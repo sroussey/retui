@@ -215,6 +215,8 @@ export default class App extends PureComponent<Props, State> {
 	};
 
 	handleExit = (error?: Error): void => {
+		process.exitCode = 1;
+
 		if (this.isRawModeSupported()) {
 			this.handleSetRawMode(false);
 		}
