@@ -1,5 +1,5 @@
 import {Node as YogaNode} from 'yoga-wasm-web';
-import {Types as MouseTypes} from './Mouse.js';
+import {T as MouseTypes} from './Mouse.js';
 import {DOMElement} from '../dom.js';
 
 /*

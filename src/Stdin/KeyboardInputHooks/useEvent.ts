@@ -1,11 +1,39 @@
 import {useEffect} from 'react';
-import {Types as Keyboard} from '../Keyboard.js';
+import {T as KeyboardTypes} from '../Keyboard.js';
 import {STDIN} from '../Stdin.js';
 
-export default function useEvent<T extends Keyboard.KeyMap = any>(
-	event: KeyOf<T>,
+export namespace T {
+	export interface UseEvent<T extends KeyboardTypes.KeyMap = any> {
+		(cmd: keyof T, handler: (stdin: string) => unknown): void;
+	}
+	export type Listener = {
+		event: string;
+		handler: (...args: any[]) => unknown;
+	};
+
+	export type MultipleListeners<T extends KeyboardTypes.KeyMap = any> = {
+		cmd: KeyOf<T>;
+		handler: (...args: any[]) => unknown;
+	}[];
+
+	// Remove symbol keyof an object and converts numbers to strings
+	export type KeyOf<T extends object> = T extends object
+		? ToString<keyof T>
+		: never;
+
+	export type ToString<T> = T extends number
+		? `${T}`
+		: T extends string
+			? T
+			: never;
+}
+
+export type {T as UseEventTypes};
+
+export default function useEvent<T extends KeyboardTypes.KeyMap = any>(
+	event: T.KeyOf<T>,
 	handler: (stdin: string) => unknown,
-	extraFocusCheck: boolean,
+	extraFocusCheck?: boolean,
 ) {
 	// const isFocus = useIsFocus();
 	const isFocus = true;
@@ -22,29 +50,8 @@ export default function useEvent<T extends Keyboard.KeyMap = any>(
 	});
 }
 
-export function useTypedEvent<T extends Keyboard.KeyMap>(): {
-	useEvent: UseEvent<T>;
+export function useTypedEvent<T extends KeyboardTypes.KeyMap>(): {
+	useEvent: T.UseEvent<T>;
 } {
-	return {useEvent: useEvent as UseEvent<T>};
+	return {useEvent: useEvent as T.UseEvent<T>};
 }
-
-export interface UseEvent<T = any> {
-	(cmd: keyof T, handler: (stdin: string) => unknown): void;
-}
-
-export type Listener = {
-	event: string;
-	handler: (...args: any[]) => unknown;
-};
-
-export type MultipleListeners<T extends Keyboard.KeyMap = any> = {
-	cmd: KeyOf<T>;
-	handler: (...args: any[]) => unknown;
-}[];
-
-// Remove symbol keyof an object and converts numbers to strings
-export type KeyOf<T extends object> = T extends object
-	? ToString<keyof T>
-	: never;
-
-type ToString<T> = T extends number ? `${T}` : T extends string ? T : never;

@@ -3,7 +3,7 @@ import EventEmitter = require('events');
 import ElementPosition from './ElementPosition.js';
 import {spawnSync} from 'child_process';
 
-export namespace Types {
+export namespace T {
 	// Events emitted from Mouse.Emitter
 	export type Events =
 		| 'CLICK'
@@ -65,7 +65,7 @@ export namespace Types {
 		};
 	};
 
-	export type HandlerRegistry = Record<Types.HandlerProps, Types.ComponentData>;
+	export type HandlerRegistry = Record<T.HandlerProps, T.ComponentData>;
 
 	export type Buttons =
 		| 'LEFT_BTN_DOWN'
@@ -76,6 +76,8 @@ export namespace Types {
 		| 'SCROLL_DOWN';
 }
 
+export type {T as MouseTypes};
+
 export const MOUSE_ESCAPE_CODES = {
 	ON: '\x1b[?1000h',
 	OFF: '\x1b[?1000l',
@@ -83,9 +85,9 @@ export const MOUSE_ESCAPE_CODES = {
 
 export default class Mouse {
 	// Ensure consistent naming for Events and Handler Props
-	private PropsToEvents: Record<Types.HandlerProps, Types.Events>;
+	private PropsToEvents: Record<T.HandlerProps, T.Events>;
 	private Emitter: EventEmitter;
-	private Handlers: Types.HandlerRegistry;
+	private Handlers: T.HandlerRegistry;
 	private unsubscribers: (() => void)[];
 	private btnDownState: {
 		left: boolean;
@@ -156,59 +158,56 @@ export default class Mouse {
 
 	// Parse the this.Handler[prop] object which contains a store IDs from Box
 	// components and determine if their click event handlers should be executed
-	public handleEvent =
-		(prop: Types.HandlerProps) => (event: Types.StdinData) => {
-			const {clientX, clientY} = event;
-			const propData = this.Handlers[prop] as Types.ComponentData;
-			for (const ID in propData) {
-				const componentPosition = propData[ID]!.targetPosition;
-				const componentHandler = propData[ID]!.componentHandler;
-				const componentNode = propData[ID]!.target;
-				const setLeftActive = propData[ID]!.setLeftActive;
-				const trackLeftActive = propData[ID]!.trackLeftActive;
-				const setRightActive = propData[ID]!.setRightActive;
-				const trackRightActive = propData[ID]!.trackRightActive;
+	public handleEvent = (prop: T.HandlerProps) => (event: T.StdinData) => {
+		const {clientX, clientY} = event;
+		const propData = this.Handlers[prop] as T.ComponentData;
+		for (const ID in propData) {
+			const componentPosition = propData[ID]!.targetPosition;
+			const componentHandler = propData[ID]!.componentHandler;
+			const componentNode = propData[ID]!.target;
+			const setLeftActive = propData[ID]!.setLeftActive;
+			const trackLeftActive = propData[ID]!.trackLeftActive;
+			const setRightActive = propData[ID]!.setRightActive;
+			const trackRightActive = propData[ID]!.trackRightActive;
 
-				if (
-					!ElementPosition.containsPoint(clientX, clientY, componentPosition)
-				) {
-					return;
-				}
+			if (!ElementPosition.containsPoint(clientX, clientY, componentPosition)) {
+				return;
+			}
 
-				const event: Types.Event = {
-					clientX,
-					clientY,
-					targetPosition: componentPosition,
-					target: componentNode,
-				};
+			const event: T.Event = {
+				clientX,
+				clientY,
+				targetPosition: componentPosition,
+				target: componentNode,
+			};
 
-				const eventType = this.PropsToEvents[prop];
+			const eventType = this.PropsToEvents[prop];
 
-				if (trackLeftActive && eventType === this.PropsToEvents.onMouseDown) {
-					setLeftActive(true);
-					this.Emitter.once(this.PropsToEvents.onMouseUp, () => {
-						setLeftActive(false);
-					});
-				}
-				// prettier-ignore
-				if (trackRightActive && eventType === this.PropsToEvents.onRightMouseDown) {
+			if (trackLeftActive && eventType === this.PropsToEvents.onMouseDown) {
+				setLeftActive(true);
+				this.Emitter.once(this.PropsToEvents.onMouseUp, () => {
+					setLeftActive(false);
+				});
+			}
+			// prettier-ignore
+			if (trackRightActive && eventType === this.PropsToEvents.onRightMouseDown) {
 						setRightActive(true);
 						this.Emitter.once(this.PropsToEvents.onRightMouseUp, () => {
 							setRightActive(false);
 						})
 					}
 
-				componentHandler?.(event);
-			}
-		};
+			componentHandler?.(event);
+		}
+	};
 
 	// Allow processing of this.Handlers object when mouse input events are recieved
 	public listen = (): void => {
 		if (this.listening) return;
 
 		for (const prop in this.PropsToEvents) {
-			const eventString = this.PropsToEvents[prop as Types.HandlerProps];
-			const handler = this.handleEvent(prop as Types.HandlerProps);
+			const eventString = this.PropsToEvents[prop as T.HandlerProps];
+			const handler = this.handleEvent(prop as T.HandlerProps);
 
 			this.Emitter.on(eventString, handler);
 			this.unsubscribers.push(() => {
@@ -228,7 +227,7 @@ export default class Mouse {
 	};
 
 	// Update this.Handlers object from within a Box component
-	public subscribeComponent = <T extends {[P in Types.HandlerProps]?: any}>({
+	public subscribeComponent = <T extends {[P in T.HandlerProps]?: any}>({
 		props,
 		ID,
 		target,
@@ -241,7 +240,7 @@ export default class Mouse {
 		props: T;
 		ID: string;
 		target: YogaNode;
-		targetPosition: Types.Position;
+		targetPosition: T.Position;
 		setLeftActive: (b: boolean) => void;
 		setRightActive: (b: boolean) => void;
 		trackLeftActive: boolean;
@@ -258,9 +257,9 @@ export default class Mouse {
 		};
 
 		for (const prop in this.PropsToEvents) {
-			this.Handlers[prop as Types.HandlerProps][ID] = {
+			this.Handlers[prop as T.HandlerProps][ID] = {
 				...componentData,
-				componentHandler: props[prop as Types.HandlerProps],
+				componentHandler: props[prop as T.HandlerProps],
 			};
 		}
 
@@ -273,11 +272,11 @@ export default class Mouse {
 	// Cleanup after a Box component is unmounted
 	public unsubscribeComponent = (ID: string): void => {
 		for (const prop in this.PropsToEvents) {
-			delete this.Handlers[prop as Types.HandlerProps][ID];
+			delete this.Handlers[prop as T.HandlerProps][ID];
 		}
 	};
 
-	private getButtonType = (n: number): Types.Buttons | null => {
+	private getButtonType = (n: number): T.Buttons | null => {
 		switch (n) {
 			case 0:
 				return 'LEFT_BTN_DOWN';
@@ -315,7 +314,7 @@ export default class Mouse {
 		let x = buffer[4]! - 0x20 - 1;
 		let y = buffer[5]! - 0x20 - 1;
 
-		const event: Types.StdinData = {clientX: x, clientY: y};
+		const event: T.StdinData = {clientX: x, clientY: y};
 		const button = this.getButtonType(buttonCode);
 
 		if (button === 'LEFT_BTN_DOWN') {

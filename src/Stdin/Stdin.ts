@@ -50,6 +50,7 @@ class Stdin {
 			return console.warn('Raw mode not supported.  Stdin not supported');
 		}
 
+		process.stdin.setEncoding('hex');
 		process.stdin.on('data', this.handleStdin);
 		this.mouseEnabled && this.Mouse.listen();
 		// Keyboard listeners are added/removed in through hooks in the app

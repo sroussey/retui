@@ -1,13 +1,13 @@
 {
-	"name": "ink",
+	"name": "react-terminal",
 	"version": "5.0.1",
 	"description": "React for CLI",
 	"license": "MIT",
-	"repository": "vadimdemedes/ink",
+	"repository": "max5961/react-terminal",
 	"author": {
-		"name": "Vadim Demedes",
-		"email": "vadimdemedes@hey.com",
-		"url": "https://github.com/vadimdemedes"
+		"name": "Maxwell Morrissey",
+		"email": "mmorrissey92@proton.me",
+		"url": "https://github.com/max5961/react-terminal"
 	},
 	"type": "module",
 	"exports": {
@@ -53,6 +53,7 @@
 		"cli-truncate": "^4.0.0",
 		"code-excerpt": "^4.0.0",
 		"es-toolkit": "^1.22.0",
+		"immer": "^10.1.1",
 		"indent-string": "^5.0.0",
 		"is-in-ci": "^0.1.0",
 		"patch-console": "^2.0.0",

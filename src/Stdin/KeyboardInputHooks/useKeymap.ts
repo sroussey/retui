@@ -1,10 +1,10 @@
 import {STDIN} from '../Stdin.js';
 import {randomUUID} from 'crypto';
-import {Types as Keyboard} from '../Keyboard.js';
+import {T as Keyboard} from '../Keyboard.js';
 import {useEffect, useState} from 'react';
 import ProcessGate from './ProcessGate.js';
 
-export namespace Types {
+export namespace T {
 	export type Return = {
 		register: string;
 		event: string;
@@ -16,7 +16,7 @@ export namespace Types {
 	};
 }
 
-export default function useKeymap(keymap: Keyboard.KeyMap, opts?: Types.Opts) {
+export default function useKeymap(keymap: Keyboard.KeyMap, opts?: T.Opts) {
 	opts = {trackState: false, priority: 'default', ...opts};
 
 	const [ID] = useState(randomUUID());
@@ -27,7 +27,7 @@ export default function useKeymap(keymap: Keyboard.KeyMap, opts?: Types.Opts) {
 		STDIN.listen();
 	}
 
-	const [data, setData] = useState<Types.Return>({
+	const [data, setData] = useState<T.Return>({
 		register: '',
 		event: '',
 	});

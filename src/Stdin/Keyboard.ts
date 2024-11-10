@@ -3,7 +3,7 @@ import {SpecialKeys, newSpecialKeyRegister} from './AsciiMap.js';
 import {EVENT} from './Stdin.js';
 import {ASCII} from './AsciiMap.js';
 
-export namespace Types {
+export namespace T {
 	export type Key = keyof SpecialKeys;
 
 	export type Binding = {
@@ -17,6 +17,8 @@ export namespace Types {
 		[eventName: string]: Binding | Binding[];
 	};
 }
+
+export type {T as KeyboardTypes};
 
 export default class Keyboard {
 	private Emitter: EventEmitter;
@@ -93,8 +95,7 @@ export default class Keyboard {
 
 	public handleStdin = (buffer: Buffer): void => {
 		if (buffer[0] === undefined) return;
-		const charCode = buffer[0];
-		const char = String.fromCharCode(charCode);
+		const char = buffer.toString('utf-8');
 
 		this.state.eventSet = false;
 		this.state.eventEmitted = false;
@@ -150,6 +151,7 @@ export default class Keyboard {
 
 		// Ctrl + lowercase letter.  Unfortunately, I don't believe there is any way
 		// within Nodejs to recognize other combinations of special keys.
+		const charCode = char.charCodeAt(0);
 		if (charCode >= 1 && charCode <= 26) {
 			const letter = String.fromCharCode(charCode + 96);
 			this.state.ctrlKeys = letter;
@@ -196,7 +198,7 @@ export default class Keyboard {
 		this.Emitter.off(event, handler);
 	};
 
-	public processConfig = (config: Types.KeyMap): void => {
+	public processConfig = (config: T.KeyMap): void => {
 		if (this.state.eventSet) return;
 
 		/* Is there a non alphanumeric keypress?  We need to know so that bindings
@@ -204,7 +206,7 @@ export default class Keyboard {
 		const hasNonAlphaKey = Object.values(this.state.specialKeys).some(b => b);
 
 		for (const event in config) {
-			const binding = config[event] as Types.Binding | Types.Binding[];
+			const binding = config[event] as T.Binding | T.Binding[];
 
 			let match = false;
 			if (Array.isArray(binding)) {
@@ -218,7 +220,7 @@ export default class Keyboard {
 	};
 
 	private checkMatch = (
-		binding: Types.Binding,
+		binding: T.Binding,
 		hasNonAlphakey: boolean,
 	): boolean => {
 		// Empty object triggers any key press
@@ -258,7 +260,7 @@ export default class Keyboard {
 		return false;
 	};
 
-	private checkNotMatch = (binding: Types.Binding): boolean => {
+	private checkNotMatch = (binding: T.Binding): boolean => {
 		const notKey = binding.notKey || [];
 		const notInput = binding.notInput || [];
 
