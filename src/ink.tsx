@@ -14,6 +14,7 @@ import * as dom from './dom.js';
 import logUpdate, {type LogUpdate} from './log-update.js';
 import instances from './instances.js';
 import App from './components/App.js';
+import {ALT_STDIN, STDIN} from './Stdin/Stdin.js';
 
 const noop = () => {};
 
@@ -281,6 +282,13 @@ export default class Ink {
 
 		reconciler.updateContainer(null, this.container, null, noop);
 		instances.delete(this.options.stdout);
+
+		// Allow app to exit by removing STDIN listeners and pausing the socket.
+		setImmediate(() => {
+			STDIN.pause();
+			ALT_STDIN.pause();
+			process.stdin.pause();
+		});
 
 		if (error instanceof Error) {
 			this.rejectExitPromise(error);

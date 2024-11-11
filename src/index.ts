@@ -25,7 +25,7 @@ export {default as measureElement} from './measure-element.js';
 export type {DOMElement} from './dom.js';
 
 // Fork
-export {STDIN, ALT_STDIN} from './Stdin/Stdin.js';
+export {STDIN, ALT_STDIN, setMouse} from './Stdin/Stdin.js';
 export {default as useEvent} from './Stdin/KeyboardInputHooks/useEvent.js';
 export {default as useKeymap} from './Stdin/KeyboardInputHooks/useKeymap.js';
 

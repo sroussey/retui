@@ -172,6 +172,10 @@ export default class Keyboard {
 		this.Emitter.emit(EVENT.keypress, char);
 	};
 
+	public pause = (): void => {
+		this.Emitter.removeAllListeners(EVENT.keypress);
+	};
+
 	public addComponentListener = (
 		processKeymapHandler: (stdin: string) => unknown,
 	): void => {

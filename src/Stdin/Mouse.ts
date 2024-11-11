@@ -99,6 +99,7 @@ export default class Mouse {
 		right: boolean;
 	};
 	private listening: boolean;
+	private hasSetExitHandler: boolean;
 
 	constructor() {
 		this.PropsToEvents = {
@@ -139,6 +140,7 @@ export default class Mouse {
 			right: false,
 		};
 		this.listening = false;
+		this.hasSetExitHandler = false;
 	}
 
 	public setMouseReporting = (on: boolean): void => {
@@ -151,9 +153,13 @@ export default class Mouse {
 		};
 
 		set(escapeSequence);
-		process.on('exit', () => {
-			set(MOUSE_ESCAPE_CODES.OFF);
-		});
+
+		if (!this.hasSetExitHandler) {
+			process.on('exit', () => {
+				set(MOUSE_ESCAPE_CODES.OFF);
+			});
+			this.hasSetExitHandler = true;
+		}
 	};
 
 	// Parse the this.Handler[prop] object which contains a store IDs from Box
@@ -209,6 +215,8 @@ export default class Mouse {
 			const eventString = this.PropsToEvents[prop as T.HandlerProps];
 			const handler = this.handleEvent(prop as T.HandlerProps);
 
+			// console.log(`eventstring: ${eventString}`);
+
 			this.Emitter.on(eventString, handler);
 			this.unsubscribers.push(() => {
 				this.Emitter.off(eventString, handler);
@@ -218,11 +226,9 @@ export default class Mouse {
 		this.listening = true;
 	};
 
-	// Used to exit the entire app, or to temporarily pause for any reason
+	// Used to exit the entire app, or to temporarily pause mouse input for any reason
 	public pause = (): void => {
-		for (const event of Object.values(this.PropsToEvents)) {
-			this.Emitter.removeAllListeners(event);
-		}
+		this.Emitter.removeAllListeners();
 		this.listening = false;
 	};
 

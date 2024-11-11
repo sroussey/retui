@@ -49,7 +49,6 @@ class Stdin {
 			return console.warn('Raw mode not supported.  Stdin not supported');
 		}
 
-		process.stdin.resume();
 		process.stdin.setEncoding('hex');
 		process.stdin.on(EVENT.data, this.handleStdin);
 		this.mouseEnabled && this.Mouse.listen();
@@ -60,8 +59,9 @@ class Stdin {
 
 	public pause = (): void => {
 		process.stdin.off(EVENT.data, this.handleStdin);
+		this.Mouse.Emitter.removeAllListeners();
+		this.Keyboard.Emitter.removeAllListeners();
 		this.Mouse.pause();
-		this.Keyboard.pause();
 		this.listening = false;
 	};
 
@@ -85,7 +85,3 @@ class Stdin {
 // some sort of input to switch back to default input.
 export const STDIN = new Stdin();
 export const ALT_STDIN = new Stdin();
-
-export function setMouse(b: boolean): void {
-	STDIN.setMouseReporting(b);
-}

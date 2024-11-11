@@ -6,7 +6,8 @@
 		"sourceMap": true,
 		"jsx": "react",
 		"isolatedModules": true,
-		"lib": ["ES2023"]
+		"lib": ["ES2023"],
+		"noUnusedLocals": false
 	},
 	"include": ["src"],
 	"ts-node": {
