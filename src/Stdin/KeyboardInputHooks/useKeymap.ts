@@ -4,6 +4,7 @@ import {T as Keyboard} from '../Keyboard.js';
 import {useEffect, useState} from 'react';
 import ProcessGate from './ProcessGate.js';
 import useEvent, {useTypedEvent} from './useEvent.js';
+import {useIsFocus} from '../../Window/UnitContext.js';
 
 export namespace T {
 	export type Return<U extends Keyboard.KeyMap = any> = {
@@ -26,7 +27,7 @@ export default function useKeymap<U extends Keyboard.KeyMap = any>(
 
 	const [ID] = useState(randomUUID());
 	const priority = opts.priority ?? 'default';
-	// const focused = useIsFocus();
+	const focused = useIsFocus();
 
 	if (priority !== 'never') {
 		STDIN.listen();
@@ -46,8 +47,7 @@ export default function useKeymap<U extends Keyboard.KeyMap = any>(
 
 	useEffect(() => {
 		const handleStdin = (stdin: string) => {
-			// if (focused && ProcessGate.canProcess(ID, priority)) {
-			if (ProcessGate.canProcess(ID, priority)) {
+			if (focused && ProcessGate.canProcess(ID, priority)) {
 				STDIN.Keyboard.processConfig(keymap);
 			}
 

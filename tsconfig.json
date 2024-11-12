@@ -7,7 +7,8 @@
 		"jsx": "react",
 		"isolatedModules": true,
 		"lib": ["ES2023"],
-		"noUnusedLocals": false
+		"noUnusedLocals": false,
+		"noUncheckedIndexedAccess": false
 	},
 	"include": ["src"],
 	"ts-node": {
@@ -17,6 +18,7 @@
 		"experimentalSpecifierResolution": "node",
 		"noPropertyAccessFromIndexSignature": false,
 		"noImplicitAny": false,
-		"noUnusedLocals": false
+		"noUnusedLocals": false,
+		"noUncheckedIndexedAccess": false
 	}
 }

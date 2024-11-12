@@ -34,11 +34,11 @@ export function Unit({
 		return (
 			<>
 				{isHidden && maintainState ? (
-					<Box height={0} width={0} overflow="hidden">
+					<Box height={0} width={0} overflow="hidden" key={node.key}>
 						{node}
 					</Box>
 				) : !isHidden ? (
-					<Box height={dimension} width={dimension}>
+					<Box height={dimension} width={dimension} key={node.key}>
 						{node}
 					</Box>
 				) : null}
@@ -48,7 +48,7 @@ export function Unit({
 
 	if (type === 'PAGES') {
 		return (
-			<PageContext.Provider value={{isFocus, index}}>
+			<PageContext.Provider value={{isFocus, index}} key={node.key}>
 				{getUnit()}
 			</PageContext.Provider>
 		);
@@ -62,6 +62,7 @@ export function Unit({
 					index,
 					items,
 				}}
+				key={node.key}
 			>
 				{getUnit()}
 			</ItemContext.Provider>
