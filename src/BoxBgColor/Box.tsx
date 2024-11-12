@@ -10,19 +10,9 @@ export type Props = BoxProps & {
 
 const BoxWithBg = forwardRef<DOMElement, Props>(
 	(props, ref): React.ReactNode => {
-		const backgroundColor = props.backgroundColor;
-
-		if (!backgroundColor) {
-			return (
-				<Box {...props} ref={ref}>
-					{props.children}
-				</Box>
-			);
-		}
-
 		return (
 			<Box {...props} ref={ref}>
-				<FillBg backgroundColor={backgroundColor} />
+				<FillBg backgroundColor={props.backgroundColor} />
 				{props.children}
 			</Box>
 		);
@@ -44,8 +34,9 @@ function FillBg({
 			width="100"
 			flexDirection="column"
 		>
-			{height !== null &&
-				width !== null &&
+			{backgroundColor &&
+				height &&
+				width &&
 				new Array(height).fill(null).map((_, idx) => {
 					return (
 						<Text key={idx} backgroundColor={backgroundColor}>

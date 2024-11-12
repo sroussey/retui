@@ -27,6 +27,7 @@ export type {DOMElement} from './dom.js';
 // Fork
 export {STDIN, ALT_STDIN, setMouse} from './Stdin/Stdin.js';
 export {default as useEvent} from './Stdin/KeyboardInputHooks/useEvent.js';
+export {useTypedEvent} from './Stdin/KeyboardInputHooks/useEvent.js';
 export {default as useKeymap} from './Stdin/KeyboardInputHooks/useKeymap.js';
 
 // Add 'backgroundColor' property to Box component
@@ -38,3 +39,9 @@ export {Box} from './BoxBgColor/Box.js';
 import {KeyboardTypes} from './Stdin/Keyboard.js';
 type KeyMap = KeyboardTypes.KeyMap;
 export type {KeyMap};
+
+// Window
+export {useWindow} from './Window/useWindow.js';
+export {Window} from './Window/Window.js';
+export type {ItemGenerator} from './Window/Window.js';
+export {useItem, useIsFocus, usePage} from './Window/UnitContext.js';

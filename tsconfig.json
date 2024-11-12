@@ -16,6 +16,7 @@
 		"experimentalResolver": true,
 		"experimentalSpecifierResolution": "node",
 		"noPropertyAccessFromIndexSignature": false,
-		"noImplicitAny": false
+		"noImplicitAny": false,
+		"noUnusedLocals": false
 	}
 }

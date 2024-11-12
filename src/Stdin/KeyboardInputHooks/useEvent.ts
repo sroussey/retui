@@ -1,6 +1,7 @@
 import {useEffect} from 'react';
 import {T as KeyboardTypes} from '../Keyboard.js';
 import {STDIN} from '../Stdin.js';
+import {useIsFocus} from '../../Window/UnitContext.js';
 
 export namespace T {
 	export interface UseEvent<T extends KeyboardTypes.KeyMap = any> {
@@ -35,8 +36,7 @@ export default function useEvent<T extends KeyboardTypes.KeyMap = any>(
 	handler: (stdin: string) => unknown,
 	extraFocusCheck?: boolean,
 ) {
-	// const isFocus = useIsFocus();
-	const isFocus = true;
+	const isFocus = useIsFocus();
 	extraFocusCheck = extraFocusCheck ?? true;
 
 	useEffect(() => {

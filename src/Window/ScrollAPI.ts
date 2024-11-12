@@ -1,55 +1,35 @@
-import {UseScrollTypes} from './useScroll.js';
-import {UseListTypes} from './useList.js';
 import {produce} from 'immer';
 import assert from 'node:assert';
+import {ScrollAPIInit, ScrollAPIPublicFns} from './types.js';
 
-namespace T {
-	export type Init = {
-		state: UseScrollTypes.State;
-		setState: (newState: UseScrollTypes.State) => void;
-		LENGTH: number;
-		WINDOW_SIZE: number;
-		opts: UseListTypes.Opts;
-	};
-
-	// Public functions in ScrollAPI
-	export type API = Omit<
-		{
-			[P in keyof ScrollAPI]: ScrollAPI[P] extends Function
-				? ScrollAPI[P]
-				: never;
-		},
-		'getAPI'
-	>;
-}
-
-export type {T as ScrollAPITypes};
+type State = ScrollAPIInit['state'];
+type SetState = ScrollAPIInit['setState'];
 
 export class ScrollAPI {
-	private readonly state: T.Init['state'];
-	private readonly setState: T.Init['setState'];
-	private readonly LENGTH: T.Init['LENGTH'];
-	private readonly WINDOW_SIZE: T.Init['WINDOW_SIZE'];
+	private readonly state: State;
+	private readonly setState: SetState;
+	private readonly LENGTH: ScrollAPIInit['LENGTH'];
+	private readonly WINDOW_SIZE: ScrollAPIInit['WINDOW_SIZE'];
 	private readonly centerScroll: boolean;
-	private readonly circular: boolean;
+	private readonly fallthrough: boolean;
 
-	constructor({state, setState, LENGTH, WINDOW_SIZE, opts}: T.Init) {
+	constructor({state, setState, LENGTH, WINDOW_SIZE, opts}: ScrollAPIInit) {
 		this.state = state;
-		this.setState = (nextState: T.Init['state']) => {
+		this.setState = (nextState: ScrollAPIInit['state']) => {
 			try {
 				assert.deepStrictEqual(this.state, nextState);
-				setState(nextState);
 			} catch {
+				setState(nextState);
 				return;
 			}
 		};
 		this.LENGTH = LENGTH;
 		this.WINDOW_SIZE = WINDOW_SIZE;
 		this.centerScroll = opts.centerScroll ?? false;
-		this.circular = opts.circular ?? false;
+		this.fallthrough = opts.fallthrough ?? false;
 	}
 
-	public getAPI = (): T.API => {
+	public getAPI = (): ScrollAPIPublicFns => {
 		return {
 			handle: this.handle,
 			nextItem: this.nextItem,
@@ -75,7 +55,7 @@ export class ScrollAPI {
 		if (nextIdx >= this.LENGTH || nextIdx < 0) return;
 
 		// getCenterScrollChanges instead
-		const nextState = this.getNormalScrollChanges(nextIdx);
+		const nextState = this.getCenterScrollChanges(nextIdx);
 		this.setState(nextState);
 	};
 
@@ -83,8 +63,8 @@ export class ScrollAPI {
 		// List is hidden
 		if (this.state.start === this.state.end) return;
 
-		// At the end of the list and circular scroll is on, go to beginning
-		if (this.circular && this.state.idx === this.LENGTH - 1) {
+		// At the end of the list and fallthrough scroll is on, go to beginning
+		if (this.fallthrough && this.state.idx === this.LENGTH - 1) {
 			return this.handle(0);
 		}
 
@@ -98,8 +78,8 @@ export class ScrollAPI {
 		// List is hidden
 		if (this.state.start === this.state.end) return;
 
-		// At beginning of the list and circular scroll is on, go to the end
-		if (this.circular && this.state.idx <= 0) {
+		// At beginning of the list and fallthrough scroll is on, go to the end
+		if (this.fallthrough && this.state.idx <= 0) {
 			return this.handle(this.LENGTH - 1);
 		}
 
@@ -113,7 +93,7 @@ export class ScrollAPI {
 		const half = Math.floor(this.WINDOW_SIZE / 2);
 		const nextIdx = this.state.idx + half;
 
-		if (this.circular && nextIdx >= this.LENGTH) {
+		if (this.fallthrough && nextIdx >= this.LENGTH) {
 			const diff = this.LENGTH - this.state.idx - 1;
 			return this.goToIndex(half - diff - 1);
 		}
@@ -125,7 +105,7 @@ export class ScrollAPI {
 		const half = Math.floor(this.WINDOW_SIZE / 2);
 		const nextIdx = this.state.idx - half;
 
-		if (this.circular && nextIdx < 0) {
+		if (this.fallthrough && nextIdx < 0) {
 			const diff = half - this.state.idx;
 			return this.goToIndex(this.LENGTH - diff);
 		}
@@ -189,7 +169,7 @@ export class ScrollAPI {
 
 	private getCenterScrollChanges = (
 		nextIdx: number = this.state.idx,
-	): T.Init['state'] => {
+	): State => {
 		const LENGTH = this.LENGTH;
 		const WINDOW_SIZE = this.WINDOW_SIZE;
 		const noIdxChange = nextIdx === this.state.idx;
@@ -244,7 +224,7 @@ export class ScrollAPI {
 		draft,
 		LENGTH,
 	}: {
-		draft: T.Init['state'];
+		draft: State;
 		LENGTH: number;
 	}): void => {
 		const getMid = (s: number, e: number) => Math.floor((s + e) / 2);
@@ -269,7 +249,7 @@ export class ScrollAPI {
 		draft,
 		LENGTH,
 	}: {
-		draft: T.Init['state'];
+		draft: State;
 		LENGTH: number;
 	}): void => {
 		draft.start = Math.max(draft.start, 0);
@@ -333,7 +313,7 @@ export class ScrollAPI {
 		this.setState(nextState);
 	};
 
-	private rangeCheck = (draft: T.Init['state'], msg: string): void => {
+	private rangeCheck = (draft: State, msg: string): void => {
 		if (
 			draft.start >= 0 &&
 			draft.start <= draft.end &&

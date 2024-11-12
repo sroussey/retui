@@ -1,6 +1,4 @@
-import {KeyboardTypes} from '../Stdin/Keyboard.js';
-
-type KeyMap = KeyboardTypes.KeyMap;
+import {KeyMap} from './types.js';
 
 export const LIST_CMDS = {
 	increment: 'USE_KEYBINDS_INCREMENT',

@@ -2,6 +2,7 @@ import {useState, useRef, useEffect} from 'react';
 import measureElement from '../measure-element.js';
 import useStdout from '../hooks/use-stdout.js';
 import {useListener} from '../useListener/useListener.js';
+import {Node} from 'yoga-wasm-web';
 
 namespace UseResponsiveDimensions {
 	export type Dimensions = {height: number | null; width: number | null};
@@ -14,7 +15,19 @@ namespace UseResponsiveDimensions {
  * Updates height and width dimensions of ref object and ensures that screen
  * resizes update state.
  * */
-export function useResponsiveDimensions(): UseResponsiveDimensions.Return {
+
+process.stdout.setMaxListeners(Infinity);
+
+type Props = {
+	shouldUpdate?: boolean;
+	dependencies?: any[];
+};
+export function useResponsiveDimensions(
+	props?: Props,
+): UseResponsiveDimensions.Return {
+	const shouldUpdate = props?.shouldUpdate ?? true;
+	const dependencies = props?.dependencies ?? [{}];
+
 	const ref = useRef();
 	const {stdout} = useStdout();
 
@@ -27,6 +40,7 @@ export function useResponsiveDimensions(): UseResponsiveDimensions.Return {
 		const nextDim = measureElement(ref.current as any);
 
 		if (!nextDim.width || !nextDim.height) return;
+		if (!shouldUpdate) return;
 
 		setDim(prevDim => {
 			if (
@@ -40,7 +54,7 @@ export function useResponsiveDimensions(): UseResponsiveDimensions.Return {
 		});
 	};
 
-	useEffect(update);
+	useEffect(update, dependencies);
 	useListener(stdout, 'resize', update);
 
 	return {height: dim.height, width: dim.width, ref};

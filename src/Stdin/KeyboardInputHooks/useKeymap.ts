@@ -3,11 +3,13 @@ import {randomUUID} from 'crypto';
 import {T as Keyboard} from '../Keyboard.js';
 import {useEffect, useState} from 'react';
 import ProcessGate from './ProcessGate.js';
+import useEvent, {useTypedEvent} from './useEvent.js';
 
 export namespace T {
-	export type Return = {
+	export type Return<U extends Keyboard.KeyMap = any> = {
 		register: string;
 		event: string;
+		useEvent: typeof useEvent<U>;
 	};
 
 	export type Opts = {
@@ -16,7 +18,10 @@ export namespace T {
 	};
 }
 
-export default function useKeymap(keymap: Keyboard.KeyMap, opts?: T.Opts) {
+export default function useKeymap<U extends Keyboard.KeyMap = any>(
+	keymap: U,
+	opts?: T.Opts,
+): T.Return<U> {
 	opts = {trackState: false, priority: 'default', ...opts};
 
 	const [ID] = useState(randomUUID());
@@ -27,7 +32,7 @@ export default function useKeymap(keymap: Keyboard.KeyMap, opts?: T.Opts) {
 		STDIN.listen();
 	}
 
-	const [data, setData] = useState<T.Return>({
+	const [data, setData] = useState<Omit<T.Return, 'useEvent'>>({
 		register: '',
 		event: '',
 	});
@@ -60,5 +65,10 @@ export default function useKeymap(keymap: Keyboard.KeyMap, opts?: T.Opts) {
 		};
 	});
 
-	return data;
+	const {useEvent} = useTypedEvent<U>();
+
+	return {
+		...data,
+		useEvent,
+	};
 }
