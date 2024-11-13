@@ -20,6 +20,7 @@ export type WindowProps = {
 	scrollBar?: boolean;
 	scrollColor?: BoxProps['backgroundColor'];
 	scrollBarAlign?: 'start' | 'end';
+	scrollBarStyle?: 'single' | 'bold';
 	wordList?: string[];
 	direction?: 'column' | 'row';
 	maintainState?: boolean;
@@ -33,6 +34,7 @@ export function Window({
 	scrollBar = true,
 	scrollColor = 'white',
 	scrollBarAlign = 'end',
+	scrollBarStyle = 'single',
 	direction = 'column',
 	maintainState = true,
 }: WindowProps): React.ReactNode {
@@ -83,6 +85,8 @@ export function Window({
 				height={height ?? 0}
 				width={width ?? 0}
 				color={scrollColor}
+				direction={direction}
+				style={scrollBarStyle}
 			/>
 		);
 	};
@@ -116,7 +120,8 @@ export function Window({
 	);
 
 	const horizontalList = direction === 'row' && (
-		<Box flexDirection="row" height="100%" width="100%" ref={dimensions.ref}>
+		// <Box flexDirection="row" height="100%" width="100%" ref={dimensions.ref}>
+		<Box flexDirection="row" ref={dimensions.ref}>
 			<Box flexDirection="column" justifyContent="space-between" height="100%">
 				{scrollBarStart}
 				<Box display="flex" flexDirection="row">
