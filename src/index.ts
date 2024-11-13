@@ -49,3 +49,6 @@ export {useItem, useIsFocus, usePage} from './Window/UnitContext.js';
 // Pages
 export {usePages} from './Window/Pages/usePages.js';
 export {Pages} from './Window/Pages/Pages.js';
+
+// Lines
+export {VerticalLine, HorizontalLine} from './Lines/Line.js';
