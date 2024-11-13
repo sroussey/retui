@@ -13,8 +13,8 @@ export function useScroll(items: unknown[] | string, opts: Opts): Return {
 	const [state, setState] = useState<State>({
 		idx: 0,
 		start: 0,
-		end: Math.min(opts.windowSize ?? items.length, items.length),
-		_winSize: opts.windowSize ?? items.length,
+		end: Math.min(Math.floor(opts.windowSize ?? items.length), items.length),
+		_winSize: Math.floor(opts.windowSize ?? items.length),
 	});
 
 	const LENGTH = items.length;

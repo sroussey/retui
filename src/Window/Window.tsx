@@ -24,6 +24,7 @@ export type WindowProps = {
 	wordList?: string[];
 	direction?: 'column' | 'row';
 	maintainState?: boolean;
+	unitSize?: number;
 };
 
 export function Window({
@@ -37,6 +38,7 @@ export function Window({
 	scrollBarStyle = 'single',
 	direction = 'column',
 	maintainState = true,
+	unitSize = 1,
 }: WindowProps): React.ReactNode {
 	const isPageFocus = usePageFocus();
 
@@ -75,15 +77,16 @@ export function Window({
 	);
 
 	const shouldUpdate = scrollBar ? true : false;
-	const {height, width, ref} = useResponsiveDimensions({shouldUpdate});
+	// const {height, width, ref} = useResponsiveDimensions({shouldUpdate});
+	const scrollDimensions = useResponsiveDimensions({shouldUpdate});
 
 	const getScrollBar = (shouldBuild: boolean) => {
 		if (!shouldBuild) return null;
 		return (
 			<ScrollBar
 				viewState={viewState}
-				height={height ?? 0}
-				width={width ?? 0}
+				height={scrollDimensions.height ?? 0}
+				width={scrollDimensions.width ?? 0}
 				color={scrollColor}
 				direction={direction}
 				style={scrollBarStyle}
@@ -102,15 +105,31 @@ export function Window({
 
 	useEffect(() => {
 		if (!viewState._fitWindow) return;
-		viewState._util.modifyWinSize(dimensions.height ?? 0);
+
+		const nextWinSize =
+			direction === 'column'
+				? Math.floor((dimensions.height ?? 0) / unitSize)
+				: Math.floor((dimensions.width ?? 0) / unitSize);
+
+		viewState._util.modifyWinSize(nextWinSize);
 	}, [dimensions.width, dimensions.height]);
 
+	// Original percents with %
 	const verticalList = direction === 'column' && (
 		<Box flexDirection="column" height="100%" width="100%" ref={dimensions.ref}>
-			<Box flexDirection="row" justifyContent="space-between" width="100%">
+			<Box
+				flexDirection="row"
+				justifyContent="space-between"
+				width="100%"
+				height="100"
+			>
 				{scrollBarStart}
 				<Box display="flex" flexGrow={1} flexDirection="column">
-					<Box flexDirection="column" ref={ref as any}>
+					<Box
+						flexDirection="column"
+						justifyContent="space-between"
+						ref={scrollDimensions.ref as any}
+					>
 						{generatedItems}
 					</Box>
 				</Box>
@@ -121,14 +140,22 @@ export function Window({
 
 	const horizontalList = direction === 'row' && (
 		// <Box flexDirection="row" height="100%" width="100%" ref={dimensions.ref}>
-		<Box flexDirection="row" ref={dimensions.ref}>
-			<Box flexDirection="column" justifyContent="space-between" height="100%">
+		<Box flexDirection="row" width="100" ref={dimensions.ref}>
+			<Box
+				flexDirection="column"
+				justifyContent="space-between"
+				height="100%"
+				width="100"
+			>
 				{scrollBarStart}
-				<Box display="flex" flexDirection="row">
-					<Box flexShrink={1} flexDirection="row" ref={ref as any}>
+				<Box display="flex" flexDirection="row" width="100">
+					<Box
+						flexShrink={1}
+						flexDirection="row"
+						ref={scrollDimensions.ref as any}
+					>
 						{generatedItems}
 					</Box>
-					<Box flexGrow={1}></Box>
 				</Box>
 				{scrollBarEnd}
 			</Box>

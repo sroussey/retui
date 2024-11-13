@@ -42,6 +42,8 @@ export class ScrollAPI {
 	};
 
 	public handle = (nextIdx: number = this.state.idx): void => {
+		nextIdx = Math.floor(nextIdx);
+
 		if (this.centerScroll) {
 			const nextState = this.getCenterScrollChanges(nextIdx);
 			return this.setState(nextState);
@@ -52,6 +54,8 @@ export class ScrollAPI {
 	};
 
 	public goToIndex = (nextIdx: number): void => {
+		nextIdx = Math.floor(nextIdx);
+
 		if (nextIdx >= this.LENGTH || nextIdx < 0) return;
 
 		// getCenterScrollChanges instead
@@ -114,6 +118,8 @@ export class ScrollAPI {
 	};
 
 	private getNormalScrollChanges = (nextIdx: number = this.state.idx) => {
+		nextIdx = Math.floor(nextIdx);
+
 		const LENGTH = this.LENGTH;
 		const WINDOW_SIZE = this.WINDOW_SIZE;
 
@@ -170,6 +176,8 @@ export class ScrollAPI {
 	private getCenterScrollChanges = (
 		nextIdx: number = this.state.idx,
 	): State => {
+		nextIdx = Math.floor(nextIdx);
+
 		const LENGTH = this.LENGTH;
 		const WINDOW_SIZE = this.WINDOW_SIZE;
 		const noIdxChange = nextIdx === this.state.idx;
@@ -262,6 +270,8 @@ export class ScrollAPI {
 	};
 
 	public modifyWinSize = (nextSize: number): void => {
+		nextSize = Math.floor(nextSize);
+
 		const LENGTH = this.LENGTH;
 		const WINDOW_SIZE = this.WINDOW_SIZE;
 

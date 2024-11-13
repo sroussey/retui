@@ -28,6 +28,8 @@ export function useWindow(
 	let fitWindow = false;
 	if (opts.windowSize === 'fit') {
 		fitWindow = true;
+		// Initially set to zero.  Once the parent component that contains the window
+		// has read its dimensions, it will adjust the window size accordingly
 		opts.windowSize = 0;
 	}
 
