@@ -16,7 +16,7 @@ export interface ItemGenerator<T extends KeyMap = any> {
 export type WindowProps = {
 	type: 'PAGES' | 'ITEMS';
 	viewState: ViewState;
-	items: (ItemGenerator | React.ReactNode)[];
+	generators?: ItemGenerator[];
 	scrollBar?: boolean;
 	scrollColor?: BoxProps['backgroundColor'];
 	scrollBarAlign?: 'start' | 'end';
@@ -25,11 +25,12 @@ export type WindowProps = {
 	direction?: 'column' | 'row';
 	maintainState?: boolean;
 	unitSize?: number;
-};
+} & React.PropsWithChildren;
 
 export function Window({
-	items,
+	children,
 	type,
+	generators,
 	viewState,
 	wordList,
 	scrollBar = true,
@@ -40,44 +41,56 @@ export function Window({
 	maintainState = true,
 	unitSize = 1,
 }: WindowProps): React.ReactNode {
+	if (React.Children.count(children) && generators !== undefined) {
+		throw new Error('Window cannot contain both children and generators prop');
+	}
+
+	if (!React.Children.count(children) && generators === undefined) {
+		throw new Error('Window must contain either children or a generators prop');
+	}
+
 	const isPageFocus = usePageFocus();
 
-	const generatedItems = items.map(
-		(item: ItemGenerator | React.ReactNode, idx: number) => {
-			const listeners: Listener[] = [];
+	const generatedItems = generators
+		? generators.map(handleMap)
+		: React.Children.map(children, handleMap);
 
-			const isFocus = idx === viewState._idx;
-			const onUnit = (event: string, handler: any) => {
-				if (!isFocus || !isPageFocus) return;
-				listeners.push({event, handler});
-			};
+	function handleMap(
+		item: ItemGenerator | React.ReactNode,
+		idx: number,
+	): React.ReactElement {
+		const listeners: Listener[] = [];
 
-			const node = isRenderable(item)
-				? item
-				: (item as ItemGenerator)(isFocus, onUnit as any);
+		const isFocus = idx === viewState._idx;
+		const onUnit = (event: string, handler: any) => {
+			if (!isFocus || !isPageFocus) return;
+			listeners.push({event, handler});
+		};
 
-			const key = (node as React.ReactElement).key;
-			const isHidden = idx < viewState._start || idx >= viewState._end;
+		const node = isRenderable(item)
+			? item
+			: (item as ItemGenerator)(isFocus, onUnit as any);
 
-			return (
-				<Unit
-					key={key}
-					type={type}
-					listeners={listeners}
-					isHidden={isHidden}
-					maintainState={maintainState ?? true}
-					// context
-					isFocus={idx === viewState._idx}
-					index={idx}
-					items={viewState._items}
-					node={node as React.ReactElement}
-				/>
-			);
-		},
-	);
+		const key = (node as React.ReactElement).key;
+		const isHidden = idx < viewState._start || idx >= viewState._end;
+
+		return (
+			<Unit
+				key={key}
+				type={type}
+				listeners={listeners}
+				isHidden={isHidden}
+				maintainState={maintainState ?? true}
+				// context
+				isFocus={idx === viewState._idx}
+				index={idx}
+				items={viewState._items}
+				node={node as React.ReactElement}
+			/>
+		);
+	}
 
 	const shouldUpdate = scrollBar ? true : false;
-	// const {height, width, ref} = useResponsiveDimensions({shouldUpdate});
 	const scrollDimensions = useResponsiveDimensions({shouldUpdate});
 
 	const getScrollBar = (shouldBuild: boolean) => {

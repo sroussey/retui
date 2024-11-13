@@ -33,6 +33,8 @@ export function useWindow(
 		opts.windowSize = 0;
 	}
 
+	opts.windowSize;
+
 	const {scrollState, scrollAPI, LENGTH, WINDOW_SIZE} = useScroll(items, {
 		centerScroll: opts.centerScroll,
 		fallthrough: opts.fallthrough,

@@ -7,13 +7,12 @@ export type Props = Omit<
 	'type' | 'viewState' | 'items' | 'wordList'
 > & {
 	pagesState: UsePages.Return['pagesState'];
-	pages: React.ReactElement[];
-};
+} & React.PropsWithChildren;
 
 export function Pages(props: Props): any {
 	const windowProps: WindowProps = {
 		type: 'PAGES',
-		items: props.pages,
+		generators: props.generators,
 		viewState: props.pagesState,
 		scrollBar: props.scrollBar ?? false,
 		scrollColor: props.scrollColor ?? 'white',
@@ -22,5 +21,5 @@ export function Pages(props: Props): any {
 		wordList: undefined,
 	};
 
-	return <Window {...windowProps} />;
+	return <Window {...windowProps}>{props.children}</Window>;
 }
