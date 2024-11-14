@@ -42,19 +42,25 @@ export function useResponsiveDimensions(
 		if (!nextDim.width || !nextDim.height) return;
 		if (!shouldUpdate) return;
 
-		setDim(prevDim => {
-			if (
-				nextDim.width !== prevDim?.width ||
-				nextDim.height !== prevDim?.height
-			) {
-				return nextDim;
-			} else {
-				return prevDim;
-			}
-		});
+		// Calling every render creates max update depth warning
+		// setDim(prevDim => {
+		// 	if (
+		// 		nextDim.width !== prevDim?.width ||
+		// 		nextDim.height !== prevDim?.height
+		// 	) {
+		// 		return nextDim;
+		// 	} else {
+		// 		return prevDim;
+		// 	}
+		// });
+
+		if (dim.width !== nextDim.width || dim.height !== nextDim.height) {
+			setDim(nextDim);
+		}
 	};
 
 	useEffect(update, dependencies);
+	// useListener(stdout, 'resize', update, [stdout]);
 	useListener(stdout, 'resize', update);
 
 	return {height: dim.height, width: dim.width, ref};

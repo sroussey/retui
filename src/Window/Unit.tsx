@@ -1,20 +1,41 @@
-import React, {PropsWithChildren, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Box} from '../BoxBgColor/Box.js';
 import {WindowProps} from './Window.js';
-import {ItemContext, PageContext} from './UnitContext.js';
+import {ListItemContext, PageContext} from './UnitContext.js';
 import {STDIN} from '../Stdin/Stdin.js';
 import {Listener} from './types.js';
 
 type Props = {
+	// What kind of context is passed to the Unit?  (PageContext or ItemContext)
+	// What kind of default styles are added to the wrapper?
 	type: WindowProps['type'];
-	isFocus: boolean;
+
+	// The React node that will be wrapped in the Unit component
+	node: React.ReactElement;
+
+	// Is the Window focused && is the Unit focused within the Window?
+	isDeepFocus: boolean;
+
+	// Is the Unit focused within the Window?  (Shallow focus disregards the focus of the Window)
+	// Imagine 3 Lists wrapped in a single List.  You would want to have a different
+	// style for the list item whose focus extends all the way to the root, vs
+	// the other 2 which are only focused to their immediate List parent.
+	isShallowFocus: boolean;
+
+	// Based on the ViewState, is the Unit visible within the viewing window?
 	isHidden: boolean;
+
+	// If the Unit is not visible, should the component be unmounted (lose its state)?
+	// Most of the time you would want this on
 	maintainState: boolean;
+
+	// Event listeners added if Units were rendered using the ItemGenerator method
+	listeners: Listener[];
+
+	// Context data passed to both ItemContext and PageContext
 	index: number;
 	items: any[];
 	setItems: (items: unknown[]) => void;
-	listeners: Listener[];
-	node: React.ReactElement;
 };
 
 export function Unit({
@@ -23,7 +44,8 @@ export function Unit({
 	items,
 	setItems,
 	index,
-	isFocus,
+	isShallowFocus,
+	isDeepFocus,
 	isHidden,
 	maintainState,
 	node,
@@ -50,7 +72,10 @@ export function Unit({
 
 	if (type === 'PAGES') {
 		return (
-			<PageContext.Provider value={{isFocus, index}} key={node.key}>
+			<PageContext.Provider
+				value={{isFocus: isDeepFocus, isShallowFocus, index}}
+				key={node.key}
+			>
 				{getUnit()}
 			</PageContext.Provider>
 		);
@@ -58,9 +83,10 @@ export function Unit({
 
 	if (type === 'ITEMS') {
 		return (
-			<ItemContext.Provider
+			<ListItemContext.Provider
 				value={{
-					isFocus,
+					isFocus: isDeepFocus,
+					isShallowFocus,
 					index,
 					items,
 					setItems,
@@ -68,7 +94,7 @@ export function Unit({
 				key={node.key}
 			>
 				{getUnit()}
-			</ItemContext.Provider>
+			</ListItemContext.Provider>
 		);
 	}
 

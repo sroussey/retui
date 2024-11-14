@@ -4,7 +4,7 @@ import {useResponsiveDimensions} from '../useResponsiveDimensions/useResponsiveD
 import {BoxProps, KeyMap} from '../index.js';
 import {isRenderable} from './isRenderable.js';
 import {Listener, ViewState} from './types.js';
-import {useIsFocus, usePageFocus} from './UnitContext.js';
+import {useIsFocus, WindowContext} from './UnitContext.js';
 import {Unit} from './Unit.js';
 import ScrollBar from './ScrollBar.js';
 import Box from '../components/Box.js';
@@ -52,7 +52,7 @@ export function Window({
 		// throw an error because empty lists need to be accomodated
 	}
 
-	const isWindowFocus = useIsFocus();
+	const THIS_WINDOW_FOCUS = useIsFocus();
 
 	const generatedItems = generators
 		? generators.map(handleMap)
@@ -66,7 +66,7 @@ export function Window({
 
 		const isFocus = idx === viewState._idx;
 		const onUnit = (event: string, handler: any) => {
-			if (!isFocus || !isWindowFocus) return;
+			if (!isFocus || !THIS_WINDOW_FOCUS) return;
 			listeners.push({event, handler});
 		};
 
@@ -81,15 +81,16 @@ export function Window({
 			<Unit
 				key={key}
 				type={type}
+				node={node as React.ReactElement}
 				listeners={listeners}
 				isHidden={isHidden}
 				maintainState={maintainState ?? true}
 				// context
-				isFocus={idx === viewState._idx}
+				isShallowFocus={idx === viewState._idx}
+				isDeepFocus={THIS_WINDOW_FOCUS && idx === viewState._idx}
 				index={idx}
 				items={viewState._items}
 				setItems={viewState._setItems}
-				node={node as React.ReactElement}
 			/>
 		);
 	}
@@ -179,5 +180,9 @@ export function Window({
 		</Box>
 	);
 
-	return verticalList || horizontalList;
+	return (
+		<WindowContext.Provider value={{isFocus: THIS_WINDOW_FOCUS}}>
+			{verticalList || horizontalList}
+		</WindowContext.Provider>
+	);
 }

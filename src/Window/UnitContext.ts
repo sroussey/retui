@@ -1,18 +1,60 @@
 import {createContext, useContext} from 'react';
 
-export type ItemContext<T extends any[] = any> = {
+export type ListItemContext<T extends any[] = any> = {
 	items: T;
 	setItems: (items: T) => void;
+	// Focus extends up the focus tree to the root node
 	isFocus: boolean;
+	// Focus based only on whatever focus given by the List component containing this list item
+	isShallowFocus: boolean;
 	index: number;
 };
 
-export const ItemContext = createContext<ItemContext | null>(null);
+export type PageContext = {
+	// Focus extends up the focus tree to the root node
+	isFocus: boolean;
+	// Focus based only on whatever focus given by the Pages component containing this page
+	isShallowFocus: boolean;
+	index: number;
+};
 
-export function useItem<T extends any[] = any>(): ItemContext<T> & {
+export type WindowContext = {
+	isFocus: boolean;
+};
+
+export const ListItemContext = createContext<ListItemContext | null>(null);
+export const PageContext = createContext<PageContext | null>(null);
+export const WindowContext = createContext<WindowContext | null>(null);
+
+// If no Context exists, this is the root node and therefore focus is true.
+// Otherwise, focus is dependent on the Context value.
+export function useWindowFocus(): boolean {
+	const windowContext = useContext(WindowContext);
+	if (windowContext === null) return true;
+	return windowContext.isFocus;
+}
+export function usePageFocus(): boolean {
+	const pageContext = useContext(PageContext);
+	if (pageContext === null) return true;
+	return pageContext.isFocus;
+}
+export function useItemFocus(): boolean {
+	const listItemContext = useContext(ListItemContext);
+	if (listItemContext === null) return true;
+	return listItemContext.isFocus;
+}
+// Combine focus of all the above
+export function useIsFocus(): boolean {
+	const itemFocus = useItemFocus();
+	const pageFocus = usePageFocus();
+	const windowFocus = useWindowFocus();
+	return itemFocus && pageFocus && windowFocus;
+}
+
+export function useListItem<T extends any[] = any>(): ListItemContext<T> & {
 	item: T[number];
 } {
-	const context = useContext(ItemContext);
+	const context = useContext(ListItemContext);
 
 	if (context === null) {
 		throw new Error(
@@ -24,28 +66,11 @@ export function useItem<T extends any[] = any>(): ItemContext<T> & {
 	const setItems = context.setItems;
 	const index = context.index;
 	const isFocus = context.isFocus;
+	const isShallowFocus = context.isShallowFocus;
 	const item = items[index];
 
-	return {items, setItems, index, isFocus, item};
+	return {items, setItems, index, isFocus, isShallowFocus, item};
 }
-
-/*
- * When creating event listeners, we can safely assume that if there is no itemContext,
- * then the Node exists outside of an Item component and there is no need to block the
- * execution of its callback based on its focus status
- * */
-export function useItemFocus(): boolean {
-	const itemContext = useContext(ItemContext);
-	if (itemContext === null) return true;
-	return itemContext.isFocus;
-}
-
-export type PageContext = {
-	isFocus: boolean;
-	index: number;
-};
-
-export const PageContext = createContext<PageContext | null>(null);
 
 export function usePage(): PageContext {
 	const context = useContext(PageContext);
@@ -57,16 +82,4 @@ export function usePage(): PageContext {
 	}
 
 	return context;
-}
-
-export function usePageFocus(): boolean {
-	const pageContext = useContext(PageContext);
-	if (pageContext === null) return true;
-	return pageContext.isFocus;
-}
-
-export function useIsFocus(): boolean {
-	const itemFocus = useItemFocus();
-	const pageFocus = usePageFocus();
-	return itemFocus && pageFocus;
 }
