@@ -4,7 +4,7 @@ import {useResponsiveDimensions} from '../useResponsiveDimensions/useResponsiveD
 import {BoxProps, KeyMap} from '../index.js';
 import {isRenderable} from './isRenderable.js';
 import {Listener, ViewState} from './types.js';
-import {usePageFocus} from './UnitContext.js';
+import {useIsFocus, usePageFocus} from './UnitContext.js';
 import {Unit} from './Unit.js';
 import ScrollBar from './ScrollBar.js';
 import Box from '../components/Box.js';
@@ -24,6 +24,11 @@ export type WindowProps = {
 	wordList?: string[];
 	direction?: 'column' | 'row';
 	maintainState?: boolean;
+
+	/**
+	 * The cross sectional dimension of each item.  Used to determine how many
+	 * items to show when the windowSize option in useWindow is set to 'fit'
+	 * */
 	unitSize?: number;
 } & React.PropsWithChildren;
 
@@ -43,13 +48,11 @@ export function Window({
 }: WindowProps): React.ReactNode {
 	if (React.Children.count(children) && generators !== undefined) {
 		throw new Error('Window cannot contain both children and generators prop');
+		// On the other hand, if there are no children and no generators we can't
+		// throw an error because empty lists need to be accomodated
 	}
 
-	if (!React.Children.count(children) && generators === undefined) {
-		throw new Error('Window must contain either children or a generators prop');
-	}
-
-	const isPageFocus = usePageFocus();
+	const isWindowFocus = useIsFocus();
 
 	const generatedItems = generators
 		? generators.map(handleMap)
@@ -63,7 +66,7 @@ export function Window({
 
 		const isFocus = idx === viewState._idx;
 		const onUnit = (event: string, handler: any) => {
-			if (!isFocus || !isPageFocus) return;
+			if (!isFocus || !isWindowFocus) return;
 			listeners.push({event, handler});
 		};
 
@@ -85,6 +88,7 @@ export function Window({
 				isFocus={idx === viewState._idx}
 				index={idx}
 				items={viewState._items}
+				setItems={viewState._setItems}
 				node={node as React.ReactElement}
 			/>
 		);

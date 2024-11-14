@@ -1,3 +1,4 @@
+import {Dispatch, SetStateAction} from 'react';
 import {T as Keyboard} from '../Stdin/Keyboard.js';
 import {ScrollAPI} from './ScrollAPI.js';
 
@@ -48,18 +49,30 @@ export type ViewState = Readonly<{
 	_winSize: number;
 	_itemsLen: number;
 	_util: UseWindowUtil;
-	_items: any[];
+	_items: any;
+	_setItems: SetState<any>;
 	_fitWindow: boolean;
 }>;
 
-export type UseWindowReturn = {
-	viewState: ViewState;
-	util: UseWindowUtil;
-};
+export type SetState<T> = Dispatch<SetStateAction<T>>;
+
+export type UseWindowReturn<T extends any[] | number> = T extends any[]
+	? {
+			viewState: ViewState;
+			util: UseWindowUtil;
+			items: T[number][];
+			setItems: SetState<T[number][]>;
+		}
+	: {
+			viewState: ViewState;
+			util: UseWindowUtil;
+			items: null[];
+			setItems: SetState<null[]>;
+		};
 
 export type ScrollAPIInit = {
 	state: ScrollState;
-	setState: (newState: ScrollState) => void;
+	setState: (next: ScrollState) => void;
 	LENGTH: number;
 	WINDOW_SIZE: number;
 	opts: UseScrollOpts;

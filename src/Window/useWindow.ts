@@ -11,10 +11,10 @@ import {
 import {useScroll} from './useScroll.js';
 import {useState} from 'react';
 
-export function useWindow(
-	items: unknown[],
+export function useWindow<T extends any[] | number>(
+	itemsOrLength: T,
 	opts: UseWindowOpts,
-): UseWindowReturn {
+): UseWindowReturn<T> {
 	// Set default opts
 	opts = {
 		windowSize: null,
@@ -35,7 +35,16 @@ export function useWindow(
 
 	opts.windowSize;
 
-	const {scrollState, scrollAPI, LENGTH, WINDOW_SIZE} = useScroll(items, {
+	const [items, setItems] = useState<any[]>(
+		typeof itemsOrLength === 'number'
+			? new Array(itemsOrLength).fill(null)
+			: itemsOrLength,
+	);
+
+	const nextLength =
+		typeof itemsOrLength === 'number' ? itemsOrLength : items.length;
+
+	const {scrollState, scrollAPI, LENGTH, WINDOW_SIZE} = useScroll(nextLength, {
 		centerScroll: opts.centerScroll,
 		fallthrough: opts.fallthrough,
 		windowSize: opts.windowSize,
@@ -89,11 +98,19 @@ export function useWindow(
 		_itemsLen: LENGTH,
 		_util: util,
 		_items: items,
+		_setItems: setItems,
 		_fitWindow: fitWindow,
 	});
+
+	const itemsReturn =
+		typeof itemsOrLength === 'number'
+			? new Array(itemsOrLength).fill(null)
+			: items;
 
 	return {
 		viewState,
 		util,
-	};
+		items: itemsReturn,
+		setItems,
+	} as UseWindowReturn<T>;
 }

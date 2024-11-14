@@ -2,6 +2,7 @@ import {createContext, useContext} from 'react';
 
 export type ItemContext<T extends any[] = any> = {
 	items: T;
+	setItems: (items: T) => void;
 	isFocus: boolean;
 	index: number;
 };
@@ -20,11 +21,12 @@ export function useItem<T extends any[] = any>(): ItemContext<T> & {
 	}
 
 	const items = context.items;
+	const setItems = context.setItems;
 	const index = context.index;
 	const isFocus = context.isFocus;
 	const item = items[index];
 
-	return {items, index, isFocus, item};
+	return {items, setItems, index, isFocus, item};
 }
 
 /*

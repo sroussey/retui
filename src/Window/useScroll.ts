@@ -7,18 +7,18 @@ type State = ScrollAPIInit['state'];
 type Return = UseScrollReturn;
 type Opts = UseScrollOpts;
 
-export function useScroll(items: unknown[] | string, opts: Opts): Return {
+export function useScroll(itemsLength: number, opts: Opts): Return {
 	assert(opts.windowSize !== 'fit');
 
 	const [state, setState] = useState<State>({
 		idx: 0,
 		start: 0,
-		end: Math.min(Math.floor(opts.windowSize ?? items.length), items.length),
-		_winSize: Math.floor(opts.windowSize ?? items.length),
+		end: Math.min(Math.floor(opts.windowSize ?? itemsLength), itemsLength),
+		_winSize: Math.floor(opts.windowSize ?? itemsLength),
 	});
 
-	const LENGTH = items.length;
-	const WINDOW_SIZE = Math.min(state._winSize ?? items.length, items.length);
+	const LENGTH = itemsLength;
+	const WINDOW_SIZE = Math.min(state._winSize ?? itemsLength, itemsLength);
 
 	const scrollAPI = new ScrollAPI({state, setState, LENGTH, WINDOW_SIZE, opts});
 	scrollAPI.handle();

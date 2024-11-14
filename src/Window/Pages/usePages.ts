@@ -1,5 +1,6 @@
+import {SetStateAction} from 'react';
 import {KeyMap, useWindow} from '../../index.js';
-import {UseWindowOpts, UseWindowUtil, ViewState} from '../types.js';
+import {SetState, UseWindowOpts, UseWindowUtil, ViewState} from '../types.js';
 
 export namespace UsePages {
 	export type Return = {
@@ -20,13 +21,16 @@ export namespace UsePages {
 	};
 }
 
-export function usePages(
-	pages: any[],
+export function usePages<T extends React.ReactNode[] | number>(
+	pagesOrPagesLength: T,
 	opts: UsePages.Opts = {},
 ): UsePages.Return {
 	opts.windowSize = opts.windowSize ?? 1;
 
-	const {viewState, util} = useWindow(pages, {...opts, navigation: 'none'});
+	const {viewState, util, items, setItems} = useWindow(pagesOrPagesLength, {
+		...opts,
+		navigation: 'none',
+	});
 
 	const pagesUtil: UsePages.Util = {
 		goToPage: util.goToIndex,

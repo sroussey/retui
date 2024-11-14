@@ -12,6 +12,7 @@ type Props = {
 	maintainState: boolean;
 	index: number;
 	items: any[];
+	setItems: (items: unknown[]) => void;
 	listeners: Listener[];
 	node: React.ReactElement;
 };
@@ -20,6 +21,7 @@ export function Unit({
 	type,
 	listeners,
 	items,
+	setItems,
 	index,
 	isFocus,
 	isHidden,
@@ -61,6 +63,7 @@ export function Unit({
 					isFocus,
 					index,
 					items,
+					setItems,
 				}}
 				key={node.key}
 			>
