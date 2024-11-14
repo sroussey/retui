@@ -146,6 +146,7 @@ export function Window({
 					<Box
 						flexDirection="column"
 						justifyContent="space-between"
+						width="100"
 						ref={scrollDimensions.ref as any}
 					>
 						{generatedItems}

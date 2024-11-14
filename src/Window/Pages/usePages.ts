@@ -1,46 +1,28 @@
-import {SetStateAction} from 'react';
-import {KeyMap, useWindow} from '../../index.js';
-import {SetState, UseWindowOpts, UseWindowUtil, ViewState} from '../types.js';
+import {useWindow} from '../../index.js';
+import {UseWindowOpts} from '../types.js';
 
-export namespace UsePages {
-	export type Return = {
-		pagesState: ViewState;
-		pagesUtil: Util;
-	};
+type UseWindowReturn = ReturnType<typeof useWindow<number>>;
+type UsePagesReturn = {
+	pageView: UseWindowReturn['viewState'];
+	util: UseWindowReturn['util'];
+};
+type UsePagesOpts = Pick<UseWindowOpts, 'fallthrough'>;
 
-	export type Util = {
-		goToPage: UseWindowUtil['goToIndex'];
-		nextPage: UseWindowUtil['nextItem'];
-		prevPage: UseWindowUtil['prevItem'];
-		currentPageIndex: UseWindowUtil['currentIndex'];
-	};
-
-	export type Opts = {
-		windowSize?: number | null;
-		fallthrough?: boolean;
-	};
-}
-
-export function usePages<T extends React.ReactNode[] | number>(
-	pagesOrPagesLength: T,
-	opts: UsePages.Opts = {},
-): UsePages.Return {
-	opts.windowSize = opts.windowSize ?? 1;
-
-	const {viewState, util, items, setItems} = useWindow(pagesOrPagesLength, {
-		...opts,
+export function usePages(
+	numPages: number,
+	opts: UsePagesOpts = {fallthrough: false},
+): UsePagesReturn {
+	const windowOpts: UseWindowOpts = {
+		windowSize: 1,
+		centerScroll: false,
 		navigation: 'none',
-	});
-
-	const pagesUtil: UsePages.Util = {
-		goToPage: util.goToIndex,
-		nextPage: util.nextItem,
-		prevPage: util.prevItem,
-		currentPageIndex: util.currentIndex,
+		fallthrough: opts.fallthrough,
 	};
+
+	const pages = useWindow(numPages, windowOpts);
 
 	return {
-		pagesState: viewState,
-		pagesUtil,
+		pageView: pages.viewState,
+		util: pages.util,
 	};
 }

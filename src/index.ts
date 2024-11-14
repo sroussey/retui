@@ -46,6 +46,10 @@ export {Window} from './Window/Window.js';
 export type {ItemGenerator} from './Window/Window.js';
 export {useListItem, useIsFocus, usePage} from './Window/UnitContext.js';
 
+// List
+export {useList} from './Window/List/useList.js';
+export {List} from './Window/List/List.js';
+
 // Pages
 export {usePages} from './Window/Pages/usePages.js';
 export {Pages} from './Window/Pages/Pages.js';

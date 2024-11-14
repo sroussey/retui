@@ -13,15 +13,14 @@ import {useState} from 'react';
 
 export function useWindow<T extends any[] | number>(
 	itemsOrLength: T,
-	opts: UseWindowOpts,
+	opts: UseWindowOpts = {},
 ): UseWindowReturn<T> {
 	// Set default opts
 	opts = {
-		windowSize: null,
+		windowSize: undefined,
 		centerScroll: false,
 		navigation: 'vi-vertical',
 		fallthrough: false,
-		vertical: true,
 		...opts,
 	};
 

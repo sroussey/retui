@@ -25,7 +25,7 @@ export type UseScrollReturn = {
 };
 
 export type UseWindowOpts = {
-	windowSize?: number | null | 'fit';
+	windowSize?: number | 'fit';
 	navigation?:
 		| 'none'
 		| 'vi-vertical'
@@ -34,7 +34,6 @@ export type UseWindowOpts = {
 		| 'arrow-horizontal';
 	centerScroll?: boolean;
 	fallthrough?: boolean;
-	vertical?: boolean;
 };
 
 export type UseWindowUtil = {

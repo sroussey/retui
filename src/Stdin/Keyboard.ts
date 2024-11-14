@@ -35,6 +35,7 @@ export default class Keyboard {
 
 	constructor() {
 		this.Emitter = new EventEmitter();
+		this.Emitter.setMaxListeners(Infinity);
 		this.state = {
 			chars: '',
 			specialKeys: newSpecialKeyRegister(),

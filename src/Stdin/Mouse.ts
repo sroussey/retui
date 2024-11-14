@@ -102,6 +102,8 @@ export default class Mouse {
 	private hasSetExitHandler: boolean;
 
 	constructor() {
+		this.Emitter = new EventEmitter();
+		this.Emitter.setMaxListeners(Infinity);
 		this.PropsToEvents = {
 			onClick: 'CLICK',
 			onDoubleClick: 'DOUBLE_CLICK',
@@ -115,7 +117,6 @@ export default class Mouse {
 			onScrollDown: 'SCROLL_DOWN',
 			onScrollClick: 'SCROLL_CLICK',
 		};
-		this.Emitter = new EventEmitter();
 		this.Handlers = {
 			onClick: {},
 			onDoubleClick: {},
