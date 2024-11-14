@@ -182,6 +182,11 @@ export type Styles = {
 	readonly display?: 'flex' | 'none';
 
 	/**
+	 * Background color
+	 */
+	readonly backgroundColor?: LiteralUnion<ForegroundColorName, string>;
+
+	/**
 	 * Add a border with a specified style.
 	 * If `borderStyle` is `undefined` (which it is by default), no border will be added.
 	 */

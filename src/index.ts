@@ -31,10 +31,10 @@ export {useTypedEvent} from './Stdin/KeyboardInputHooks/useEvent.js';
 export {default as useKeymap} from './Stdin/KeyboardInputHooks/useKeymap.js';
 
 // Add 'backgroundColor' property to Box component
-// export type {Props as BoxProps} from './components/Box.js';
-// export {default as Box} from './components/Box.js';
-export type {Props as BoxProps} from './BoxBgColor/Box.js';
-export {Box} from './BoxBgColor/Box.js';
+export type {Props as BoxProps} from './components/Box.js';
+export {default as Box} from './components/Box.js';
+// export type {Props as BoxProps} from './BoxBgColor/Box.js';
+// export {Box} from './BoxBgColor/Box.js';
 
 import {KeyboardTypes} from './Stdin/Keyboard.js';
 type KeyMap = KeyboardTypes.KeyMap;

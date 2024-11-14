@@ -7,6 +7,7 @@ import squashTextNodes from './squash-text-nodes.js';
 import renderBorder from './render-border.js';
 import {type DOMElement} from './dom.js';
 import type Output from './output.js';
+import renderBackgroundColor from './render-border-color.js';
 
 // If parent container is `<Box>`, text nodes will be treated as separate nodes in
 // the tree and will have their own coordinates in the layout.
@@ -93,6 +94,7 @@ const renderNodeToOutput = (
 
 		if (node.nodeName === 'ink-box') {
 			renderBorder(x, y, node, output);
+			renderBackgroundColor(x, y, node, output);
 
 			const clipHorizontally =
 				node.style.overflowX === 'hidden' || node.style.overflow === 'hidden';
