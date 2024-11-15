@@ -14,7 +14,7 @@ export namespace T {
 	};
 
 	export type Opts = {
-		trackState: boolean;
+		trackState?: boolean;
 		priority: 'never' | 'always' | 'default' | 'override' | 'textinput';
 	};
 }

@@ -64,7 +64,9 @@ export function useWindow<T extends any[] | number>(
 
 	const keymap = getKeymap();
 
-	useKeymap(keymap);
+	useKeymap(keymap, {
+		priority: opts.navigation !== 'none' ? 'default' : 'never',
+	});
 	useEvent(LIST_CMDS.increment(ID), () => {
 		scrollAPI.nextItem();
 	});
