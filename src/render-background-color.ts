@@ -7,13 +7,24 @@ const renderBackgroundColor = (
 	y: number,
 	node: DOMNode,
 	output: Output,
+	parentHasBg: boolean,
 ): void => {
-	if (typeof node.style.backgroundColor !== 'string') return;
-
 	const BACKGROUND_COLOR = node.style.backgroundColor;
+	const HAS_BG = typeof BACKGROUND_COLOR === 'string';
 	const HAS_BORDER =
 		typeof node.style.borderStyle === 'string' ||
 		typeof node.style.borderStyle === 'object';
+
+	// It is costly to render background when not necessary, so only render a bg color
+	// when directed or when it makes sense (parent element has bg, so wipe the bg to prevent
+	// bleed through)
+	//
+	// If there is no backgroundColor property set, proceed
+	// If the parent element has a background set, proceed (so there isn't bleed through)
+	// wipeBackground set to true (false by default) wipes the bg no matter what
+	if (!HAS_BG && !parentHasBg && !node.style.wipeBackground) {
+		return;
+	}
 
 	let width = node.yogaNode!.getComputedWidth();
 	let height = node.yogaNode!.getComputedHeight();
@@ -28,13 +39,13 @@ const renderBackgroundColor = (
 		offsetX += 1;
 		offsetY += 1;
 
-		// Mod dimensions
+		// Modify dimensions
 		node.style.borderLeft === false && ++width;
 		node.style.borderRight === false && ++width;
 		node.style.borderTop === false && ++height;
 		node.style.borderBottom === false && ++height;
 
-		// Mod offset
+		// Modify offset
 		node.style.borderLeft === false && --offsetX;
 		node.style.borderTop === false && --offsetY;
 	}
@@ -43,7 +54,11 @@ const renderBackgroundColor = (
 	for (let i = 0; i < height; ++i) {
 		const line = ' '.repeat(width);
 		const colorizedLine = colorize(line, BACKGROUND_COLOR, 'background');
-		content += `${colorizedLine}\n`;
+		if (HAS_BG) {
+			content += `${colorizedLine}\n`;
+		} else {
+			content += `${line}\n`;
+		}
 	}
 
 	output.write(x + offsetX, y + offsetY, content, {transformers: []});

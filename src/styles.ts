@@ -182,9 +182,21 @@ export type Styles = {
 	readonly display?: 'flex' | 'none';
 
 	/**
-	 * Background color
+	 * Color the background of the element.  Value set to 'inherit' sets the
+	 * background to the background of the parent Box.
 	 */
-	readonly backgroundColor?: LiteralUnion<ForegroundColorName, string>;
+	readonly backgroundColor?:
+		| LiteralUnion<ForegroundColorName, string>
+		| 'inherit';
+
+	/**
+	 * Wipe the background of the element.  Defaults to false because wiping the
+	 * background is a burden on performance.  When the direct parent element has a
+	 * backgroundColor property set, the background will be automatically wiped.
+	 *
+	 * @default false
+	 * */
+	readonly wipeBackground?: boolean;
 
 	/**
 	 * Add a border with a specified style.

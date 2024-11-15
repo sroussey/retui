@@ -15,6 +15,7 @@ const Box = forwardRef<DOMElement, PropsWithChildren<Props>>(
 				ref={ref}
 				style={{
 					...style,
+					wipeBackground: style.wipeBackground ?? false,
 					overflowX: style.overflowX ?? style.overflow ?? 'visible',
 					overflowY: style.overflowY ?? style.overflow ?? 'visible',
 				}}

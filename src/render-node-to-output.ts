@@ -7,7 +7,8 @@ import squashTextNodes from './squash-text-nodes.js';
 import renderBorder from './render-border.js';
 import {type DOMElement} from './dom.js';
 import type Output from './output.js';
-import renderBackgroundColor from './render-border-color.js';
+import renderBackgroundColor from './render-background-color.js';
+import {Styles} from './styles.js';
 
 // If parent container is `<Box>`, text nodes will be treated as separate nodes in
 // the tree and will have their own coordinates in the layout.
@@ -38,6 +39,7 @@ const renderNodeToOutput = (
 		offsetY?: number;
 		transformers?: OutputTransformer[];
 		skipStaticElements: boolean;
+		inheritedBackgroundColor?: Styles['backgroundColor'];
 	},
 ) => {
 	const {
@@ -93,8 +95,15 @@ const renderNodeToOutput = (
 		let clipped = false;
 
 		if (node.nodeName === 'ink-box') {
+			// prettier-ignore
+			// Inherit backgroundColor from parent element
+			if (options.inheritedBackgroundColor && node.style.backgroundColor === "inherit") {
+				(node.style.backgroundColor as string) = options.inheritedBackgroundColor;
+			}
+
 			renderBorder(x, y, node, output);
-			renderBackgroundColor(x, y, node, output);
+			const parentHasBg = options.inheritedBackgroundColor ? true : false;
+			renderBackgroundColor(x, y, node, output, parentHasBg);
 
 			const clipHorizontally =
 				node.style.overflowX === 'hidden' || node.style.overflow === 'hidden';
@@ -134,6 +143,7 @@ const renderNodeToOutput = (
 					offsetY: y,
 					transformers: newTransformers,
 					skipStaticElements,
+					inheritedBackgroundColor: node.style.backgroundColor,
 				});
 			}
 
