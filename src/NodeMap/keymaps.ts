@@ -9,7 +9,9 @@ const BASE_EVENTS = {
 	prev: 'NAV_PREV',
 };
 
-// With hook IDs
+// Build events scoped to a given ID to prevent overlap if there are multiple
+// instances of the useNavigation hook.  Non-focused useEvent hooks shouldn't
+// respond to events anyways, but this is another barrier
 export const ID_NAV_EVENTS = {
 	up: (ID: string) => `${ID}-${BASE_EVENTS.up}`,
 	down: (ID: string) => `${ID}-${BASE_EVENTS.down}`,

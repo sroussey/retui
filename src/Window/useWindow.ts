@@ -5,7 +5,7 @@ import {ListKeymaps, LIST_CMDS} from './ListKeymaps.js';
 import {
 	UseWindowOpts,
 	UseWindowReturn,
-	UseWindowUtil,
+	UseWindowControl,
 	ViewState,
 } from './types.js';
 import {useScroll} from './useScroll.js';
@@ -86,7 +86,7 @@ export function useWindow<T extends any[] | number>(
 		scrollAPI.scrollUp();
 	});
 
-	const util: UseWindowUtil = {
+	const control: UseWindowControl = {
 		currentIndex: scrollState.idx,
 		...scrollAPI,
 	};
@@ -97,7 +97,7 @@ export function useWindow<T extends any[] | number>(
 		_idx: scrollState.idx,
 		_winSize: WINDOW_SIZE,
 		_itemsLen: LENGTH,
-		_util: util,
+		_control: control,
 		_items: items,
 		_setItems: setItems,
 		_fitWindow: fitWindow,
@@ -110,7 +110,7 @@ export function useWindow<T extends any[] | number>(
 
 	return {
 		viewState,
-		util,
+		control,
 		items: itemsReturn,
 		setItems,
 	} as UseWindowReturn<T>;

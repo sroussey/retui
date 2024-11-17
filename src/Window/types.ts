@@ -26,17 +26,17 @@ export type UseScrollReturn = {
 
 export type UseWindowOpts = {
 	windowSize?: number | 'fit';
+	centerScroll?: boolean;
+	fallthrough?: boolean;
 	navigation?:
 		| 'none'
 		| 'vi-vertical'
 		| 'vi-horizontal'
 		| 'arrow-vertical'
 		| 'arrow-horizontal';
-	centerScroll?: boolean;
-	fallthrough?: boolean;
 };
 
-export type UseWindowUtil = {
+export type UseWindowControl = {
 	currentIndex: number;
 } & ScrollAPIPublicFns;
 
@@ -47,7 +47,7 @@ export type ViewState = Readonly<{
 	_idx: number;
 	_winSize: number;
 	_itemsLen: number;
-	_util: UseWindowUtil;
+	_control: UseWindowControl;
 	_items: any;
 	_setItems: SetState<any>;
 	_fitWindow: boolean;
@@ -58,13 +58,13 @@ export type SetState<T> = Dispatch<SetStateAction<T>>;
 export type UseWindowReturn<T extends any[] | number> = T extends any[]
 	? {
 			viewState: ViewState;
-			util: UseWindowUtil;
+			control: UseWindowControl;
 			items: T[number][];
 			setItems: SetState<T[number][]>;
 		}
 	: {
 			viewState: ViewState;
-			util: UseWindowUtil;
+			control: UseWindowControl;
 			items: null[];
 			setItems: SetState<null[]>;
 		};
@@ -84,7 +84,7 @@ export type ScrollAPIPublicFns = Omit<
 			? ScrollAPI[P]
 			: never;
 	},
-	'getAPI'
+	'getAPI' | 'handle'
 >;
 
 export type Listener = {

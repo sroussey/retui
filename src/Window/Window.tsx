@@ -4,7 +4,7 @@ import {useResponsiveDimensions} from '../useResponsiveDimensions/useResponsiveD
 import {BoxProps, KeyMap} from '../index.js';
 import {isRenderable} from './isRenderable.js';
 import {Listener, ViewState} from './types.js';
-import {useIsFocus, WindowContext} from './UnitContext.js';
+import {useIsFocus, WindowContext} from '../FocusContext/FocusContext.js';
 import {Unit} from './Unit.js';
 import ScrollBar from './ScrollBar.js';
 import Box from '../components/Box.js';
@@ -129,7 +129,7 @@ export function Window({
 				? Math.floor((dimensions.height ?? 0) / unitSize)
 				: Math.floor((dimensions.width ?? 0) / unitSize);
 
-		viewState._util.modifyWinSize(nextWinSize);
+		viewState._control.modifyWinSize(nextWinSize);
 	}, [dimensions.width, dimensions.height]);
 
 	// Original percents with %

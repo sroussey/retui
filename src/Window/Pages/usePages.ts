@@ -2,9 +2,12 @@ import {useWindow} from '../../index.js';
 import {UseWindowOpts} from '../types.js';
 
 type UseWindowReturn = ReturnType<typeof useWindow<number>>;
+export type PageView = UseWindowReturn['viewState'] & {
+	_numPages: number;
+};
 type UsePagesReturn = {
-	pageView: UseWindowReturn['viewState'];
-	util: UseWindowReturn['util'];
+	pageView: PageView;
+	control: UseWindowReturn['control'];
 };
 type UsePagesOpts = Pick<UseWindowOpts, 'fallthrough'>;
 
@@ -21,8 +24,13 @@ export function usePages(
 
 	const pages = useWindow(numPages, windowOpts);
 
+	const pageView: PageView = Object.freeze({
+		...pages.viewState,
+		_numPages: numPages,
+	});
+
 	return {
-		pageView: pages.viewState,
-		util: pages.util,
+		pageView,
+		control: pages.control,
 	};
 }

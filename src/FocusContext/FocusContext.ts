@@ -1,4 +1,5 @@
 import {createContext, useContext} from 'react';
+import {NodesView} from '../NodeMap/useNodeMap.js';
 
 export type ListItemContext<T extends any[] = any> = {
 	items: T;
@@ -22,9 +23,17 @@ export type WindowContext = {
 	isFocus: boolean;
 };
 
+export type NodeContext<T extends string = string> = {
+	name: T;
+	isFocus: boolean;
+	isShallowFocus: boolean;
+	control: NodesView<T>['_control'];
+};
+
 export const ListItemContext = createContext<ListItemContext | null>(null);
 export const PageContext = createContext<PageContext | null>(null);
 export const WindowContext = createContext<WindowContext | null>(null);
+export const NodeContext = createContext<NodeContext | null>(null);
 
 // If no Context exists, this is the root node and therefore focus is true.
 // Otherwise, focus is dependent on the Context value.
@@ -43,43 +52,56 @@ export function useItemFocus(): boolean {
 	if (listItemContext === null) return true;
 	return listItemContext.isFocus;
 }
+export function useNodeFocus(): boolean {
+	const nodeContext = useContext(NodeContext);
+	if (nodeContext === null) return true;
+	return nodeContext.isFocus;
+}
 // Combine focus of all the above
 export function useIsFocus(): boolean {
 	const itemFocus = useItemFocus();
 	const pageFocus = usePageFocus();
-	const windowFocus = useWindowFocus();
-	return itemFocus && pageFocus && windowFocus;
+	const windowFocus = useWindowFocus(); // Don't this this one is necessary
+	const nodeFocus = useNodeFocus();
+	return itemFocus && pageFocus && windowFocus && nodeFocus;
 }
+
+// prettier-ignore
+const errMsg = (h: string, cmp: string) => `Attemping to use ${h} hook outside the context of a ${cmp} component.`;
 
 export function useListItem<T extends any[] = any>(): ListItemContext<T> & {
 	item: T[number];
 } {
-	const context = useContext(ListItemContext);
+	const listItemContext = useContext(ListItemContext);
 
-	if (context === null) {
-		throw new Error(
-			'Attempting to use useItem hook outside the context of a List component',
-		);
+	if (listItemContext === null) {
+		throw new Error(errMsg('useListItem', 'List'));
 	}
 
-	const items = context.items;
-	const setItems = context.setItems;
-	const index = context.index;
-	const isFocus = context.isFocus;
-	const isShallowFocus = context.isShallowFocus;
+	const items = listItemContext.items;
+	const setItems = listItemContext.setItems;
+	const index = listItemContext.index;
+	const isFocus = listItemContext.isFocus;
+	const isShallowFocus = listItemContext.isShallowFocus;
 	const item = items[index];
 
 	return {items, setItems, index, isFocus, isShallowFocus, item};
 }
 
 export function usePage(): PageContext {
-	const context = useContext(PageContext);
+	const pageContext = useContext(PageContext);
 
-	if (context === null) {
-		throw new Error(
-			'Attemping to use usePage hook outside the context of a Pages component',
-		);
+	if (pageContext === null) {
+		throw new Error(errMsg('usePage', 'Pages'));
 	}
 
-	return context;
+	return pageContext;
+}
+
+export function useNode<T extends string = string>(): NodeContext<T> {
+	const nodeContext = useContext(NodeContext);
+	if (nodeContext === null) {
+		throw new Error(errMsg('useNavNode', 'Nav.Node'));
+	}
+	return nodeContext as NodeContext<T>;
 }

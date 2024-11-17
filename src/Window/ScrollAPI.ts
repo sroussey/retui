@@ -31,7 +31,6 @@ export class ScrollAPI {
 
 	public getAPI = (): ScrollAPIPublicFns => {
 		return {
-			handle: this.handle,
 			nextItem: this.nextItem,
 			prevItem: this.prevItem,
 			goToIndex: this.goToIndex,

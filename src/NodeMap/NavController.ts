@@ -1,21 +1,21 @@
 import assert from 'assert';
 
-export type NavigationMap<T extends string = string> = T[][];
+export type NodeMap<T extends string = string> = T[][];
 export type Position = [number, number];
 export type NavControllerAPI = Omit<
 	{[P in keyof NavController]: NavController[P]},
-	'getIteration' | 'getSize' | 'goToIteration' | 'goToNodeName'
+	'goToIteration' | 'goToNodeName'
 >;
 
 export class NavController {
-	private nav: NavigationMap;
+	private nav: NodeMap;
 	private currPosition!: Position;
 	private nameMap: {[name: string]: {position: Position; iteration: number}};
 	private prevMap: {[name: string]: Position};
 	private nextMap: {[name: string]: Position};
 	private size: number;
 
-	constructor(nav: NavigationMap, startingNode?: string | number) {
+	constructor(nav: NodeMap, startingNode?: string | number) {
 		this.nav = nav;
 		this.prevMap = {};
 		this.nextMap = {};
@@ -24,7 +24,7 @@ export class NavController {
 		this.init(nav, startingNode);
 	}
 
-	private init = (nav: NavigationMap, startingNode?: string | number): void => {
+	private init = (nav: NodeMap, startingNode?: string | number): void => {
 		let currStartPosition: Position | null = null;
 
 		let prevPosition: Position | null = null;

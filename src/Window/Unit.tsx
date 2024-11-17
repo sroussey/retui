@@ -1,9 +1,9 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {Box} from '../BoxBgColor/Box.js';
 import {WindowProps} from './Window.js';
-import {ListItemContext, PageContext} from './UnitContext.js';
 import {STDIN} from '../Stdin/Stdin.js';
 import {Listener} from './types.js';
+import {ListItemContext, PageContext} from '../FocusContext/FocusContext.js';
 
 type Props = {
 	// What kind of context is passed to the Unit?  (PageContext or ItemContext)
@@ -32,7 +32,7 @@ type Props = {
 	// Event listeners added if Units were rendered using the ItemGenerator method
 	listeners: Listener[];
 
-	// Context data passed to both ItemContext and PageContext
+	// Context data that will added to both ItemContext and PageContext
 	index: number;
 	items: any[];
 	setItems: (items: unknown[]) => void;
@@ -52,6 +52,8 @@ export function Unit({
 }: Props) {
 	useMultipleEventsWithoutContextChecks(listeners);
 
+	// Make sure that pages aren't accidently shrunk.  Could proably get rid of the
+	// wrapper around not hidden nodes and disregard this, but it works right now
 	const dimension = type === 'PAGES' ? '100' : undefined;
 
 	const getUnit = () => {

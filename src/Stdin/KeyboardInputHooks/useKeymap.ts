@@ -4,7 +4,7 @@ import {T as Keyboard} from '../Keyboard.js';
 import {useEffect, useState} from 'react';
 import ProcessGate from './ProcessGate.js';
 import useEvent, {useTypedEvent} from './useEvent.js';
-import {useIsFocus} from '../../Window/UnitContext.js';
+import {useIsFocus} from '../../FocusContext/FocusContext.js';
 
 export namespace T {
 	export type Return<U extends Keyboard.KeyMap = any> = {

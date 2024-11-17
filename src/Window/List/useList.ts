@@ -6,7 +6,7 @@ type UseWindowReturn<T extends any[] | number> = ReturnType<
 >;
 type UseListReturn<T extends any[] | number> = {
 	listView: UseWindowReturn<T>['viewState'];
-	util: UseWindowReturn<T>['util'];
+	control: UseWindowReturn<T>['control'];
 	items: UseWindowReturn<T>['items'];
 	setItems: UseWindowReturn<T>['setItems'];
 };
@@ -17,7 +17,7 @@ export function useList<T extends any[] | number>(
 	const list = useWindow(...args);
 	return {
 		listView: list.viewState,
-		util: list.util,
+		control: list.control,
 		items: list.items,
 		setItems: list.setItems,
 	};

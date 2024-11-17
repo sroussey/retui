@@ -1,5 +1,5 @@
 import {describe, expect, test} from 'vitest';
-import {NavigationMap, NavController} from './NavController.js';
+import {NodeMap, NavController} from './NavController.js';
 import assert from 'assert';
 
 const deepEqual = (a: any, b: any) => {
@@ -12,7 +12,7 @@ const deepEqual = (a: any, b: any) => {
 };
 
 // prettier-ignore
-const map: NavigationMap = [
+const map: NodeMap = [
     ["a", "b"],
     ["c"],
     ["d"],
