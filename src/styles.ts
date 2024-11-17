@@ -17,6 +17,13 @@ export type Styles = {
 	readonly position?: 'absolute' | 'relative';
 
 	/**
+	 * Makes it possible to inject pre-defined styles into a component.  Conflicts
+	 * in styles found in the styles prop and normal props will overwrite in favor
+	 * of the normal props.
+	 */
+	readonly styles?: Omit<Styles, 'styles'>;
+
+	/**
 	 * Size of the gap between an element's columns.
 	 */
 	readonly columnGap?: number;
