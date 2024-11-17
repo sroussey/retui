@@ -12,8 +12,10 @@ export type Props<T extends string = string> = {
 export function Node<T extends string = string>(
 	props: Props<T>,
 ): React.ReactNode {
-	const isShallowFocus = useIsFocus();
-	const isDeepFocus = props.name === props.nodesView._node && isShallowFocus;
+	const parentIsFocused = useIsFocus();
+	const nodeIsFocused = props.name === props.nodesView._node;
+	const isDeepFocus = parentIsFocused && nodeIsFocused;
+	const isShallowFocus = !parentIsFocused && nodeIsFocused;
 
 	return (
 		<NodeContext.Provider

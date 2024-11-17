@@ -105,7 +105,8 @@ export function Unit({
 
 /*
  * Like useEvent, but does not perform context checks before calling handlers.
- * The Window component returns early before adding listeners if not in focus
+ * No context checks are needed here because the Window component won't add any
+ * listeners if the focus state isn't appropriate
  * */
 function useMultipleEventsWithoutContextChecks(nextListeners: Listener[]) {
 	const oldListeners = useRef<Listener[]>([]);

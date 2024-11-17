@@ -77,6 +77,9 @@ export function Window({
 		const key = (node as React.ReactElement).key;
 		const isHidden = idx < viewState._start || idx >= viewState._end;
 
+		const isDeepFocus = THIS_WINDOW_FOCUS && idx === viewState._idx;
+		const isShallowFocus = !isDeepFocus && idx === viewState._idx;
+
 		return (
 			<Unit
 				key={key}
@@ -86,8 +89,8 @@ export function Window({
 				isHidden={isHidden}
 				maintainState={maintainState ?? true}
 				// context
-				isShallowFocus={idx === viewState._idx}
-				isDeepFocus={THIS_WINDOW_FOCUS && idx === viewState._idx}
+				isShallowFocus={isShallowFocus}
+				isDeepFocus={isDeepFocus}
 				index={idx}
 				items={viewState._items}
 				setItems={viewState._setItems}
