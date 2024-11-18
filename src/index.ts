@@ -69,3 +69,6 @@ export {Modal} from './Modal/Modal.js';
 
 // Logger
 export {default as logger, Logger} from './Logger/Logger.js';
+
+// Viewport
+export {Viewport} from './Viewport/Viewport.js';
