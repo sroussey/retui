@@ -66,3 +66,6 @@ export {Node} from './NodeMap/Node.js';
 
 // Modal
 export {Modal} from './Modal/Modal.js';
+
+// Logger
+export {default as logger, Logger} from './Logger/Logger.js';
