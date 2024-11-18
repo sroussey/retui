@@ -63,3 +63,6 @@ export {VerticalLine, HorizontalLine} from './Lines/Line.js';
 export {useNodeMap} from './NodeMap/useNodeMap.js';
 export type {NodeMap} from './NodeMap/NavController.js';
 export {Node} from './NodeMap/Node.js';
+
+// Modal
+export {Modal} from './Modal/Modal.js';

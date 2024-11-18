@@ -129,9 +129,13 @@ const renderNodeToOutput = (
 	} else if (node.nodeName === 'ink-box') {
 		// prettier-ignore
 		// Inherit backgroundColor from parent element
-		if (options.parentBackgroundColor && node.style.backgroundColor === "inherit") {
+		if (node.style.backgroundColor === 'inherit') {
+			if (options.parentBackgroundColor) {
 				(node.style.backgroundColor as string) = options.parentBackgroundColor;
+			} else {
+				(node.style.backgroundColor as any) = undefined;
 			}
+		}
 
 		renderBorder(x, y, node, output);
 		const parentHasBg = options.parentBackgroundColor ? true : false;
