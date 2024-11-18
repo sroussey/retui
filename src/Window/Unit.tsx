@@ -1,5 +1,5 @@
 import React, {useEffect, useRef} from 'react';
-import {Box} from '../BoxBgColor/Box.js';
+import Box from '../components/Box.js';
 import {WindowProps} from './Window.js';
 import {STDIN} from '../Stdin/Stdin.js';
 import {Listener} from './types.js';

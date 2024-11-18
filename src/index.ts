@@ -72,3 +72,6 @@ export {default as logger, Logger} from './Logger/Logger.js';
 
 // Viewport
 export {Viewport} from './Viewport/Viewport.js';
+
+// Underline/Overline
+export {Underline, Overline} from './Lines/BorderedLines/BorderedLines.js';

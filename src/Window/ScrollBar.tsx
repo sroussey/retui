@@ -1,8 +1,8 @@
 import React from 'react';
-import {Box} from '../BoxBgColor/Box.js';
 import Text from '../components/Text.js';
 import {ViewState} from './types.js';
 import {WindowProps} from './Window.js';
+import Box from '../components/Box.js';
 
 type Props = {
 	viewState: ViewState;
