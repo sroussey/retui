@@ -30,13 +30,13 @@ const Box = forwardRef<DOMElement, PropsWithChildren<Props>>(
 		props.flexDirection = props.flexDirection ?? 'row';
 		props.flexGrow = props.flexGrow ?? 0;
 		props.flexShrink = props.flexShrink ?? 1;
+		props.zIndex = props.zIndex ?? 'auto';
 
 		return (
 			<ink-box
 				ref={ref}
 				style={{
 					...props,
-					wipeBackground: props.wipeBackground ?? false,
 					overflowX: props.overflowX ?? props.overflow ?? 'visible',
 					overflowY: props.overflowY ?? props.overflow ?? 'visible',
 				}}

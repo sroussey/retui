@@ -24,6 +24,15 @@ export type Styles = {
 	readonly styles?: Omit<Styles, 'styles'>;
 
 	/**
+	 * Alters the render order which a component will be rendered, allowing for
+	 * components to appear on top of other components.  Does not support negative
+	 * zIndexes.  zIndex values are relative only to parent nodes.
+	 *
+	 * @default 'auto' (same as 0)
+	 * */
+	readonly zIndex?: number | 'auto';
+
+	/**
 	 * Size of the gap between an element's columns.
 	 */
 	readonly columnGap?: number;
@@ -198,8 +207,10 @@ export type Styles = {
 
 	/**
 	 * Wipe the background of the element.  Defaults to false because wiping the
-	 * background is a burden on performance.  When the direct parent element has a
-	 * backgroundColor property set, the background will be automatically wiped.
+	 * background is a burden on performance.  There are cases where the background is
+	 * automatically wiped.  1. When the direct parent element has a backgroundColor property
+	 * set and the element does not have backgroundColor set to 'inherit'. 2. When the
+	 * element has a zIndex set to a value other than auto or 0.
 	 *
 	 * @default false
 	 * */
@@ -603,4 +614,5 @@ const styles = (node: YogaNode, style: Styles = {}): void => {
 	applyGapStyles(node, style);
 };
 
+export type BoxStyles = Omit<Styles, 'styles'>;
 export default styles;

@@ -9,21 +9,32 @@ const renderBackgroundColor = (
 	output: Output,
 	parentHasBg: boolean,
 ): void => {
-	const BACKGROUND_COLOR = node.style.backgroundColor;
-	const HAS_BG = typeof BACKGROUND_COLOR === 'string';
-	const HAS_BORDER =
-		typeof node.style.borderStyle === 'string' ||
-		typeof node.style.borderStyle === 'object';
+	const {backgroundColor, zIndex, wipeBackground, borderStyle} = node.style;
 
-	// It is costly to render background when not necessary, so only render a bg color
-	// when directed or when it makes sense (parent element has bg, so wipe the bg to prevent
-	// bleed through)
-	//
-	// If there is no backgroundColor property set, proceed
-	// If the parent element has a background set, proceed (so there isn't bleed through)
-	// wipeBackground set to true (false by default) wipes the bg no matter what
-	if (!HAS_BG && !parentHasBg && !node.style.wipeBackground) {
-		return;
+	const hasBorder =
+		typeof borderStyle === 'string' || typeof borderStyle === 'object';
+	const hasBackgroundColor =
+		backgroundColor && typeof backgroundColor === 'string';
+
+	// If no backgroundColor property set, respect the explicit setting of false to wipeBackground
+	if (wipeBackground === false && !hasBackgroundColor) return;
+
+	let wipe = wipeBackground ?? false;
+	if (!wipe) {
+		// Prevent bleed through
+		if (parentHasBg) {
+			wipe = true;
+		}
+		// Make sure zIndex'd elements actually appear 'above' other elements
+		if (typeof zIndex === 'number' && zIndex > 0) {
+			wipe = true;
+		}
+		// If there is a background color set, then the background is wiped as part of the process
+		if (hasBackgroundColor) {
+			wipe = true;
+		}
+
+		if (!wipe) return;
 	}
 
 	let width = node.yogaNode!.getComputedWidth();
@@ -32,7 +43,7 @@ const renderBackgroundColor = (
 	let offsetX = 0;
 	let offsetY = 0;
 
-	if (HAS_BORDER) {
+	if (hasBorder) {
 		width -= 2;
 		height -= 2;
 
@@ -53,8 +64,8 @@ const renderBackgroundColor = (
 	let content = '';
 	for (let i = 0; i < height; ++i) {
 		const line = ' '.repeat(width);
-		const colorizedLine = colorize(line, BACKGROUND_COLOR, 'background');
-		if (HAS_BG) {
+		const colorizedLine = colorize(line, backgroundColor, 'background');
+		if (hasBackgroundColor) {
 			content += `${colorizedLine}\n`;
 		} else {
 			content += `${line}\n`;
@@ -65,3 +76,7 @@ const renderBackgroundColor = (
 };
 
 export default renderBackgroundColor;
+
+// It is costly to render background when not necessary, so only render a bg color
+// when directed or when it makes sense (parent element has bg, so wipe the bg to prevent
+// bleed through)

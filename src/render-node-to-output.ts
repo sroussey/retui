@@ -9,6 +9,7 @@ import {type DOMElement} from './dom.js';
 import type Output from './output.js';
 import renderBackgroundColor from './render-background-color.js';
 import {Styles} from './styles.js';
+import assert from 'assert';
 
 // If parent container is `<Box>`, text nodes will be treated as separate nodes in
 // the tree and will have their own coordinates in the layout.
@@ -39,8 +40,11 @@ const renderNodeToOutput = (
 		offsetY?: number;
 		transformers?: OutputTransformer[];
 		skipStaticElements: boolean;
-		inheritedBackgroundColor?: Styles['backgroundColor'];
+		parentBackgroundColor?: Styles['backgroundColor'];
+		parentZIndex?: number;
+		isZIndexRoot?: boolean;
 	},
+	zIndexes: {index: number; cb: () => void}[] = [],
 ) => {
 	const {
 		offsetX = 0,
@@ -49,107 +53,149 @@ const renderNodeToOutput = (
 		skipStaticElements,
 	} = options;
 
-	if (skipStaticElements && node.internal_static) {
+	const {yogaNode} = node;
+
+	if (skipStaticElements && node.internal_static) return;
+	if (!yogaNode || yogaNode.getDisplay() === Yoga.DISPLAY_NONE) return;
+
+	// Left and top positions in Yoga are relative to their parent node
+	// If this is a call from a zIndex node, then the offset has already been calculated
+	const nextOffsetX = options.isZIndexRoot ? 0 : yogaNode.getComputedLeft();
+	const nextOffsetY = options.isZIndexRoot ? 0 : yogaNode.getComputedTop();
+	const x = offsetX + nextOffsetX;
+	const y = offsetY + nextOffsetY;
+
+	// Transformers are functions that transform final text output of each component
+	// See Output class for logic that applies transformers
+	let newTransformers = transformers;
+
+	if (typeof node.internal_transform === 'function') {
+		newTransformers = [node.internal_transform, ...transformers];
+	}
+
+	if (node.nodeName === 'ink-text') {
+		let text = squashTextNodes(node);
+
+		if (text.length > 0) {
+			const currentWidth = widestLine(text);
+			const maxWidth = getMaxWidth(yogaNode);
+
+			if (currentWidth > maxWidth) {
+				const textWrap = node.style.textWrap ?? 'wrap';
+				text = wrapText(text, maxWidth, textWrap);
+			}
+
+			text = applyPaddingToText(node, text);
+
+			output.write(x, y, text, {transformers: newTransformers});
+		}
+
 		return;
 	}
 
-	const {yogaNode} = node;
+	let clipped = false;
 
-	if (yogaNode) {
-		if (yogaNode.getDisplay() === Yoga.DISPLAY_NONE) {
-			return;
-		}
+	const hasZIndex =
+		typeof node.style.zIndex === 'number' &&
+		node.style.zIndex > 0 &&
+		!options.isZIndexRoot;
 
-		// Left and top positions in Yoga are relative to their parent node
-		const x = offsetX + yogaNode.getComputedLeft();
-		const y = offsetY + yogaNode.getComputedTop();
+	if (typeof node.style.zIndex === 'number' && node.style.zIndex < 0) {
+		throw new Error('zIndex property must be a positive number.');
+	}
 
-		// Transformers are functions that transform final text output of each component
-		// See Output class for logic that applies transformers
-		let newTransformers = transformers;
+	// Save for rendering after the rest of the tree has finished
+	if (node.nodeName === 'ink-box' && hasZIndex) {
+		// prettier-ignore
+		const index = (node.style.zIndex as number) + (options.parentZIndex ?? 0);
 
-		if (typeof node.internal_transform === 'function') {
-			newTransformers = [node.internal_transform, ...transformers];
-		}
+		// prettier-ignore
+		const cb = () => {
+			renderNodeToOutput(node, output, {
+				offsetX: x,
+				offsetY: y,
+				transformers: newTransformers,
+				skipStaticElements,
+				parentBackgroundColor: node.style.backgroundColor,
+				parentZIndex: index,
+				isZIndexRoot: true,
+			}, []);
+			// Don't pass in the cached zIndexes, each node with a zIndex accumulates
+			// recursive callbacks to other nodes with zIndexes just like the root node
+		};
 
-		if (node.nodeName === 'ink-text') {
-			let text = squashTextNodes(node);
-
-			if (text.length > 0) {
-				const currentWidth = widestLine(text);
-				const maxWidth = getMaxWidth(yogaNode);
-
-				if (currentWidth > maxWidth) {
-					const textWrap = node.style.textWrap ?? 'wrap';
-					text = wrapText(text, maxWidth, textWrap);
-				}
-
-				text = applyPaddingToText(node, text);
-
-				output.write(x, y, text, {transformers: newTransformers});
+		zIndexes.push({index, cb});
+		zIndexes.sort((a, b) => (a.index > b.index ? 1 : -1));
+	} else if (node.nodeName === 'ink-box') {
+		// prettier-ignore
+		// Inherit backgroundColor from parent element
+		if (options.parentBackgroundColor && node.style.backgroundColor === "inherit") {
+				(node.style.backgroundColor as string) = options.parentBackgroundColor;
 			}
 
-			return;
+		renderBorder(x, y, node, output);
+		const parentHasBg = options.parentBackgroundColor ? true : false;
+		renderBackgroundColor(x, y, node, output, parentHasBg);
+
+		const clipHorizontally =
+			node.style.overflowX === 'hidden' || node.style.overflow === 'hidden';
+		const clipVertically =
+			node.style.overflowY === 'hidden' || node.style.overflow === 'hidden';
+
+		if (clipHorizontally || clipVertically) {
+			const x1 = clipHorizontally
+				? x + yogaNode.getComputedBorder(Yoga.EDGE_LEFT)
+				: undefined;
+
+			const x2 = clipHorizontally
+				? x +
+					yogaNode.getComputedWidth() -
+					yogaNode.getComputedBorder(Yoga.EDGE_RIGHT)
+				: undefined;
+
+			const y1 = clipVertically
+				? y + yogaNode.getComputedBorder(Yoga.EDGE_TOP)
+				: undefined;
+
+			const y2 = clipVertically
+				? y +
+					yogaNode.getComputedHeight() -
+					yogaNode.getComputedBorder(Yoga.EDGE_BOTTOM)
+				: undefined;
+
+			output.clip({x1, x2, y1, y2});
+			clipped = true;
 		}
+	}
 
-		let clipped = false;
-
-		if (node.nodeName === 'ink-box') {
-			// prettier-ignore
-			// Inherit backgroundColor from parent element
-			if (options.inheritedBackgroundColor && node.style.backgroundColor === "inherit") {
-				(node.style.backgroundColor as string) = options.inheritedBackgroundColor;
-			}
-
-			renderBorder(x, y, node, output);
-			const parentHasBg = options.inheritedBackgroundColor ? true : false;
-			renderBackgroundColor(x, y, node, output, parentHasBg);
-
-			const clipHorizontally =
-				node.style.overflowX === 'hidden' || node.style.overflow === 'hidden';
-			const clipVertically =
-				node.style.overflowY === 'hidden' || node.style.overflow === 'hidden';
-
-			if (clipHorizontally || clipVertically) {
-				const x1 = clipHorizontally
-					? x + yogaNode.getComputedBorder(Yoga.EDGE_LEFT)
-					: undefined;
-
-				const x2 = clipHorizontally
-					? x +
-						yogaNode.getComputedWidth() -
-						yogaNode.getComputedBorder(Yoga.EDGE_RIGHT)
-					: undefined;
-
-				const y1 = clipVertically
-					? y + yogaNode.getComputedBorder(Yoga.EDGE_TOP)
-					: undefined;
-
-				const y2 = clipVertically
-					? y +
-						yogaNode.getComputedHeight() -
-						yogaNode.getComputedBorder(Yoga.EDGE_BOTTOM)
-					: undefined;
-
-				output.clip({x1, x2, y1, y2});
-				clipped = true;
-			}
-		}
-
-		if (node.nodeName === 'ink-root' || node.nodeName === 'ink-box') {
-			for (const childNode of node.childNodes) {
-				renderNodeToOutput(childNode as DOMElement, output, {
+	if (
+		node.nodeName === 'ink-root' ||
+		(node.nodeName === 'ink-box' && !hasZIndex)
+	) {
+		for (const childNode of node.childNodes) {
+			renderNodeToOutput(
+				childNode as DOMElement,
+				output,
+				{
 					offsetX: x,
 					offsetY: y,
 					transformers: newTransformers,
 					skipStaticElements,
-					inheritedBackgroundColor: node.style.backgroundColor,
-				});
-			}
+					parentBackgroundColor: node.style.backgroundColor,
+					parentZIndex: options.parentZIndex,
+				},
+				zIndexes,
+			);
+		}
 
-			if (clipped) {
-				output.unclip();
-			}
+		if (clipped) {
+			output.unclip();
+		}
+	}
+
+	if (node.nodeName === 'ink-root' || options.isZIndexRoot) {
+		for (const level of zIndexes) {
+			level.cb();
 		}
 	}
 };

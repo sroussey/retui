@@ -32,6 +32,7 @@ export {default as useKeymap} from './Stdin/KeyboardInputHooks/useKeymap.js';
 
 // Add 'backgroundColor' property to Box component
 export type {Props as BoxProps} from './components/Box.js';
+export type {BoxStyles} from './styles.js';
 export {default as Box} from './components/Box.js';
 // export type {Props as BoxProps} from './BoxBgColor/Box.js';
 // export {Box} from './BoxBgColor/Box.js';
