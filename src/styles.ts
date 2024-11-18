@@ -614,5 +614,8 @@ const styles = (node: YogaNode, style: Styles = {}): void => {
 	applyGapStyles(node, style);
 };
 
-export type BoxStyles = Omit<Styles, 'styles'>;
+export type BoxStyles = {
+	-readonly [P in keyof Omit<Styles, 'styles'>]: Omit<Styles, 'styles'>[P];
+};
+
 export default styles;

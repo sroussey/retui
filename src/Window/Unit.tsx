@@ -10,8 +10,11 @@ type Props = {
 	// What kind of default styles are added to the wrapper?
 	type: WindowProps['type'];
 
-	// The React node that will be wrapped in the Unit component
+	// The component that will be wrapped in the Unit component
 	node: React.ReactElement;
+
+	// Does the component have a fixed size, or should it stretch to fit the window container
+	stretch: boolean;
 
 	// Is the Window focused && is the Unit focused within the Window?
 	isDeepFocus: boolean;
@@ -43,6 +46,7 @@ export function Unit({
 	listeners,
 	items,
 	setItems,
+	stretch,
 	index,
 	isShallowFocus,
 	isDeepFocus,
@@ -55,6 +59,7 @@ export function Unit({
 	// Make sure that pages aren't accidently shrunk.  Could proably get rid of the
 	// wrapper around not hidden nodes and disregard this, but it works right now
 	const dimension = type === 'PAGES' ? '100' : undefined;
+	const flexShrink = stretch ? 1 : 0;
 
 	const getUnit = () => {
 		return (
@@ -64,7 +69,12 @@ export function Unit({
 						{node}
 					</Box>
 				) : !isHidden ? (
-					<Box height={dimension} width={dimension} key={node.key}>
+					<Box
+						flexShrink={flexShrink}
+						height={dimension}
+						width={dimension}
+						key={node.key}
+					>
 						{node}
 					</Box>
 				) : null}

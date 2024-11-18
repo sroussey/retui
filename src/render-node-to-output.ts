@@ -10,6 +10,7 @@ import type Output from './output.js';
 import renderBackgroundColor from './render-background-color.js';
 import {Styles} from './styles.js';
 import assert from 'assert';
+import {logger} from './index.js';
 
 // If parent container is `<Box>`, text nodes will be treated as separate nodes in
 // the tree and will have their own coordinates in the layout.

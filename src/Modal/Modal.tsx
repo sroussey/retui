@@ -1,6 +1,7 @@
 import React from 'react';
 import Box from '../components/Box.js';
-import {BoxProps} from '../index.js';
+import {BoxProps, BoxStyles, useIsFocus} from '../index.js';
+import {usePageFocus} from '../FocusContext/FocusContext.js';
 
 /*
  * Absolutely positions a box the same dimensions as the parent node and applies
@@ -23,13 +24,26 @@ export function Modal({
 	yOffset = 0,
 	children,
 }: Props): React.ReactNode {
+	const isPageFocus = usePageFocus();
+
+	const styles: BoxStyles = {
+		height: '100',
+		width: '100',
+		overflow: 'visible',
+	};
+
+	if (!isPageFocus) {
+		styles.height = '0';
+		styles.width = '0';
+		styles.overflow = 'hidden';
+	}
+
 	return (
 		<Box
+			styles={styles}
 			zIndex={zIndex}
 			wipeBackground={false} // zIndex wipes background by default, we don't want that here
 			position="absolute"
-			height="100"
-			width="100"
 			justifyContent={justifyContent}
 			alignItems={alignItems}
 			marginLeft={xOffset}

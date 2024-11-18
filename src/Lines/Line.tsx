@@ -35,6 +35,7 @@ export function VerticalLine(props: VerticalProps): React.ReactNode {
 	return (
 		<Box
 			{...props}
+			flexShrink={0}
 			borderColor={props.color}
 			borderStyle={{
 				left: left,
@@ -70,6 +71,7 @@ export function HorizontalLine(props: HorizontalProps): React.ReactNode {
 	return (
 		<Box
 			{...props}
+			flexShrink={0}
 			borderColor={props.color}
 			borderStyle="single"
 			borderTop={borderTop}

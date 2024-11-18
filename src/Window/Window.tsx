@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {UseEventTypes} from '../Stdin/KeyboardInputHooks/useEvent.js';
 import {useResponsiveDimensions} from '../useResponsiveDimensions/useResponsiveDimensions.js';
-import {BoxProps, KeyMap} from '../index.js';
+import {BoxProps, KeyMap, logger} from '../index.js';
 import {isRenderable} from './isRenderable.js';
 import {Listener, ViewState} from './types.js';
 import {useIsFocus, WindowContext} from '../FocusContext/FocusContext.js';
@@ -26,10 +26,26 @@ export type WindowProps = {
 	maintainState?: boolean;
 
 	/**
-	 * The cross sectional dimension of each item.  Used to determine how many
-	 * items to show when the windowSize option in useWindow is set to 'fit'
+	 * There are two scenarios where this needs to be explicitly set.
+	 *
+	 * 1. If the cross-sectional dimension given to each list item is not 1 and you
+	 * have set your windowSize to 'fit'.  Setting windowSize to 'fit' adjusts the
+	 * windowSize dynamically based on available space which means it needs the
+	 * cross-sectional dimension given to each list item to calculate this how many
+	 * units can be displayed.  For example, you have set your direction prop to
+	 * 'column' and your windowSize is set to 'fit'.  The windowSize will be adjusted
+	 * dynamically based on the available amount of rows within the List component.
+	 * If all of your list items have a height of 1, then you're all set.  However,
+	 * if you list items have a height of 3, unitSize needs to be set to 3 to avoid
+	 * overflow.
+	 *
+	 * 2. The cross-sectional dimension of your list items are dynamic.  For
+	 * example, a List with a windowSize of 3 and you want your list items that are
+	 * viewable within the window to stretch to fill available space.
+	 *
+	 * @default: 1
 	 * */
-	unitSize?: number;
+	unitSize?: number | 'stretch';
 } & React.PropsWithChildren;
 
 export function Window({
@@ -94,20 +110,34 @@ export function Window({
 				index={idx}
 				items={viewState._items}
 				setItems={viewState._setItems}
+				stretch={unitSize === 'stretch'}
 			/>
 		);
 	}
 
-	const shouldUpdate = scrollBar ? true : false;
-	const scrollDimensions = useResponsiveDimensions({shouldUpdate});
+	const dimensions = useResponsiveDimensions({
+		shouldUpdate: viewState._fitWindow || scrollBar,
+	});
+
+	useEffect(() => {
+		if (!viewState._fitWindow) return;
+		if (typeof unitSize !== 'number') return;
+
+		const nextWinSize =
+			direction === 'column'
+				? Math.floor((dimensions.height ?? 0) / unitSize)
+				: Math.floor((dimensions.width ?? 0) / unitSize);
+
+		viewState._control.modifyWinSize(nextWinSize);
+	}, [dimensions.width, dimensions.height]);
 
 	const getScrollBar = (shouldBuild: boolean) => {
 		if (!shouldBuild) return null;
 		return (
 			<ScrollBar
 				viewState={viewState}
-				height={scrollDimensions.height ?? 0}
-				width={scrollDimensions.width ?? 0}
+				height={dimensions.height ?? 0}
+				width={dimensions.width ?? 0}
 				color={scrollColor}
 				direction={direction}
 				style={scrollBarStyle}
@@ -120,38 +150,19 @@ export function Window({
 	// Wordlist placeholder
 	wordList && viewState._winSize > 0;
 
-	const dimensions = useResponsiveDimensions({
-		shouldUpdate: viewState._fitWindow,
-	});
-
-	useEffect(() => {
-		if (!viewState._fitWindow) return;
-
-		const nextWinSize =
-			direction === 'column'
-				? Math.floor((dimensions.height ?? 0) / unitSize)
-				: Math.floor((dimensions.width ?? 0) / unitSize);
-
-		viewState._control.modifyWinSize(nextWinSize);
-	}, [dimensions.width, dimensions.height]);
-
-	// Original percents with %
 	const verticalList = direction === 'column' && (
-		<Box flexDirection="column" height="100%" width="100%" ref={dimensions.ref}>
+		<Box flexDirection="column" height="100" width="100" flexGrow={1}>
 			<Box
+				flexShrink={0}
 				flexDirection="row"
 				justifyContent="space-between"
-				width="100%"
+				width="100"
 				height="100"
+				ref={dimensions.ref}
 			>
 				{scrollBarStart}
-				<Box display="flex" flexGrow={1} flexDirection="column">
-					<Box
-						flexDirection="column"
-						justifyContent="space-between"
-						width="100"
-						ref={scrollDimensions.ref as any}
-					>
+				<Box display="flex" flexDirection="column" height="100" flexShrink={0}>
+					<Box flexDirection="column" width="100" height="100" flexShrink={0}>
 						{generatedItems}
 					</Box>
 				</Box>
@@ -161,21 +172,18 @@ export function Window({
 	);
 
 	const horizontalList = direction === 'row' && (
-		// <Box flexDirection="row" height="100%" width="100%" ref={dimensions.ref}>
-		<Box flexDirection="row" width="100" ref={dimensions.ref}>
+		<Box flexDirection="row" height="100" width="100">
 			<Box
+				flexShrink={0}
 				flexDirection="column"
 				justifyContent="space-between"
-				height="100%"
+				height="100"
 				width="100"
+				ref={dimensions.ref as any}
 			>
 				{scrollBarStart}
-				<Box display="flex" flexDirection="row" width="100">
-					<Box
-						flexShrink={1}
-						flexDirection="row"
-						ref={scrollDimensions.ref as any}
-					>
+				<Box display="flex" flexDirection="row" width="100" flexShrink={0}>
+					<Box flexDirection="row" width="100" height="100" flexShrink={0}>
 						{generatedItems}
 					</Box>
 				</Box>

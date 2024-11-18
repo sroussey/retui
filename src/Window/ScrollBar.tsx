@@ -50,17 +50,15 @@ function _ScrollBar({
 			});
 
 		return (
-			<>
-				<Box flexDirection="column" height="100%">
-					{new Array(startHeight).fill(0).map((_, idx) => {
-						return <Text key={idx}> </Text>;
-					})}
-					{barComponent}
-					{new Array(endHeight).fill(0).map((_, idx) => {
-						return <Text key={idx}> </Text>;
-					})}
-				</Box>
-			</>
+			<Box flexDirection="column" height={height}>
+				{new Array(startHeight).fill(0).map((_, idx) => {
+					return <Text key={idx}> </Text>;
+				})}
+				{barComponent}
+				{new Array(endHeight).fill(0).map((_, idx) => {
+					return <Text key={idx}> </Text>;
+				})}
+			</Box>
 		);
 	}
 
@@ -85,13 +83,11 @@ function _ScrollBar({
 		);
 
 		return (
-			<>
-				<Box flexDirection="row" height={1} width="100">
-					<Text>{' '.repeat(startWidth)}</Text>
-					{barComponent}
-					<Text>{' '.repeat(endWidth)}</Text>
-				</Box>
-			</>
+			<Box flexDirection="row" height={1} width={width}>
+				<Text>{' '.repeat(startWidth)}</Text>
+				{barComponent}
+				<Text>{' '.repeat(endWidth)}</Text>
+			</Box>
 		);
 	}
 
