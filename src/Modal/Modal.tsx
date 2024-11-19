@@ -10,46 +10,42 @@ import {usePageFocus} from '../FocusContext/FocusContext.js';
  * */
 export type Props = {
 	zIndex?: number;
-	justifyContent?: BoxProps['justifyContent'];
-	alignItems?: BoxProps['alignItems'];
+	justifySelf?: 'flex-start' | 'center' | 'flex-end';
+	alignSelf?: 'flex-start' | 'center' | 'flex-end';
 	xOffset?: number;
 	yOffset?: number;
-} & React.PropsWithChildren;
+} & Omit<BoxProps, 'wipeBackground'> &
+	React.PropsWithChildren;
 
-export function Modal({
-	zIndex = 1,
-	justifyContent = 'center',
-	alignItems = 'center',
-	xOffset = 0,
-	yOffset = 0,
-	children,
-}: Props): React.ReactNode {
+export function Modal(props: Props): React.ReactNode {
 	const isPageFocus = usePageFocus();
+	if (!isPageFocus) return null;
 
-	const styles: BoxStyles = {
-		height: '100',
-		width: '100',
-		overflow: 'visible',
-	};
-
-	if (!isPageFocus) {
-		styles.height = '0';
-		styles.width = '0';
-		styles.overflow = 'hidden';
-	}
+	const {
+		justifySelf = 'center',
+		alignSelf = 'center',
+		xOffset = 0,
+		yOffset = 0,
+		zIndex = 1,
+		children,
+		...rest
+	} = props;
 
 	return (
 		<Box
-			styles={styles}
-			zIndex={zIndex}
-			wipeBackground={false} // zIndex wipes background by default, we don't want that here
 			position="absolute"
-			justifyContent={justifyContent}
-			alignItems={alignItems}
+			height="100"
+			width="100"
+			zIndex={zIndex}
+			wipeBackground={false} // zIndex wipes background by default, we don't want that in the overlay Box
+			justifyContent={justifySelf}
+			alignItems={alignSelf}
 			marginLeft={xOffset}
 			marginTop={yOffset}
 		>
-			{children}
+			<Box {...rest} wipeBackground>
+				{children}
+			</Box>
 		</Box>
 	);
 }
