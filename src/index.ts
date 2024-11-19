@@ -75,3 +75,6 @@ export {Viewport} from './Viewport/Viewport.js';
 
 // Underline/Overline
 export {Underline, Overline} from './Lines/BorderedLines/BorderedLines.js';
+
+// TitleBox
+export {Title} from './Title/Title.js';
