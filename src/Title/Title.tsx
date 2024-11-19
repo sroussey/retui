@@ -17,7 +17,7 @@ type Align = 'start' | 'end';
 export type Props = {
 	title: string;
 	color?: BoxProps['borderColor'];
-	tabBorderColor?: BoxProps['borderColor'];
+	// tabBorderColor?: BoxProps['borderColor'];
 	tabBorderStyle?: BoxProps['borderStyle'];
 	style?: TitleStyle;
 	justify?: Justify;
@@ -35,7 +35,7 @@ export function Title({
 	style = 'strike-through',
 	color = undefined,
 	tabBorderStyle = 'single',
-	tabBorderColor = undefined,
+	// tabBorderColor = undefined,
 	justify = 'center',
 	align = 'start',
 }: Props): React.ReactNode {
@@ -84,11 +84,12 @@ export function Title({
 			marginTop={marginTop}
 			justifyContent={FLEX_VALUES_MAP[justify] as any}
 			alignItems={FLEX_VALUES_MAP[align] as any}
+			borderColor="inherit"
 		>
 			<TitleImplementation
 				title={title}
 				color={color}
-				borderColor={tabBorderColor}
+				// borderColor={tabBorderColor}
 				borderConfiguration={borderConfiguration}
 			/>
 		</Box>
@@ -98,7 +99,7 @@ export function Title({
 type TitleImplementationProps = {
 	title: string;
 	color: BoxProps['borderColor'];
-	borderColor: BoxProps['borderColor'] | undefined;
+	// borderColor: BoxProps['borderColor'] | undefined;
 	borderConfiguration?: BorderConfiguration;
 };
 
@@ -114,7 +115,8 @@ function TitleImplementation(props: TitleImplementationProps): React.ReactNode {
 	return (
 		<Box
 			borderStyle={props.borderConfiguration}
-			borderColor={props.borderColor}
+			borderColor="inherit"
+			backgroundColor="inherit"
 			flexShrink={0}
 			zIndex={1}
 		>

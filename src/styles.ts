@@ -24,9 +24,9 @@ export type Styles = {
 	readonly styles?: Omit<Styles, 'styles'>;
 
 	/**
-	 * Alters the render order which a component will be rendered, allowing for
-	 * components to appear on top of other components.  Does not support negative
-	 * zIndexes.  zIndex values are relative only to parent nodes.
+	 * Alters the render order for a component which allows components to appear
+	 * on top of other components.  Does not support negative zIndexes.  zIndex
+	 * values are relative only to parent nodes.
 	 *
 	 * @default 'auto' (same as 0)
 	 * */
@@ -220,7 +220,7 @@ export type Styles = {
 	 * Add a border with a specified style.
 	 * If `borderStyle` is `undefined` (which it is by default), no border will be added.
 	 */
-	readonly borderStyle?: keyof Boxes | BoxStyle;
+	readonly borderStyle?: keyof Boxes | BoxStyle | 'inherit';
 
 	/**
 	 * Determines whether top border is visible.
@@ -254,7 +254,7 @@ export type Styles = {
 	 * Change border color.
 	 * Shorthand for setting `borderTopColor`, `borderRightColor`, `borderBottomColor` and `borderLeftColor`.
 	 */
-	readonly borderColor?: LiteralUnion<ForegroundColorName, string>;
+	readonly borderColor?: LiteralUnion<ForegroundColorName, string> | 'inherit';
 
 	/**
 	 * Change top border color.
@@ -567,6 +567,12 @@ const applyDisplayStyles = (node: YogaNode, style: Styles): void => {
 	}
 };
 
+// This is where content dimensions are calculated in relation to borders.  If
+// you had a borderStyle that included a depth greater than 1, it should be
+// included here.  For example, if you had a tabbed border for the top border, and
+// that tab extended a total of 2 rows above a normal single border, you would
+// need to set the borderWidth to 3 when executing the setBorder function with
+// Yoga.EDGE_TOP as an argument.
 const applyBorderStyles = (node: YogaNode, style: Styles): void => {
 	if ('borderStyle' in style) {
 		const borderWidth = style.borderStyle ? 1 : 0;

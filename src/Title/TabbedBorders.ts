@@ -1,9 +1,12 @@
 import {BoxProps} from '../index.js';
 
 type BorderStyleHelper = Exclude<BoxProps['borderStyle'], undefined>;
-export type BorderStyle = keyof {
-	[P in BorderStyleHelper as P extends string ? P : never]: string;
-};
+export type BorderStyle = keyof Omit<
+	{
+		[P in BorderStyleHelper as P extends string ? P : never]: string;
+	},
+	'inherit'
+>;
 export type BorderConfiguration = {
 	topLeft: string;
 	top: string;

@@ -1,4 +1,4 @@
-import cliBoxes from 'cli-boxes';
+import cliBoxes, {Boxes} from 'cli-boxes';
 import chalk from 'chalk';
 import colorize from './colorize.js';
 import {type DOMNode} from './dom.js';
@@ -13,9 +13,11 @@ const renderBorder = (
 	if (node.style.borderStyle) {
 		const width = node.yogaNode!.getComputedWidth();
 		const height = node.yogaNode!.getComputedHeight();
+
+		// 'inherit' borderStyle prop will always be reset before rendering border
 		const box =
 			typeof node.style.borderStyle === 'string'
-				? cliBoxes[node.style.borderStyle]
+				? cliBoxes[node.style.borderStyle as keyof Boxes]
 				: node.style.borderStyle;
 
 		const topBorderColor = node.style.borderTopColor ?? node.style.borderColor;

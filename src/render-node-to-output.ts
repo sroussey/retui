@@ -9,8 +9,6 @@ import {type DOMElement} from './dom.js';
 import type Output from './output.js';
 import renderBackgroundColor from './render-background-color.js';
 import {Styles} from './styles.js';
-import assert from 'assert';
-import {logger} from './index.js';
 
 // If parent container is `<Box>`, text nodes will be treated as separate nodes in
 // the tree and will have their own coordinates in the layout.
@@ -41,9 +39,13 @@ const renderNodeToOutput = (
 		offsetY?: number;
 		transformers?: OutputTransformer[];
 		skipStaticElements: boolean;
-		parentBackgroundColor?: Styles['backgroundColor'];
-		parentZIndex?: number;
 		isZIndexRoot?: boolean;
+		parentStyles?: {
+			backgroundColor?: Styles['backgroundColor'];
+			borderColor?: Styles['borderColor'];
+			borderStyle?: Styles['borderStyle'];
+		};
+		parentZIndex?: number;
 	},
 	zIndexes: {index: number; cb: () => void}[] = [],
 ) => {
@@ -117,29 +119,43 @@ const renderNodeToOutput = (
 				offsetY: y,
 				transformers: newTransformers,
 				skipStaticElements,
-				parentBackgroundColor: node.style.backgroundColor,
-				parentZIndex: index,
+				parentStyles: options?.parentStyles,
+				parentZIndex:index,
 				isZIndexRoot: true,
 			}, []);
 			// Don't pass in the cached zIndexes, each node with a zIndex accumulates
-			// recursive callbacks to other nodes with zIndexes just like the root node
+			// recursive callbacks to other zIndexed nodes just like the root node
 		};
 
 		zIndexes.push({index, cb});
 		zIndexes.sort((a, b) => (a.index > b.index ? 1 : -1));
 	} else if (node.nodeName === 'ink-box') {
+		// Inherit styles from parent element
 		// prettier-ignore
-		// Inherit backgroundColor from parent element
 		if (node.style.backgroundColor === 'inherit') {
-			if (options.parentBackgroundColor) {
-				(node.style.backgroundColor as string) = options.parentBackgroundColor;
+			if (options?.parentStyles?.backgroundColor) {
+				(node.style.backgroundColor as string) = options.parentStyles.backgroundColor;
 			} else {
 				(node.style.backgroundColor as any) = undefined;
 			}
 		}
+		if (node.style.borderColor === 'inherit') {
+			if (options?.parentStyles?.borderColor) {
+				(node.style.borderColor as string) = options.parentStyles.borderColor;
+			} else {
+				(node.style.borderColor as any) = undefined;
+			}
+		}
+		if (node.style.borderStyle === 'inherit') {
+			if (options?.parentStyles?.borderStyle) {
+				(node.style.borderStyle as any) = options.parentStyles.borderStyle;
+			} else {
+				(node.style.borderStyle as any) = undefined;
+			}
+		}
 
 		renderBorder(x, y, node, output);
-		const parentHasBg = options.parentBackgroundColor ? true : false;
+		const parentHasBg = options?.parentStyles?.backgroundColor ? true : false;
 		renderBackgroundColor(x, y, node, output, parentHasBg);
 
 		const clipHorizontally =
@@ -186,7 +202,11 @@ const renderNodeToOutput = (
 					offsetY: y,
 					transformers: newTransformers,
 					skipStaticElements,
-					parentBackgroundColor: node.style.backgroundColor,
+					parentStyles: {
+						backgroundColor: node.style.backgroundColor,
+						borderStyle: node.style.borderStyle,
+						borderColor: node.style.borderColor,
+					},
 					parentZIndex: options.parentZIndex,
 				},
 				zIndexes,
