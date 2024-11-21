@@ -582,17 +582,17 @@ const applyDisplayStyles = (node: YogaNode, style: Styles): void => {
 // need to set the borderWidth to 3 when executing the setBorder function with
 // Yoga.EDGE_TOP as an argument.
 const applyBorderStyles = (node: YogaNode, style: Styles): void => {
-	const hasTopTitle =
-		style.titleTopLeft?.title ||
-		style.titleTopCenter?.title ||
-		style.titleTopRight?.title;
-	const hasBottomTitle =
-		style.titleBottomLeft?.title ||
-		style.titleBottomCenter?.title ||
-		style.titleBottomRight?.title;
-
-	if ('borderStyle' in style || hasTopTitle || hasBottomTitle) {
+	if ('borderStyle' in style) {
 		const borderWidth = style.borderStyle ? 1 : 0;
+
+		const hasTopTitle =
+			style.titleTopLeft?.title ||
+			style.titleTopCenter?.title ||
+			style.titleTopRight?.title;
+		const hasBottomTitle =
+			style.titleBottomLeft?.title ||
+			style.titleBottomCenter?.title ||
+			style.titleBottomRight?.title;
 
 		let topOffset = 0;
 		let bottomOffset = 0;

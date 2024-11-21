@@ -62,12 +62,9 @@ export function renderTitle(
 	let centerText = center?.title ?? '';
 	let rightText = right?.title ?? '';
 
-	let leftStart = 0;
-	let centerStart = Math.max(
-		Math.floor((contentWidth - centerText.length) / 2),
-		0,
-	);
-	let rightStart = Math.max(contentWidth - rightText.length, 0);
+	const leftStart = 0;
+	const centerStart = Math.floor((contentWidth - centerText.length) / 2);
+	const rightStart = Math.max(contentWidth - rightText.length, 0);
 
 	let fillChar = position === 'top' ? (box?.top ?? ' ') : (box?.bottom ?? ' ');
 
@@ -96,7 +93,7 @@ export function renderTitle(
 		++centerEnd;
 	}
 
-	const R_STOP = getEnd(contentWidth);
+	const R_STOP = getEnd(rightStart + rightText.length);
 	let rightEnd = rightStart;
 	j = 0;
 	for (let i = rightStart; i < R_STOP; ++i) {
@@ -104,17 +101,17 @@ export function renderTitle(
 		++rightEnd;
 	}
 
-	leftStart = Math.min(leftStart, centerStart);
-	centerStart = Math.min(centerStart, rightStart);
-
 	leftEnd = Math.min(leftEnd, centerStart, rightStart);
 	centerEnd = Math.min(centerEnd, rightStart);
 
 	let leftSlice = line.slice(leftStart, leftEnd);
-	let leftGapSlice = line.slice(leftEnd, centerStart);
+	let leftGapSlice = line.slice(leftEnd + 1, centerStart);
 	let centerSlice = line.slice(centerStart, centerEnd);
-	let rightGapSlice = line.slice(centerEnd, rightStart);
-	let rightSlice = line.slice(rightStart, rightEnd);
+	let rightGapSlice = line.slice(rightStart, rightEnd);
+	// prettier-ignore
+	let rightSlice = line.slice(centerEnd + 1, rightStart);
+
+	console.log(leftSlice.join(''), centerSlice.join(''), rightSlice.join(''));
 
 	const leftTitle = colorizeSlice(leftSlice.join(''), left);
 	const leftGap = leftGapSlice.join('');
