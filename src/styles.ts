@@ -3,6 +3,7 @@ import {type Boxes, type BoxStyle} from 'cli-boxes';
 import {type LiteralUnion} from 'type-fest';
 import {type ForegroundColorName} from 'ansi-styles'; // Note: We import directly from `ansi-styles` to avoid a bug in TypeScript.
 import Yoga, {type Node as YogaNode} from 'yoga-wasm-web/auto';
+import {Title} from './renderTitles/renderTitleToOutput.js';
 
 export type Styles = {
 	readonly textWrap?:
@@ -15,6 +16,13 @@ export type Styles = {
 		| 'truncate-start';
 
 	readonly position?: 'absolute' | 'relative';
+
+	readonly titleTopLeft?: Title;
+	readonly titleTopCenter?: Title;
+	readonly titleTopRight?: Title;
+	readonly titleBottomLeft?: Title;
+	readonly titleBottomCenter?: Title;
+	readonly titleBottomRight?: Title;
 
 	/**
 	 * Makes it possible to inject pre-defined styles into a component.  Conflicts
@@ -574,15 +582,34 @@ const applyDisplayStyles = (node: YogaNode, style: Styles): void => {
 // need to set the borderWidth to 3 when executing the setBorder function with
 // Yoga.EDGE_TOP as an argument.
 const applyBorderStyles = (node: YogaNode, style: Styles): void => {
-	if ('borderStyle' in style) {
+	const hasTopTitle =
+		style.titleTopLeft?.title ||
+		style.titleTopCenter?.title ||
+		style.titleTopRight?.title;
+	const hasBottomTitle =
+		style.titleBottomLeft?.title ||
+		style.titleBottomCenter?.title ||
+		style.titleBottomRight?.title;
+
+	if ('borderStyle' in style || hasTopTitle || hasBottomTitle) {
 		const borderWidth = style.borderStyle ? 1 : 0;
 
+		let topOffset = 0;
+		let bottomOffset = 0;
+		if (!style.borderStyle && hasTopTitle) {
+			topOffset = 1;
+		}
+
+		if (!style.borderStyle && hasBottomTitle) {
+			bottomOffset = 1;
+		}
+
 		if (style.borderTop !== false) {
-			node.setBorder(Yoga.EDGE_TOP, borderWidth);
+			node.setBorder(Yoga.EDGE_TOP, borderWidth + topOffset);
 		}
 
 		if (style.borderBottom !== false) {
-			node.setBorder(Yoga.EDGE_BOTTOM, borderWidth);
+			node.setBorder(Yoga.EDGE_BOTTOM, borderWidth + bottomOffset);
 		}
 
 		if (style.borderLeft !== false) {

@@ -154,9 +154,9 @@ const renderNodeToOutput = (
 			}
 		}
 
-		renderBorder(x, y, node, output);
 		const parentHasBg = options?.parentStyles?.backgroundColor ? true : false;
 		renderBackgroundColor(x, y, node, output, parentHasBg);
+		renderBorder(x, y, node, output);
 
 		const clipHorizontally =
 			node.style.overflowX === 'hidden' || node.style.overflow === 'hidden';
