@@ -150,18 +150,33 @@ export function Window({
 	// Wordlist placeholder
 	wordList && viewState._winSize > 0;
 
+	/*
+	 * For an unknown reason, space-between is incapable of properly placing the
+	 * scrollbar at certain dimensions.
+	 */
+
 	const verticalList = direction === 'column' && (
-		<Box flexDirection="column" height="100" width="100" flexGrow={1}>
+		<Box
+			flexDirection="column"
+			height="100"
+			// width="100"
+			flexGrow={1}
+			ref={dimensions.ref}
+		>
 			<Box
 				flexShrink={0}
 				flexDirection="row"
 				justifyContent="space-between"
-				width="100"
 				height="100"
-				ref={dimensions.ref}
+				width={'100'} // This calculation (and the horizontal counterpart) behave unpredictably
 			>
 				{scrollBarStart}
-				<Box display="flex" flexDirection="column" height="100" flexShrink={0}>
+				<Box
+					display="flex"
+					flexDirection="column"
+					height={dimensions.height ?? '100'}
+					flexShrink={0}
+				>
 					<Box flexDirection="column" width="100" height="100" flexShrink={0}>
 						{generatedItems}
 					</Box>
@@ -172,18 +187,27 @@ export function Window({
 	);
 
 	const horizontalList = direction === 'row' && (
-		<Box flexDirection="row" height="100" width="100">
+		<Box
+			flexDirection="row"
+			// height="100"
+			width="100"
+			ref={dimensions.ref as any}
+		>
 			<Box
 				flexShrink={0}
 				flexDirection="column"
 				justifyContent="space-between"
-				height="100"
+				height={'100'}
 				width="100"
-				ref={dimensions.ref as any}
 			>
 				{scrollBarStart}
-				<Box display="flex" flexDirection="row" width="100" flexShrink={0}>
-					<Box flexDirection="row" width="100" height="100" flexShrink={0}>
+				<Box
+					display="flex"
+					flexDirection="row"
+					width={dimensions.width ?? '100'}
+					flexShrink={0}
+				>
+					<Box flexDirection="row" width="100" flexShrink={0}>
 						{generatedItems}
 					</Box>
 				</Box>

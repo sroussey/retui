@@ -13,7 +13,9 @@ namespace UseResponsiveDimensions {
 
 /*
  * Updates height and width dimensions of ref object and ensures that screen
- * resizes update state.
+ * resizes update state.  Because the dimensions of some elements might expand
+ * due to the dimensions of child elements, nothing is updated when the height
+ * or width is zero which would lock the dimensions into a zero height or width.
  * */
 
 process.stdout.setMaxListeners(Infinity);
@@ -39,20 +41,8 @@ export function useResponsiveDimensions(
 	const update = () => {
 		const nextDim = measureElement(ref.current as any);
 
-		if (!nextDim.width || !nextDim.height) return;
+		// if (!nextDim.width || !nextDim.height) return;
 		if (!shouldUpdate) return;
-
-		// Calling every render creates max update depth warning
-		// setDim(prevDim => {
-		// 	if (
-		// 		nextDim.width !== prevDim?.width ||
-		// 		nextDim.height !== prevDim?.height
-		// 	) {
-		// 		return nextDim;
-		// 	} else {
-		// 		return prevDim;
-		// 	}
-		// });
 
 		if (dim.width !== nextDim.width || dim.height !== nextDim.height) {
 			setDim(nextDim);

@@ -60,17 +60,19 @@ export function Unit({
 	// wrapper around not hidden nodes and disregard this, but it works right now
 	const dimension = type === 'PAGES' ? '100' : undefined;
 	const flexShrink = stretch ? 1 : 0;
+	const flexGrow = stretch ? 1 : 0;
 
 	const getUnit = () => {
 		return (
 			<>
 				{isHidden && maintainState ? (
-					<Box height={0} width={0} overflow="hidden" key={node.key}>
-						{node}
+					<Box height={0} width={0} key={node.key}>
+						<Box display="none">{node}</Box>
 					</Box>
 				) : !isHidden ? (
 					<Box
 						flexShrink={flexShrink}
+						flexGrow={flexGrow}
 						height={dimension}
 						width={dimension}
 						key={node.key}
