@@ -75,6 +75,14 @@ export function TextInput({
 			}
 		}
 
+		// Increase in window size
+		else if (previousWidth.current < availableWidth) {
+			const endWindowLimit = copy.window.start + availableWidth - 1;
+			const endValueLimit = copy.value.length;
+
+			copy.window.end = Math.min(endWindowLimit, endValueLimit);
+		}
+
 		previousWidth.current = availableWidth;
 
 		console.log('end copy', JSON.stringify(copy, null, 4));
@@ -115,6 +123,33 @@ export function TextInput({
 		return copy;
 	}
 
+	function pruneSpecialChars(c: string): string {
+		const charCode = c.charCodeAt(0);
+
+		// Allow pasting text
+		if (charCode === 22 || charCode === 98) {
+		}
+
+		if (charCode <= 31) return '';
+		if (charCode === 127) return '';
+
+		if (c.length > 1) {
+			let word = c.slice(1);
+			for (let i = 0; i < word.length; ++i) {
+				const charCode = word[i]?.charCodeAt(0);
+				if (
+					charCode !== undefined &&
+					(charCode <= 31 || word[i] === '\n' || word[i] === '\t')
+				) {
+					word = word.slice(0, i) + ' ' + word.slice(i + 1, word.length);
+				}
+			}
+			return word;
+		} else {
+			return c;
+		}
+	}
+
 	useEvent(Enter, () => {
 		const nextIdx = state.value.length;
 		const nextEnd = nextIdx;
@@ -137,16 +172,35 @@ export function TextInput({
 	});
 
 	useEvent(ScopedEvents.keypress, (char: string) => {
+		console.log(char);
+		char = pruneSpecialChars(char);
+		if (char === '') return;
+
 		const leftSlice = state.value.slice(0, state.idx);
 		const rightSlice = state.value.slice(state.idx);
 		const nextValue = leftSlice + char + rightSlice;
 
-		const nextState = getWindowChange(
-			{...state, value: nextValue, stdin: char},
-			'right',
-		);
+		if (char.length === 1) {
+			const nextState = getWindowChange(
+				{...state, value: nextValue, stdin: char},
+				'right',
+			);
+			update(nextState);
+		} else {
+			const copy = {...state, value: nextValue, stdin: char};
+			copy.idx += char.length;
 
-		update(nextState);
+			if (copy.idx > copy.window.end) {
+				copy.window.end = copy.idx;
+			}
+			let currWinSize = copy.window.end - copy.window.start + 1;
+			while (currWinSize > availableWidth) {
+				copy.window.start = copy.window.start + 1;
+				currWinSize = copy.window.end - copy.window.start + 1;
+			}
+
+			update(copy);
+		}
 	});
 
 	useEvent(ScopedEvents.left, () => {
@@ -226,7 +280,11 @@ function DisplayText(props: DisplayTextProps): React.ReactNode {
 
 	let leftValue = value.slice(start, idx);
 	let cursorValue = value[idx] ?? ' ';
-	let rightValue = value.slice(idx + 1, props.availableWidth);
+
+	let rightStop = end;
+	rightStop = Math.max(end, props.availableWidth);
+
+	let rightValue = value.slice(idx + 1, rightStop);
 
 	if (leftValue) {
 		leftValue = colorize(leftValue, color, 'foreground');

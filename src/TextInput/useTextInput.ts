@@ -14,6 +14,7 @@ export type State = {
 
 export type Return = {
 	value: State['value'];
+	insert: boolean;
 	onChange: () => {state: State; update: (nextState: State) => void};
 };
 
@@ -51,5 +52,9 @@ export function useTextInput(initialValue: string = ''): Return {
 		};
 	};
 
-	return {value: state.value, onChange: onChange};
+	function setText(): void {
+		//
+	}
+
+	return {value: state.value, insert: state.insert, onChange: onChange};
 }
