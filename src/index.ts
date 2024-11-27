@@ -13,7 +13,7 @@ export {default as Transform} from './components/Transform.js';
 export type {Props as NewlineProps} from './components/Newline.js';
 export {default as Newline} from './components/Newline.js';
 export {default as Spacer} from './components/Spacer.js';
-export type {Key} from './hooks/use-input.js';
+// export type {Key} from './hooks/use-input.js';
 export {default as useInput} from './hooks/use-input.js';
 export {default as useApp} from './hooks/use-app.js';
 export {default as useStdin} from './hooks/use-stdin.js';
@@ -39,7 +39,9 @@ export {default as Box} from './components/Box.js';
 
 import {KeyboardTypes} from './Stdin/Keyboard.js';
 type KeyMap = KeyboardTypes.KeyMap;
-export type {KeyMap};
+type Binding = KeyboardTypes.Binding;
+type Key = KeyboardTypes.Key;
+export type {KeyMap, Binding, Key};
 
 // Window
 export {useWindow} from './Window/useWindow.js';
@@ -78,3 +80,7 @@ export {Underline, Overline} from './Lines/BorderedLines/BorderedLines.js';
 
 // TitleBox
 export {Title} from './Title/Title.js';
+
+// TextInput
+export {TextInput} from './TextInput/TextInput.js';
+export {useTextInput} from './TextInput/useTextInput.js';
