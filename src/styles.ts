@@ -13,7 +13,8 @@ export type Styles = {
 		| 'truncate-end'
 		| 'truncate'
 		| 'truncate-middle'
-		| 'truncate-start';
+		| 'truncate-start'
+		| 'overflow';
 
 	readonly position?: 'absolute' | 'relative';
 

@@ -18,6 +18,10 @@ const wrapText = (
 
 	let wrappedText = text;
 
+	if (wrapType === 'overflow') {
+		return wrappedText;
+	}
+
 	if (wrapType === 'wrap') {
 		wrappedText = wrapAnsi(text, maxWidth, {
 			trim: false,

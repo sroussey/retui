@@ -50,9 +50,16 @@ export function TextInput({
 	const previousWidth = useRef(availableWidth);
 
 	useEffect(() => {
-		const copy = {...state};
+		const copy = {...state, window: {...state.window}};
+		console.log('start copy', JSON.stringify(copy, null, 4));
+
+		const currWindowSize = copy.window.end - copy.window.start + 1;
+
 		// Decrease in window size
-		if (previousWidth.current > availableWidth) {
+		if (
+			currWindowSize > availableWidth &&
+			previousWidth.current > availableWidth
+		) {
 			// we are at the end
 			if (copy.window.end === copy.idx) {
 				let i = previousWidth.current - availableWidth;
@@ -60,10 +67,18 @@ export function TextInput({
 				while (copy.window.start < copy.window.end && i-- !== 0) {
 					++copy.window.start;
 				}
+			} else {
+				copy.window.end = copy.window.start + availableWidth - 1;
+				if (copy.window.end > copy.value.length) {
+					copy.window.end = copy.value.length;
+				}
 			}
 		}
 
 		previousWidth.current = availableWidth;
+
+		console.log('end copy', JSON.stringify(copy, null, 4));
+
 		update(copy);
 	}, [availableWidth]);
 
@@ -213,14 +228,18 @@ function DisplayText(props: DisplayTextProps): React.ReactNode {
 	let cursorValue = value[idx] ?? ' ';
 	let rightValue = value.slice(idx + 1, props.availableWidth);
 
-	leftValue = colorize(leftValue, color, 'foreground');
+	if (leftValue) {
+		leftValue = colorize(leftValue, color, 'foreground');
+	}
+	if (rightValue) {
+		rightValue = colorize(rightValue, color, 'foreground');
+	}
 	cursorValue = colorize(cursorValue, cursorColor, 'foreground');
 	cursorValue = chalk.inverse(cursorValue);
-	rightValue = colorize(rightValue, color, 'foreground');
 
 	const displayValue = `${leftValue}${cursorValue}${rightValue}`;
 
-	// console.log(displayValue, props.state);
+	console.log(displayValue, props.availableWidth, props.state);
 
-	return <Text>{displayValue}</Text>;
+	return <Text wrap="overflow">{displayValue}</Text>;
 }
