@@ -64,6 +64,7 @@ export function Unit({
 	const flexShrink = stretch ? 1 : 0;
 	const flexGrow = stretch ? 1 : 0;
 
+	// excess keys effecting state loss?
 	const getUnit = () => {
 		return (
 			<>

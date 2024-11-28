@@ -16,6 +16,8 @@ export type Return = {
 	value: State['value'];
 	insert: boolean;
 	onChange: () => {state: State; update: (nextState: State) => void};
+	setValue: (nextValue: string) => void;
+	enterInsert: () => void;
 };
 
 export function useTextInput(initialValue: string = ''): Return {
@@ -30,31 +32,41 @@ export function useTextInput(initialValue: string = ''): Return {
 		},
 	});
 
-	/*
-	 * Window API
-	 * Idx changes are handled differently depending on where you are in the windowslice
-	 * and how many chars the value has.  If the window is filled, the cursor is
-	 * ALWAYS at the last slot in the viewing window.  Left/Right/Delete operations
-	 * shift the window right or left
-	 *
-	 * If at the end of the slice, idx stays the same, but window shifts right (for both delete and move cursor)
-	 * Left cursor and backspace both 'look' the same when at the end
-	 * */
-
 	const onChange = () => {
 		return {
 			update(nextState: State): void {
-				if (!deepEqual(state, nextState)) {
-					setState(nextState);
-				}
+				setState(prev => {
+					if (!deepEqual(prev, nextState)) {
+						return nextState;
+					} else {
+						return prev;
+					}
+				});
 			},
 			state,
 		};
 	};
 
-	function setText(): void {
-		//
-	}
+	const enterInsert = () => {
+		if (!state.insert) {
+			setState(prev => {
+				return {...prev, insert: true};
+			});
+		}
+	};
 
-	return {value: state.value, insert: state.insert, onChange: onChange};
+	const setValue = (nextValue: string) => {
+		// setState({...state, value: nextValue});
+		setState(prev => {
+			return {...prev, value: nextValue};
+		});
+	};
+
+	return {
+		value: state.value,
+		insert: state.insert,
+		onChange: onChange,
+		setValue: setValue,
+		enterInsert: enterInsert,
+	};
 }

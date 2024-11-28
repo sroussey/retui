@@ -30,10 +30,7 @@ export type Props = {
 	React.PropsWithChildren;
 
 export function Modal(props: Props): React.ReactNode {
-	const isPageFocus = usePageFocus();
-	if (!isPageFocus) return null;
-
-	const {
+	let {
 		visible = true,
 		justifySelf = 'center',
 		alignSelf = 'center',
@@ -54,6 +51,11 @@ export function Modal(props: Props): React.ReactNode {
 		children,
 		...displayProps
 	} = props;
+
+	const isPageFocus = usePageFocus();
+	if (!isPageFocus) {
+		visible = false;
+	}
 
 	// prettier-ignore
 	displayProps.backgroundColor = displayProps.backgroundColor ?? 'inherit';

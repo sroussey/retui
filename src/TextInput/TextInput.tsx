@@ -22,6 +22,9 @@ type Color = Exclude<BoxProps['borderColor'], 'inherit'>;
 
 type Props = {
 	onChange: UseTextInputReturn['onChange'];
+	onExit?: (value: string) => unknown;
+	onEnter?: () => unknown;
+	onKeypress?: (char: string) => unknown;
 	enterKeymap?: Binding | Binding[];
 	exitKeymap?: Binding | Binding[];
 	color?: Color;
@@ -31,6 +34,9 @@ type Props = {
 
 export function TextInput({
 	onChange,
+	onEnter,
+	onKeypress,
+	onExit,
 	enterKeymap = ControlKeymap.defaultEnter,
 	exitKeymap = ControlKeymap.defaultExit,
 	color,
@@ -60,6 +66,7 @@ export function TextInput({
 
 	const handleExit = () => {
 		update({...state, insert: false});
+		onExit?.(state.value);
 	};
 	useEffect(() => {
 		if (!isFocus) {
@@ -179,12 +186,15 @@ export function TextInput({
 			idx: state.value.length,
 			window: {...state.window, start: nextStart, end: nextEnd},
 		});
+
+		onEnter?.();
 	});
 
 	useEvent(Exit, handleExit);
 
 	useEvent(ScopedEvents.keypress, (char: string) => {
 		char = pruneSpecialChars(char);
+		onKeypress?.(char);
 		if (char === '') return;
 
 		const leftSlice = state.value.slice(0, state.idx);
