@@ -58,6 +58,15 @@ export function TextInput({
 	const availableWidth = responsiveDimensions.width ?? 0;
 	const previousWidth = useRef(availableWidth);
 
+	const handleExit = () => {
+		update({...state, insert: false});
+	};
+	useEffect(() => {
+		if (!isFocus) {
+			handleExit();
+		}
+	}, [isFocus]);
+
 	useEffect(() => {
 		const copy = {...state, window: {...state.window}};
 		// console.log('start copy', JSON.stringify(copy, null, 4));
@@ -135,10 +144,6 @@ export function TextInput({
 	function pruneSpecialChars(c: string): string {
 		const charCode = c.charCodeAt(0);
 
-		// Allow pasting text
-		if (charCode === 22 || charCode === 98) {
-		}
-
 		if (charCode <= 31) return '';
 		if (charCode === 127) return '';
 
@@ -176,9 +181,7 @@ export function TextInput({
 		});
 	});
 
-	useEvent(Exit, () => {
-		update({...state, insert: false});
-	});
+	useEvent(Exit, handleExit);
 
 	useEvent(ScopedEvents.keypress, (char: string) => {
 		char = pruneSpecialChars(char);
