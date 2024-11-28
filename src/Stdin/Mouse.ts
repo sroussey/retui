@@ -185,11 +185,17 @@ export default class Mouse {
 		// Sort zIndex highest to lowest to highest
 		// If an event is clicked inside one of the components on one level, the
 		// lower levels will not be checked.
+		const zIndexes: number[] = [];
 		const zIndexListeners: (T.ZIndexRegistry | undefined)[] = Object.keys(
 			this.Handlers,
 		)
 			.sort((a, b) => Number(b) - Number(a))
-			.map(zIndex => this.Handlers[Number(zIndex) as number]);
+			.map(zIndex => {
+				zIndexes.push(Number(zIndex));
+				return this.Handlers[Number(zIndex) as number];
+			});
+
+		logger.write('ZINDEXES', zIndexes);
 
 		let eventHappened = false;
 
@@ -198,7 +204,10 @@ export default class Mouse {
 		for (const level of zIndexListeners) {
 			if (eventHappened) break;
 
-			if (!level) continue;
+			if (!level) {
+				logger.write('NO LEVEL');
+				continue;
+			}
 
 			const propData = level[prop] as T.ComponentData;
 
@@ -372,6 +381,8 @@ export default class Mouse {
 
 		const event: T.StdinData = {clientX: x, clientY: y};
 		const button = this.getButtonType(buttonCode);
+
+		logger.prefix('BUTTON', button);
 
 		if (button === 'LEFT_BTN_DOWN') {
 			this.btnDownState.left = true;

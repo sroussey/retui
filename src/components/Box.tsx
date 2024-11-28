@@ -29,13 +29,6 @@ const Box = forwardRef<DOMElement, PropsWithChildren<Props>>(
 		const [leftActive, setLeftActive] = useState(false);
 		const [rightActive, setRightActive] = useState(false);
 
-		// Default styles
-		props.flexWrap = props.flexWrap ?? 'nowrap';
-		props.flexDirection = props.flexDirection ?? 'row';
-		props.flexGrow = props.flexGrow ?? 0;
-		props.flexShrink = props.flexShrink ?? 1;
-		props.zIndex = props.zIndex ?? 'auto';
-
 		// Apply styles from styles prop if style not already set
 		if (styles) {
 			for (const key of Object.keys(styles)) {
@@ -87,6 +80,13 @@ const Box = forwardRef<DOMElement, PropsWithChildren<Props>>(
 				STDIN.Mouse.unsubscribeComponent(ID);
 			};
 		}, []);
+
+		// Default styles
+		props.flexWrap = props.flexWrap ?? 'nowrap';
+		props.flexDirection = props.flexDirection ?? 'row';
+		props.flexGrow = props.flexGrow ?? 0;
+		props.flexShrink = props.flexShrink ?? 1;
+		props.zIndex = props.zIndex ?? 'auto';
 
 		return (
 			<ink-box

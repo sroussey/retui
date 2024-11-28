@@ -11,6 +11,7 @@ import renderBackgroundColor from './render-background-color.js';
 import {Styles} from './styles.js';
 import {addMouseEventListeners} from './Stdin/AddMouseEventListeners.js';
 import {STDIN} from './Stdin/Stdin.js';
+import {logger} from './index.js';
 
 // If parent container is `<Box>`, text nodes will be treated as separate nodes in
 // the tree and will have their own coordinates in the layout.
@@ -42,12 +43,12 @@ const renderNodeToOutput = (
 		transformers?: OutputTransformer[];
 		skipStaticElements: boolean;
 		isZIndexRoot?: boolean;
+		rootZIndex?: number;
 		parentStyles?: {
 			backgroundColor?: Styles['backgroundColor'];
 			borderColor?: Styles['borderColor'];
 			borderStyle?: Styles['borderStyle'];
 		};
-		parentZIndex?: number;
 	},
 	zIndexes: {index: number; cb: () => void}[] = [],
 ) => {
@@ -73,6 +74,12 @@ const renderNodeToOutput = (
 	// Transformers are functions that transform final text output of each component
 	// See Output class for logic that applies transformers
 	let newTransformers = transformers;
+
+	// Every node that has a zIndex set becomes a 'zIndex root', which means rendering
+	// is cached until the current zIndex root is finished rendering.  Every zIndex
+	// root accumulates from the previous zIndex root's value.  The 'ink-root' zIndex
+	// starts at 0
+	options.rootZIndex = options.rootZIndex ?? 0;
 
 	if (typeof node.internal_transform === 'function') {
 		newTransformers = [node.internal_transform, ...transformers];
@@ -103,19 +110,24 @@ const renderNodeToOutput = (
 	if (node.style.zIndex === 'auto') {
 		(node.style.zIndex as any) = 0;
 	}
+
+	// zIndexes less than 0 won't have any effect...make this explicitly clear
+	if (typeof node.style.zIndex === 'number' && node.style.zIndex < 0) {
+		throw new Error('zIndex property must be a positive number.');
+	}
+
+	// If zIndex root, that means this stack frame has already been queued and is
+	// now being executed, we don't need to stash it for later
 	const hasZIndex =
 		typeof node.style.zIndex === 'number' &&
 		node.style.zIndex > 0 &&
 		!options.isZIndexRoot;
 
-	if (typeof node.style.zIndex === 'number' && node.style.zIndex < 0) {
-		throw new Error('zIndex property must be a positive number.');
-	}
-
 	// Save for rendering after the rest of the tree has finished
+	// This is a zIndex root node, save for later
 	if (node.nodeName === 'ink-box' && hasZIndex) {
 		// prettier-ignore
-		const index = (node.style.zIndex as number) + (options.parentZIndex ?? 0);
+		const nodeZIndex = (node.style.zIndex as number) + (options.rootZIndex ?? 0);
 
 		// prettier-ignore
 		const cb = () => {
@@ -125,14 +137,14 @@ const renderNodeToOutput = (
 				transformers: newTransformers,
 				skipStaticElements,
 				parentStyles: options?.parentStyles,
-				parentZIndex:index,
+				rootZIndex:nodeZIndex,
 				isZIndexRoot: true,
 			}, []);
 			// Don't pass in the cached zIndexes, each node with a zIndex accumulates
 			// recursive callbacks to other zIndexed nodes just like the root node
 		};
 
-		zIndexes.push({index, cb});
+		zIndexes.push({index: nodeZIndex, cb});
 		zIndexes.sort((a, b) => (a.index > b.index ? 1 : -1));
 	} else if (node.nodeName === 'ink-box') {
 		// Inherit styles from parent element
@@ -158,14 +170,8 @@ const renderNodeToOutput = (
 				(node.style.borderStyle as any) = undefined;
 			}
 		}
-		if (options.parentZIndex) {
-			(node.style.zIndex as any) =
-				typeof node.style.zIndex === 'number'
-					? (node.style.zIndex as any) + options.parentZIndex
-					: 0 + options.parentZIndex;
-		}
 
-		addMouseEventListeners(node);
+		addMouseEventListeners(node, options.rootZIndex);
 
 		const parentHasBg = options?.parentStyles?.backgroundColor ? true : false;
 		renderBackgroundColor(x, y, node, output, parentHasBg);
@@ -224,7 +230,7 @@ const renderNodeToOutput = (
 						borderStyle: node.style.borderStyle,
 						borderColor: node.style.borderColor,
 					},
-					parentZIndex: node.style.zIndex as number,
+					rootZIndex: options.rootZIndex,
 				},
 				zIndexes,
 			);
@@ -239,6 +245,8 @@ const renderNodeToOutput = (
 		for (const level of zIndexes) {
 			level.cb();
 		}
+
+		logger.prefix('levels', zIndexes);
 	}
 };
 

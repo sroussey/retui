@@ -68,8 +68,8 @@ export function Unit({
 		return (
 			<>
 				{isHidden && maintainState ? (
-					<Box height={0} width={0} key={node.key}>
-						<Box display="none">{node}</Box>
+					<Box height={0} width={0} overflow="hidden" key={node.key}>
+						{node}
 					</Box>
 				) : !isHidden ? (
 					<Box

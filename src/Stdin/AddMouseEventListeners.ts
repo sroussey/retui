@@ -2,7 +2,11 @@ import {DOMElement} from '../dom.js';
 import ElementPosition from './ElementPosition.js';
 import {STDIN} from './Stdin.js';
 
-export function addMouseEventListeners(node: DOMElement): void {
+export function addMouseEventListeners(
+	node: DOMElement,
+	// The current 'level' in the zIndex stack this node is on, not its zIndex property
+	zIndexRoot: number,
+): void {
 	const trackLeftActive =
 		!!node.style.styles?.leftActive || !!node.style.leftActive;
 	const trackRightActive =
@@ -16,7 +20,6 @@ export function addMouseEventListeners(node: DOMElement): void {
 	const setRightActive = node.attributes['setRightActive'] as (
 		b: boolean,
 	) => void;
-	const zIndex = node.style.zIndex === 'auto' ? 0 : (node.style.zIndex ?? 0);
 
 	const shouldSubscribe =
 		trackLeftActive ||
@@ -46,7 +49,7 @@ export function addMouseEventListeners(node: DOMElement): void {
 			setRightActive,
 			trackLeftActive,
 			trackRightActive,
-			zIndex,
+			zIndex: zIndexRoot,
 		});
 	}
 }

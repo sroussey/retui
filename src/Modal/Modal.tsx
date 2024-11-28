@@ -58,17 +58,16 @@ export function Modal(props: Props): React.ReactNode {
 	// prettier-ignore
 	displayProps.backgroundColor = displayProps.backgroundColor ?? 'inherit';
 
-	const outerHeight: BoxProps['height'] = '100';
-	const outerWidth: BoxProps['width'] = '100';
-	const display = visible ? 'flex' : 'none';
+	const outerHeight: BoxProps['height'] = visible ? '100' : 0;
+	const outerWidth: BoxProps['width'] = visible ? '100' : 0;
 
 	return (
 		<Box
 			position="absolute"
-			display={display}
 			zIndex={zIndex}
 			height={outerHeight}
 			width={outerWidth}
+			overflow="hidden"
 			// zIndex wipes background by default, we don't want that in the overlay Box
 			wipeBackground={false}
 			// Position the inner Box
