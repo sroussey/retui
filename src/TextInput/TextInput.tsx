@@ -85,7 +85,7 @@ export function TextInput({
 
 		previousWidth.current = availableWidth;
 
-		console.log('end copy', JSON.stringify(copy, null, 4));
+		// console.log('end copy', JSON.stringify(copy, null, 4));
 
 		update(copy);
 	}, [availableWidth]);
@@ -172,7 +172,6 @@ export function TextInput({
 	});
 
 	useEvent(ScopedEvents.keypress, (char: string) => {
-		console.log(char);
 		char = pruneSpecialChars(char);
 		if (char === '') return;
 
@@ -297,7 +296,7 @@ function DisplayText(props: DisplayTextProps): React.ReactNode {
 
 	const displayValue = `${leftValue}${cursorValue}${rightValue}`;
 
-	console.log(displayValue, props.availableWidth, props.state);
+	// console.log(displayValue, props.availableWidth, props.state);
 
 	return <Text wrap="overflow">{displayValue}</Text>;
 }

@@ -4,6 +4,10 @@ import {type LiteralUnion} from 'type-fest';
 import {type ForegroundColorName} from 'ansi-styles'; // Note: We import directly from `ansi-styles` to avoid a bug in TypeScript.
 import Yoga, {type Node as YogaNode} from 'yoga-wasm-web/auto';
 import {Title} from './renderTitles/renderTitleToOutput.js';
+import {T as MouseTypes} from './Stdin/Mouse.js';
+
+export type ClickEvent = MouseTypes.Event;
+export type StylesConfig = Omit<Styles, 'styles'>;
 
 export type Styles = {
 	readonly textWrap?:
@@ -30,7 +34,10 @@ export type Styles = {
 	 * in styles found in the styles prop and normal props will overwrite in favor
 	 * of the normal props.
 	 */
-	readonly styles?: Omit<Styles, 'styles'>;
+	readonly styles?: StylesConfig;
+
+	readonly leftActive?: StylesConfig;
+	readonly rightActive?: StylesConfig;
 
 	/**
 	 * Alters the render order for a component which allows components to appear
@@ -40,6 +47,22 @@ export type Styles = {
 	 * @default 'auto' (same as 0)
 	 * */
 	readonly zIndex?: number | 'auto';
+
+	/**
+	 * Handle click events on Box components.  Click events will only be read when
+	 * using a Viewport component.
+	 * */
+	readonly onClick?: (event: ClickEvent) => unknown;
+	readonly onDoubleClick?: (event: ClickEvent) => unknown;
+	readonly onMouseDown?: (event: ClickEvent) => unknown;
+	readonly onMouseUp?: (event: ClickEvent) => unknown;
+	readonly onRightClick?: (event: ClickEvent) => unknown;
+	readonly onRightMouseDown?: (event: ClickEvent) => unknown;
+	readonly onRightMouseUp?: (event: ClickEvent) => unknown;
+	readonly onRightDoubleClick?: (event: ClickEvent) => unknown;
+	readonly onScrollUp?: (event: ClickEvent) => unknown;
+	readonly onScrollDown?: (event: ClickEvent) => unknown;
+	readonly onScrollClick?: (event: ClickEvent) => unknown;
 
 	/**
 	 * Size of the gap between an element's columns.

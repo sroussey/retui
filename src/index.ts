@@ -84,3 +84,14 @@ export {Title} from './Title/Title.js';
 // TextInput
 export {TextInput} from './TextInput/TextInput.js';
 export {useTextInput} from './TextInput/useTextInput.js';
+
+// STDIN Related
+import {STDIN} from './Stdin/Stdin.js';
+const setMouseReporting = STDIN.setMouseReporting;
+const setCharRegisterSize = STDIN.Keyboard.setMaxChars;
+export {setMouseReporting, setCharRegisterSize};
+
+// Styles Types
+// Styles prop
+export {type StylesConfig as Styles} from './styles.js';
+export {type ClickEvent} from './styles.js';

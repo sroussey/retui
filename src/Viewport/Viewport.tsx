@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Box from '../components/Box.js';
-import {BoxProps, useStdout} from '../index.js';
+import {BoxProps, STDIN, useStdout} from '../index.js';
 
 export type Props = Omit<
 	BoxProps,

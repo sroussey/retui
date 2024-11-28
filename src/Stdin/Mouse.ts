@@ -2,6 +2,7 @@ import {Node as YogaNode} from 'yoga-wasm-web';
 import EventEmitter = require('events');
 import ElementPosition from './ElementPosition.js';
 import {spawnSync} from 'child_process';
+import {logger} from '../index.js';
 
 export namespace T {
 	// Events emitted from Mouse.Emitter
@@ -178,7 +179,7 @@ export default class Mouse {
 			const trackRightActive = propData[ID]!.trackRightActive;
 
 			if (!ElementPosition.containsPoint(clientX, clientY, componentPosition)) {
-				return;
+				continue;
 			}
 
 			const event: T.Event = {
@@ -198,11 +199,11 @@ export default class Mouse {
 			}
 			// prettier-ignore
 			if (trackRightActive && eventType === this.PropsToEvents.onRightMouseDown) {
-						setRightActive(true);
-						this.Emitter.once(this.PropsToEvents.onRightMouseUp, () => {
-							setRightActive(false);
-						})
-					}
+				setRightActive(true);
+				this.Emitter.once(this.PropsToEvents.onRightMouseUp, () => {
+					setRightActive(false);
+				})
+			}
 
 			componentHandler?.(event);
 		}
@@ -215,8 +216,6 @@ export default class Mouse {
 		for (const prop in this.PropsToEvents) {
 			const eventString = this.PropsToEvents[prop as T.HandlerProps];
 			const handler = this.handleEvent(prop as T.HandlerProps);
-
-			// console.log(`eventstring: ${eventString}`);
 
 			this.Emitter.on(eventString, handler);
 			this.unsubscribers.push(() => {
@@ -269,11 +268,6 @@ export default class Mouse {
 				componentHandler: props[prop as T.HandlerProps],
 			};
 		}
-
-		// this.Handlers.onClick[ID] = {
-		// 	...componentData,
-		// 	componentHandler: props.onClick,
-		// };
 	};
 
 	// Cleanup after a Box component is unmounted
@@ -304,8 +298,8 @@ export default class Mouse {
 
 	public isMouseEvent = (buffer: Buffer): boolean => {
 		let codes: any[] = [];
-		for (let i = 0; i < buffer.length; i += 2) {
-			codes.push(`${buffer[i]}${buffer[i + 1]}`);
+		for (let i = 0; i < buffer.length; ++i) {
+			codes.push(`${buffer[i]?.toString(16)}`);
 		}
 
 		// Mouse event ESC[M

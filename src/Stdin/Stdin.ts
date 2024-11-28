@@ -1,5 +1,6 @@
 import Mouse from './Mouse.js';
 import Keyboard from './Keyboard.js';
+import {logger} from '../index.js';
 
 /*
  * Stdin.handleStdin parses input from the keyboard and mouse.
@@ -35,9 +36,11 @@ class Stdin {
 		this.listening = false;
 	}
 
-	public setMouseReporting = (b: boolean) => {
+	public setMouseReporting = (b: boolean = true) => {
 		this.Mouse.setMouseReporting(b);
 		this.mouseEnabled = b;
+
+		b && this.listen();
 	};
 
 	public listen = (): void => {
