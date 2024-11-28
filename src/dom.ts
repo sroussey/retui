@@ -27,6 +27,7 @@ export type DOMElement = {
 	attributes: Record<string, DOMNodeAttribute>;
 	childNodes: DOMNode[];
 	internal_transform?: OutputTransformer;
+	ID?: string;
 
 	// Internal properties
 	isStaticDirty?: boolean;
@@ -51,7 +52,7 @@ export type DOMNode<T = {nodeName: NodeNames}> = T extends {
 	: never;
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-export type DOMNodeAttribute = boolean | string | number;
+export type DOMNodeAttribute = boolean | string | number | Function;
 
 export const createNode = (nodeName: ElementNames): DOMElement => {
 	const node: DOMElement = {

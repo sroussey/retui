@@ -20,6 +20,10 @@ declare namespace Ink {
 		key?: Key;
 		ref?: LegacyRef<DOMElement>;
 		style?: Except<Styles, 'textWrap'>;
+		ID?: string;
+		isPageFocus?: boolean;
+		setLeftActive?: (b: boolean) => void;
+		setRightActive?: (b: boolean) => void;
 	};
 
 	type Text = {

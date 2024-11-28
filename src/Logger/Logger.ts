@@ -147,6 +147,9 @@ export class Logger {
 		};
 
 		const formatData = (data: any) => {
+			if (data === null) return 'null';
+			if (data === undefined) return 'undefined';
+
 			if (typeof data !== 'string' && typeof data !== 'number') {
 				const {stringifiedData, errors} = stringify(data);
 

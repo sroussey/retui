@@ -80,48 +80,26 @@ const Box = forwardRef<DOMElement, PropsWithChildren<Props>>(
 		}
 
 		const [ID] = useState(randomUUID());
-		const internalRef = useRef();
 		const isPageFocus = usePageFocus();
-		const trackLeftActive = !!styles?.leftActive || !!props.leftActive;
-		const trackRightActive = !!styles?.rightActive || !!props.rightActive;
 
 		useEffect(() => {
-			if (ref) {
-				(ref as any).current = internalRef.current;
-			}
-		}, []);
-
-		useEffect(() => {
-			// Should make this a fn and have it run on every resize event
-			if (isPageFocus) {
-				const target = ElementPosition.getNode(internalRef.current!);
-				const targetPosition = ElementPosition.getScreenPosition(target);
-
-				STDIN.Mouse.subscribeComponent({
-					props,
-					ID,
-					target,
-					targetPosition,
-					setLeftActive,
-					setRightActive,
-					trackLeftActive,
-					trackRightActive,
-				});
-			}
-
 			return () => {
 				STDIN.Mouse.unsubscribeComponent(ID);
 			};
-		});
+		}, []);
 
 		return (
 			<ink-box
-				ref={internalRef as any}
+				ref={ref}
 				style={{
 					...props,
 					overflowX: props.overflowX ?? props.overflow ?? 'visible',
 					overflowY: props.overflowY ?? props.overflow ?? 'visible',
 				}}
+				ID={ID}
+				isPageFocus={isPageFocus}
+				setLeftActive={setLeftActive}
+				setRightActive={setRightActive}
 			>
 				{children}
 			</ink-box>

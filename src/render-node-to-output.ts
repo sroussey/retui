@@ -9,6 +9,7 @@ import {type DOMElement} from './dom.js';
 import type Output from './output.js';
 import renderBackgroundColor from './render-background-color.js';
 import {Styles} from './styles.js';
+import {addMouseEventListeners} from './Stdin/AddMouseEventListeners.js';
 
 // If parent container is `<Box>`, text nodes will be treated as separate nodes in
 // the tree and will have their own coordinates in the layout.
@@ -153,6 +154,8 @@ const renderNodeToOutput = (
 				(node.style.borderStyle as any) = undefined;
 			}
 		}
+
+		addMouseEventListeners(node);
 
 		const parentHasBg = options?.parentStyles?.backgroundColor ? true : false;
 		renderBackgroundColor(x, y, node, output, parentHasBg);

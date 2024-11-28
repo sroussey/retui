@@ -18,6 +18,7 @@ import {
 } from './dom.js';
 import applyStyles, {type Styles} from './styles.js';
 import {type OutputTransformer} from './render-node-to-output.js';
+import {logger} from './index.js';
 
 // We need to conditionally perform devtools connection to avoid
 // accidentally breaking other third-party code.
