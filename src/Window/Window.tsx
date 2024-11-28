@@ -110,6 +110,7 @@ export function Window({
 				index={idx}
 				items={viewState._items}
 				setItems={viewState._setItems}
+				control={viewState._control}
 				stretch={unitSize === 'stretch'}
 			/>
 		);

@@ -16,11 +16,24 @@ export function addMouseEventListeners(node: DOMElement): void {
 	const setRightActive = node.attributes['setRightActive'] as (
 		b: boolean,
 	) => void;
+	const zIndex = node.style.zIndex === 'auto' ? 0 : (node.style.zIndex ?? 0);
 
-	// const ID = node.attributes['ID'];
-	// logger.prefix('ID', ID);
+	const shouldSubscribe =
+		trackLeftActive ||
+		trackRightActive ||
+		node.style.onClick ||
+		node.style.onRightClick ||
+		node.style.onDoubleClick ||
+		node.style.onRightDoubleClick ||
+		node.style.onMouseDown ||
+		node.style.onMouseUp ||
+		node.style.onRightMouseUp ||
+		node.style.onRightMouseDown ||
+		node.style.onScrollClick ||
+		node.style.onScrollDown ||
+		node.style.onScrollUp;
 
-	if (isPageFocus) {
+	if (isPageFocus && shouldSubscribe) {
 		const target = ElementPosition.getNode(node);
 		const targetPosition = ElementPosition.getScreenPosition(target);
 
@@ -33,6 +46,7 @@ export function addMouseEventListeners(node: DOMElement): void {
 			setRightActive,
 			trackLeftActive,
 			trackRightActive,
+			zIndex,
 		});
 	}
 }

@@ -43,7 +43,7 @@ export default function useKeymap<U extends Keyboard.KeyMap = any>(
 		return () => {
 			ProcessGate.removeHook(ID);
 		};
-	}, []);
+	}, [priority]);
 
 	useEffect(() => {
 		const handleStdin = (stdin: string) => {

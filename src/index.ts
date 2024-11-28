@@ -87,6 +87,9 @@ export {useTextInput} from './TextInput/useTextInput.js';
 
 // STDIN Related
 import {STDIN} from './Stdin/Stdin.js';
+import {type T as MouseTypes} from './Stdin/Mouse.js';
+type MouseEventHandler = MouseTypes.Handler;
+export {type MouseEventHandler};
 const setMouseReporting = STDIN.setMouseReporting;
 const setCharRegisterSize = STDIN.Keyboard.setMaxChars;
 export {setMouseReporting, setCharRegisterSize};

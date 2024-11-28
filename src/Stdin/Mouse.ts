@@ -2,7 +2,7 @@ import {Node as YogaNode} from 'yoga-wasm-web';
 import EventEmitter = require('events');
 import ElementPosition from './ElementPosition.js';
 import {spawnSync} from 'child_process';
-import {logger} from '../index.js';
+import {logger, MouseEventHandler} from '../index.js';
 
 export namespace T {
 	// Events emitted from Mouse.Emitter
@@ -66,7 +66,12 @@ export namespace T {
 		};
 	};
 
-	export type HandlerRegistry = Record<T.HandlerProps, T.ComponentData>;
+	// Holds Registry at a certain z-index
+	export type ZIndexRegistry = Record<T.HandlerProps, T.ComponentData>;
+
+	export type HandlerRegistry = {
+		[zIndex: number]: ZIndexRegistry;
+	};
 
 	export type Buttons =
 		| 'LEFT_BTN_DOWN'
@@ -118,19 +123,7 @@ export default class Mouse {
 			onScrollDown: 'SCROLL_DOWN',
 			onScrollClick: 'SCROLL_CLICK',
 		};
-		this.Handlers = {
-			onClick: {},
-			onDoubleClick: {},
-			onMouseDown: {},
-			onMouseUp: {},
-			onRightClick: {},
-			onRightDoubleClick: {},
-			onRightMouseDown: {},
-			onRightMouseUp: {},
-			onScrollUp: {},
-			onScrollDown: {},
-			onScrollClick: {},
-		};
+		this.Handlers = {};
 		this.unsubscribers = [];
 		this.btnDownState = {
 			left: false,
@@ -143,6 +136,26 @@ export default class Mouse {
 		};
 		this.listening = false;
 		this.hasSetExitHandler = false;
+	}
+
+	public resetHandlers(): void {
+		this.Handlers = {};
+	}
+
+	private newZIndexRegistry(): T.ZIndexRegistry {
+		return {
+			onClick: {},
+			onDoubleClick: {},
+			onMouseDown: {},
+			onMouseUp: {},
+			onRightClick: {},
+			onRightDoubleClick: {},
+			onRightMouseDown: {},
+			onRightMouseUp: {},
+			onScrollUp: {},
+			onScrollDown: {},
+			onScrollClick: {},
+		};
 	}
 
 	public setMouseReporting = (on: boolean): void => {
@@ -168,45 +181,78 @@ export default class Mouse {
 	// components and determine if their click event handlers should be executed
 	public handleEvent = (prop: T.HandlerProps) => (event: T.StdinData) => {
 		const {clientX, clientY} = event;
-		const propData = this.Handlers[prop] as T.ComponentData;
-		for (const ID in propData) {
-			const componentPosition = propData[ID]!.targetPosition;
-			const componentHandler = propData[ID]!.componentHandler;
-			const componentNode = propData[ID]!.target;
-			const setLeftActive = propData[ID]!.setLeftActive;
-			const trackLeftActive = propData[ID]!.trackLeftActive;
-			const setRightActive = propData[ID]!.setRightActive;
-			const trackRightActive = propData[ID]!.trackRightActive;
 
-			if (!ElementPosition.containsPoint(clientX, clientY, componentPosition)) {
-				continue;
+		// Sort zIndex highest to lowest to highest
+		// If an event is clicked inside one of the components on one level, the
+		// lower levels will not be checked.
+		const zIndexListeners: (T.ZIndexRegistry | undefined)[] = Object.keys(
+			this.Handlers,
+		)
+			.sort((a, b) => Number(b) - Number(a))
+			.map(zIndex => this.Handlers[Number(zIndex) as number]);
+
+		let eventHappened = false;
+
+		const batchedHandlers: (() => void)[] = [];
+
+		for (const level of zIndexListeners) {
+			if (eventHappened) break;
+
+			if (!level) continue;
+
+			const propData = level[prop] as T.ComponentData;
+
+			for (const ID in propData) {
+				const componentPosition = propData[ID]!.targetPosition;
+				const componentHandler = propData[ID]!.componentHandler;
+				const componentNode = propData[ID]!.target;
+				const setLeftActive = propData[ID]!.setLeftActive;
+				const trackLeftActive = propData[ID]!.trackLeftActive;
+				const setRightActive = propData[ID]!.setRightActive;
+				const trackRightActive = propData[ID]!.trackRightActive;
+
+				if (
+					!ElementPosition.containsPoint(clientX, clientY, componentPosition)
+				) {
+					continue;
+				}
+
+				eventHappened = true;
+
+				const event: T.Event = {
+					clientX,
+					clientY,
+					targetPosition: componentPosition,
+					target: componentNode,
+				};
+
+				const eventType = this.PropsToEvents[prop];
+
+				if (trackLeftActive && eventType === this.PropsToEvents.onMouseDown) {
+					setLeftActive(true);
+					this.Emitter.once(this.PropsToEvents.onMouseUp, () => {
+						setLeftActive(false);
+					});
+				}
+				// prettier-ignore
+				if (trackRightActive && eventType === this.PropsToEvents.onRightMouseDown) {
+					setRightActive(true);
+					this.Emitter.once(this.PropsToEvents.onRightMouseUp, () => {
+						setRightActive(false);
+					})
+				}
+
+				if (componentHandler) {
+					batchedHandlers.push(() => {
+						componentHandler(event);
+					});
+				}
 			}
-
-			const event: T.Event = {
-				clientX,
-				clientY,
-				targetPosition: componentPosition,
-				target: componentNode,
-			};
-
-			const eventType = this.PropsToEvents[prop];
-
-			if (trackLeftActive && eventType === this.PropsToEvents.onMouseDown) {
-				setLeftActive(true);
-				this.Emitter.once(this.PropsToEvents.onMouseUp, () => {
-					setLeftActive(false);
-				});
-			}
-			// prettier-ignore
-			if (trackRightActive && eventType === this.PropsToEvents.onRightMouseDown) {
-				setRightActive(true);
-				this.Emitter.once(this.PropsToEvents.onRightMouseUp, () => {
-					setRightActive(false);
-				})
-			}
-
-			componentHandler?.(event);
 		}
+
+		batchedHandlers.forEach(batchedHandler => {
+			batchedHandler();
+		});
 	};
 
 	// Allow processing of this.Handlers object when mouse input events are recieved
@@ -242,6 +288,7 @@ export default class Mouse {
 		setRightActive,
 		trackLeftActive,
 		trackRightActive,
+		zIndex,
 	}: {
 		props: T;
 		ID: string;
@@ -251,6 +298,7 @@ export default class Mouse {
 		setRightActive: (b: boolean) => void;
 		trackLeftActive: boolean;
 		trackRightActive: boolean;
+		zIndex: number;
 	}): void => {
 		const componentData = {
 			ID,
@@ -260,20 +308,27 @@ export default class Mouse {
 			setRightActive,
 			trackLeftActive,
 			trackRightActive,
+			zIndex,
 		};
 
 		for (const prop in this.PropsToEvents) {
-			this.Handlers[prop as T.HandlerProps][ID] = {
+			if (!this.Handlers[zIndex]) {
+				this.Handlers[zIndex] = this.newZIndexRegistry();
+			}
+
+			this.Handlers[zIndex][prop as T.HandlerProps][ID] = {
 				...componentData,
 				componentHandler: props[prop as T.HandlerProps],
 			};
 		}
 	};
 
-	// Cleanup after a Box component is unmounted
+	// Ensure listeners are removed after a Box component is unmounted
 	public unsubscribeComponent = (ID: string): void => {
-		for (const prop in this.PropsToEvents) {
-			delete this.Handlers[prop as T.HandlerProps][ID];
+		for (const zIndex in this.Handlers) {
+			for (const prop in this.PropsToEvents) {
+				delete this.Handlers[zIndex]?.[prop as T.HandlerProps][ID];
+			}
 		}
 	};
 

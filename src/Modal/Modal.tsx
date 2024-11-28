@@ -1,6 +1,6 @@
 import React from 'react';
 import Box from '../components/Box.js';
-import {BoxProps, BoxStyles, logger, useIsFocus} from '../index.js';
+import {BoxProps, MouseEventHandler} from '../index.js';
 import {usePageFocus} from '../FocusContext/FocusContext.js';
 
 /*
@@ -15,6 +15,17 @@ export type Props = {
 	alignSelf?: 'flex-start' | 'center' | 'flex-end';
 	xOffset?: number;
 	yOffset?: number;
+	onOutsideClick?: MouseEventHandler;
+	onOutsideRightClick?: MouseEventHandler;
+	onOutsideDoubleClick?: MouseEventHandler;
+	onOutsideDoubleRightClick?: MouseEventHandler;
+	onOutsideMouseDown?: MouseEventHandler;
+	onOutsideMouseUp?: MouseEventHandler;
+	onOutsideRightMouseDown?: MouseEventHandler;
+	onOutsideRightMouseUp?: MouseEventHandler;
+	onOutsideScrollClick?: MouseEventHandler;
+	onOutsideScrollDown?: MouseEventHandler;
+	onOutsideScrollUp?: MouseEventHandler;
 } & Omit<BoxProps, 'wipeBackground'> &
 	React.PropsWithChildren;
 
@@ -29,6 +40,17 @@ export function Modal(props: Props): React.ReactNode {
 		xOffset = 0,
 		yOffset = 0,
 		zIndex = 1,
+		onOutsideClick,
+		onOutsideRightClick,
+		onOutsideDoubleClick,
+		onOutsideDoubleRightClick,
+		onOutsideMouseUp,
+		onOutsideMouseDown,
+		onOutsideRightMouseUp,
+		onOutsideRightMouseDown,
+		onOutsideScrollUp,
+		onOutsideScrollDown,
+		onOutsideScrollClick,
 		children,
 		...displayProps
 	} = props;
@@ -36,17 +58,17 @@ export function Modal(props: Props): React.ReactNode {
 	// prettier-ignore
 	displayProps.backgroundColor = displayProps.backgroundColor ?? 'inherit';
 
-	const outerHeight: BoxProps['height'] = visible ? '100' : 0;
-	const outerWidth: BoxProps['width'] = visible ? '100' : 0;
-	const outerOverflow: BoxProps['overflow'] = visible ? 'visible' : 'hidden';
+	const outerHeight: BoxProps['height'] = '100';
+	const outerWidth: BoxProps['width'] = '100';
+	const display = visible ? 'flex' : 'none';
 
 	return (
 		<Box
 			position="absolute"
+			display={display}
 			zIndex={zIndex}
 			height={outerHeight}
 			width={outerWidth}
-			overflow={outerOverflow}
 			// zIndex wipes background by default, we don't want that in the overlay Box
 			wipeBackground={false}
 			// Position the inner Box
@@ -54,8 +76,19 @@ export function Modal(props: Props): React.ReactNode {
 			alignItems={alignSelf}
 			marginLeft={xOffset}
 			marginTop={yOffset}
+			// Click handlers
+			onClick={onOutsideClick}
+			onRightClick={onOutsideRightClick}
+			onDoubleClick={onOutsideDoubleClick}
+			onMouseDown={onOutsideMouseDown}
+			onMouseUp={onOutsideMouseUp}
+			onRightMouseDown={onOutsideRightMouseDown}
+			onRightMouseUp={onOutsideRightMouseUp}
+			onScrollUp={onOutsideScrollUp}
+			onScrollDown={onOutsideMouseDown}
+			onScrollClick={onOutsideScrollClick}
 		>
-			<Box {...displayProps} wipeBackground>
+			<Box {...displayProps} zIndex={zIndex + 1} wipeBackground>
 				{children}
 			</Box>
 		</Box>

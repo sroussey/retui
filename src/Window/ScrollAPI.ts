@@ -52,14 +52,18 @@ export class ScrollAPI {
 		}
 	};
 
-	public goToIndex = (nextIdx: number): void => {
+	public goToIndex = (nextIdx: number, center?: boolean): void => {
 		nextIdx = Math.floor(nextIdx);
 
 		if (nextIdx >= this.LENGTH || nextIdx < 0) return;
 
-		// getCenterScrollChanges instead
-		const nextState = this.getCenterScrollChanges(nextIdx);
-		this.setState(nextState);
+		if (center) {
+			const nextState = this.getCenterScrollChanges(nextIdx);
+			this.setState(nextState);
+		} else {
+			const nextState = this.getNormalScrollChanges(nextIdx);
+			this.setState(nextState);
+		}
 	};
 
 	public nextItem = (): void => {
@@ -92,24 +96,28 @@ export class ScrollAPI {
 		this.handle(this.state.idx - 1);
 	};
 
-	public scrollDown = (): void => {
+	public scrollDown = (n?: number): void => {
 		const half = Math.floor(this.WINDOW_SIZE / 2);
-		const nextIdx = this.state.idx + half;
+		const displacement = n ?? half;
+
+		const nextIdx = this.state.idx + displacement;
 
 		if (this.fallthrough && nextIdx >= this.LENGTH) {
 			const diff = this.LENGTH - this.state.idx - 1;
-			return this.goToIndex(half - diff - 1);
+			return this.goToIndex(displacement - diff - 1);
 		}
 
 		this.goToIndex(Math.min(this.LENGTH - 1, nextIdx));
 	};
 
-	public scrollUp = (): void => {
+	public scrollUp = (n?: number): void => {
 		const half = Math.floor(this.WINDOW_SIZE / 2);
-		const nextIdx = this.state.idx - half;
+		const displacement = n ?? half;
+
+		const nextIdx = this.state.idx - displacement;
 
 		if (this.fallthrough && nextIdx < 0) {
-			const diff = half - this.state.idx;
+			const diff = displacement - this.state.idx;
 			return this.goToIndex(this.LENGTH - diff);
 		}
 

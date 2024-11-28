@@ -1,9 +1,11 @@
 import {createContext, useContext} from 'react';
 import {NodesView} from '../NodeMap/useNodeMap.js';
+import {ViewState} from '../Window/types.js';
 
 export type ListItemContext<T extends any[] = any> = {
 	items: T;
 	setItems: (items: T) => void;
+	control: ViewState['_control'];
 	// Focus extends up the focus tree to the root node
 	isFocus: boolean;
 	// Focus based only on whatever focus given by the List component containing this list item
@@ -12,6 +14,7 @@ export type ListItemContext<T extends any[] = any> = {
 };
 
 export type PageContext = {
+	control: ViewState['_control'];
 	// Focus extends up the focus tree to the root node
 	isFocus: boolean;
 	// Focus based only on whatever focus given by the Pages component containing this page
@@ -81,11 +84,12 @@ export function useListItem<T extends any[] = any>(): ListItemContext<T> & {
 	const items = listItemContext.items;
 	const setItems = listItemContext.setItems;
 	const index = listItemContext.index;
+	const control = listItemContext.control;
 	const isFocus = listItemContext.isFocus;
 	const isShallowFocus = listItemContext.isShallowFocus;
 	const item = items[index];
 
-	return {items, setItems, index, isFocus, isShallowFocus, item};
+	return {items, setItems, index, isFocus, isShallowFocus, item, control};
 }
 
 export function usePage(): PageContext {

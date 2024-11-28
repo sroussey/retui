@@ -2,7 +2,7 @@ import React, {useEffect, useRef} from 'react';
 import Box from '../components/Box.js';
 import {WindowProps} from './Window.js';
 import {STDIN} from '../Stdin/Stdin.js';
-import {Listener} from './types.js';
+import {Listener, ViewState} from './types.js';
 import {ListItemContext, PageContext} from '../FocusContext/FocusContext.js';
 
 type Props = {
@@ -38,6 +38,7 @@ type Props = {
 	// Context data that will added to both ItemContext and PageContext
 	index: number;
 	items: any[];
+	control: ViewState['_control'];
 	setItems: (items: unknown[]) => void;
 };
 
@@ -46,6 +47,7 @@ export function Unit({
 	listeners,
 	items,
 	setItems,
+	control,
 	stretch,
 	index,
 	isShallowFocus,
@@ -87,7 +89,7 @@ export function Unit({
 	if (type === 'PAGES') {
 		return (
 			<PageContext.Provider
-				value={{isFocus: isDeepFocus, isShallowFocus, index}}
+				value={{isFocus: isDeepFocus, isShallowFocus, index, control}}
 				key={node.key}
 			>
 				{getUnit()}
@@ -104,6 +106,7 @@ export function Unit({
 					index,
 					items,
 					setItems,
+					control,
 				}}
 				key={node.key}
 			>

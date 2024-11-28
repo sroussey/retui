@@ -5,7 +5,14 @@ import {
 	Return as UseTextInputReturn,
 } from './useTextInput.js';
 import {randomUUID} from 'crypto';
-import {Binding, Box, BoxProps, useIsFocus, useKeymap} from '../index.js';
+import {
+	Binding,
+	Box,
+	BoxProps,
+	logger,
+	useIsFocus,
+	useKeymap,
+} from '../index.js';
 import ControlKeymap from './ControlKeymap.js';
 import chalk from 'chalk';
 import {useResponsiveDimensions} from '../useResponsiveDimensions/useResponsiveDimensions.js';
@@ -41,9 +48,11 @@ export function TextInput({
 	const isFocus = useIsFocus();
 	const KeyMap = state.insert ? InsertKeymap : NormalKeymap;
 
+	const priority =
+		state.insert && isFocus ? 'textinput' : isFocus ? 'default' : 'never';
+
 	const {useEvent} = useKeymap(KeyMap, {
-		priority:
-			state.insert && isFocus ? 'textinput' : isFocus ? 'default' : 'never',
+		priority,
 	});
 
 	const availableWidth = responsiveDimensions.width ?? 0;
@@ -51,7 +60,7 @@ export function TextInput({
 
 	useEffect(() => {
 		const copy = {...state, window: {...state.window}};
-		console.log('start copy', JSON.stringify(copy, null, 4));
+		// console.log('start copy', JSON.stringify(copy, null, 4));
 
 		const currWindowSize = copy.window.end - copy.window.start + 1;
 
@@ -240,7 +249,12 @@ export function TextInput({
 	});
 
 	return (
-		<Box ref={responsiveDimensions.ref} height="100" width="100">
+		<Box
+			ref={responsiveDimensions.ref}
+			wipeBackground={false}
+			height="100"
+			width="100"
+		>
 			<DisplayText
 				state={state}
 				availableWidth={availableWidth}

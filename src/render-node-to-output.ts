@@ -10,6 +10,7 @@ import type Output from './output.js';
 import renderBackgroundColor from './render-background-color.js';
 import {Styles} from './styles.js';
 import {addMouseEventListeners} from './Stdin/AddMouseEventListeners.js';
+import {STDIN} from './Stdin/Stdin.js';
 
 // If parent container is `<Box>`, text nodes will be treated as separate nodes in
 // the tree and will have their own coordinates in the layout.
@@ -99,6 +100,9 @@ const renderNodeToOutput = (
 
 	let clipped = false;
 
+	if (node.style.zIndex === 'auto') {
+		(node.style.zIndex as any) = 0;
+	}
 	const hasZIndex =
 		typeof node.style.zIndex === 'number' &&
 		node.style.zIndex > 0 &&
@@ -154,6 +158,12 @@ const renderNodeToOutput = (
 				(node.style.borderStyle as any) = undefined;
 			}
 		}
+		if (options.parentZIndex) {
+			(node.style.zIndex as any) =
+				typeof node.style.zIndex === 'number'
+					? (node.style.zIndex as any) + options.parentZIndex
+					: 0 + options.parentZIndex;
+		}
 
 		addMouseEventListeners(node);
 
@@ -196,6 +206,10 @@ const renderNodeToOutput = (
 		node.nodeName === 'ink-root' ||
 		(node.nodeName === 'ink-box' && !hasZIndex)
 	) {
+		if (node.nodeName === 'ink-root') {
+			STDIN.Mouse.resetHandlers();
+		}
+
 		for (const childNode of node.childNodes) {
 			renderNodeToOutput(
 				childNode as DOMElement,
@@ -210,7 +224,7 @@ const renderNodeToOutput = (
 						borderStyle: node.style.borderStyle,
 						borderColor: node.style.borderColor,
 					},
-					parentZIndex: options.parentZIndex,
+					parentZIndex: node.style.zIndex as number,
 				},
 				zIndexes,
 			);
