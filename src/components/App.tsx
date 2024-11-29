@@ -8,6 +8,7 @@ import StdoutContext from './StdoutContext.js';
 import StderrContext from './StderrContext.js';
 import FocusContext from './FocusContext.js';
 import ErrorOverview from './ErrorOverview.js';
+import {spawnSync} from 'node:child_process';
 
 const tab = '\t';
 const shiftTab = '\u001B[Z';

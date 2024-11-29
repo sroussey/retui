@@ -1,4 +1,4 @@
-import process from 'node:process';
+import process, {exitCode} from 'node:process';
 import React, {type ReactNode} from 'react';
 import {throttle} from 'es-toolkit/compat';
 import ansiEscapes from 'ansi-escapes';
@@ -15,6 +15,9 @@ import logUpdate, {type LogUpdate} from './log-update.js';
 import instances from './instances.js';
 import App from './components/App.js';
 import {ALT_STDIN, STDIN} from './Stdin/Stdin.js';
+import {spawnSync} from 'node:child_process';
+import PreserveScreen from './TPut/PreserveScreen.js';
+import {logger} from './index.js';
 
 const noop = () => {};
 
@@ -139,6 +142,16 @@ export default class Ink {
 		);
 	};
 
+	// Allows app to exit by clearing up excess listeners
+	private pauseStdin(): void {
+		setImmediate(() => {
+			STDIN.pause();
+			ALT_STDIN.pause();
+			process.stdin.removeAllListeners();
+			process.stdin.pause();
+		});
+	}
+
 	onRender: () => void = () => {
 		if (this.isUnmounted) {
 			return;
@@ -258,9 +271,13 @@ export default class Ink {
 			return;
 		}
 
-		this.calculateLayout();
-		this.onRender();
-		this.unsubscribeExit();
+		this.pauseStdin();
+
+		if (error || !PreserveScreen.State.ShouldPreserveScreen) {
+			this.calculateLayout();
+			this.onRender();
+			this.unsubscribeExit();
+		}
 
 		if (typeof this.restoreConsole === 'function') {
 			this.restoreConsole();
@@ -282,13 +299,6 @@ export default class Ink {
 
 		reconciler.updateContainer(null, this.container, null, noop);
 		instances.delete(this.options.stdout);
-
-		// Allow app to exit by removing STDIN listeners and pausing the socket.
-		setImmediate(() => {
-			STDIN.pause();
-			ALT_STDIN.pause();
-			process.stdin.pause();
-		});
 
 		if (error instanceof Error) {
 			this.rejectExitPromise(error);

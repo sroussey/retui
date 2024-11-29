@@ -98,3 +98,6 @@ export {setMouseReporting, setCharRegisterSize};
 // Styles prop
 export {type StylesConfig as Styles} from './styles.js';
 export {type ClickEvent} from './styles.js';
+
+// tput preserveScreen
+export {preserveScreen} from './TPut/PreserveScreen.js';
