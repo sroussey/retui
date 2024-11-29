@@ -94,6 +94,10 @@ export default class Keyboard {
 		this.state.eventEmitted = true;
 	};
 
+	public respondToKeypress(cb: (stdin: string) => unknown): void {
+		this.Emitter.once(EVENT.keypress, cb);
+	}
+
 	public handleStdin = (buffer: Buffer): void => {
 		if (buffer[0] === undefined) return;
 		const char = buffer.toString('utf-8');

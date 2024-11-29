@@ -15,7 +15,6 @@ import logUpdate, {type LogUpdate} from './log-update.js';
 import instances from './instances.js';
 import App from './components/App.js';
 import {ALT_STDIN, STDIN} from './Stdin/Stdin.js';
-import {spawnSync} from 'node:child_process';
 import PreserveScreen from './TPut/PreserveScreen.js';
 import {logger} from './index.js';
 
@@ -149,6 +148,9 @@ export default class Ink {
 			ALT_STDIN.pause();
 			process.stdin.removeAllListeners();
 			process.stdin.pause();
+			// process.exit for right now because I can't figure out what is
+			// causing the hang up which occurs after executing shell commands
+			process.exit();
 		});
 	}
 

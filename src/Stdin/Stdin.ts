@@ -68,6 +68,14 @@ class Stdin {
 		this.listening = false;
 	};
 
+	public pauseDataStream(): void {
+		process.stdin.off(EVENT.data, this.handleStdin);
+	}
+
+	public resumeDataStream(): void {
+		process.stdin.on(EVENT.data, this.handleStdin);
+	}
+
 	private handleStdin = (stdin: string): void => {
 		// Handle SIGINT
 		if (stdin === '03') {

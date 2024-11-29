@@ -11,7 +11,6 @@ import renderBackgroundColor from './render-background-color.js';
 import {Styles} from './styles.js';
 import {addMouseEventListeners} from './Stdin/AddMouseEventListeners.js';
 import {STDIN} from './Stdin/Stdin.js';
-import {logger} from './index.js';
 
 // If parent container is `<Box>`, text nodes will be treated as separate nodes in
 // the tree and will have their own coordinates in the layout.

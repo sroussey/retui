@@ -8,7 +8,7 @@ import StdoutContext from './StdoutContext.js';
 import StderrContext from './StderrContext.js';
 import FocusContext from './FocusContext.js';
 import ErrorOverview from './ErrorOverview.js';
-import {spawnSync} from 'node:child_process';
+import {ShellCommmand} from '../TPut/ShellCommandContext.js';
 
 const tab = '\t';
 const shiftTab = '\u001B[Z';
@@ -114,11 +114,13 @@ export default class App extends PureComponent<Props, State> {
 									focus: this.focus,
 								}}
 							>
-								{this.state.error ? (
-									<ErrorOverview error={this.state.error as Error} />
-								) : (
-									this.props.children
-								)}
+								<ShellCommmand>
+									{this.state.error ? (
+										<ErrorOverview error={this.state.error as Error} />
+									) : (
+										this.props.children
+									)}
+								</ShellCommmand>
 							</FocusContext.Provider>
 						</StderrContext.Provider>
 					</StdoutContext.Provider>

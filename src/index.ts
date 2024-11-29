@@ -99,5 +99,7 @@ export {setMouseReporting, setCharRegisterSize};
 export {type StylesConfig as Styles} from './styles.js';
 export {type ClickEvent} from './styles.js';
 
-// tput preserveScreen
+// tput
 export {preserveScreen} from './TPut/PreserveScreen.js';
+export {executeShellCommand} from './TPut/executeShellCommand.js';
+export {useShellCommand} from './TPut/ShellCommandContext.js';
