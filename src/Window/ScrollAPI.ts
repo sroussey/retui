@@ -1,6 +1,7 @@
 import {produce} from 'immer';
 import assert from 'node:assert';
 import {ScrollAPIInit, ScrollAPIPublicFns} from './types.js';
+import {logger} from '../index.js';
 
 type State = ScrollAPIInit['state'];
 type SetState = ScrollAPIInit['setState'];
@@ -12,8 +13,16 @@ export class ScrollAPI {
 	private readonly WINDOW_SIZE: ScrollAPIInit['WINDOW_SIZE'];
 	private readonly centerScroll: boolean;
 	private readonly fallthrough: boolean;
+	private readonly prevBounds?: {start: number; end: number};
 
-	constructor({state, setState, LENGTH, WINDOW_SIZE, opts}: ScrollAPIInit) {
+	constructor({
+		state,
+		setState,
+		LENGTH,
+		WINDOW_SIZE,
+		opts,
+		prevBounds,
+	}: ScrollAPIInit) {
 		this.state = state;
 		this.setState = (nextState: ScrollAPIInit['state']) => {
 			try {
@@ -27,6 +36,7 @@ export class ScrollAPI {
 		this.WINDOW_SIZE = WINDOW_SIZE;
 		this.centerScroll = opts.centerScroll ?? false;
 		this.fallthrough = opts.fallthrough ?? false;
+		this.prevBounds = prevBounds;
 	}
 
 	public getAPI = (): ScrollAPIPublicFns => {
@@ -156,6 +166,8 @@ export class ScrollAPI {
 			}
 
 			//  next idx less than range (goToIndex)
+			//  Shouldn't the second clause be draft.start > 0 ?? Since we do want
+			//  to shift start below 0
 			while (draft.idx < draft.start && draft.start >= 0) {
 				--draft.end;
 				--draft.start;
@@ -170,8 +182,8 @@ export class ScrollAPI {
 				return;
 			}
 
-			// next idx 'bumps' into start position, forcing new window
-			if (draft.idx === draft.end && draft.end < LENGTH) {
+			// next idx 'bumps' into past position, forcing new window
+			if (draft.idx === draft.start - 1 && draft.start > 0) {
 				--draft.start;
 				--draft.end;
 				this.rangeCheck(draft, 'getNormalScrollChanges');
@@ -325,12 +337,27 @@ export class ScrollAPI {
 			if (this.centerScroll) {
 				this.centerIdx({draft, LENGTH});
 			}
+
+			if (nextSize !== 0 && this.prevBounds) {
+				const prevSize = this.prevBounds.end - this.prevBounds.start;
+				if (nextSize === prevSize) {
+					if (
+						this.prevBounds.start >= 0 &&
+						this.prevBounds.end <= this.LENGTH &&
+						draft.idx >= this.prevBounds.start &&
+						draft.idx < this.prevBounds.end
+					) {
+						draft.start = this.prevBounds.start;
+						draft.end = this.prevBounds.end;
+					}
+				}
+			}
 		});
 
 		this.setState(nextState);
 	};
 
-	private rangeCheck = (draft: State, msg: string): void => {
+	private rangeCheck = (draft: State, msg: string = ''): void => {
 		if (
 			draft.start >= 0 &&
 			draft.start <= draft.end &&

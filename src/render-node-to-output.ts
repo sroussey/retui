@@ -246,7 +246,7 @@ const renderNodeToOutput = (
 			level.cb();
 		}
 
-		logger.prefix('levels', zIndexes);
+		// logger.prefix('levels', zIndexes);
 	}
 };
 

@@ -75,6 +75,7 @@ export type ScrollAPIInit = {
 	LENGTH: number;
 	WINDOW_SIZE: number;
 	opts: UseScrollOpts;
+	prevBounds?: {start: number; end: number};
 };
 
 // Public functions in ScrollAPIPublicFns, used as utility functions in components
