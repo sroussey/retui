@@ -7,7 +7,7 @@ import React, {
 import {executeShellCommand} from './executeShellCommand.js';
 import assert from 'assert';
 
-type ShellCommandContext = {
+export type ShellCommandContext = {
 	render: () => void;
 };
 
@@ -20,19 +20,21 @@ export function useShellCommand() {
 	assert(ctx);
 
 	return {
-		exec: (...args: Parameters<typeof executeShellCommand>) => {
+		exec: (
+			...args: Parameters<typeof executeShellCommand>
+		): Promise<number | null> => {
 			const [cmd, message] = args;
-			executeShellCommand(cmd, message)(ctx.render);
+			return executeShellCommand(cmd, message)(ctx.render);
 		},
 	};
 }
 
-export function ShellCommmand(props: PropsWithChildren): React.ReactNode {
+export function ShellCommmandProvider(
+	props: PropsWithChildren,
+): React.ReactNode {
 	const [count, setCount] = useState(0);
 
-	const render = () => {
-		setCount(count + 1);
-	};
+	const render = () => setCount(count + 1);
 
 	return (
 		<ShellCommandContext.Provider value={{render}}>
