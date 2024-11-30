@@ -195,8 +195,6 @@ export default class Mouse {
 				return this.Handlers[Number(zIndex) as number];
 			});
 
-		logger.write('ZINDEXES', zIndexes);
-
 		let eventHappened = false;
 
 		const batchedHandlers: (() => void)[] = [];
@@ -381,8 +379,6 @@ export default class Mouse {
 
 		const event: T.StdinData = {clientX: x, clientY: y};
 		const button = this.getButtonType(buttonCode);
-
-		logger.prefix('BUTTON', button);
 
 		if (button === 'LEFT_BTN_DOWN') {
 			this.btnDownState.left = true;

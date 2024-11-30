@@ -4,12 +4,14 @@ import {type Styles} from './styles.js';
 import wrapText from './wrap-text.js';
 import squashTextNodes from './squash-text-nodes.js';
 import {type OutputTransformer} from './render-node-to-output.js';
+import {TextProps} from './index.js';
 
 type InkNode = {
 	parentNode: DOMElement | undefined;
 	yogaNode?: YogaNode;
 	internal_static?: boolean;
-	style: Styles;
+	// was just Styles
+	style: Styles & TextProps;
 };
 
 export type TextName = '#text';

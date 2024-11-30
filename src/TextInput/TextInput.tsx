@@ -264,9 +264,10 @@ export function TextInput({
 	return (
 		<Box
 			ref={responsiveDimensions.ref}
-			wipeBackground={false}
+			// wipeBackground={false}
 			height="100"
 			width="100"
+			backgroundColor="inherit"
 		>
 			<DisplayText
 				state={state}

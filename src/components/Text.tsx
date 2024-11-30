@@ -3,6 +3,7 @@ import chalk, {type ForegroundColorName} from 'chalk';
 import {type LiteralUnion} from 'type-fest';
 import colorize from '../colorize.js';
 import {type Styles} from '../styles.js';
+import {logger} from '../index.js';
 
 export type Props = {
 	/**
@@ -13,7 +14,7 @@ export type Props = {
 	/**
 	 * Same as `color`, but for background.
 	 */
-	readonly backgroundColor?: LiteralUnion<ForegroundColorName, string>;
+	readonly backgroundColor?: Styles['backgroundColor'];
 
 	/**
 	 * Dim the color (emit a small amount of light).
@@ -60,7 +61,7 @@ export type Props = {
  */
 export default function Text({
 	color,
-	backgroundColor,
+	backgroundColor = 'inherit',
 	dimColor = false,
 	bold = false,
 	italic = false,
@@ -74,36 +75,52 @@ export default function Text({
 		return null;
 	}
 
+	const style: Styles & Props = {
+		flexGrow: 0,
+		flexShrink: 1,
+		flexDirection: 'row',
+		textWrap: wrap,
+		backgroundColor,
+		color,
+		inverse,
+		dimColor,
+		bold,
+		italic,
+		underline,
+		strikethrough,
+		wrap,
+	};
+
 	const transform = (children: string): string => {
-		if (dimColor) {
+		if (style.dimColor) {
 			children = chalk.dim(children);
 		}
 
-		if (color) {
-			children = colorize(children, color, 'foreground');
+		if (style.color) {
+			children = colorize(children, style.color, 'foreground');
 		}
 
-		if (backgroundColor) {
-			children = colorize(children, backgroundColor, 'background');
+		if (style.backgroundColor && style.backgroundColor !== 'inherit') {
+			children = colorize(children, style.backgroundColor, 'background');
 		}
 
-		if (bold) {
+		if (style.bold) {
 			children = chalk.bold(children);
 		}
 
-		if (italic) {
+		if (style.italic) {
 			children = chalk.italic(children);
 		}
 
-		if (underline) {
+		if (style.underline) {
 			children = chalk.underline(children);
 		}
 
-		if (strikethrough) {
+		if (style.strikethrough) {
 			children = chalk.strikethrough(children);
 		}
 
-		if (inverse) {
+		if (style.inverse) {
 			children = chalk.inverse(children);
 		}
 
@@ -111,10 +128,7 @@ export default function Text({
 	};
 
 	return (
-		<ink-text
-			style={{flexGrow: 0, flexShrink: 1, flexDirection: 'row', textWrap: wrap}}
-			internal_transform={transform}
-		>
+		<ink-text style={style} internal_transform={transform}>
 			{children}
 		</ink-text>
 	);

@@ -1,7 +1,6 @@
 import React, {
 	forwardRef,
 	useEffect,
-	useRef,
 	useState,
 	type PropsWithChildren,
 } from 'react';
@@ -10,10 +9,8 @@ import {type Styles} from '../styles.js';
 import {type DOMElement} from '../dom.js';
 import {usePageFocus} from '../FocusContext/FocusContext.js';
 import {T as MouseTypes} from '../Stdin/Mouse.js';
-import ElementPosition from '../Stdin/ElementPosition.js';
 import {STDIN} from '../Stdin/Stdin.js';
 import {randomUUID} from 'crypto';
-import {logger} from '../index.js';
 
 export type ClickEvent = MouseTypes.Event;
 
@@ -57,7 +54,7 @@ const Box = forwardRef<DOMElement, PropsWithChildren<Props>>(
 			}
 		}
 
-		// Overwrite props if leftActive
+		// Overwrite props if right active
 		if (rightActive && (styles?.rightActive || props.rightActive)) {
 			if (styles?.rightActive) {
 				for (const key in styles.rightActive) {

@@ -85,6 +85,22 @@ const renderNodeToOutput = (
 	}
 
 	if (node.nodeName === 'ink-text') {
+		const {backgroundColor, color, inverse} = node.style;
+		const parentBg = options.parentStyles?.backgroundColor;
+
+		if (backgroundColor === 'inherit' && parentBg) {
+			// Do not modify bg if inverse === true, because inverse === true ends
+			// up setting the background so we don't want to overwrite any intentional
+			// styles
+			if (!inverse && !color) {
+				(node.style.color as any) = parentBg;
+				(node.style.inverse as any) = true;
+			} else if (!inverse) {
+				(node.style.backgroundColor as any) = parentBg;
+			}
+		}
+
+		// Styles are applied in squashTextNodes
 		let text = squashTextNodes(node);
 
 		if (text.length > 0) {
@@ -244,8 +260,6 @@ const renderNodeToOutput = (
 		for (const level of zIndexes) {
 			level.cb();
 		}
-
-		// logger.prefix('levels', zIndexes);
 	}
 };
 
