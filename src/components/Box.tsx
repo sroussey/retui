@@ -1,6 +1,7 @@
 import React, {
 	forwardRef,
 	useEffect,
+	useRef,
 	useState,
 	type PropsWithChildren,
 } from 'react';
@@ -11,6 +12,7 @@ import {usePageFocus} from '../FocusContext/FocusContext.js';
 import {T as MouseTypes} from '../Stdin/Mouse.js';
 import {STDIN} from '../Stdin/Stdin.js';
 import {randomUUID} from 'crypto';
+import {logger} from '../index.js';
 
 export type ClickEvent = MouseTypes.Event;
 
@@ -28,13 +30,12 @@ const Box = forwardRef<DOMElement, PropsWithChildren<Props>>(
 
 		// Apply styles from styles prop if style not already set
 		if (styles) {
-			for (const key of Object.keys(styles)) {
+			for (const key in styles) {
 				if (key === 'styles') continue;
-				if (
-					(props as any)[key] === undefined &&
-					(styles as any)[key] !== undefined
-				) {
-					(props as any)[key] = (styles as any)[key];
+				// @ts-ignore
+				if (props[key] === undefined && styles[key] !== undefined) {
+					// @ts-ignore
+					props[key] = styles[key];
 				}
 			}
 		}
@@ -43,13 +44,15 @@ const Box = forwardRef<DOMElement, PropsWithChildren<Props>>(
 		if (leftActive && (styles?.leftActive || props.leftActive)) {
 			if (styles?.leftActive) {
 				for (const key in styles.leftActive) {
-					(props as any)[key] = (styles.leftActive as any)[key];
+					// @ts-ignore
+					props[key] = styles.leftActive[key];
 				}
 			}
 
 			if (props.leftActive) {
 				for (const key in props.leftActive) {
-					(props as any)[key] = (props.leftActive as any)[key];
+					// @ts-ignore
+					props[key] = props.leftActive[key];
 				}
 			}
 		}
@@ -58,13 +61,15 @@ const Box = forwardRef<DOMElement, PropsWithChildren<Props>>(
 		if (rightActive && (styles?.rightActive || props.rightActive)) {
 			if (styles?.rightActive) {
 				for (const key in styles.rightActive) {
-					(props as any)[key] = (styles.rightActive as any)[key];
+					// @ts-ignore
+					props[key] = styles.rightActive[key];
 				}
 			}
 
 			if (props.rightActive) {
 				for (const key in props.rightActive) {
-					(props as any)[key] = (props.rightActive as any)[key];
+					// @ts-ignore
+					props[key] = props.rightActive[key];
 				}
 			}
 		}
@@ -97,6 +102,7 @@ const Box = forwardRef<DOMElement, PropsWithChildren<Props>>(
 				isPageFocus={isPageFocus}
 				setLeftActive={setLeftActive}
 				setRightActive={setRightActive}
+				internalStyles={{...props}}
 			>
 				{children}
 			</ink-box>

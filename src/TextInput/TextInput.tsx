@@ -297,6 +297,8 @@ function DisplayText(props: DisplayTextProps): React.ReactNode {
 	const color = props.color;
 	const cursorColor = props.cursorColor ?? color;
 
+	logger.write(color);
+
 	if (!insert) {
 		return (
 			<Text wrap="truncate-end" color={color}>
@@ -313,10 +315,10 @@ function DisplayText(props: DisplayTextProps): React.ReactNode {
 
 	let rightValue = value.slice(idx + 1, rightStop);
 
-	if (leftValue) {
+	if (leftValue && color) {
 		leftValue = colorize(leftValue, color, 'foreground');
 	}
-	if (rightValue) {
+	if (rightValue && color) {
 		rightValue = colorize(rightValue, color, 'foreground');
 	}
 	cursorValue = colorize(cursorValue, cursorColor, 'foreground');

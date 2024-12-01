@@ -11,6 +11,7 @@ import renderBackgroundColor from './render-background-color.js';
 import {Styles} from './styles.js';
 import {addMouseEventListeners} from './Stdin/AddMouseEventListeners.js';
 import {STDIN} from './Stdin/Stdin.js';
+import {TextProps} from './index.js';
 
 // If parent container is `<Box>`, text nodes will be treated as separate nodes in
 // the tree and will have their own coordinates in the layout.
@@ -70,6 +71,10 @@ const renderNodeToOutput = (
 	const x = offsetX + nextOffsetX;
 	const y = offsetY + nextOffsetY;
 
+	const InternalStyles = node.attributes['internalStyles'] as
+		| (Styles & TextProps)
+		| undefined;
+
 	// Transformers are functions that transform final text output of each component
 	// See Output class for logic that applies transformers
 	let newTransformers = transformers;
@@ -85,19 +90,30 @@ const renderNodeToOutput = (
 	}
 
 	if (node.nodeName === 'ink-text') {
-		const {backgroundColor, color, inverse} = node.style;
-		const parentBg = options.parentStyles?.backgroundColor;
+		const parentBg = node.parentNode?.style.backgroundColor;
+		const hasParentBg = parentBg !== undefined && parentBg !== 'inherit';
 
-		if (backgroundColor === 'inherit' && parentBg) {
-			// Do not modify bg if inverse === true, because inverse === true ends
-			// up setting the background so we don't want to overwrite any intentional
-			// styles
-			if (!inverse && !color) {
-				(node.style.color as any) = parentBg;
-				(node.style.inverse as any) = true;
-			} else if (!inverse) {
-				(node.style.backgroundColor as any) = parentBg;
+		const internalBackgroundColor = InternalStyles?.backgroundColor;
+		const internalInverse = InternalStyles?.inverse;
+		const internalColor = InternalStyles?.color;
+
+		if (internalBackgroundColor === 'inherit' && hasParentBg) {
+			if (!internalInverse && !internalColor) {
+				// @ts-ignore
+				node.style.color = parentBg;
+				// @ts-ignore
+				node.style.inverse = true;
+			} else if (!internalColor) {
+				// @ts-ignore
+				node.style.backgroundColor = parentBg;
 			}
+		} else {
+			// @ts-ignore
+			node.style.color = internalColor;
+			// @ts-ignore
+			node.style.backgroundColor = internalBackgroundColor;
+			// @ts-ignore
+			node.style.inverse = internalInverse;
 		}
 
 		// Styles are applied in squashTextNodes
@@ -123,7 +139,8 @@ const renderNodeToOutput = (
 	let clipped = false;
 
 	if (node.style.zIndex === 'auto') {
-		(node.style.zIndex as any) = 0;
+		// @ts-ignore
+		node.style.zIndex = 0;
 	}
 
 	// zIndexes less than 0 won't have any effect...make this explicitly clear
@@ -162,27 +179,37 @@ const renderNodeToOutput = (
 		zIndexes.push({index: nodeZIndex, cb});
 		zIndexes.sort((a, b) => (a.index > b.index ? 1 : -1));
 	} else if (node.nodeName === 'ink-box') {
-		// Inherit styles from parent element
-		// prettier-ignore
-		if (node.style.backgroundColor === 'inherit') {
-			if (options?.parentStyles?.backgroundColor) {
-				(node.style.backgroundColor as string) = options.parentStyles.backgroundColor;
+		const internalBackgroundColor = InternalStyles?.backgroundColor;
+		const internalBorderColor = InternalStyles?.borderColor;
+		const internalBorderStyle = InternalStyles?.borderStyle;
+
+		if (internalBackgroundColor === 'inherit') {
+			if (options.parentStyles?.backgroundColor) {
+				// @ts-ignore
+				node.style.backgroundColor = options.parentStyles.backgroundColor;
 			} else {
-				(node.style.backgroundColor as any) = undefined;
+				// @ts-ignore
+				node.style.backgroundColor = undefined;
 			}
 		}
-		if (node.style.borderColor === 'inherit') {
+
+		if (internalBorderStyle === 'inherit') {
+			if (options.parentStyles?.borderStyle) {
+				// @ts-ignore
+				node.style.borderStyle = options.parentStyles.borderStyle;
+			} else {
+				// @ts-ignore
+				node.style.borderStyle = undefined;
+			}
+		}
+
+		if (internalBorderColor === 'inherit') {
 			if (options?.parentStyles?.borderColor) {
-				(node.style.borderColor as string) = options.parentStyles.borderColor;
+				// @ts-ignore
+				node.style.borderColor = options.parentStyles.borderColor;
 			} else {
-				(node.style.borderColor as any) = undefined;
-			}
-		}
-		if (node.style.borderStyle === 'inherit') {
-			if (options?.parentStyles?.borderStyle) {
-				(node.style.borderStyle as any) = options.parentStyles.borderStyle;
-			} else {
-				(node.style.borderStyle as any) = undefined;
+				// @ts-ignore
+				node.style.borderColor = undefined;
 			}
 		}
 

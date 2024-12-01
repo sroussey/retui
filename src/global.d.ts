@@ -25,6 +25,7 @@ declare namespace Ink {
 		isPageFocus?: boolean;
 		setLeftActive?: (b: boolean) => void;
 		setRightActive?: (b: boolean) => void;
+		internalStyles?: Styles;
 	};
 
 	type Text = {
@@ -35,5 +36,6 @@ declare namespace Ink {
 
 		// eslint-disable-next-line @typescript-eslint/naming-convention
 		internal_transform?: (children: string, index: number) => string;
+		internalStyles?: TextProps;
 	};
 }

@@ -128,7 +128,11 @@ export default function Text({
 	};
 
 	return (
-		<ink-text style={style} internal_transform={transform}>
+		<ink-text
+			style={style}
+			internal_transform={transform}
+			internalStyles={{...style}}
+		>
 			{children}
 		</ink-text>
 	);
