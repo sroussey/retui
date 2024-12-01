@@ -3,8 +3,15 @@ import chalk from 'chalk';
 import colorize from '../colorize.js';
 import {type DOMNode} from '../dom.js';
 import type Output from '../output.js';
-import {BoxProps} from '../index.js';
+import {BoxProps, DOMElement, STDIN, Styles} from '../index.js';
+import {T as MouseTypes} from '../Stdin/Mouse.js';
 import assert from 'assert';
+import {addTitleEventListeners} from '../Stdin/AddTitleEventListeners.js';
+import styles from '../styles.js';
+
+type StylesHandlers = {
+	[P in keyof Styles as P extends `on${infer _}` ? P : never]: Styles[P];
+};
 
 export type Title = {
 	title: string;
@@ -13,7 +20,7 @@ export type Title = {
 	color?: BoxProps['backgroundColor'];
 	backgroundColor?: BoxProps['backgroundColor'];
 	style?: 'strike-through' | 'tab-deep' | 'tab-shallow';
-};
+} & StylesHandlers;
 
 type MutableBoxStyle = {-readonly [P in keyof BoxStyle]: BoxStyle[P]};
 
@@ -23,6 +30,7 @@ export function renderTitle(
 	node: DOMNode,
 	output: Output,
 	position: 'top' | 'bottom',
+	zIndexRoot: number,
 ) {
 	const width = node.yogaNode!.getComputedWidth();
 	const height = node.yogaNode!.getComputedHeight();
@@ -116,6 +124,9 @@ export function renderTitle(
 	let rightGapSlice = line.slice(centerEnd, rightStart);
 	let rightSlice = line.slice(rightStart, rightEnd);
 
+	leftGapSlice = leftGapSlice.map(_ => fillChar);
+	rightGapSlice = rightGapSlice.map(_ => fillChar);
+
 	const leftTitle = colorizeSlice(leftSlice.join(''), left);
 	const leftGap = leftGapSlice.join('');
 	const centerTitle = colorizeSlice(centerSlice.join(''), center);
@@ -150,6 +161,59 @@ export function renderTitle(
 	} else {
 		output.write(x, y + height - 1, outputLine, {transformers: []});
 	}
+
+	const textPosition = (start: number, end: number) => {
+		return getPosition(
+			x,
+			y,
+			start,
+			end,
+			position === 'top' ? 0 : height,
+			hasPadding,
+		);
+	};
+
+	if (leftText) {
+		const targetPosition = textPosition(leftStart, leftEnd);
+		addTitleEventListeners({
+			node: node as DOMElement,
+			targetPosition: targetPosition,
+			titleType: `title-${position}-left`,
+			title:
+				position === 'top'
+					? node.style.titleTopLeft!
+					: node.style.titleBottomLeft!,
+			zIndexRoot: zIndexRoot,
+		});
+	}
+
+	if (centerText) {
+		const targetPosition = textPosition(centerStart, centerEnd);
+		addTitleEventListeners({
+			node: node as DOMElement,
+			targetPosition: targetPosition,
+			titleType: `title-${position}-center`,
+			title:
+				position === 'top'
+					? node.style.titleTopCenter!
+					: node.style.titleBottomCenter!,
+			zIndexRoot: zIndexRoot,
+		});
+	}
+
+	if (rightText) {
+		const targetPosition = textPosition(rightStart, rightEnd);
+		addTitleEventListeners({
+			node: node as DOMElement,
+			targetPosition: targetPosition,
+			titleType: `title-${position}-right`,
+			title:
+				position === 'top'
+					? node.style.titleTopRight!
+					: node.style.titleBottomRight!,
+			zIndexRoot: zIndexRoot,
+		});
+	}
 }
 
 function colorizeSlice(text: string, title?: Title): string {
@@ -168,6 +232,30 @@ function colorizeSlice(text: string, title?: Title): string {
 		text = chalk.dim(text);
 	}
 	return text;
+}
+
+function getPosition(
+	sx: number,
+	sy: number,
+	dxs: number,
+	dxe: number,
+	displaceHeight: number,
+	hasPadding: boolean,
+): MouseTypes.Position {
+	if (displaceHeight) {
+		sy += displaceHeight - 1;
+	}
+
+	if (hasPadding) {
+		sx += 2;
+	}
+
+	return {
+		topLeft: [sx + dxs, sy],
+		topRight: [sx + dxe, sy],
+		bottomLeft: [sx + dxs, sy + 1],
+		bottomRight: [sx + dxe, sy + 1],
+	};
 }
 
 function getBox(node: DOMNode, colorized?: boolean): MutableBoxStyle {

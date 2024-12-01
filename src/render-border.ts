@@ -10,6 +10,7 @@ const renderBorder = (
 	y: number,
 	node: DOMNode,
 	output: Output,
+	zIndexRoot: number,
 ): void => {
 	const hasTopTitle =
 		node.style.titleTopLeft ||
@@ -25,8 +26,8 @@ const renderBorder = (
 	// and bottom titles.  If there is no borderStyle, just render the titles
 	// and skip rendering the borders.
 	if (!node.style.borderStyle) {
-		hasTopTitle && renderTitle(x, y, node, output, 'top');
-		hasBottomTitle && renderTitle(x, y, node, output, 'bottom');
+		hasTopTitle && renderTitle(x, y, node, output, 'top', zIndexRoot);
+		hasBottomTitle && renderTitle(x, y, node, output, 'bottom', zIndexRoot);
 		return;
 	}
 
@@ -124,7 +125,7 @@ const renderBorder = (
 
 	if (topBorder) {
 		if (hasTopTitle) {
-			renderTitle(x, y, node, output, 'top');
+			renderTitle(x, y, node, output, 'top', zIndexRoot);
 		} else {
 			output.write(x, y, topBorder, {transformers: []});
 		}
@@ -142,7 +143,7 @@ const renderBorder = (
 
 	if (bottomBorder) {
 		if (hasBottomTitle) {
-			renderTitle(x, y, node, output, 'bottom');
+			renderTitle(x, y, node, output, 'bottom', zIndexRoot);
 		} else {
 			output.write(x, y + height - 1, bottomBorder, {transformers: []});
 		}

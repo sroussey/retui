@@ -2,7 +2,7 @@ import {Node as YogaNode} from 'yoga-wasm-web';
 import EventEmitter = require('events');
 import ElementPosition from './ElementPosition.js';
 import {spawnSync} from 'child_process';
-import {logger, MouseEventHandler} from '../index.js';
+import {Title} from '../renderTitles/renderTitleToOutput.js';
 
 export namespace T {
 	// Events emitted from Mouse.Emitter
@@ -66,8 +66,20 @@ export namespace T {
 		};
 	};
 
+	export type TitleData = {
+		[TitleId: string]: {
+			isTitle: true;
+			target: YogaNode;
+			targetPosition: Position;
+			titleHandler?: Handler;
+		};
+	};
+
 	// Holds Registry at a certain z-index
-	export type ZIndexRegistry = Record<T.HandlerProps, T.ComponentData>;
+	export type ZIndexRegistry = Record<
+		T.HandlerProps,
+		T.ComponentData | T.TitleData
+	>;
 
 	export type HandlerRegistry = {
 		[zIndex: number]: ZIndexRegistry;
@@ -203,56 +215,62 @@ export default class Mouse {
 			if (eventHappened) break;
 
 			if (!level) {
-				logger.write('NO LEVEL');
 				continue;
 			}
 
-			const propData = level[prop] as T.ComponentData;
+			const propData = level[prop] as T.ComponentData | T.TitleData;
 
 			for (const ID in propData) {
-				const componentPosition = propData[ID]!.targetPosition;
-				const componentHandler = propData[ID]!.componentHandler;
+				const targetPosition = propData[ID]!.targetPosition;
 				const componentNode = propData[ID]!.target;
-				const setLeftActive = propData[ID]!.setLeftActive;
-				const trackLeftActive = propData[ID]!.trackLeftActive;
-				const setRightActive = propData[ID]!.setRightActive;
-				const trackRightActive = propData[ID]!.trackRightActive;
 
-				if (
-					!ElementPosition.containsPoint(clientX, clientY, componentPosition)
-				) {
+				if (!ElementPosition.containsPoint(clientX, clientY, targetPosition)) {
 					continue;
 				}
 
 				eventHappened = true;
-
 				const event: T.Event = {
 					clientX,
 					clientY,
-					targetPosition: componentPosition,
+					targetPosition: targetPosition,
 					target: componentNode,
 				};
 
-				const eventType = this.PropsToEvents[prop];
+				if ('isTitle' in propData[ID]!) {
+					const titleHandler = (propData as T.TitleData)[ID]?.titleHandler;
+					if (titleHandler) {
+						batchedHandlers.push(() => {
+							titleHandler(event);
+						});
+					}
+				} else {
+					const componentHandler = propData[ID]!.componentHandler;
+					const setLeftActive = propData[ID]!.setLeftActive;
+					const trackLeftActive = propData[ID]!.trackLeftActive;
+					const setRightActive = propData[ID]!.setRightActive;
+					const trackRightActive = propData[ID]!.trackRightActive;
 
-				if (trackLeftActive && eventType === this.PropsToEvents.onMouseDown) {
-					setLeftActive(true);
-					this.Emitter.once(this.PropsToEvents.onMouseUp, () => {
-						setLeftActive(false);
-					});
-				}
-				// prettier-ignore
-				if (trackRightActive && eventType === this.PropsToEvents.onRightMouseDown) {
-					setRightActive(true);
-					this.Emitter.once(this.PropsToEvents.onRightMouseUp, () => {
-						setRightActive(false);
-					})
-				}
+					const eventType = this.PropsToEvents[prop];
 
-				if (componentHandler) {
-					batchedHandlers.push(() => {
-						componentHandler(event);
-					});
+					if (trackLeftActive && eventType === this.PropsToEvents.onMouseDown) {
+						setLeftActive(true);
+						this.Emitter.once(this.PropsToEvents.onMouseUp, () => {
+							setLeftActive(false);
+						});
+					}
+					// prettier-ignore
+					if (trackRightActive && eventType === this.PropsToEvents.onRightMouseDown) {
+						setRightActive(true);
+						this.Emitter.once(this.PropsToEvents.onRightMouseUp, () => {
+							setRightActive(false);
+						})
+					}
+
+					if (componentHandler) {
+						batchedHandlers.push(() => {
+							componentHandler(event);
+						});
+					}
 				}
 			}
 		}
@@ -284,6 +302,33 @@ export default class Mouse {
 		this.Emitter.removeAllListeners();
 		this.listening = false;
 	};
+
+	public subscribeTitle({
+		ID,
+		target,
+		targetPosition,
+		zIndex,
+		title,
+	}: {
+		ID: string;
+		target: YogaNode;
+		targetPosition: T.Position;
+		zIndex: number;
+		title: Title;
+	}): void {
+		for (const prop in this.PropsToEvents) {
+			if (!this.Handlers[zIndex]) {
+				this.Handlers[zIndex] = this.newZIndexRegistry();
+			}
+
+			this.Handlers[zIndex][prop as T.HandlerProps][ID] = {
+				isTitle: true,
+				target: target,
+				targetPosition: targetPosition,
+				titleHandler: title[prop as T.HandlerProps],
+			};
+		}
+	}
 
 	// Update this.Handlers object from within a Box component
 	public subscribeComponent = <T extends {[P in T.HandlerProps]?: any}>({

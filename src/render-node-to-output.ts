@@ -44,11 +44,7 @@ const renderNodeToOutput = (
 		skipStaticElements: boolean;
 		isZIndexRoot?: boolean;
 		rootZIndex?: number;
-		parentStyles?: {
-			backgroundColor?: Styles['backgroundColor'];
-			borderColor?: Styles['borderColor'];
-			borderStyle?: Styles['borderStyle'];
-		};
+		parentStyles?: Styles;
 	},
 	zIndexes: {index: number; cb: () => void}[] = [],
 ) => {
@@ -65,7 +61,7 @@ const renderNodeToOutput = (
 	if (!yogaNode || yogaNode.getDisplay() === Yoga.DISPLAY_NONE) return;
 
 	// Left and top positions in Yoga are relative to their parent node
-	// If this is a call from a zIndex node, then the offset has already been calculated
+	// If this is a call from a zIndex node, then the offset has already been applied
 	const nextOffsetX = options.isZIndexRoot ? 0 : yogaNode.getComputedLeft();
 	const nextOffsetY = options.isZIndexRoot ? 0 : yogaNode.getComputedTop();
 	const x = offsetX + nextOffsetX;
@@ -217,7 +213,7 @@ const renderNodeToOutput = (
 
 		const parentHasBg = options?.parentStyles?.backgroundColor ? true : false;
 		renderBackgroundColor(x, y, node, output, parentHasBg);
-		renderBorder(x, y, node, output);
+		renderBorder(x, y, node, output, options.rootZIndex ?? 0);
 
 		const clipHorizontally =
 			node.style.overflowX === 'hidden' || node.style.overflow === 'hidden';
