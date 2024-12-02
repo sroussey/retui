@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import {deepEqual} from '../util.js';
+import {logger} from '../index.js';
 
 export type State = {
 	value: string;
@@ -32,19 +33,18 @@ export function useTextInput(initialValue: string = ''): Return {
 		},
 	});
 
+	const update = (nextState: State) => {
+		setState(prev => {
+			if (!deepEqual(prev, nextState)) {
+				return nextState;
+			} else {
+				return prev;
+			}
+		});
+	};
+
 	const onChange = () => {
-		return {
-			update(nextState: State): void {
-				setState(prev => {
-					if (!deepEqual(prev, nextState)) {
-						return nextState;
-					} else {
-						return prev;
-					}
-				});
-			},
-			state,
-		};
+		return {update, state};
 	};
 
 	const enterInsert = () => {
@@ -56,9 +56,13 @@ export function useTextInput(initialValue: string = ''): Return {
 	};
 
 	const setValue = (nextValue: string) => {
-		// setState({...state, value: nextValue});
 		setState(prev => {
-			return {...prev, value: nextValue};
+			return {
+				...prev,
+				value: nextValue,
+				idx: nextValue.length,
+				window: {start: 0, end: nextValue.length},
+			};
 		});
 	};
 

@@ -40,12 +40,10 @@ export const executeShellCommand =
 			});
 
 			spawnedCmd.on('error', err => {
-				logger.prefix('SPAWN', 'Error during: ', cmd, err.name, err.message);
 				rej(err);
 			});
 
 			spawnedCmd.on('close', code => {
-				logger.prefix('SPAWN', 'Successfully executed: ', cmd, code);
 				res(code);
 			});
 		})
@@ -61,7 +59,6 @@ export const executeShellCommand =
 				return new Promise(res => {
 					ALT_STDIN.listen();
 					ALT_STDIN.Keyboard.respondToKeypress(() => {
-						logger.prefix('ALT_STDIN', 'respond to keypress');
 						res(exitStatus);
 					});
 				});
@@ -73,6 +70,12 @@ export const executeShellCommand =
 					STDIN.resumeDataStream();
 					render();
 
+					logger.write('EXIT STATUS', exitStatus);
+
+					// This is possibly bad because exitStatus has been converted to a number
+					// somewhere instead of the err.message...accually is because
+					// spawn isn't catching the error, close is triggering it and
+					// close only returns a code
 					if (exitStatus instanceof Error) {
 						rej(exitStatus);
 					} else {

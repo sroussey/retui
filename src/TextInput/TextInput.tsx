@@ -186,7 +186,6 @@ export function TextInput({
 			idx: state.value.length,
 			window: {...state.window, start: nextStart, end: nextEnd},
 		});
-
 		onEnter?.();
 	});
 
@@ -297,8 +296,6 @@ function DisplayText(props: DisplayTextProps): React.ReactNode {
 	const color = props.color;
 	const cursorColor = props.cursorColor ?? color;
 
-	logger.write(color);
-
 	if (!insert) {
 		return (
 			<Text wrap="truncate-end" color={color}>
@@ -312,6 +309,7 @@ function DisplayText(props: DisplayTextProps): React.ReactNode {
 
 	let rightStop = end;
 	rightStop = Math.max(end, props.availableWidth);
+	// logger.write(props.state);
 
 	let rightValue = value.slice(idx + 1, rightStop);
 

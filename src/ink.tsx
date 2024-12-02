@@ -161,6 +161,10 @@ export default class Ink {
 
 		const {output, outputHeight, staticOutput} = render(this.rootNode);
 
+		if (ALT_STDIN.isListening()) {
+			return;
+		}
+
 		// If <Static> output isn't empty, it means new children have been added to it
 		const hasStaticOutput = staticOutput && staticOutput !== '\n';
 

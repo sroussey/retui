@@ -10,7 +10,7 @@ import type Output from './output.js';
 import renderBackgroundColor from './render-background-color.js';
 import {Styles} from './styles.js';
 import {addMouseEventListeners} from './Stdin/AddMouseEventListeners.js';
-import {STDIN} from './Stdin/Stdin.js';
+import {ALT_STDIN, STDIN} from './Stdin/Stdin.js';
 import {TextProps} from './index.js';
 
 // If parent container is `<Box>`, text nodes will be treated as separate nodes in

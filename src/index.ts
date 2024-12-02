@@ -103,3 +103,6 @@ export {type ClickEvent} from './styles.js';
 export {preserveScreen} from './TPut/PreserveScreen.js';
 export {executeShellCommand} from './TPut/executeShellCommand.js';
 export {useShellCommand} from './TPut/ShellCommandContext.js';
+
+// CLI
+export {Cli, useCommand, type Commands} from './Cli/Cli.js';

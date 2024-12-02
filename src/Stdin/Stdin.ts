@@ -61,6 +61,10 @@ class Stdin {
 		this.listening = true;
 	};
 
+	public isListening = (): boolean => {
+		return this.listening;
+	};
+
 	public pause = (): void => {
 		process.stdin.off(EVENT.data, this.handleStdin);
 		this.Mouse.pause();

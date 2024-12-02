@@ -41,7 +41,6 @@ export function useScroll(itemsLength: number, opts: Opts): Return {
 	scrollAPI.handle();
 
 	if (state._winSize > 0) {
-		// logger.write('setting prevBounds');
 		prevBounds.current = {start: state.start, end: state.end};
 	}
 
