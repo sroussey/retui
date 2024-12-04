@@ -4,9 +4,10 @@ import Box from '../components/Box.js';
 import {TextInput} from '../TextInput/TextInput.js';
 import EventEmitter from 'events';
 import {useIsFocus} from '../FocusContext/FocusContext.js';
-import {Text} from '../index.js';
+import {Text, TextProps} from '../index.js';
 import {T as UseEventTypes} from '../Stdin/KeyboardInputHooks/useEvent.js';
 import chalk from 'chalk';
+import {Except} from 'type-fest';
 
 interface Handler {
 	(args: string[], unsanitizedUserInput: string): unknown;
@@ -18,6 +19,8 @@ export type Commands = {
 
 export type Props = {
 	commands: Commands;
+	displayUnknownCommand?: boolean;
+	// text?: Except<TextProps, 'wrap' | 'children'>;
 };
 
 type KeyOf<T extends object> = UseEventTypes.KeyOf<T>;
@@ -28,20 +31,22 @@ const CliEmitter = new EventEmitter();
  * TODO
  * props for styling cli input line...possibly Cli.Box to add box styles..
  * props for styling cli text
- * props for handling and styling post command messages and errors
+ * props for handling and styling post command messages and error
  * */
 export function Cli(props: Props): React.ReactNode {
 	const {onChange, setValue, insert} = useTextInput();
 
 	return (
-		<Box width="100" flexDirection="row" backgroundColor="blue">
+		<Box width="100" flexDirection="row">
 			<Text>{insert ? ':' : ''}</Text>
 			<TextInput
 				onChange={onChange}
 				enterKeymap={{input: ':'}}
 				exitKeymap={[{key: 'return'}, {key: 'esc'}]}
 				onExit={rawInput => {
-					handleInput(props.commands, rawInput)
+					handleInput(props.commands, rawInput, {
+						displayUnknownCommand: props.displayUnknownCommand ?? true,
+					})
 						.then((result: unknown) => {
 							const sanitized: string = sanitizeResult(result);
 							setValue(sanitized);
@@ -59,8 +64,13 @@ export function Cli(props: Props): React.ReactNode {
 	);
 }
 
-export function useCommand<T extends Commands = any>(
-	command: KeyOf<T>,
+type DefaultCommands = Readonly<{
+	DEFAULT: Handler;
+}>;
+const DEFAULT: KeyOf<DefaultCommands> = 'DEFAULT';
+
+export function useCommand<T extends Commands = DefaultCommands>(
+	command: KeyOf<T> | KeyOf<DefaultCommands>,
 	handler: (...args: string[]) => unknown,
 	extraFocusCheck?: boolean,
 ) {
@@ -81,22 +91,23 @@ export function useCommand<T extends Commands = any>(
 async function handleInput(
 	commands: Commands,
 	cliInput: string,
+	config: Except<Props, 'commands'>,
 ): Promise<unknown> {
 	const [command, ...args] = toSanitizedArray(cliInput);
 	const rawInput = toRawInput(cliInput, command || '');
 
 	let handler: Handler | null = null;
 
-	for (const key in commands) {
-		if (key === command) {
-			handler = commands[key] as Handler;
-			CliEmitter.emit(command, args, rawInput);
-		}
+	CliEmitter.emit(DEFAULT, [command, ...args], rawInput);
+
+	if (command && commands[command]) {
+		handler = commands[command] as Handler;
+		CliEmitter.emit(command, args, rawInput);
 	}
 
 	if (handler) {
 		return await handler(args, rawInput);
-	} else if (command) {
+	} else if (command && config.displayUnknownCommand) {
 		return chalk.red.inverse(`Unknown command: ${command}`);
 	} else {
 		return '';

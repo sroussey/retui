@@ -1,6 +1,6 @@
 {
-	"name": "react-terminal",
-	"version": "5.0.1",
+	"name": "@mmorrissey5961/react-terminal",
+	"version": "1.0.1",
 	"description": "React for CLI",
 	"license": "MIT",
 	"repository": "max5961/react-terminal",
