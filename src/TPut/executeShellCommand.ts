@@ -70,12 +70,6 @@ export const executeShellCommand =
 					STDIN.resumeDataStream();
 					render();
 
-					logger.write('EXIT STATUS', exitStatus);
-
-					// This is possibly bad because exitStatus has been converted to a number
-					// somewhere instead of the err.message...accually is because
-					// spawn isn't catching the error, close is triggering it and
-					// close only returns a code
 					if (exitStatus instanceof Error) {
 						rej(exitStatus);
 					} else {

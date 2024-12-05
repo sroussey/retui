@@ -56,6 +56,44 @@ export type Props = {
 	readonly children?: ReactNode;
 };
 
+export const styleText =
+	(style: Styles & Props) =>
+	(children: string): string => {
+		if (style.dimColor) {
+			children = chalk.dim(children);
+		}
+
+		if (style.color) {
+			children = colorize(children, style.color, 'foreground');
+		}
+
+		if (style.backgroundColor && style.backgroundColor !== 'inherit') {
+			children = colorize(children, style.backgroundColor, 'background');
+		}
+
+		if (style.bold) {
+			children = chalk.bold(children);
+		}
+
+		if (style.italic) {
+			children = chalk.italic(children);
+		}
+
+		if (style.underline) {
+			children = chalk.underline(children);
+		}
+
+		if (style.strikethrough) {
+			children = chalk.strikethrough(children);
+		}
+
+		if (style.inverse) {
+			children = chalk.inverse(children);
+		}
+
+		return children;
+	};
+
 /**
  * This component can display text, and change its style to make it colorful, bold, underline, italic or strikethrough.
  */
@@ -91,41 +129,7 @@ export default function Text({
 		wrap,
 	};
 
-	const transform = (children: string): string => {
-		if (style.dimColor) {
-			children = chalk.dim(children);
-		}
-
-		if (style.color) {
-			children = colorize(children, style.color, 'foreground');
-		}
-
-		if (style.backgroundColor && style.backgroundColor !== 'inherit') {
-			children = colorize(children, style.backgroundColor, 'background');
-		}
-
-		if (style.bold) {
-			children = chalk.bold(children);
-		}
-
-		if (style.italic) {
-			children = chalk.italic(children);
-		}
-
-		if (style.underline) {
-			children = chalk.underline(children);
-		}
-
-		if (style.strikethrough) {
-			children = chalk.strikethrough(children);
-		}
-
-		if (style.inverse) {
-			children = chalk.inverse(children);
-		}
-
-		return children;
-	};
+	const transform = styleText(style);
 
 	return (
 		<ink-text

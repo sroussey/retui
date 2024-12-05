@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import Text from '../components/Text.js';
+import Text, {styleText} from '../components/Text.js';
 import {
 	State as UseTextInputState,
 	Return as UseTextInputReturn,
@@ -9,7 +9,9 @@ import {
 	Binding,
 	Box,
 	BoxProps,
+	logger,
 	STDIN,
+	TextProps,
 	useIsFocus,
 	useKeymap,
 } from '../index.js';
@@ -17,6 +19,7 @@ import ControlKeymap from './ControlKeymap.js';
 import chalk from 'chalk';
 import {useResponsiveDimensions} from '../useResponsiveDimensions/useResponsiveDimensions.js';
 import colorize from '../colorize.js';
+import {Except} from 'type-fest';
 
 type Color = Exclude<BoxProps['borderColor'], 'inherit'>;
 
@@ -29,6 +32,7 @@ type Props = {
 	exitKeymap?: Binding | Binding[];
 	color?: Color;
 	cursorColor?: Color;
+	textStyles?: Except<TextProps, 'children' | 'wrap'>;
 	// autoEnter?: boolean;
 };
 
@@ -41,6 +45,7 @@ export function TextInput({
 	exitKeymap = ControlKeymap.defaultExit,
 	color,
 	cursorColor,
+	textStyles,
 }: Props): React.ReactNode {
 	const {state, update} = onChange();
 
@@ -276,6 +281,7 @@ export function TextInput({
 				availableWidth={availableWidth}
 				color={color}
 				cursorColor={cursorColor}
+				textStyles={textStyles}
 			/>
 		</Box>
 	);
@@ -286,6 +292,7 @@ type DisplayTextProps = {
 	availableWidth: number;
 	cursorColor: Color;
 	color: Color;
+	textStyles: Props['textStyles'];
 };
 
 function DisplayText(props: DisplayTextProps): React.ReactNode {
@@ -298,6 +305,7 @@ function DisplayText(props: DisplayTextProps): React.ReactNode {
 
 	const color = props.color;
 	const cursorColor = props.cursorColor ?? color;
+	const applyStyles = props.textStyles ? styleText(props.textStyles) : null;
 
 	if (!insert) {
 		return (
@@ -316,11 +324,13 @@ function DisplayText(props: DisplayTextProps): React.ReactNode {
 
 	let rightValue = value.slice(idx + 1, rightStop);
 
-	if (leftValue && color) {
-		leftValue = colorize(leftValue, color, 'foreground');
+	if (leftValue && (color || applyStyles)) {
+		leftValue =
+			applyStyles?.(leftValue) ?? colorize(leftValue, color, 'foreground');
 	}
-	if (rightValue && color) {
-		rightValue = colorize(rightValue, color, 'foreground');
+	if (rightValue && (color || applyStyles)) {
+		rightValue =
+			applyStyles?.(rightValue) ?? colorize(rightValue, color, 'foreground');
 	}
 	cursorValue = colorize(cursorValue, cursorColor, 'foreground');
 	cursorValue = chalk.inverse(cursorValue);
