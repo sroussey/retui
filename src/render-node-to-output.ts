@@ -11,7 +11,7 @@ import renderBackgroundColor from './render-background-color.js';
 import {Styles} from './styles.js';
 import {addMouseEventListeners} from './Stdin/AddMouseEventListeners.js';
 import {ALT_STDIN, STDIN} from './Stdin/Stdin.js';
-import {TextProps} from './index.js';
+import {logger, TextProps} from './index.js';
 
 // If parent container is `<Box>`, text nodes will be treated as separate nodes in
 // the tree and will have their own coordinates in the layout.
@@ -99,7 +99,7 @@ const renderNodeToOutput = (
 				node.style.color = parentBg;
 				// @ts-ignore
 				node.style.inverse = true;
-			} else if (!internalColor) {
+			} else if (!internalInverse) {
 				// @ts-ignore
 				node.style.backgroundColor = parentBg;
 			}

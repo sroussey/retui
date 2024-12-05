@@ -9,7 +9,6 @@ import {
 	Binding,
 	Box,
 	BoxProps,
-	logger,
 	STDIN,
 	TextProps,
 	useIsFocus,
@@ -30,9 +29,8 @@ type Props = {
 	onKeypress?: (char: string) => unknown;
 	enterKeymap?: Binding | Binding[];
 	exitKeymap?: Binding | Binding[];
-	color?: Color;
 	cursorColor?: Color;
-	textStyles?: Except<TextProps, 'children' | 'wrap'>;
+	textStyle?: Except<TextProps, 'children' | 'wrap'>;
 	// autoEnter?: boolean;
 };
 
@@ -43,9 +41,8 @@ export function TextInput({
 	onExit,
 	enterKeymap = ControlKeymap.defaultEnter,
 	exitKeymap = ControlKeymap.defaultExit,
-	color,
 	cursorColor,
-	textStyles,
+	textStyle,
 }: Props): React.ReactNode {
 	const {state, update} = onChange();
 
@@ -279,9 +276,8 @@ export function TextInput({
 			<DisplayText
 				state={state}
 				availableWidth={availableWidth}
-				color={color}
 				cursorColor={cursorColor}
-				textStyles={textStyles}
+				textStyle={textStyle}
 			/>
 		</Box>
 	);
@@ -291,8 +287,7 @@ type DisplayTextProps = {
 	state: UseTextInputState;
 	availableWidth: number;
 	cursorColor: Color;
-	color: Color;
-	textStyles: Props['textStyles'];
+	textStyle: Props['textStyle'];
 };
 
 function DisplayText(props: DisplayTextProps): React.ReactNode {
@@ -303,13 +298,12 @@ function DisplayText(props: DisplayTextProps): React.ReactNode {
 		window: {start, end},
 	} = props.state;
 
-	const color = props.color;
-	const cursorColor = props.cursorColor ?? color;
-	const applyStyles = props.textStyles ? styleText(props.textStyles) : null;
+	const styles = props.textStyle ?? {};
+	const cursorColor = props.cursorColor;
 
 	if (!insert) {
 		return (
-			<Text wrap="truncate-end" color={color}>
+			<Text wrap="truncate-end" {...styles}>
 				{value.length ? value : ' '}
 			</Text>
 		);
@@ -320,24 +314,21 @@ function DisplayText(props: DisplayTextProps): React.ReactNode {
 
 	let rightStop = end;
 	rightStop = Math.max(end, props.availableWidth);
-	// logger.write(props.state);
 
 	let rightValue = value.slice(idx + 1, rightStop);
 
-	if (leftValue && (color || applyStyles)) {
-		leftValue =
-			applyStyles?.(leftValue) ?? colorize(leftValue, color, 'foreground');
-	}
-	if (rightValue && (color || applyStyles)) {
-		rightValue =
-			applyStyles?.(rightValue) ?? colorize(rightValue, color, 'foreground');
-	}
 	cursorValue = colorize(cursorValue, cursorColor, 'foreground');
 	cursorValue = chalk.inverse(cursorValue);
 
-	const displayValue = `${leftValue}${cursorValue}${rightValue}`;
-
-	// console.log(displayValue, props.availableWidth, props.state);
-
-	return <Text wrap="overflow">{displayValue}</Text>;
+	return (
+		<Box backgroundColor="inherit">
+			<Text wrap="overflow" {...styles}>
+				{leftValue}
+			</Text>
+			<Text wrap="overflow">{cursorValue}</Text>
+			<Text wrap="overflow" {...styles}>
+				{rightValue}
+			</Text>
+		</Box>
+	);
 }

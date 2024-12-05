@@ -59,6 +59,7 @@ export function Modal(props: Props): React.ReactNode {
 
 	// prettier-ignore
 	displayProps.backgroundColor = displayProps.backgroundColor ?? 'inherit';
+	displayProps.borderStyle = visible ? displayProps.borderStyle : undefined;
 
 	const outerHeight: BoxProps['height'] = visible ? '100' : 0;
 	const outerWidth: BoxProps['width'] = visible ? '100' : 0;
@@ -69,6 +70,7 @@ export function Modal(props: Props): React.ReactNode {
 			zIndex={zIndex}
 			height={outerHeight}
 			width={outerWidth}
+			// Hide the Modal
 			overflow="hidden"
 			// zIndex wipes background by default, we don't want that in the overlay Box
 			wipeBackground={false}

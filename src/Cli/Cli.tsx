@@ -1,27 +1,40 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useTextInput} from '../TextInput/useTextInput.js';
 import Box from '../components/Box.js';
 import {TextInput} from '../TextInput/TextInput.js';
 import EventEmitter from 'events';
 import {useIsFocus} from '../FocusContext/FocusContext.js';
-import {Text, TextProps} from '../index.js';
+import {Binding, Modal, Text, TextProps, useKeymap} from '../index.js';
 import {T as UseEventTypes} from '../Stdin/KeyboardInputHooks/useEvent.js';
-import chalk from 'chalk';
 import {Except} from 'type-fest';
-import {styleText} from '../components/Text.js';
+import {Props as ModalProps} from '../Modal/Modal.js';
+import InternalEvents from '../utility/InternalEvents.js';
+import {randomUUID} from 'crypto';
+import {SetValue, useCli} from './useCli.js';
 
 interface Handler {
 	(args: string[], unsanitizedUserInput: string): unknown;
 }
 
+type DefaultCommands = Readonly<{
+	DEFAULT: Handler;
+}>;
+const DEFAULT: KeyOf<DefaultCommands> = 'DEFAULT';
+
 export type Commands = {
 	[command: string]: Handler;
+} & {
+	DEFAULT?: Handler;
 };
 
 type TextStyles = Except<TextProps, 'wrap' | 'children'>;
 
 export type Props = {
 	commands: Commands;
+	prefix?: string;
+	persistPrefix?: boolean;
+	enterKeymap?: Binding | Binding[];
+	exitKeymap?: Binding | Binding[];
 	displayUnknownCommand?: boolean;
 	inputStyles?: TextStyles;
 	resolveStyles?: TextStyles;
@@ -33,51 +46,69 @@ type KeyOf<T extends object> = UseEventTypes.KeyOf<T>;
 const CliEmitter = new EventEmitter();
 
 export function Cli(props: Props): React.ReactNode {
-	const {onChange, setValue, insert} = useTextInput();
+	const {onChange, setValue, insert, textStyle} = useCli(props);
 
 	return (
-		<Box width="100" flexDirection="row">
-			<Text>{insert ? ':' : ''}</Text>
+		<CliText
+			{...props}
+			onChange={onChange}
+			setValue={setValue}
+			insert={insert}
+			textStyles={textStyle}
+		/>
+	);
+}
+
+type CliTextProps = Except<
+	Props,
+	'rejectStyles' | 'resolveStyles' | 'inputStyles'
+> & {
+	onChange: ReturnType<typeof useTextInput>['onChange'];
+	setValue: SetValue;
+	insert: boolean;
+} & {
+	textStyles: TextStyles;
+};
+
+function CliText({
+	commands,
+	enterKeymap = {input: ':'},
+	exitKeymap = [{key: 'return'}, {key: 'esc'}],
+	prefix = ':',
+	persistPrefix = false,
+	onChange,
+	setValue,
+	insert,
+	textStyles,
+}: CliTextProps): React.ReactNode {
+	const prefixValue = insert || persistPrefix ? prefix : '';
+
+	return (
+		<Box width="100" flexDirection="row" backgroundColor="inherit">
+			<Text wrap="truncate-end">{prefixValue}</Text>
 			<TextInput
-				textStyles={props.inputStyles}
+				textStyle={textStyles}
 				onChange={onChange}
-				enterKeymap={{input: ':'}}
-				exitKeymap={[{key: 'return'}, {key: 'esc'}]}
+				enterKeymap={enterKeymap}
+				exitKeymap={exitKeymap}
 				onExit={rawInput => {
-					handleInput(props.commands, rawInput, {
-						displayUnknownCommand: props.displayUnknownCommand ?? true,
-					})
+					handleInput(commands, rawInput)
 						.then((result: unknown) => {
 							const sanitized: string = sanitizeResult(result);
-							if (props.resolveStyles) {
-								const styled = styleText(props.resolveStyles)(sanitized);
-								setValue(styled);
-							} else {
-								setValue(sanitized);
-							}
+							setValue('RESOLVE', sanitized);
 						})
 						.catch((error: unknown) => {
-							const sanitizedError: string = sanitizeResult(error);
-							if (props.rejectStyles) {
-								const styled = styleText(props.rejectStyles)(sanitizedError);
-								setValue(styled);
-							} else {
-								setValue(sanitizedError);
-							}
+							const sanitized: string = sanitizeResult(error);
+							setValue('REJECT', sanitized);
 						});
 				}}
 				onEnter={() => {
-					setValue('');
+					setValue('INPUT', '');
 				}}
 			/>
 		</Box>
 	);
 }
-
-type DefaultCommands = Readonly<{
-	DEFAULT: Handler;
-}>;
-const DEFAULT: KeyOf<DefaultCommands> = 'DEFAULT';
 
 export function useCommand<T extends Commands = DefaultCommands>(
 	command: KeyOf<T> | KeyOf<DefaultCommands>,
@@ -101,7 +132,6 @@ export function useCommand<T extends Commands = DefaultCommands>(
 async function handleInput(
 	commands: Commands,
 	cliInput: string,
-	config: Except<Props, 'commands'>,
 ): Promise<unknown> {
 	const [command, ...args] = toSanitizedArray(cliInput);
 	const rawInput = toRawInput(cliInput, command || '');
@@ -117,8 +147,8 @@ async function handleInput(
 
 	if (handler) {
 		return await handler(args, rawInput);
-	} else if (command && config.displayUnknownCommand) {
-		return Promise.reject(`Unknown command: ${command}`);
+	} else if (DEFAULT in commands) {
+		return await commands[DEFAULT]?.([command ?? '', ...args], rawInput);
 	} else {
 		return '';
 	}
@@ -150,3 +180,50 @@ function sanitizeResult(result: unknown): string {
 
 	return '';
 }
+
+type CliModalProps = Props & Except<ModalProps, 'visible'>;
+
+Cli.Modal = function (props: CliModalProps): React.ReactNode {
+	const {
+		commands,
+		displayUnknownCommand,
+		exitKeymap,
+		enterKeymap,
+		prefix,
+		inputStyles,
+		resolveStyles,
+		rejectStyles,
+		persistPrefix,
+		...modalProps
+	} = props;
+
+	const {onChange, setValue, insert, value, textStyle} = useCli(props);
+
+	const [ID] = useState(randomUUID());
+	const exitModal = InternalEvents.getInternalEvent('exitModal', ID);
+	const {useEvent} = useKeymap({[exitModal]: {key: 'esc'}});
+	useEvent(exitModal, () => {
+		if (!insert && value) {
+			setValue('INPUT', '');
+		}
+	});
+
+	const visible = !!(insert || value);
+
+	return (
+		<Modal {...modalProps} visible={visible}>
+			<CliText
+				commands={commands}
+				displayUnknownCommand={displayUnknownCommand}
+				onChange={onChange}
+				setValue={setValue}
+				insert={insert}
+				textStyles={textStyle}
+				enterKeymap={enterKeymap}
+				exitKeymap={exitKeymap}
+				prefix={prefix}
+				persistPrefix={persistPrefix}
+			/>
+		</Modal>
+	);
+};

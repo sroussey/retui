@@ -2,7 +2,6 @@ import PreserveScreen from './PreserveScreen.js';
 import {STDIN, ALT_STDIN} from '../Stdin/Stdin.js';
 import {spawn} from 'child_process';
 import fs from 'fs';
-import {logger} from '../index.js';
 
 export type ExitStatus = number | null;
 
