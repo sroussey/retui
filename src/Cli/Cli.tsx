@@ -4,7 +4,7 @@ import Box from '../components/Box.js';
 import {TextInput} from '../TextInput/TextInput.js';
 import EventEmitter from 'events';
 import {useIsFocus} from '../FocusContext/FocusContext.js';
-import {Text, TextProps} from '../index.js';
+import {Text} from '../index.js';
 import {T as UseEventTypes} from '../Stdin/KeyboardInputHooks/useEvent.js';
 import chalk from 'chalk';
 import {Except} from 'type-fest';

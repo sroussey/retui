@@ -22,6 +22,7 @@ export type {T as KeyboardTypes};
 
 export default class Keyboard {
 	private Emitter: EventEmitter;
+	private StateEmitter: EventEmitter;
 	private state: {
 		chars: string;
 		specialKeys: SpecialKeys;
@@ -31,10 +32,14 @@ export default class Keyboard {
 		eventSet: boolean;
 		eventEmitted: boolean;
 		registerSize: number;
+		isTextInput: boolean;
 	};
+
+	public static StateUpdate = 'STATE_UPDATE';
 
 	constructor() {
 		this.Emitter = new EventEmitter();
+		this.StateEmitter = new EventEmitter();
 		this.Emitter.setMaxListeners(Infinity);
 		this.state = {
 			chars: '',
@@ -45,6 +50,7 @@ export default class Keyboard {
 			eventSet: false,
 			eventEmitted: false,
 			registerSize: 2,
+			isTextInput: false,
 		};
 	}
 
@@ -75,6 +81,7 @@ export default class Keyboard {
 
 		this.state.event = typeof event === 'string' ? event : String(event);
 		this.state.chars = '';
+		this.StateEmitter.emit(Keyboard.StateUpdate, this.state);
 	};
 
 	private appendChar = (c: string): void => {
@@ -85,6 +92,8 @@ export default class Keyboard {
 		}
 
 		this.state.chars += c;
+
+		this.StateEmitter.emit(Keyboard.StateUpdate, this.state);
 	};
 
 	public emitEvent = (event: string | null, stdin: string): void => {
@@ -92,6 +101,10 @@ export default class Keyboard {
 
 		this.Emitter.emit(event, stdin);
 		this.state.eventEmitted = true;
+	};
+
+	public setTextInputMode = (b: boolean) => {
+		this.state.isTextInput = b;
 	};
 
 	public respondToKeypress(cb: (stdin: string) => unknown): void {
@@ -179,6 +192,7 @@ export default class Keyboard {
 
 	public pause = (): void => {
 		this.Emitter.removeAllListeners(EVENT.keypress);
+		this.Emitter.removeAllListeners(Keyboard.StateUpdate);
 	};
 
 	public addComponentListener = (
@@ -191,6 +205,18 @@ export default class Keyboard {
 		processKeymapHandler: (stdin: string) => unknown,
 	): void => {
 		this.Emitter.off(EVENT.keypress, processKeymapHandler);
+	};
+
+	public subscribeComponentToStateChanges = (
+		cb: (s: Keyboard['state']) => unknown,
+	): void => {
+		this.StateEmitter.on(Keyboard.StateUpdate, cb);
+	};
+
+	public unsubscribeComponentToStateChanges = (
+		cb: (s: Keyboard['state']) => unknown,
+	): void => {
+		this.StateEmitter.off(Keyboard.StateUpdate, cb);
 	};
 
 	public addEventListener = (

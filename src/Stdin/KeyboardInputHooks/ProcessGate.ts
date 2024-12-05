@@ -1,5 +1,6 @@
 import assert from 'assert';
 import {T as UseKeymapTypes} from './useKeymap.js';
+import {logger} from '../../index.js';
 
 /*
  * Sets priority levels for useKeymaps hooks so that control can be passed

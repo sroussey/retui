@@ -40,6 +40,7 @@ export default function useKeymap<U extends Keyboard.KeyMap = any>(
 
 	useEffect(() => {
 		ProcessGate.updatePriority(ID, priority);
+
 		return () => {
 			ProcessGate.removeHook(ID);
 		};
@@ -47,7 +48,9 @@ export default function useKeymap<U extends Keyboard.KeyMap = any>(
 
 	useEffect(() => {
 		const handleStdin = (stdin: string) => {
-			if (focused && ProcessGate.canProcess(ID, priority)) {
+			const canProcess = ProcessGate.canProcess(ID, priority);
+
+			if (focused && canProcess) {
 				STDIN.Keyboard.processConfig(keymap);
 			}
 
@@ -55,7 +58,13 @@ export default function useKeymap<U extends Keyboard.KeyMap = any>(
 			const event = STDIN.Keyboard.getEvent();
 
 			STDIN.Keyboard.emitEvent(event, stdin);
-			opts?.trackState && setData({register, event: event || ''});
+			if (opts?.trackState) {
+				if (canProcess) {
+					setData({register, event: event || ''});
+				} else if (data.register !== '' || data.event !== '') {
+					setData({register: '', event: ''});
+				}
+			}
 		};
 
 		STDIN.Keyboard.addComponentListener(handleStdin);

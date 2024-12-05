@@ -1,4 +1,5 @@
-import {Binding, Key, KeyMap} from '../index.js';
+import {Binding, Key, KeyMap, logger} from '../index.js';
+import InternalEvents from '../utility/InternalEvents.js';
 
 type InsertEvents =
 	| 'return'
@@ -13,7 +14,7 @@ type InsertEvents =
 const defaultEnter: Binding[] = [{key: 'return'}, {input: 'i'}];
 const defaultExit: Binding[] = [{key: 'return'}, {key: 'esc'}];
 
-export const EVENTS: {[K in InsertEvents]: string} = {
+const EVENTS: {[K in InsertEvents]: string} = {
 	return: 'return',
 	left: 'left',
 	right: 'right',
@@ -26,14 +27,14 @@ export const EVENTS: {[K in InsertEvents]: string} = {
 
 function getScopedEvents(ID: string): {[K in InsertEvents]: string} {
 	return {
-		return: postFixWithId('return', ID),
-		left: postFixWithId('left', ID),
-		right: postFixWithId('right', ID),
-		up: postFixWithId('up', ID),
-		down: postFixWithId('down', ID),
-		backspace: postFixWithId('backspace', ID),
-		tab: postFixWithId('tab', ID),
-		keypress: postFixWithId('keypress', ID),
+		return: InternalEvents.getInternalEvent('return', ID),
+		left: InternalEvents.getInternalEvent('left', ID),
+		right: InternalEvents.getInternalEvent('right', ID),
+		up: InternalEvents.getInternalEvent('up', ID),
+		down: InternalEvents.getInternalEvent('down', ID),
+		backspace: InternalEvents.getInternalEvent('backspace', ID),
+		tab: InternalEvents.getInternalEvent('tab', ID),
+		keypress: InternalEvents.getInternalEvent('keypress', ID),
 	};
 }
 
@@ -57,7 +58,7 @@ function getNormalKeymap(
 	ID: string,
 	enterBinding: Binding | Binding[],
 ): [KeyMap, string] {
-	const ScopedEnterEvent = `ENTER_${ID}`;
+	const ScopedEnterEvent = InternalEvents.getInternalEvent('enter', ID);
 	return [{[ScopedEnterEvent]: enterBinding}, ScopedEnterEvent];
 }
 
@@ -94,22 +95,27 @@ function getInsertKeymap(
 
 	for (const [key, value] of Object.entries(defaultInsert)) {
 		delete defaultInsert[key];
-		defaultInsert[postFixWithId(key, ID)] = value;
+
+		const scopedKey = InternalEvents.getInternalEvent(key, ID);
+
+		if (key === EVENTS.keypress) {
+			defaultInsert[scopedKey] = {
+				...(value as Binding),
+				notKey: [...notKey, ...((value as Binding).notKey as any)],
+				notInput: [...notInput, ...((value as Binding).notInput as any)],
+			};
+		} else {
+			defaultInsert[scopedKey] = value;
+		}
 	}
 
-	const ScopedExitEvent = postFixWithId('exit', ID);
+	const ScopedExitEvent = InternalEvents.getInternalEvent('exit', ID);
 	defaultInsert[ScopedExitEvent] = exitBinding;
 
 	return [defaultInsert, ScopedExitEvent];
 }
 
-function postFixWithId(event: string, ID: string = ''): string {
-	if (ID === '') return event;
-	return `${event}_${ID}`;
-}
-
 export default {
-	postFixWithId,
 	getInsertKeymap,
 	getNormalKeymap,
 	defaultEnter,

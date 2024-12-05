@@ -9,7 +9,7 @@ import {
 	Binding,
 	Box,
 	BoxProps,
-	logger,
+	STDIN,
 	useIsFocus,
 	useKeymap,
 } from '../index.js';
@@ -65,6 +65,7 @@ export function TextInput({
 	const previousWidth = useRef(availableWidth);
 
 	const handleExit = () => {
+		STDIN.Keyboard.setTextInputMode(false);
 		update({...state, insert: false});
 		onExit?.(state.value);
 	};
@@ -172,6 +173,8 @@ export function TextInput({
 	}
 
 	useEvent(Enter, () => {
+		STDIN.Keyboard.setTextInputMode(true);
+
 		const nextIdx = state.value.length;
 		const nextEnd = nextIdx;
 		let nextStart = 0;
