@@ -29,6 +29,24 @@ export type Props = {
 } & Omit<BoxProps, 'wipeBackground'> &
 	React.PropsWithChildren;
 
+/*
+ * TODO
+ * ModalContext - Everything outside of the Modal is unfocused when visible
+ * 		- This is fundamentally different than the other FocusContexts though since
+ * 		modals live outside the normal flow
+ * 		- Every Modal component updates a global variable to true if pageFocus && visible
+ *  	- Would be ideal if it was only top level modals, but there is a risk of memoized components
+ *  	messing up the order (maybe, if you use ModalContext then memoized Modals will change when
+ *  	the context changes.  If no context assume parent Modal is visible, otherwise visibility
+ *  	is dictated by props and context)
+ * 		- event responders check the global variable before running handlers
+ * 		- Modals would need to give context with their IDs, if the IDs match the top level focused
+ * 		Modal and the Modal context says visible, then event responders can run.
+ * 		- If there is no Modal context || there is no global ID for the top level modal,
+ * 		then we can assume its safe to execute the callback
+ * 		- useModalFocus: checks if Modal context and if Modal context ID matches global ID. If not
+ * 		Modal context, checks if there is a global ID for top level modal
+ * */
 export function Modal(props: Props): React.ReactNode {
 	let {
 		visible = true,

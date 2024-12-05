@@ -2,6 +2,7 @@ import {useEffect} from 'react';
 import {T as KeyboardTypes} from '../Keyboard.js';
 import {STDIN} from '../Stdin.js';
 import {useIsFocus} from '../../FocusContext/FocusContext.js';
+import {KeyOf} from '../../utility/types.js';
 
 export namespace T {
 	export interface UseEvent<T extends KeyboardTypes.KeyMap = any> {
@@ -16,23 +17,12 @@ export namespace T {
 		cmd: KeyOf<T>;
 		handler: (...args: any[]) => unknown;
 	}[];
-
-	// Remove symbol keyof an object and converts numbers to strings
-	export type KeyOf<T extends object> = T extends object
-		? ToString<keyof T>
-		: never;
-
-	export type ToString<T> = T extends number
-		? `${T}`
-		: T extends string
-			? T
-			: never;
 }
 
 export type {T as UseEventTypes};
 
 export default function useEvent<T extends KeyboardTypes.KeyMap = any>(
-	event: T.KeyOf<T>,
+	event: KeyOf<T>,
 	handler: (stdin: string) => unknown,
 	extraFocusCheck?: boolean,
 ) {

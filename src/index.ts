@@ -105,7 +105,9 @@ export {executeShellCommand} from './TPut/executeShellCommand.js';
 export {useShellCommand} from './TPut/ShellCommandContext.js';
 
 // CLI
-export {Cli, useCommand, type Commands} from './Cli/Cli.js';
+export {Cli} from './Cli/Cli.js';
+export {useCommand} from './Cli/useCommand.js';
+export {type Commands} from './Cli/types.js';
 
 // RegisterState
 export {RegisterState} from './RegisterState/RegisterState.js';

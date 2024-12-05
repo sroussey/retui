@@ -1,33 +1,15 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {useTextInput} from '../TextInput/useTextInput.js';
 import Box from '../components/Box.js';
 import {TextInput} from '../TextInput/TextInput.js';
 import EventEmitter from 'events';
-import {useIsFocus} from '../FocusContext/FocusContext.js';
-import {Binding, Modal, Text, TextProps, useKeymap} from '../index.js';
-import {T as UseEventTypes} from '../Stdin/KeyboardInputHooks/useEvent.js';
+import {Binding, Modal, Text, useKeymap} from '../index.js';
 import {Except} from 'type-fest';
 import {Props as ModalProps} from '../Modal/Modal.js';
 import InternalEvents from '../utility/InternalEvents.js';
 import {randomUUID} from 'crypto';
-import {SetValue, useCli} from './useCli.js';
-
-interface Handler {
-	(args: string[], unsanitizedUserInput: string): unknown;
-}
-
-type DefaultCommands = Readonly<{
-	DEFAULT: Handler;
-}>;
-const DEFAULT: KeyOf<DefaultCommands> = 'DEFAULT';
-
-export type Commands = {
-	[command: string]: Handler;
-} & {
-	DEFAULT?: Handler;
-};
-
-type TextStyles = Except<TextProps, 'wrap' | 'children'>;
+import {SetValue, TextStyles, useCli} from './useCli.js';
+import {Commands, Default, Handler} from './types.js';
 
 export type Props = {
 	commands: Commands;
@@ -41,9 +23,9 @@ export type Props = {
 	rejectStyles?: TextStyles;
 };
 
-type KeyOf<T extends object> = UseEventTypes.KeyOf<T>;
+const DEFAULT: Default = 'DEFAULT';
 
-const CliEmitter = new EventEmitter();
+export const CliEmitter = new EventEmitter();
 
 export function Cli(props: Props): React.ReactNode {
 	const {onChange, setValue, insert, textStyle} = useCli(props);
@@ -58,6 +40,52 @@ export function Cli(props: Props): React.ReactNode {
 		/>
 	);
 }
+
+type CliModalProps = Props & Except<ModalProps, 'visible'>;
+Cli.Modal = function (props: CliModalProps): React.ReactNode {
+	const {
+		commands,
+		displayUnknownCommand,
+		exitKeymap,
+		enterKeymap,
+		prefix,
+		inputStyles,
+		resolveStyles,
+		rejectStyles,
+		persistPrefix,
+		...modalProps
+	} = props;
+
+	const {onChange, setValue, insert, value, textStyle} = useCli(props);
+
+	const [ID] = useState(randomUUID());
+	const exitModal = InternalEvents.getInternalEvent('exitModal', ID);
+	const {useEvent} = useKeymap({[exitModal]: {key: 'esc'}});
+	useEvent(exitModal, () => {
+		if (!insert && value) {
+			setValue('INPUT', '');
+		}
+	});
+
+	const visible = !!(insert || value);
+
+	return (
+		<Modal {...modalProps} visible={visible}>
+			<CliText
+				commands={commands}
+				displayUnknownCommand={displayUnknownCommand}
+				onChange={onChange}
+				setValue={setValue}
+				insert={insert}
+				textStyles={textStyle}
+				enterKeymap={enterKeymap}
+				exitKeymap={exitKeymap}
+				prefix={prefix}
+				persistPrefix={persistPrefix}
+			/>
+		</Modal>
+	);
+};
 
 type CliTextProps = Except<
 	Props,
@@ -110,45 +138,29 @@ function CliText({
 	);
 }
 
-export function useCommand<T extends Commands = DefaultCommands>(
-	command: KeyOf<T> | KeyOf<DefaultCommands>,
-	handler: (...args: string[]) => unknown,
-	extraFocusCheck?: boolean,
-) {
-	const isFocus = useIsFocus();
-	extraFocusCheck = extraFocusCheck ?? true;
-
-	useEffect(() => {
-		if (!isFocus || !extraFocusCheck) return;
-
-		CliEmitter.on(command, handler);
-
-		return () => {
-			CliEmitter.off(command, handler);
-		};
-	});
-}
-
 async function handleInput(
 	commands: Commands,
 	cliInput: string,
 ): Promise<unknown> {
 	const [command, ...args] = toSanitizedArray(cliInput);
 	const rawInput = toRawInput(cliInput, command || '');
+	const rawDefaultInput = toRawInput(cliInput, '');
 
 	let handler: Handler | null = null;
 
-	CliEmitter.emit(DEFAULT, [command, ...args], rawInput);
+	CliEmitter.emit(DEFAULT, [command, ...args], rawDefaultInput);
 
 	if (command && commands[command]) {
-		handler = commands[command] as Handler;
-		CliEmitter.emit(command, args, rawInput);
+		if (command !== DEFAULT) {
+			handler = commands[command] as Handler;
+			CliEmitter.emit(command, args, rawInput);
+		}
 	}
 
 	if (handler) {
 		return await handler(args, rawInput);
 	} else if (DEFAULT in commands) {
-		return await commands[DEFAULT]?.([command ?? '', ...args], rawInput);
+		return await commands[DEFAULT]?.([command ?? '', ...args], rawDefaultInput);
 	} else {
 		return '';
 	}
@@ -180,50 +192,3 @@ function sanitizeResult(result: unknown): string {
 
 	return '';
 }
-
-type CliModalProps = Props & Except<ModalProps, 'visible'>;
-
-Cli.Modal = function (props: CliModalProps): React.ReactNode {
-	const {
-		commands,
-		displayUnknownCommand,
-		exitKeymap,
-		enterKeymap,
-		prefix,
-		inputStyles,
-		resolveStyles,
-		rejectStyles,
-		persistPrefix,
-		...modalProps
-	} = props;
-
-	const {onChange, setValue, insert, value, textStyle} = useCli(props);
-
-	const [ID] = useState(randomUUID());
-	const exitModal = InternalEvents.getInternalEvent('exitModal', ID);
-	const {useEvent} = useKeymap({[exitModal]: {key: 'esc'}});
-	useEvent(exitModal, () => {
-		if (!insert && value) {
-			setValue('INPUT', '');
-		}
-	});
-
-	const visible = !!(insert || value);
-
-	return (
-		<Modal {...modalProps} visible={visible}>
-			<CliText
-				commands={commands}
-				displayUnknownCommand={displayUnknownCommand}
-				onChange={onChange}
-				setValue={setValue}
-				insert={insert}
-				textStyles={textStyle}
-				enterKeymap={enterKeymap}
-				exitKeymap={exitKeymap}
-				prefix={prefix}
-				persistPrefix={persistPrefix}
-			/>
-		</Modal>
-	);
-};

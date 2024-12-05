@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {useTextInput} from '../TextInput/useTextInput.js';
 import {Except} from 'type-fest';
 import {TextProps} from '../index.js';
@@ -7,6 +7,11 @@ export type StyleType = 'INPUT' | 'RESOLVE' | 'REJECT';
 export type SetValue = (style: StyleType, value: string) => void;
 export type TextStyles = Except<TextProps, 'wrap' | 'children'>;
 
+/*
+ * Wraps the setValue function from useTextInput in a function that updates the state
+ * of the styles prop so that the declared styles of different outcomes accurately
+ * reflect each other.
+ * */
 export function useCli({
 	inputStyles,
 	rejectStyles,
@@ -20,10 +25,7 @@ export function useCli({
 	const [textStyleType, setTextStyleType] = useState<StyleType>('INPUT');
 	const hasStyles = inputStyles || rejectStyles || resolveStyles;
 
-	const internalSetValue: SetValue = (
-		style: typeof textStyleType,
-		value: string,
-	) => {
+	const internalSetValue: SetValue = (style: StyleType, value: string) => {
 		setValue(value);
 		if (hasStyles) {
 			setTextStyleType(style);
