@@ -1,18 +1,18 @@
 import {randomUUID} from 'crypto';
 import {useContext, useState} from 'react';
-import {Binding, logger, useKeymap} from '../index.js';
+import {Binding, useKeymap} from '../index.js';
 import InternalEvents from '../utility/InternalEvents.js';
 import {ModalContext} from './ModalContext.js';
 
 export type ModalControlKeyMaps = {
-	show: Binding | Binding[];
-	hide: Binding | Binding[];
+	show: Binding | Binding[] | null;
+	hide: Binding | Binding[] | null;
 };
 
 export type ModalData = {
 	_ID: string;
-	_hideKeymap: Binding | Binding[];
-	_showKeymap: Binding | Binding[];
+	_hideKeymap: Binding | Binding[] | null;
+	_showKeymap: Binding | Binding[] | null;
 	_vis: boolean;
 	_showEvent: string;
 	_hideEvent: string;

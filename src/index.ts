@@ -68,7 +68,8 @@ export {Node} from './NodeMap/Node.js';
 
 // Modal
 export {Modal} from './Modal/Modal.js';
-export {useModal} from './Modal/useModal.js';
+export {useModal, useHideModal} from './Modal/useModal.js';
+export {type ModalData} from './Modal/useModal.js';
 
 // Logger
 export {default as logger, Logger} from './Logger/Logger.js';

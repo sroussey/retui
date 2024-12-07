@@ -68,17 +68,11 @@ function ModalConsumer(props: Props & {visible: boolean}): React.ReactNode {
 		};
 	}, []);
 
-	// prettier-ignore
-	displayProps.backgroundColor = displayProps.backgroundColor ?? 'inherit';
-
-	const outerHeight: BoxProps['height'] = '100';
-	const outerWidth: BoxProps['width'] = '100';
-
 	const hideKeymap = modal._hideKeymap;
 	const hideEvent = modal._hideEvent;
 	const hideModal = modal._hideModal;
 
-	let internalKeymap = {[hideEvent]: hideKeymap};
+	const internalKeymap = hideKeymap ? {[hideEvent]: hideKeymap} : {};
 	const {useEvent} = useKeymap(internalKeymap);
 	useEvent(hideEvent, hideModal);
 
@@ -88,8 +82,8 @@ function ModalConsumer(props: Props & {visible: boolean}): React.ReactNode {
 		<Box
 			position="absolute"
 			zIndex={zIndex}
-			height={outerHeight}
-			width={outerWidth}
+			height="100"
+			width="100"
 			// zIndex wipes background by default, we don't want that in the overlay Box
 			wipeBackground={false}
 			// Position the inner Box
@@ -104,7 +98,7 @@ function ModalConsumer(props: Props & {visible: boolean}): React.ReactNode {
 				{...displayProps}
 				zIndex={zIndex + 1}
 				wipeBackground
-				onClick={props.onClick ?? (() => {})}
+				onClick={displayProps.onClick ?? (() => {})}
 			>
 				{children}
 			</Box>
