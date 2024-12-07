@@ -23,7 +23,8 @@
 		"prepare": "npm run build",
 		"test": "tsc --noEmit && xo && FORCE_COLOR=true ava",
 		"example": "NODE_NO_WARNINGS=1 node --loader ts-node/esm",
-		"benchmark": "NODE_NO_WARNINGS=1 node --loader ts-node/esm"
+		"benchmark": "NODE_NO_WARNINGS=1 node --loader ts-node/esm",
+		"vitest": "tsc && npx vitest"
 	},
 	"files": [
 		"build"
@@ -64,7 +65,6 @@
 		"stack-utils": "^2.0.6",
 		"string-width": "^7.0.0",
 		"type-fest": "^4.8.3",
-		"vitest": "^2.1.5",
 		"widest-line": "^5.0.0",
 		"wrap-ansi": "^9.0.0",
 		"ws": "^8.15.0",
@@ -100,6 +100,7 @@
 		"strip-ansi": "^7.1.0",
 		"ts-node": "^10.9.2",
 		"typescript": "^5.3.3",
+		"vitest": "^2.1.8",
 		"xo": "^0.58.0"
 	},
 	"peerDependencies": {

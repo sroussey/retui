@@ -41,7 +41,7 @@ export function Cli(props: Props): React.ReactNode {
 	);
 }
 
-type CliModalProps = Props & Except<ModalProps, 'visible'>;
+type CliModalProps = Props & ModalProps;
 Cli.Modal = function (props: CliModalProps): React.ReactNode {
 	const {
 		commands,
@@ -70,7 +70,7 @@ Cli.Modal = function (props: CliModalProps): React.ReactNode {
 	const visible = !!(insert || value);
 
 	return (
-		<Modal {...modalProps} visible={visible}>
+		<Modal {...modalProps}>
 			<CliText
 				commands={commands}
 				displayUnknownCommand={displayUnknownCommand}

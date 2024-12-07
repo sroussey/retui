@@ -3,6 +3,8 @@ import {T as KeyboardTypes} from '../Keyboard.js';
 import {STDIN} from '../Stdin.js';
 import {useIsFocus} from '../../FocusContext/FocusContext.js';
 import {KeyOf} from '../../utility/types.js';
+import {useModalLevel} from '../../Modal/ModalContext.js';
+import ModalStack from '../../Modal/ModalStack.js';
 
 export namespace T {
 	export interface UseEvent<T extends KeyboardTypes.KeyMap = any> {
@@ -29,13 +31,21 @@ export default function useEvent<T extends KeyboardTypes.KeyMap = any>(
 	const isFocus = useIsFocus();
 	extraFocusCheck = extraFocusCheck ?? true;
 
+	const componentLevel = useModalLevel();
+
 	useEffect(() => {
 		if (!isFocus || !extraFocusCheck) return;
 
-		STDIN.Keyboard.addEventListener(event, handler);
+		const innerHandler = (stdin: string) => {
+			if (ModalStack.isActiveModalLevel(componentLevel)) {
+				handler(stdin);
+			}
+		};
+
+		STDIN.Keyboard.addEventListener(event, innerHandler);
 
 		return () => {
-			STDIN.Keyboard.removeEventListener(event, handler);
+			STDIN.Keyboard.removeEventListener(event, innerHandler);
 		};
 	});
 }

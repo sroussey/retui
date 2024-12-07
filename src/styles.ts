@@ -7,6 +7,7 @@ import {Title} from './renderTitles/renderTitleToOutput.js';
 import {T as MouseTypes} from './Stdin/Mouse.js';
 
 export type ClickEvent = MouseTypes.Event;
+/* TODO: Omit mouse handlers from StylesConfig.  Make separate styles config for Text and Box */
 export type StylesConfig = Omit<Styles, 'styles'>;
 
 export type Styles = {

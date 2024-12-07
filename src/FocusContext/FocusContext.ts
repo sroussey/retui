@@ -64,7 +64,7 @@ export function useNodeFocus(): boolean {
 export function useIsFocus(): boolean {
 	const itemFocus = useItemFocus();
 	const pageFocus = usePageFocus();
-	const windowFocus = useWindowFocus(); // Don't this this one is necessary
+	const windowFocus = useWindowFocus(); // Don't think this is necessary
 	const nodeFocus = useNodeFocus();
 	return itemFocus && pageFocus && windowFocus && nodeFocus;
 }

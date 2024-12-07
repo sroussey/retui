@@ -8,6 +8,8 @@ import {useIsFocus, WindowContext} from '../FocusContext/FocusContext.js';
 import {Unit} from './Unit.js';
 import ScrollBar from './ScrollBar.js';
 import Box from '../components/Box.js';
+import {useModalLevel} from '../Modal/ModalContext.js';
+import ModalStack from '../Modal/ModalStack.js';
 
 export interface ItemGenerator<T extends KeyMap = any> {
 	(isFocus: boolean, onUnit: UseEventTypes.UseEvent<T>): React.ReactNode;
@@ -69,6 +71,7 @@ export function Window({
 	}
 
 	const THIS_WINDOW_FOCUS = useIsFocus();
+	const THIS_WINDOW_LEVEL = useModalLevel();
 
 	const generatedItems = generators
 		? generators.map(handleMap)
@@ -83,6 +86,7 @@ export function Window({
 		const isFocus = idx === viewState._idx;
 		const onUnit = (event: string, handler: any) => {
 			if (!isFocus || !THIS_WINDOW_FOCUS) return;
+			if (!ModalStack.isActiveModalLevel(THIS_WINDOW_LEVEL)) return;
 			listeners.push({event, handler});
 		};
 

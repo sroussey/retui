@@ -5,6 +5,8 @@ import {useEffect, useState} from 'react';
 import ProcessGate from './ProcessGate.js';
 import useEvent, {useTypedEvent} from './useEvent.js';
 import {useIsFocus} from '../../FocusContext/FocusContext.js';
+import ModalStack from '../../Modal/ModalStack.js';
+import {useModalLevel} from '../../Modal/ModalContext.js';
 
 export namespace T {
 	export type Return<U extends Keyboard.KeyMap = any> = {
@@ -28,6 +30,7 @@ export default function useKeymap<U extends Keyboard.KeyMap = any>(
 	const [ID] = useState(randomUUID());
 	const priority = opts.priority ?? 'default';
 	const focused = useIsFocus();
+	const componentLevel = useModalLevel(); // If not within a Modal this is just 0
 
 	if (priority !== 'never') {
 		STDIN.listen();
@@ -48,7 +51,9 @@ export default function useKeymap<U extends Keyboard.KeyMap = any>(
 
 	useEffect(() => {
 		const handleStdin = (stdin: string) => {
-			const canProcess = ProcessGate.canProcess(ID, priority);
+			const canProcess =
+				ProcessGate.canProcess(ID, priority) &&
+				ModalStack.isActiveModalLevel(componentLevel);
 
 			if (focused && canProcess) {
 				STDIN.Keyboard.processConfig(keymap);

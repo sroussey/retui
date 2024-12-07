@@ -1,0 +1,7290 @@
+22:02:01:039: ["child1"]
+22:02:01:038: ["child1","root"]
+22:02:01:820: ["child1","root"]
+22:02:01:821: ["child1"]
+22:02:24:379: ["child1"]
+22:02:24:378: ["child1","root"]
+00:04:50:439: stack, {}
+00:04:50:441: stack, {}
+00:04:50:441: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    }
+}
+00:04:50:441: stack, {}
+00:04:50:441: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    }
+}
+00:04:50:441: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:04:50:442: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:04:50:442: stack, {
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:04:50:442: stack, {
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:04:50:442: stack, {}
+00:04:50:443: stack, {}
+00:04:50:443: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    },
+    "root": {
+        "idx": 5,
+        "visible": true
+    }
+}
+00:04:50:444: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    }
+}
+00:04:50:444: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    }
+}
+00:04:50:444: stack, {}
+00:04:50:444: stack, {
+    "child2": {
+        "idx": 6,
+        "visible": true
+    },
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:04:50:444: stack, {}
+00:04:50:444: stack, {
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:04:50:444: stack, {}
+00:04:50:445: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:04:50:445: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:04:50:445: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:04:50:445: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:04:50:445: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:04:50:445: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": true
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:04:50:445: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:04:50:445: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:04:50:445: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:04:51:701: stack, {}
+00:04:51:703: stack, {}
+00:04:51:704: stack, {}
+00:04:51:704: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    }
+}
+00:04:51:704: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    }
+}
+00:04:51:704: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:04:51:705: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:04:51:705: stack, {
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:04:51:705: stack, {
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:04:51:706: stack, {}
+00:04:51:707: stack, {}
+00:04:51:707: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    },
+    "root": {
+        "idx": 5,
+        "visible": true
+    }
+}
+00:04:51:707: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    }
+}
+00:04:51:707: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    }
+}
+00:04:51:707: stack, {}
+00:04:51:707: stack, {
+    "child2": {
+        "idx": 6,
+        "visible": true
+    },
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:04:51:708: stack, {
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:04:51:708: stack, {}
+00:04:51:708: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:04:51:708: stack, {}
+00:04:51:708: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:04:51:708: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:04:51:709: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:04:51:709: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:04:51:709: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": true
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:04:51:709: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:04:51:709: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:04:51:709: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:05:00:440: stack, {}
+00:05:00:442: stack, {}
+00:05:00:442: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    }
+}
+00:05:00:442: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    }
+}
+00:05:00:442: stack, {}
+00:05:00:442: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:05:00:443: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:05:00:443: stack, {
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:05:00:443: stack, {}
+00:05:00:443: stack, {
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:05:00:444: stack, {}
+00:05:00:445: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    }
+}
+00:05:00:444: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    },
+    "root": {
+        "idx": 5,
+        "visible": true
+    }
+}
+00:05:00:445: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    }
+}
+00:05:00:445: stack, {}
+00:05:00:445: stack, {
+    "child2": {
+        "idx": 6,
+        "visible": true
+    },
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:05:00:445: stack, {
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:05:00:445: stack, {}
+00:05:00:446: stack, {}
+00:05:00:446: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:05:00:446: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:05:00:446: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:05:00:446: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:05:00:446: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:05:00:446: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": true
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:05:00:446: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:05:00:446: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:05:00:446: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:05:01:024: stack, {}
+00:05:01:026: stack, {}
+00:05:01:026: stack, {}
+00:05:01:027: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    }
+}
+00:05:01:027: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    }
+}
+00:05:01:027: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:05:01:027: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:05:01:028: stack, {
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:05:01:028: stack, {}
+00:05:01:028: stack, {
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:05:01:029: stack, {}
+00:05:01:029: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    },
+    "root": {
+        "idx": 5,
+        "visible": true
+    }
+}
+00:05:01:029: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    }
+}
+00:05:01:030: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    }
+}
+00:05:01:030: stack, {}
+00:05:01:030: stack, {
+    "child2": {
+        "idx": 6,
+        "visible": true
+    },
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:05:01:030: stack, {}
+00:05:01:030: stack, {
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:05:01:030: stack, {}
+00:05:01:030: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:05:01:031: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:05:01:031: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:05:01:031: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:05:01:031: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:05:01:031: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": true
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:05:01:031: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:05:01:031: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:05:01:031: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:05:05:048: stack, {}
+00:05:05:050: stack, {}
+00:05:05:050: stack, {}
+00:05:05:050: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    }
+}
+00:05:05:050: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    }
+}
+00:05:05:050: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:05:05:051: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:05:05:051: stack, {
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:05:05:051: stack, {
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:05:05:051: stack, {}
+00:05:05:052: stack, {}
+00:05:05:052: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    },
+    "root": {
+        "idx": 5,
+        "visible": true
+    }
+}
+00:05:05:053: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    }
+}
+00:05:05:053: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    }
+}
+00:05:05:053: stack, {}
+00:05:05:053: stack, {
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:05:05:053: stack, {
+    "child2": {
+        "idx": 6,
+        "visible": true
+    },
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:05:05:053: stack, {}
+00:05:05:053: stack, {}
+00:05:05:053: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:05:05:054: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:05:05:054: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:05:05:054: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:05:05:054: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:05:05:054: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": true
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:05:05:054: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:05:05:054: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:05:05:054: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:05:05:614: stack, {}
+00:05:05:615: stack, {}
+00:05:05:615: stack, {}
+00:05:05:616: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    }
+}
+00:05:05:616: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    }
+}
+00:05:05:616: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:05:05:616: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:05:05:616: stack, {
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:05:05:616: stack, {
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:05:05:617: stack, {}
+00:05:05:618: stack, {}
+00:05:05:618: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    }
+}
+00:05:05:618: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    },
+    "root": {
+        "idx": 5,
+        "visible": true
+    }
+}
+00:05:05:618: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    }
+}
+00:05:05:618: stack, {}
+00:05:05:618: stack, {
+    "child2": {
+        "idx": 6,
+        "visible": true
+    },
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:05:05:618: stack, {
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:05:05:618: stack, {}
+00:05:05:619: stack, {}
+00:05:05:619: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:05:05:619: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:05:05:619: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:05:05:619: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:05:05:619: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:05:05:619: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": true
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:05:05:620: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:05:05:620: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:05:05:620: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:06:50:562: stack, {}
+00:06:50:562: modal ID: child2
+00:06:50:562: modal ID: child2
+00:06:50:562: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    }
+}
+00:06:50:562: modal ID: child1
+00:06:50:562: modal ID: child1
+00:06:50:562: stack, {}
+00:06:50:560: stack, {}
+00:06:50:562: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    }
+}
+00:06:50:563: modal ID: root
+00:06:50:563: modal ID: root
+00:06:50:563: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:06:50:563: modal ID: child2
+00:06:50:563: modal ID: child1
+00:06:50:563: modal ID: root
+00:06:50:563: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:06:50:564: stack, {
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:06:50:564: stack, {
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:06:50:564: stack, {}
+00:06:50:565: stack, {}
+00:06:50:565: modal ID: child2
+00:06:50:565: modal ID: child1
+00:06:50:565: modal ID: root
+00:06:50:565: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    },
+    "root": {
+        "idx": 5,
+        "visible": true
+    }
+}
+00:06:50:565: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    }
+}
+00:06:50:566: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    }
+}
+00:06:50:566: stack, {}
+00:06:50:566: modal ID: child2
+00:06:50:566: modal ID: child1
+00:06:50:566: modal ID: root
+00:06:50:566: stack, {
+    "child2": {
+        "idx": 6,
+        "visible": true
+    },
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:06:50:566: stack, {
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:06:50:566: stack, {}
+00:06:50:566: stack, {}
+00:06:50:566: modal ID: child2
+00:06:50:567: modal ID: child1
+00:06:50:567: modal ID: root
+00:06:50:567: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:06:50:567: modal ID: child2
+00:06:50:567: modal ID: child1
+00:06:50:567: modal ID: root
+00:06:50:567: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:06:50:567: modal ID: child2
+00:06:50:567: modal ID: child1
+00:06:50:567: modal ID: root
+00:06:50:567: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:06:50:567: modal ID: child2
+00:06:50:567: modal ID: child1
+00:06:50:567: modal ID: root
+00:06:50:567: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:06:50:567: modal ID: child2
+00:06:50:567: modal ID: child1
+00:06:50:567: modal ID: root
+00:06:50:567: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:06:50:567: modal ID: child2
+00:06:50:567: modal ID: child1
+00:06:50:567: modal ID: root
+00:06:50:567: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": true
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:06:50:567: modal ID: child2
+00:06:50:567: modal ID: child1
+00:06:50:567: modal ID: root
+00:06:50:567: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:06:50:567: modal ID: child2
+00:06:50:567: modal ID: child1
+00:06:50:567: modal ID: root
+00:06:50:567: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:06:50:567: modal ID: child2
+00:06:50:568: modal ID: child1
+00:06:50:568: modal ID: root
+00:06:50:568: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:06:51:670: stack, {}
+00:06:51:672: stack, {}
+00:06:51:672: stack, {}
+00:06:51:672: modal ID: child2
+00:06:51:672: modal ID: child2
+00:06:51:672: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    }
+}
+00:06:51:672: modal ID: child1
+00:06:51:672: modal ID: child1
+00:06:51:672: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    }
+}
+00:06:51:673: modal ID: root
+00:06:51:673: modal ID: root
+00:06:51:673: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:06:51:673: modal ID: child2
+00:06:51:673: modal ID: child1
+00:06:51:673: modal ID: root
+00:06:51:673: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:06:51:673: stack, {
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:06:51:673: stack, {
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:06:51:673: stack, {}
+00:06:51:674: stack, {}
+00:06:51:674: modal ID: child2
+00:06:51:675: modal ID: child1
+00:06:51:675: modal ID: root
+00:06:51:675: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    },
+    "root": {
+        "idx": 5,
+        "visible": true
+    }
+}
+00:06:51:675: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    }
+}
+00:06:51:675: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    }
+}
+00:06:51:675: stack, {}
+00:06:51:675: modal ID: child2
+00:06:51:675: modal ID: child1
+00:06:51:675: modal ID: root
+00:06:51:675: stack, {
+    "child2": {
+        "idx": 6,
+        "visible": true
+    },
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:06:51:675: stack, {
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:06:51:675: stack, {}
+00:06:51:676: stack, {}
+00:06:51:676: modal ID: child2
+00:06:51:676: modal ID: child1
+00:06:51:676: modal ID: root
+00:06:51:676: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:06:51:676: modal ID: child2
+00:06:51:676: modal ID: child1
+00:06:51:676: modal ID: root
+00:06:51:676: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:06:51:676: modal ID: child2
+00:06:51:676: modal ID: child1
+00:06:51:676: modal ID: root
+00:06:51:676: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:06:51:676: modal ID: child2
+00:06:51:676: modal ID: child1
+00:06:51:676: modal ID: root
+00:06:51:676: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:06:51:676: modal ID: child2
+00:06:51:676: modal ID: child1
+00:06:51:676: modal ID: root
+00:06:51:676: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:06:51:676: modal ID: child2
+00:06:51:676: modal ID: root
+00:06:51:676: modal ID: child1
+00:06:51:676: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": true
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:06:51:676: modal ID: child2
+00:06:51:676: modal ID: child1
+00:06:51:676: modal ID: root
+00:06:51:676: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:06:51:677: modal ID: child2
+00:06:51:677: modal ID: child1
+00:06:51:677: modal ID: root
+00:06:51:677: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:06:51:677: modal ID: child2
+00:06:51:677: modal ID: child1
+00:06:51:677: modal ID: root
+00:06:51:677: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:06:58:658: stack, {}
+00:06:58:660: modal ID: child2
+00:06:58:659: stack, {}
+00:06:58:660: modal ID: child2
+00:06:58:659: stack, {}
+00:06:58:660: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    }
+}
+00:06:58:660: modal ID: child1
+00:06:58:660: modal ID: child1
+00:06:58:660: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    }
+}
+00:06:58:660: modal ID: root
+00:06:58:661: modal ID: root
+00:06:58:661: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:06:58:661: modal ID: child2
+00:06:58:661: modal ID: child1
+00:06:58:661: modal ID: root
+00:06:58:661: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:06:58:661: stack, {
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:06:58:661: stack, {
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:06:58:661: stack, {}
+00:06:58:662: modal ID: child2
+00:06:58:662: stack, {}
+00:06:58:663: modal ID: child1
+00:06:58:663: modal ID: root
+00:06:58:663: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    },
+    "root": {
+        "idx": 5,
+        "visible": true
+    }
+}
+00:06:58:663: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    }
+}
+00:06:58:663: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    }
+}
+00:06:58:663: stack, {}
+00:06:58:663: modal ID: child2
+00:06:58:663: modal ID: root
+00:06:58:663: modal ID: child1
+00:06:58:663: stack, {
+    "child2": {
+        "idx": 6,
+        "visible": true
+    },
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:06:58:663: stack, {
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:06:58:663: stack, {}
+00:06:58:664: stack, {}
+00:06:58:664: modal ID: child2
+00:06:58:664: modal ID: child1
+00:06:58:664: modal ID: root
+00:06:58:664: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:06:58:664: modal ID: child2
+00:06:58:664: modal ID: child1
+00:06:58:664: modal ID: root
+00:06:58:664: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:06:58:664: modal ID: child2
+00:06:58:664: modal ID: child1
+00:06:58:664: modal ID: root
+00:06:58:664: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:06:58:664: modal ID: child2
+00:06:58:664: modal ID: child1
+00:06:58:664: modal ID: root
+00:06:58:664: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:06:58:664: modal ID: child2
+00:06:58:664: modal ID: child1
+00:06:58:664: modal ID: root
+00:06:58:664: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:06:58:665: modal ID: child2
+00:06:58:665: modal ID: child1
+00:06:58:665: modal ID: root
+00:06:58:665: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": true
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:06:58:665: modal ID: child2
+00:06:58:665: modal ID: child1
+00:06:58:665: modal ID: root
+00:06:58:665: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:06:58:665: modal ID: child2
+00:06:58:665: modal ID: child1
+00:06:58:665: modal ID: root
+00:06:58:665: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:06:58:665: modal ID: child2
+00:06:58:665: modal ID: child1
+00:06:58:665: modal ID: root
+00:06:58:665: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:06:59:234: stack, {}
+00:06:59:236: stack, {}
+00:06:59:236: stack, {}
+00:06:59:236: modal ID: child2
+00:06:59:237: modal ID: child2
+00:06:59:237: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    }
+}
+00:06:59:237: modal ID: child1
+00:06:59:237: modal ID: child1
+00:06:59:237: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    }
+}
+00:06:59:237: modal ID: root
+00:06:59:237: modal ID: root
+00:06:59:237: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:06:59:238: modal ID: child2
+00:06:59:238: modal ID: child1
+00:06:59:238: modal ID: root
+00:06:59:238: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:06:59:238: stack, {
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:06:59:238: stack, {
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:06:59:238: stack, {}
+00:06:59:239: stack, {}
+00:06:59:239: modal ID: child2
+00:06:59:239: modal ID: child1
+00:06:59:239: modal ID: root
+00:06:59:239: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    },
+    "root": {
+        "idx": 5,
+        "visible": true
+    }
+}
+00:06:59:240: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    }
+}
+00:06:59:240: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    }
+}
+00:06:59:240: stack, {}
+00:06:59:240: modal ID: child2
+00:06:59:240: modal ID: child1
+00:06:59:240: modal ID: root
+00:06:59:240: stack, {
+    "child2": {
+        "idx": 6,
+        "visible": true
+    },
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:06:59:240: stack, {
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:06:59:240: stack, {}
+00:06:59:240: stack, {}
+00:06:59:240: modal ID: child2
+00:06:59:241: modal ID: child1
+00:06:59:241: modal ID: root
+00:06:59:241: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:06:59:241: modal ID: child2
+00:06:59:241: modal ID: child1
+00:06:59:241: modal ID: root
+00:06:59:241: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:06:59:241: modal ID: child2
+00:06:59:241: modal ID: child1
+00:06:59:241: modal ID: root
+00:06:59:241: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:06:59:241: modal ID: child2
+00:06:59:241: modal ID: child1
+00:06:59:241: modal ID: root
+00:06:59:241: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:06:59:241: modal ID: child2
+00:06:59:241: modal ID: child1
+00:06:59:241: modal ID: root
+00:06:59:241: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:06:59:241: modal ID: child2
+00:06:59:241: modal ID: child1
+00:06:59:241: modal ID: root
+00:06:59:241: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": true
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:06:59:241: modal ID: child2
+00:06:59:241: modal ID: child1
+00:06:59:241: modal ID: root
+00:06:59:241: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:06:59:241: modal ID: child2
+00:06:59:241: modal ID: child1
+00:06:59:241: modal ID: root
+00:06:59:241: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:06:59:241: modal ID: child2
+00:06:59:241: modal ID: child1
+00:06:59:241: modal ID: root
+00:06:59:241: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:07:03:474: stack, {}
+00:07:03:476: stack, {}
+00:07:03:476: modal ID: child2
+00:07:03:476: stack, {}
+00:07:03:476: modal ID: child2
+00:07:03:477: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    }
+}
+00:07:03:477: modal ID: child1
+00:07:03:477: modal ID: child1
+00:07:03:477: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    }
+}
+00:07:03:477: modal ID: root
+00:07:03:477: modal ID: root
+00:07:03:477: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:07:03:477: modal ID: child2
+00:07:03:477: modal ID: child1
+00:07:03:477: modal ID: root
+00:07:03:477: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:07:03:478: stack, {
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:07:03:478: stack, {
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:07:03:478: stack, {}
+00:07:03:479: stack, {}
+00:07:03:479: modal ID: child2
+00:07:03:479: modal ID: child1
+00:07:03:479: modal ID: root
+00:07:03:479: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    },
+    "root": {
+        "idx": 5,
+        "visible": true
+    }
+}
+00:07:03:479: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    }
+}
+00:07:03:479: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    }
+}
+00:07:03:479: stack, {}
+00:07:03:480: modal ID: child2
+00:07:03:480: modal ID: child1
+00:07:03:480: modal ID: root
+00:07:03:480: stack, {
+    "child2": {
+        "idx": 6,
+        "visible": true
+    },
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:07:03:480: stack, {
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:07:03:480: stack, {}
+00:07:03:480: stack, {}
+00:07:03:480: modal ID: child1
+00:07:03:480: modal ID: root
+00:07:03:480: modal ID: child2
+00:07:03:480: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:07:03:480: modal ID: child2
+00:07:03:480: modal ID: child1
+00:07:03:480: modal ID: root
+00:07:03:480: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:07:03:481: modal ID: child2
+00:07:03:481: modal ID: child1
+00:07:03:481: modal ID: root
+00:07:03:481: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:07:03:481: modal ID: child2
+00:07:03:481: modal ID: child1
+00:07:03:481: modal ID: root
+00:07:03:481: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:07:03:481: modal ID: child2
+00:07:03:481: modal ID: child1
+00:07:03:481: modal ID: root
+00:07:03:481: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:07:03:481: modal ID: child2
+00:07:03:481: modal ID: child1
+00:07:03:481: modal ID: root
+00:07:03:481: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": true
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:07:03:481: modal ID: child2
+00:07:03:481: modal ID: child1
+00:07:03:481: modal ID: root
+00:07:03:481: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:07:03:481: modal ID: child2
+00:07:03:481: modal ID: child1
+00:07:03:481: modal ID: root
+00:07:03:481: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:07:03:481: modal ID: child2
+00:07:03:481: modal ID: child1
+00:07:03:481: modal ID: root
+00:07:03:481: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:07:04:055: stack, {}
+00:07:04:056: stack, {}
+00:07:04:054: stack, {}
+00:07:04:056: modal ID: child2
+00:07:04:056: modal ID: child2
+00:07:04:056: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    }
+}
+00:07:04:056: modal ID: child1
+00:07:04:056: modal ID: child1
+00:07:04:056: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    }
+}
+00:07:04:056: modal ID: root
+00:07:04:057: modal ID: root
+00:07:04:057: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:07:04:057: modal ID: child2
+00:07:04:057: modal ID: child1
+00:07:04:057: modal ID: root
+00:07:04:057: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:07:04:057: stack, {
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:07:04:057: stack, {
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:07:04:057: stack, {}
+00:07:04:058: stack, {}
+00:07:04:058: modal ID: child2
+00:07:04:058: modal ID: child1
+00:07:04:058: modal ID: root
+00:07:04:059: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    },
+    "root": {
+        "idx": 5,
+        "visible": true
+    }
+}
+00:07:04:059: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    }
+}
+00:07:04:059: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    }
+}
+00:07:04:059: stack, {}
+00:07:04:059: modal ID: child2
+00:07:04:059: modal ID: child1
+00:07:04:059: modal ID: root
+00:07:04:059: stack, {
+    "child2": {
+        "idx": 6,
+        "visible": true
+    },
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:07:04:059: stack, {
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:07:04:059: stack, {}
+00:07:04:060: stack, {}
+00:07:04:060: modal ID: child2
+00:07:04:060: modal ID: child1
+00:07:04:060: modal ID: root
+00:07:04:060: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:07:04:060: modal ID: child2
+00:07:04:060: modal ID: child1
+00:07:04:060: modal ID: root
+00:07:04:060: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:07:04:060: modal ID: child2
+00:07:04:060: modal ID: child1
+00:07:04:060: modal ID: root
+00:07:04:060: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:07:04:060: modal ID: child2
+00:07:04:060: modal ID: child1
+00:07:04:060: modal ID: root
+00:07:04:060: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:07:04:060: modal ID: child2
+00:07:04:060: modal ID: child1
+00:07:04:060: modal ID: root
+00:07:04:060: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:07:04:060: modal ID: child2
+00:07:04:060: modal ID: child1
+00:07:04:060: modal ID: root
+00:07:04:060: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": true
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:07:04:060: modal ID: child2
+00:07:04:060: modal ID: child1
+00:07:04:060: modal ID: root
+00:07:04:060: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:07:04:061: modal ID: child2
+00:07:04:061: modal ID: child1
+00:07:04:061: modal ID: root
+00:07:04:061: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:07:04:061: modal ID: child2
+00:07:04:061: modal ID: child1
+00:07:04:061: modal ID: root
+00:07:04:061: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:08:59:636: stack, {}
+00:08:59:639: stack, {}
+00:08:59:639: modal ID: child2
+00:08:59:639: stack, {}
+00:08:59:640: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    }
+}
+00:08:59:640: modal ID: child1
+00:08:59:640: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    }
+}
+00:08:59:641: modal ID: root
+00:08:59:641: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:08:59:641: modal ID: child2
+00:08:59:641: modal ID: child1
+00:08:59:642: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:08:59:642: stack, {
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:08:59:641: modal ID: root
+00:08:59:642: stack, {
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:08:59:642: stack, {}
+00:08:59:644: stack, {}
+00:08:59:644: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    },
+    "root": {
+        "idx": 5,
+        "visible": true
+    }
+}
+00:08:59:645: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    }
+}
+00:08:59:645: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    }
+}
+00:08:59:645: stack, {}
+00:08:59:645: stack, {
+    "child2": {
+        "idx": 6,
+        "visible": true
+    },
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:08:59:645: stack, {
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:08:59:645: stack, {}
+00:08:59:646: stack, {}
+00:08:59:646: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:08:59:646: modal ID: child2
+00:08:59:646: modal ID: child1
+00:08:59:646: modal ID: root
+00:08:59:646: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:08:59:646: modal ID: child2
+00:08:59:646: modal ID: child1
+00:08:59:646: modal ID: root
+00:08:59:646: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:08:59:646: modal ID: child2
+00:08:59:646: modal ID: child1
+00:08:59:646: modal ID: root
+00:08:59:647: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:08:59:647: modal ID: child2
+00:08:59:647: modal ID: child1
+00:08:59:647: modal ID: root
+00:08:59:647: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:08:59:647: modal ID: child2
+00:08:59:647: modal ID: child1
+00:08:59:647: modal ID: root
+00:08:59:647: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": true
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:08:59:647: modal ID: child2
+00:08:59:647: modal ID: child1
+00:08:59:647: modal ID: root
+00:08:59:647: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:08:59:647: modal ID: child2
+00:08:59:647: modal ID: child1
+00:08:59:647: modal ID: root
+00:08:59:647: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:08:59:648: modal ID: child2
+00:08:59:648: modal ID: child1
+00:08:59:648: modal ID: root
+00:08:59:648: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:09:00:607: stack, {}
+00:09:00:609: stack, {}
+00:09:00:609: stack, {}
+00:09:00:609: modal ID: child2
+00:09:00:609: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    }
+}
+00:09:00:609: modal ID: child1
+00:09:00:610: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    }
+}
+00:09:00:610: modal ID: root
+00:09:00:610: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:09:00:610: modal ID: child2
+00:09:00:610: modal ID: child1
+00:09:00:610: modal ID: root
+00:09:00:610: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:09:00:610: stack, {
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:09:00:611: stack, {
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:09:00:611: stack, {}
+00:09:00:612: stack, {}
+00:09:00:612: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    },
+    "root": {
+        "idx": 5,
+        "visible": true
+    }
+}
+00:09:00:612: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    }
+}
+00:09:00:612: stack, {}
+00:09:00:612: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    }
+}
+00:09:00:612: stack, {
+    "child2": {
+        "idx": 6,
+        "visible": true
+    },
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:09:00:612: stack, {
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:09:00:612: stack, {}
+00:09:00:613: stack, {}
+00:09:00:613: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:09:00:613: modal ID: child2
+00:09:00:613: modal ID: child1
+00:09:00:613: modal ID: root
+00:09:00:613: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:00:613: modal ID: child2
+00:09:00:613: modal ID: child1
+00:09:00:613: modal ID: root
+00:09:00:613: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:00:613: modal ID: child2
+00:09:00:613: modal ID: child1
+00:09:00:613: modal ID: root
+00:09:00:613: modal ID: child2
+00:09:00:613: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:00:613: modal ID: child1
+00:09:00:613: modal ID: root
+00:09:00:613: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:00:613: modal ID: child2
+00:09:00:613: modal ID: child1
+00:09:00:614: modal ID: root
+00:09:00:614: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": true
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:00:614: modal ID: child2
+00:09:00:614: modal ID: child1
+00:09:00:614: modal ID: root
+00:09:00:614: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:00:614: modal ID: child2
+00:09:00:614: modal ID: child1
+00:09:00:614: modal ID: root
+00:09:00:614: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:00:614: modal ID: child2
+00:09:00:614: modal ID: child1
+00:09:00:614: modal ID: root
+00:09:00:614: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:09:03:771: stack, {}
+00:09:03:772: stack, {}
+00:09:03:772: stack, {}
+00:09:03:773: modal ID: child2
+00:09:03:773: modal ID: child2
+00:09:03:773: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    }
+}
+00:09:03:773: modal ID: child1
+00:09:03:773: modal ID: child1
+00:09:03:773: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    }
+}
+00:09:03:774: modal ID: root
+00:09:03:774: modal ID: root
+00:09:03:774: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:09:03:774: modal ID: child2
+00:09:03:774: modal ID: child1
+00:09:03:774: modal ID: root
+00:09:03:774: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:09:03:774: stack, {
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:09:03:775: stack, {}
+00:09:03:774: stack, {
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:09:03:776: stack, {}
+00:09:03:776: modal ID: child2
+00:09:03:776: modal ID: child1
+00:09:03:776: modal ID: root
+00:09:03:776: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    },
+    "root": {
+        "idx": 5,
+        "visible": true
+    }
+}
+00:09:03:776: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    }
+}
+00:09:03:776: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    }
+}
+00:09:03:776: stack, {}
+00:09:03:776: modal ID: child2
+00:09:03:776: modal ID: child1
+00:09:03:776: modal ID: root
+00:09:03:776: stack, {
+    "child2": {
+        "idx": 6,
+        "visible": true
+    },
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:09:03:777: stack, {
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:09:03:777: stack, {}
+00:09:03:777: stack, {}
+00:09:03:777: modal ID: child2
+00:09:03:777: modal ID: child1
+00:09:03:777: modal ID: root
+00:09:03:777: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:09:03:777: modal ID: child2
+00:09:03:777: modal ID: child1
+00:09:03:777: modal ID: root
+00:09:03:777: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:03:777: modal ID: child2
+00:09:03:777: modal ID: child1
+00:09:03:778: modal ID: root
+00:09:03:778: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:03:778: modal ID: child2
+00:09:03:778: modal ID: child1
+00:09:03:778: modal ID: root
+00:09:03:778: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:03:778: modal ID: child2
+00:09:03:778: modal ID: child1
+00:09:03:778: modal ID: root
+00:09:03:778: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:03:778: modal ID: child2
+00:09:03:778: modal ID: child1
+00:09:03:778: modal ID: root
+00:09:03:778: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": true
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:03:778: modal ID: child2
+00:09:03:778: modal ID: child1
+00:09:03:778: modal ID: root
+00:09:03:778: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:03:778: modal ID: child2
+00:09:03:778: modal ID: child1
+00:09:03:778: modal ID: root
+00:09:03:778: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:03:778: modal ID: child2
+00:09:03:778: modal ID: child1
+00:09:03:778: modal ID: root
+00:09:03:778: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:09:04:721: stack, {}
+00:09:04:722: stack, {}
+00:09:04:722: stack, {}
+00:09:04:723: modal ID: child2
+00:09:04:723: modal ID: child2
+00:09:04:723: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    }
+}
+00:09:04:723: modal ID: child1
+00:09:04:723: modal ID: child1
+00:09:04:723: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    }
+}
+00:09:04:723: modal ID: root
+00:09:04:723: modal ID: root
+00:09:04:723: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:09:04:724: modal ID: child2
+00:09:04:724: modal ID: child1
+00:09:04:724: modal ID: root
+00:09:04:724: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:09:04:724: stack, {
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:09:04:724: stack, {
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:09:04:724: stack, {}
+00:09:04:725: stack, {}
+00:09:04:725: modal ID: child2
+00:09:04:725: modal ID: child1
+00:09:04:725: modal ID: root
+00:09:04:725: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    },
+    "root": {
+        "idx": 5,
+        "visible": true
+    }
+}
+00:09:04:725: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    }
+}
+00:09:04:726: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    }
+}
+00:09:04:726: stack, {}
+00:09:04:726: modal ID: child2
+00:09:04:726: modal ID: child1
+00:09:04:726: modal ID: root
+00:09:04:726: stack, {
+    "child2": {
+        "idx": 6,
+        "visible": true
+    },
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:09:04:726: stack, {
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:09:04:726: stack, {}
+00:09:04:726: stack, {}
+00:09:04:726: modal ID: child2
+00:09:04:726: modal ID: child1
+00:09:04:726: modal ID: root
+00:09:04:726: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:09:04:727: modal ID: child2
+00:09:04:727: modal ID: child1
+00:09:04:727: modal ID: root
+00:09:04:727: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:04:727: modal ID: child2
+00:09:04:727: modal ID: child1
+00:09:04:727: modal ID: root
+00:09:04:727: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:04:727: modal ID: child2
+00:09:04:727: modal ID: child1
+00:09:04:727: modal ID: root
+00:09:04:727: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:04:727: modal ID: child2
+00:09:04:727: modal ID: child1
+00:09:04:727: modal ID: root
+00:09:04:727: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:04:727: modal ID: child2
+00:09:04:727: modal ID: child1
+00:09:04:727: modal ID: root
+00:09:04:727: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": true
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:04:727: modal ID: child2
+00:09:04:727: modal ID: child1
+00:09:04:727: modal ID: root
+00:09:04:727: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:04:727: modal ID: child2
+00:09:04:727: modal ID: child1
+00:09:04:727: modal ID: root
+00:09:04:727: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:04:727: modal ID: child2
+00:09:04:727: modal ID: child1
+00:09:04:727: modal ID: root
+00:09:04:727: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:09:12:770: stack, {}
+00:09:12:772: stack, {}
+00:09:12:772: stack, {}
+00:09:12:772: modal ID: child2
+00:09:12:772: modal ID: child2
+00:09:12:773: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    }
+}
+00:09:12:773: modal ID: child1
+00:09:12:773: modal ID: child1
+00:09:12:773: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    }
+}
+00:09:12:773: modal ID: root
+00:09:12:773: modal ID: root
+00:09:12:773: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:09:12:773: modal ID: child2
+00:09:12:773: modal ID: child1
+00:09:12:774: modal ID: root
+00:09:12:774: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:09:12:774: stack, {
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:09:12:774: stack, {
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:09:12:774: stack, {}
+00:09:12:775: stack, {}
+00:09:12:775: modal ID: child2
+00:09:12:775: modal ID: child1
+00:09:12:775: modal ID: root
+00:09:12:775: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    },
+    "root": {
+        "idx": 5,
+        "visible": true
+    }
+}
+00:09:12:775: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    }
+}
+00:09:12:775: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    }
+}
+00:09:12:776: modal ID: child2
+00:09:12:776: stack, {}
+00:09:12:776: modal ID: child1
+00:09:12:776: modal ID: root
+00:09:12:776: stack, {
+    "child2": {
+        "idx": 6,
+        "visible": true
+    },
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:09:12:776: stack, {
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:09:12:776: stack, {}
+00:09:12:776: stack, {}
+00:09:12:776: modal ID: child2
+00:09:12:776: modal ID: child1
+00:09:12:776: modal ID: root
+00:09:12:777: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:09:12:777: modal ID: child2
+00:09:12:777: modal ID: child1
+00:09:12:777: modal ID: root
+00:09:12:777: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:12:777: modal ID: child2
+00:09:12:777: modal ID: child1
+00:09:12:777: modal ID: root
+00:09:12:777: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:12:777: modal ID: child2
+00:09:12:777: modal ID: child1
+00:09:12:777: modal ID: root
+00:09:12:777: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:12:777: modal ID: child2
+00:09:12:777: modal ID: child1
+00:09:12:777: modal ID: root
+00:09:12:777: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:12:777: modal ID: child2
+00:09:12:777: modal ID: child1
+00:09:12:777: modal ID: root
+00:09:12:777: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": true
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:12:777: modal ID: child2
+00:09:12:777: modal ID: child1
+00:09:12:777: modal ID: root
+00:09:12:777: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:12:777: modal ID: child2
+00:09:12:777: modal ID: child1
+00:09:12:777: modal ID: root
+00:09:12:777: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:12:777: modal ID: child2
+00:09:12:777: modal ID: child1
+00:09:12:777: modal ID: root
+00:09:12:778: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:09:13:359: stack, {}
+00:09:13:361: stack, {}
+00:09:13:361: stack, {}
+00:09:13:361: modal ID: child2
+00:09:13:361: modal ID: child2
+00:09:13:362: modal ID: child1
+00:09:13:362: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    }
+}
+00:09:13:362: modal ID: child1
+00:09:13:362: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    }
+}
+00:09:13:362: modal ID: root
+00:09:13:362: modal ID: root
+00:09:13:362: modal ID: child2
+00:09:13:362: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:09:13:362: modal ID: child1
+00:09:13:363: modal ID: root
+00:09:13:363: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:09:13:363: stack, {
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:09:13:363: stack, {
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:09:13:363: stack, {}
+00:09:13:364: stack, {}
+00:09:13:364: modal ID: child2
+00:09:13:364: modal ID: child1
+00:09:13:364: modal ID: root
+00:09:13:364: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    },
+    "root": {
+        "idx": 5,
+        "visible": true
+    }
+}
+00:09:13:364: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    }
+}
+00:09:13:364: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    }
+}
+00:09:13:365: stack, {}
+00:09:13:365: modal ID: child2
+00:09:13:365: modal ID: child1
+00:09:13:365: modal ID: root
+00:09:13:365: stack, {
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:09:13:365: stack, {
+    "child2": {
+        "idx": 6,
+        "visible": true
+    },
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:09:13:365: stack, {}
+00:09:13:365: stack, {}
+00:09:13:365: modal ID: child2
+00:09:13:365: modal ID: child1
+00:09:13:365: modal ID: root
+00:09:13:365: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:09:13:365: modal ID: child2
+00:09:13:366: modal ID: child1
+00:09:13:366: modal ID: root
+00:09:13:366: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:13:366: modal ID: child2
+00:09:13:366: modal ID: child1
+00:09:13:366: modal ID: root
+00:09:13:366: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:13:366: modal ID: child2
+00:09:13:366: modal ID: child1
+00:09:13:366: modal ID: root
+00:09:13:366: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:13:366: modal ID: child2
+00:09:13:366: modal ID: child1
+00:09:13:366: modal ID: root
+00:09:13:366: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:13:366: modal ID: child2
+00:09:13:366: modal ID: child1
+00:09:13:366: modal ID: root
+00:09:13:366: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": true
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:13:366: modal ID: child2
+00:09:13:366: modal ID: child1
+00:09:13:366: modal ID: root
+00:09:13:366: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:13:366: modal ID: child2
+00:09:13:366: modal ID: child1
+00:09:13:366: modal ID: root
+00:09:13:366: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:13:366: modal ID: child2
+00:09:13:366: modal ID: child1
+00:09:13:366: modal ID: root
+00:09:13:366: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:09:17:519: stack, {}
+00:09:17:521: stack, {}
+00:09:17:521: stack, {}
+00:09:17:521: modal ID: child2
+00:09:17:521: modal ID: child2
+00:09:17:521: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    }
+}
+00:09:17:521: modal ID: child1
+00:09:17:521: modal ID: child1
+00:09:17:522: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    }
+}
+00:09:17:522: modal ID: root
+00:09:17:522: modal ID: root
+00:09:17:522: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:09:17:522: modal ID: child2
+00:09:17:522: modal ID: child1
+00:09:17:522: modal ID: root
+00:09:17:522: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:09:17:522: stack, {
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:09:17:523: stack, {
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:09:17:523: stack, {}
+00:09:17:524: stack, {}
+00:09:17:524: modal ID: child2
+00:09:17:524: modal ID: child1
+00:09:17:524: modal ID: root
+00:09:17:524: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    },
+    "root": {
+        "idx": 5,
+        "visible": true
+    }
+}
+00:09:17:524: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    }
+}
+00:09:17:524: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    }
+}
+00:09:17:524: stack, {}
+00:09:17:524: modal ID: child2
+00:09:17:524: modal ID: child1
+00:09:17:524: modal ID: root
+00:09:17:524: stack, {
+    "child2": {
+        "idx": 6,
+        "visible": true
+    },
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:09:17:525: stack, {
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:09:17:525: stack, {}
+00:09:17:525: stack, {}
+00:09:17:525: modal ID: child2
+00:09:17:525: modal ID: child1
+00:09:17:525: modal ID: root
+00:09:17:525: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:09:17:525: modal ID: child2
+00:09:17:525: modal ID: child1
+00:09:17:525: modal ID: root
+00:09:17:525: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:17:525: modal ID: child2
+00:09:17:525: modal ID: child1
+00:09:17:525: modal ID: root
+00:09:17:525: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:17:526: modal ID: child2
+00:09:17:526: modal ID: child1
+00:09:17:526: modal ID: root
+00:09:17:526: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:17:526: modal ID: child2
+00:09:17:526: modal ID: child1
+00:09:17:526: modal ID: root
+00:09:17:526: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:17:526: modal ID: child2
+00:09:17:526: modal ID: child1
+00:09:17:526: modal ID: root
+00:09:17:526: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": true
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:17:526: modal ID: child2
+00:09:17:526: modal ID: child1
+00:09:17:526: modal ID: root
+00:09:17:526: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:17:526: modal ID: child2
+00:09:17:526: modal ID: child1
+00:09:17:526: modal ID: root
+00:09:17:526: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:17:526: modal ID: child2
+00:09:17:526: modal ID: child1
+00:09:17:526: modal ID: root
+00:09:17:526: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:09:18:156: stack, {}
+00:09:18:158: stack, {}
+00:09:18:158: modal ID: child2
+00:09:18:158: modal ID: child2
+00:09:18:157: stack, {}
+00:09:18:158: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    }
+}
+00:09:18:158: modal ID: child1
+00:09:18:158: modal ID: child1
+00:09:18:158: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    }
+}
+00:09:18:159: modal ID: root
+00:09:18:159: modal ID: root
+00:09:18:159: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:09:18:159: modal ID: child2
+00:09:18:159: modal ID: child1
+00:09:18:159: modal ID: root
+00:09:18:159: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:09:18:159: stack, {
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:09:18:159: stack, {
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:09:18:160: stack, {}
+00:09:18:159: stack, {}
+00:09:18:160: modal ID: child2
+00:09:18:160: modal ID: child1
+00:09:18:161: modal ID: root
+00:09:18:161: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    },
+    "root": {
+        "idx": 5,
+        "visible": true
+    }
+}
+00:09:18:161: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    }
+}
+00:09:18:161: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    }
+}
+00:09:18:161: stack, {}
+00:09:18:161: modal ID: child2
+00:09:18:161: modal ID: child1
+00:09:18:161: modal ID: root
+00:09:18:161: stack, {
+    "child2": {
+        "idx": 6,
+        "visible": true
+    },
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:09:18:161: stack, {
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:09:18:161: stack, {}
+00:09:18:162: stack, {}
+00:09:18:162: modal ID: child2
+00:09:18:162: modal ID: child1
+00:09:18:162: modal ID: root
+00:09:18:162: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:09:18:162: modal ID: child2
+00:09:18:162: modal ID: child1
+00:09:18:162: modal ID: root
+00:09:18:162: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:18:162: modal ID: child2
+00:09:18:162: modal ID: child1
+00:09:18:162: modal ID: root
+00:09:18:162: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:18:162: modal ID: child2
+00:09:18:162: modal ID: child1
+00:09:18:162: modal ID: root
+00:09:18:162: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:18:162: modal ID: child2
+00:09:18:162: modal ID: child1
+00:09:18:162: modal ID: root
+00:09:18:162: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:18:162: modal ID: child2
+00:09:18:162: modal ID: child1
+00:09:18:162: modal ID: root
+00:09:18:162: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": true
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:18:162: modal ID: child2
+00:09:18:162: modal ID: child1
+00:09:18:162: modal ID: root
+00:09:18:162: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:18:162: modal ID: child2
+00:09:18:163: modal ID: child1
+00:09:18:163: modal ID: root
+00:09:18:163: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:09:18:163: modal ID: child2
+00:09:18:163: modal ID: child1
+00:09:18:163: modal ID: root
+00:09:18:163: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:18:29:844: stack, {}
+00:18:29:846: stack, {}
+00:18:29:846: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    }
+}
+00:18:29:847: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    }
+}
+00:18:29:846: stack, {}
+00:18:29:847: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:18:29:847: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:18:29:847: stack, {
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:18:29:847: stack, {
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:18:29:848: stack, {}
+00:18:29:849: stack, {}
+00:18:29:849: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    },
+    "root": {
+        "idx": 5,
+        "visible": true
+    }
+}
+00:18:29:849: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    }
+}
+00:18:29:849: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    }
+}
+00:18:29:849: stack, {}
+00:18:29:849: stack, {
+    "child2": {
+        "idx": 6,
+        "visible": true
+    },
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:18:29:849: stack, {
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:18:29:850: stack, {}
+00:18:29:850: stack, {}
+00:18:29:850: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:18:29:850: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:18:29:850: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:18:29:850: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:18:29:850: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:18:29:851: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": true
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:18:29:851: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:18:29:851: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:18:29:851: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:18:30:908: stack, {}
+00:18:30:910: stack, {}
+00:18:30:910: stack, {}
+00:18:30:910: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    }
+}
+00:18:30:910: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    }
+}
+00:18:30:910: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:18:30:911: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:18:30:911: stack, {
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:18:30:911: stack, {
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:18:30:911: stack, {}
+00:18:30:912: stack, {}
+00:18:30:912: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    },
+    "root": {
+        "idx": 5,
+        "visible": true
+    }
+}
+00:18:30:913: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    }
+}
+00:18:30:913: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    }
+}
+00:18:30:913: stack, {}
+00:18:30:913: stack, {
+    "child2": {
+        "idx": 6,
+        "visible": true
+    },
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:18:30:913: stack, {
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:18:30:913: stack, {}
+00:18:30:913: stack, {}
+00:18:30:913: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:18:30:914: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:18:30:914: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:18:30:914: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:18:30:914: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": true
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:18:30:914: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:18:30:914: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:18:30:914: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:18:30:914: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:19:14:469: stack, {}
+00:19:14:470: stack, {}
+00:19:14:470: stack, {}
+00:19:14:471: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    }
+}
+00:19:14:471: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    }
+}
+00:19:14:471: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:19:14:471: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:19:14:472: stack, {
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:19:14:472: stack, {
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:19:14:472: stack, {}
+00:19:14:473: stack, {}
+00:19:14:473: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    },
+    "root": {
+        "idx": 5,
+        "visible": true
+    }
+}
+00:19:14:474: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    }
+}
+00:19:14:474: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    }
+}
+00:19:14:474: stack, {}
+00:19:14:474: stack, {
+    "child2": {
+        "idx": 6,
+        "visible": true
+    },
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:19:14:474: stack, {
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:19:14:474: stack, {}
+00:19:14:475: stack, {}
+00:19:14:475: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:19:14:475: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:14:475: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:14:475: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:14:475: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:14:475: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": true
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:14:475: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:14:475: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:14:476: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:19:15:546: stack, {}
+00:19:15:548: stack, {}
+00:19:15:548: stack, {}
+00:19:15:548: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    }
+}
+00:19:15:548: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    }
+}
+00:19:15:549: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:19:15:549: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:19:15:549: stack, {
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:19:15:549: stack, {
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:19:15:549: stack, {}
+00:19:15:550: stack, {}
+00:19:15:551: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    },
+    "root": {
+        "idx": 5,
+        "visible": true
+    }
+}
+00:19:15:551: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    }
+}
+00:19:15:551: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    }
+}
+00:19:15:551: stack, {}
+00:19:15:551: stack, {
+    "child2": {
+        "idx": 6,
+        "visible": true
+    },
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:19:15:551: stack, {
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:19:15:551: stack, {}
+00:19:15:552: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:15:552: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:15:552: stack, {}
+00:19:15:552: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:19:15:552: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:15:552: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:15:552: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": true
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:15:552: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:15:552: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:15:552: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:19:23:620: stack, {}
+00:19:23:622: stack, {}
+00:19:23:622: stack, {}
+00:19:23:622: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    }
+}
+00:19:23:623: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    }
+}
+00:19:23:623: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:19:23:623: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:19:23:623: stack, {
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:19:23:624: stack, {}
+00:19:23:624: stack, {
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:19:23:625: stack, {}
+00:19:23:626: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    },
+    "root": {
+        "idx": 5,
+        "visible": true
+    }
+}
+00:19:23:626: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    }
+}
+00:19:23:626: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    }
+}
+00:19:23:626: stack, {}
+00:19:23:626: stack, {
+    "child2": {
+        "idx": 6,
+        "visible": true
+    },
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:19:23:627: stack, {
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:19:23:627: stack, {}
+00:19:23:627: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:19:23:627: stack, {}
+00:19:23:628: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:23:628: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:23:628: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:23:628: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:23:628: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": true
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:23:629: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:23:629: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:23:629: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:19:24:250: stack, {}
+00:19:24:252: stack, {}
+00:19:24:252: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    }
+}
+00:19:24:252: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:19:24:252: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    }
+}
+00:19:24:252: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:19:24:253: stack, {
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:19:24:252: stack, {}
+00:19:24:253: stack, {
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:19:24:253: stack, {}
+00:19:24:254: stack, {}
+00:19:24:255: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    }
+}
+00:19:24:255: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    },
+    "root": {
+        "idx": 5,
+        "visible": true
+    }
+}
+00:19:24:255: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    }
+}
+00:19:24:255: stack, {}
+00:19:24:255: stack, {
+    "child2": {
+        "idx": 6,
+        "visible": true
+    },
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:19:24:255: stack, {
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:19:24:255: stack, {}
+00:19:24:256: stack, {}
+00:19:24:256: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:19:24:256: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:24:256: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:24:256: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:24:256: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:24:257: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": true
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:24:257: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:24:257: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:24:257: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:19:28:723: stack, {}
+00:19:28:723: stack, {}
+00:19:28:721: stack, {}
+00:19:28:723: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    }
+}
+00:19:28:723: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    }
+}
+00:19:28:724: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:19:28:724: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:19:28:724: stack, {
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:19:28:724: stack, {
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:19:28:724: stack, {}
+00:19:28:725: stack, {}
+00:19:28:726: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    },
+    "root": {
+        "idx": 5,
+        "visible": true
+    }
+}
+00:19:28:726: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    }
+}
+00:19:28:726: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    }
+}
+00:19:28:726: stack, {}
+00:19:28:726: stack, {
+    "child2": {
+        "idx": 6,
+        "visible": true
+    },
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:19:28:726: stack, {
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:19:28:726: stack, {}
+00:19:28:727: stack, {}
+00:19:28:727: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:19:28:727: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:28:727: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:28:727: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:28:727: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:28:727: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": true
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:28:727: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:28:728: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:28:728: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:19:29:319: stack, {}
+00:19:29:321: stack, {}
+00:19:29:321: stack, {}
+00:19:29:321: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    }
+}
+00:19:29:321: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    }
+}
+00:19:29:322: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:19:29:322: stack, {
+    "child2": {
+        "idx": 0,
+        "visible": true
+    },
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:19:29:322: stack, {
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:19:29:322: stack, {
+    "child1": {
+        "idx": 1,
+        "visible": true
+    },
+    "root": {
+        "idx": 2,
+        "visible": true
+    }
+}
+00:19:29:322: stack, {}
+00:19:29:323: stack, {}
+00:19:29:324: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    },
+    "root": {
+        "idx": 5,
+        "visible": true
+    }
+}
+00:19:29:324: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    },
+    "child1": {
+        "idx": 4,
+        "visible": true
+    }
+}
+00:19:29:324: stack, {
+    "child2": {
+        "idx": 3,
+        "visible": true
+    }
+}
+00:19:29:324: stack, {}
+00:19:29:324: stack, {
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:19:29:324: stack, {
+    "child2": {
+        "idx": 6,
+        "visible": true
+    },
+    "root": {
+        "idx": 8,
+        "visible": true
+    }
+}
+00:19:29:324: stack, {}
+00:19:29:324: stack, {}
+00:19:29:325: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
+00:19:29:325: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:29:325: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:29:325: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:29:325: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": true
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:29:325: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:29:325: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": true
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:29:325: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": true
+    }
+}
+00:19:29:325: stack, {
+    "child2": {
+        "idx": 9,
+        "visible": false
+    },
+    "child1": {
+        "idx": 10,
+        "visible": false
+    },
+    "root": {
+        "idx": 11,
+        "visible": false
+    }
+}
