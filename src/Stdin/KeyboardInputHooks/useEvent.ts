@@ -1,13 +1,13 @@
 import {useEffect} from 'react';
-import {T as KeyboardTypes} from '../Keyboard.js';
 import {STDIN} from '../Stdin.js';
 import {useIsFocus} from '../../FocusContext/FocusContext.js';
 import {KeyOf} from '../../utility/types.js';
 import {useModalLevel} from '../../Modal/ModalContext.js';
 import ModalStack from '../../Modal/ModalStack.js';
+import {KeyMap} from '../Keyboard.js';
 
 export namespace T {
-	export interface UseEvent<T extends KeyboardTypes.KeyMap = any> {
+	export interface UseEvent<T extends KeyMap = any> {
 		(cmd: keyof T, handler: (stdin: string) => unknown): void;
 	}
 	export type Listener = {
@@ -15,7 +15,7 @@ export namespace T {
 		handler: (...args: any[]) => unknown;
 	};
 
-	export type MultipleListeners<T extends KeyboardTypes.KeyMap = any> = {
+	export type MultipleListeners<T extends KeyMap = any> = {
 		cmd: KeyOf<T>;
 		handler: (...args: any[]) => unknown;
 	}[];
@@ -23,7 +23,7 @@ export namespace T {
 
 export type {T as UseEventTypes};
 
-export default function useEvent<T extends KeyboardTypes.KeyMap = any>(
+export default function useEvent<T extends KeyMap = any>(
 	event: KeyOf<T>,
 	handler: (stdin: string) => unknown,
 	extraFocusCheck?: boolean,
@@ -50,7 +50,7 @@ export default function useEvent<T extends KeyboardTypes.KeyMap = any>(
 	});
 }
 
-export function useTypedEvent<T extends KeyboardTypes.KeyMap>(): {
+export function useTypedEvent<T extends KeyMap>(): {
 	useEvent: T.UseEvent<T>;
 } {
 	return {useEvent: useEvent as T.UseEvent<T>};

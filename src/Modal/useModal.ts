@@ -23,6 +23,7 @@ export type ModalData = {
 export type Return = {
 	modal: ModalData;
 	showModal: () => void;
+	hideModal: () => void;
 };
 
 export const SHOW = 'SHOW';
@@ -59,6 +60,7 @@ export function useModal(keymap: ModalControlKeyMaps): Return {
 			_hideModal: hideModal,
 		}),
 		showModal: showModal,
+		hideModal: hideModal,
 	};
 }
 

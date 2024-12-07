@@ -1,8 +1,5 @@
 import {Dispatch, SetStateAction} from 'react';
-import {T as Keyboard} from '../Stdin/Keyboard.js';
 import {ScrollAPI} from './ScrollAPI.js';
-
-export type KeyMap = Keyboard.KeyMap;
 
 export type ScrollState = {
 	idx: number;

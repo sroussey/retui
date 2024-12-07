@@ -3,22 +3,18 @@ import {SpecialKeys, newSpecialKeyRegister} from './AsciiMap.js';
 import {EVENT} from './Stdin.js';
 import {ASCII} from './AsciiMap.js';
 
-export namespace T {
-	export type Key = keyof SpecialKeys;
+export type KeyMap = {
+	[eventName: string]: Binding | Binding[];
+};
 
-	export type Binding = {
-		key?: Key;
-		notKey?: Key[];
-		input?: string;
-		notInput?: string[];
-	};
+export type Binding = {
+	key?: Key;
+	notKey?: Key[];
+	input?: string;
+	notInput?: string[];
+};
 
-	export type KeyMap = {
-		[eventName: string]: Binding | Binding[];
-	};
-}
-
-export type {T as KeyboardTypes};
+export type Key = keyof SpecialKeys;
 
 export default class Keyboard {
 	private Emitter: EventEmitter;
@@ -233,7 +229,7 @@ export default class Keyboard {
 		this.Emitter.off(event, handler);
 	};
 
-	public processConfig = (config: T.KeyMap): void => {
+	public processConfig = (config: KeyMap): void => {
 		if (this.state.eventSet) return;
 
 		/* Is there a non alphanumeric keypress?  We need to know so that bindings
@@ -241,7 +237,7 @@ export default class Keyboard {
 		const hasNonAlphaKey = Object.values(this.state.specialKeys).some(b => b);
 
 		for (const event in config) {
-			const binding = config[event] as T.Binding | T.Binding[];
+			const binding = config[event] as Binding | Binding[];
 
 			let match = false;
 			if (Array.isArray(binding)) {
@@ -254,10 +250,7 @@ export default class Keyboard {
 		}
 	};
 
-	private checkMatch = (
-		binding: T.Binding,
-		hasNonAlphakey: boolean,
-	): boolean => {
+	private checkMatch = (binding: Binding, hasNonAlphakey: boolean): boolean => {
 		// Empty object triggers any key press
 		if (!Object.keys(binding).length) {
 			return true;
@@ -295,7 +288,7 @@ export default class Keyboard {
 		return false;
 	};
 
-	private checkNotMatch = (binding: T.Binding): boolean => {
+	private checkNotMatch = (binding: Binding): boolean => {
 		const notKey = binding.notKey || [];
 		const notInput = binding.notInput || [];
 

@@ -1,4 +1,4 @@
-import {KeyMap} from './types.js';
+import {KeyMap} from '../Stdin/Keyboard.js';
 
 export const CMDS = {
 	increment: 'USE_KEYBINDS_INCREMENT',

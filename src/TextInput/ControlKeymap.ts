@@ -1,4 +1,5 @@
-import {Binding, Key, KeyMap, logger} from '../index.js';
+import {Binding, KeyMap} from '../index.js';
+import {Key} from '../Stdin/Keyboard.js';
 import InternalEvents from '../utility/InternalEvents.js';
 
 type InsertEvents =

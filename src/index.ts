@@ -26,6 +26,7 @@ export type {DOMElement} from './dom.js';
 
 // Fork
 export {STDIN, ALT_STDIN, setMouse} from './Stdin/Stdin.js';
+export {ASCII as Key} from './Stdin/AsciiMap.js';
 export {default as useEvent} from './Stdin/KeyboardInputHooks/useEvent.js';
 export {useTypedEvent} from './Stdin/KeyboardInputHooks/useEvent.js';
 export {default as useKeymap} from './Stdin/KeyboardInputHooks/useKeymap.js';
@@ -37,11 +38,7 @@ export {default as Box} from './components/Box.js';
 // export type {Props as BoxProps} from './BoxBgColor/Box.js';
 // export {Box} from './BoxBgColor/Box.js';
 
-import {KeyboardTypes} from './Stdin/Keyboard.js';
-type KeyMap = KeyboardTypes.KeyMap;
-type Binding = KeyboardTypes.Binding;
-type Key = KeyboardTypes.Key;
-export type {KeyMap, Binding, Key};
+export type {KeyMap, Binding} from './Stdin/Keyboard.js';
 
 // Window
 export {useWindow} from './Window/useWindow.js';
@@ -107,7 +104,7 @@ export {executeShellCommand} from './TPut/executeShellCommand.js';
 export {useShellCommand} from './TPut/ShellCommandContext.js';
 
 // CLI
-export {Cli} from './Cli/Cli.js';
+export {Cli, ModalCli} from './Cli/Cli.js';
 export {useCommand} from './Cli/useCommand.js';
 export {type Commands} from './Cli/types.js';
 

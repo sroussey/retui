@@ -1,6 +1,5 @@
 import {useState} from 'react';
 import {deepEqual} from '../util.js';
-import {logger} from '../index.js';
 
 export type State = {
 	value: string;

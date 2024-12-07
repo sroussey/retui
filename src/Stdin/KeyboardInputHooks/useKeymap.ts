@@ -1,15 +1,15 @@
 import {STDIN} from '../Stdin.js';
 import {randomUUID} from 'crypto';
-import {T as Keyboard} from '../Keyboard.js';
 import {useEffect, useState} from 'react';
 import ProcessGate from './ProcessGate.js';
 import useEvent, {useTypedEvent} from './useEvent.js';
 import {useIsFocus} from '../../FocusContext/FocusContext.js';
 import ModalStack from '../../Modal/ModalStack.js';
 import {useModalLevel} from '../../Modal/ModalContext.js';
+import {KeyMap} from '../Keyboard.js';
 
 export namespace T {
-	export type Return<U extends Keyboard.KeyMap = any> = {
+	export type Return<U extends KeyMap = any> = {
 		register: string;
 		event: string;
 		useEvent: typeof useEvent<U>;
@@ -21,7 +21,7 @@ export namespace T {
 	};
 }
 
-export default function useKeymap<U extends Keyboard.KeyMap = any>(
+export default function useKeymap<U extends KeyMap = any>(
 	keymap: U,
 	opts?: T.Opts,
 ): T.Return<U> {

@@ -1,5 +1,5 @@
-import React, {useEffect, useRef, useState} from 'react';
-import Text, {styleText} from '../components/Text.js';
+import React, {useEffect, useState} from 'react';
+import Text from '../components/Text.js';
 import {
 	State as UseTextInputState,
 	Return as UseTextInputReturn,
@@ -16,22 +16,22 @@ import {
 } from '../index.js';
 import ControlKeymap from './ControlKeymap.js';
 import chalk from 'chalk';
-import {useResponsiveDimensions} from '../useResponsiveDimensions/useResponsiveDimensions.js';
 import colorize from '../colorize.js';
 import {Except} from 'type-fest';
+import {useAdjustWindowSize} from './useAdjustWindowSize.js';
 
 type Color = Exclude<BoxProps['borderColor'], 'inherit'>;
 
 type Props = {
 	onChange: UseTextInputReturn['onChange'];
-	onExit?: (value: string) => unknown;
-	onEnter?: () => unknown;
+	onExit?: (value: string, stdin: string) => unknown;
+	onEnter?: (value: string, stdin: string) => unknown;
 	onKeypress?: (char: string) => unknown;
 	enterKeymap?: Binding | Binding[];
 	exitKeymap?: Binding | Binding[];
 	cursorColor?: Color;
 	textStyle?: Except<TextProps, 'children' | 'wrap'>;
-	// autoEnter?: boolean;
+	autoEnter?: boolean;
 };
 
 export function TextInput({
@@ -43,85 +43,15 @@ export function TextInput({
 	exitKeymap = ControlKeymap.defaultExit,
 	cursorColor,
 	textStyle,
+	autoEnter,
 }: Props): React.ReactNode {
 	const {state, update} = onChange();
+	const {availableWidth, ref} = useAdjustWindowSize(state, update);
 
-	const responsiveDimensions = useResponsiveDimensions();
-
-	const [ID] = useState(randomUUID());
-	const ScopedEvents = ControlKeymap.getScopedEvents(ID);
-	const [InsertKeymap, Exit] = ControlKeymap.getInsertKeymap(ID, exitKeymap);
-	const [NormalKeymap, Enter] = ControlKeymap.getNormalKeymap(ID, enterKeymap);
-
-	const isFocus = useIsFocus();
-	const KeyMap = state.insert ? InsertKeymap : NormalKeymap;
-
-	const priority =
-		state.insert && isFocus ? 'textinput' : isFocus ? 'default' : 'never';
-
-	const {useEvent} = useKeymap(KeyMap, {
-		priority,
-	});
-
-	const availableWidth = responsiveDimensions.width ?? 0;
-	const previousWidth = useRef(availableWidth);
-
-	const handleExit = () => {
-		STDIN.Keyboard.setTextInputMode(false);
-		update({...state, insert: false});
-		onExit?.(state.value);
-	};
-	useEffect(() => {
-		if (!isFocus) {
-			handleExit();
-		}
-	}, [isFocus]);
-
-	useEffect(() => {
-		const copy = {...state, window: {...state.window}};
-		// console.log('start copy', JSON.stringify(copy, null, 4));
-
-		const currWindowSize = copy.window.end - copy.window.start + 1;
-
-		// Decrease in window size
-		if (
-			currWindowSize > availableWidth &&
-			previousWidth.current > availableWidth
-		) {
-			// we are at the end
-			if (copy.window.end === copy.idx) {
-				let i = previousWidth.current - availableWidth;
-
-				while (copy.window.start < copy.window.end && i-- !== 0) {
-					++copy.window.start;
-				}
-			} else {
-				copy.window.end = copy.window.start + availableWidth - 1;
-				if (copy.window.end > copy.value.length) {
-					copy.window.end = copy.value.length;
-				}
-			}
-		}
-
-		// Increase in window size
-		else if (previousWidth.current < availableWidth) {
-			const endWindowLimit = copy.window.start + availableWidth - 1;
-			const endValueLimit = copy.value.length;
-
-			copy.window.end = Math.min(endWindowLimit, endValueLimit);
-		}
-
-		previousWidth.current = availableWidth;
-
-		// console.log('end copy', JSON.stringify(copy, null, 4));
-
-		update(copy);
-	}, [availableWidth]);
-
-	function getWindowChange(
+	const calculateNextWindow = (
 		nextState: UseTextInputState,
 		dir: 'left' | 'right',
-	): UseTextInputState {
+	): UseTextInputState => {
 		const copy = {...nextState};
 
 		if (dir === 'right') {
@@ -149,32 +79,28 @@ export function TextInput({
 		}
 
 		return copy;
-	}
+	};
 
-	function pruneSpecialChars(c: string): string {
-		const charCode = c.charCodeAt(0);
+	const [ID] = useState(randomUUID());
+	const ScopedEvents = ControlKeymap.getScopedEvents(ID);
+	const [InsertKeymap, Exit] = ControlKeymap.getInsertKeymap(ID, exitKeymap);
+	const [NormalKeymap, Enter] = ControlKeymap.getNormalKeymap(ID, enterKeymap);
 
-		if (charCode <= 31) return '';
-		if (charCode === 127) return '';
+	const isFocus = useIsFocus();
+	const KeyMap = state.insert ? InsertKeymap : NormalKeymap;
+	const priority =
+		state.insert && isFocus ? 'textinput' : isFocus ? 'default' : 'never';
+	const {useEvent} = useKeymap(KeyMap, {
+		priority,
+	});
 
-		if (c.length > 1) {
-			let word = c.slice(1);
-			for (let i = 0; i < word.length; ++i) {
-				const charCode = word[i]?.charCodeAt(0);
-				if (
-					charCode !== undefined &&
-					(charCode <= 31 || word[i] === '\n' || word[i] === '\t')
-				) {
-					word = word.slice(0, i) + ' ' + word.slice(i + 1, word.length);
-				}
-			}
-			return word;
-		} else {
-			return c;
-		}
-	}
+	const handleExit = (stdin: string) => {
+		STDIN.Keyboard.setTextInputMode(false);
+		update({...state, insert: false});
+		onExit?.(state.value, stdin);
+	};
 
-	useEvent(Enter, () => {
+	const handleEnter = (stdin: string) => {
 		STDIN.Keyboard.setTextInputMode(true);
 
 		const nextIdx = state.value.length;
@@ -182,7 +108,7 @@ export function TextInput({
 		let nextStart = 0;
 
 		if (nextEnd - nextStart > availableWidth - 1) {
-			nextStart = nextEnd - availableWidth + 1;
+			nextStart = Math.min(nextEnd - availableWidth + 1, nextEnd);
 		}
 
 		update({
@@ -191,9 +117,22 @@ export function TextInput({
 			idx: state.value.length,
 			window: {...state.window, start: nextStart, end: nextEnd},
 		});
-		onEnter?.();
-	});
+		onEnter?.(state.value, stdin);
+	};
 
+	useEffect(() => {
+		// If autoenter make sure insert is toggled to true
+		if (autoEnter && isFocus) {
+			handleEnter('');
+		}
+
+		// Make sure unfocusing also sets insert to false and executes exit handler
+		if (!isFocus) {
+			handleExit('');
+		}
+	}, [isFocus]);
+
+	useEvent(Enter, handleEnter);
 	useEvent(Exit, handleExit);
 
 	useEvent(ScopedEvents.keypress, (char: string) => {
@@ -206,7 +145,7 @@ export function TextInput({
 		const nextValue = leftSlice + char + rightSlice;
 
 		if (char.length === 1) {
-			const nextState = getWindowChange(
+			const nextState = calculateNextWindow(
 				{...state, value: nextValue, stdin: char},
 				'right',
 			);
@@ -229,12 +168,12 @@ export function TextInput({
 	});
 
 	useEvent(ScopedEvents.left, () => {
-		const nextState = getWindowChange(state, 'left');
+		const nextState = calculateNextWindow(state, 'left');
 		update(nextState);
 	});
 
 	useEvent(ScopedEvents.right, () => {
-		const nextState = getWindowChange(state, 'right');
+		const nextState = calculateNextWindow(state, 'right');
 		update(nextState);
 	});
 
@@ -244,7 +183,7 @@ export function TextInput({
 		const rightSlice = state.value.slice(state.idx);
 		const nextValue = leftSlice + rightSlice;
 
-		const nextState = getWindowChange({...state, value: nextValue}, 'left');
+		const nextState = calculateNextWindow({...state, value: nextValue}, 'left');
 		update(nextState);
 	});
 
@@ -267,7 +206,7 @@ export function TextInput({
 
 	return (
 		<Box
-			ref={responsiveDimensions.ref}
+			ref={ref}
 			// wipeBackground={false}
 			height="100"
 			width="100"
@@ -331,4 +270,27 @@ function DisplayText(props: DisplayTextProps): React.ReactNode {
 			</Text>
 		</Box>
 	);
+}
+
+function pruneSpecialChars(c: string): string {
+	const charCode = c.charCodeAt(0);
+
+	if (charCode <= 31) return '';
+	if (charCode === 127) return '';
+
+	if (c.length > 1) {
+		let word = c.slice(1);
+		for (let i = 0; i < word.length; ++i) {
+			const charCode = word[i]?.charCodeAt(0);
+			if (
+				charCode !== undefined &&
+				(charCode <= 31 || word[i] === '\n' || word[i] === '\t')
+			) {
+				word = word.slice(0, i) + ' ' + word.slice(i + 1, word.length);
+			}
+		}
+		return word;
+	} else {
+		return c;
+	}
 }
