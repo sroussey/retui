@@ -2,11 +2,10 @@
 import {type Boxes, type BoxStyle} from 'cli-boxes';
 import Yoga, {type Node as YogaNode} from 'yoga-wasm-web/auto';
 import {Title} from './renderTitles/renderTitleToOutput.js';
-import {Color, DropReadonly} from './utility/types.js';
+import {Color} from './utility/types.js';
 import {MouseEventHandler} from './index.js';
 import {StylesConfig} from './utility/types.js';
 
-export type MutableBaseProps = DropReadonly<BaseProps>;
 export type BaseProps = {
 	readonly textWrap?:
 		| 'wrap'

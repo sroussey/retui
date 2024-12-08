@@ -12,6 +12,7 @@ import {BaseProps} from './baseProps.js';
 import {addMouseEventListeners} from './stdin/AddMouseEventListeners.js';
 import {DefaultStdin} from './stdin/Stdin.js';
 import {TextProps} from './index.js';
+import {MutableBaseProps} from './utility/types.js';
 
 // If parent container is `<Box>`, text nodes will be treated as separate nodes in
 // the tree and will have their own coordinates in the layout.
@@ -44,7 +45,7 @@ const renderNodeToOutput = (
 		skipStaticElements: boolean;
 		isZIndexRoot?: boolean;
 		rootZIndex?: number;
-		parentStyles?: BaseProps;
+		parentStyles?: MutableBaseProps;
 	},
 	zIndexes: {index: number; cb: () => void}[] = [],
 ) => {
@@ -95,20 +96,14 @@ const renderNodeToOutput = (
 
 		if (internalBackgroundColor === 'inherit' && hasParentBg) {
 			if (!internalInverse && !internalColor) {
-				// @ts-ignore
 				node.style.color = parentBg;
-				// @ts-ignore
 				node.style.inverse = true;
 			} else if (!internalInverse) {
-				// @ts-ignore
 				node.style.backgroundColor = parentBg;
 			}
 		} else {
-			// @ts-ignore
 			node.style.color = internalColor;
-			// @ts-ignore
 			node.style.backgroundColor = internalBackgroundColor;
-			// @ts-ignore
 			node.style.inverse = internalInverse;
 		}
 
@@ -135,7 +130,6 @@ const renderNodeToOutput = (
 	let clipped = false;
 
 	if (node.style.zIndex === 'auto') {
-		// @ts-ignore
 		node.style.zIndex = 0;
 	}
 
@@ -181,30 +175,24 @@ const renderNodeToOutput = (
 
 		if (internalBackgroundColor === 'inherit') {
 			if (options.parentStyles?.backgroundColor) {
-				// @ts-ignore
 				node.style.backgroundColor = options.parentStyles.backgroundColor;
 			} else {
-				// @ts-ignore
 				node.style.backgroundColor = undefined;
 			}
 		}
 
 		if (internalBorderStyle === 'inherit') {
 			if (options.parentStyles?.borderStyle) {
-				// @ts-ignore
 				node.style.borderStyle = options.parentStyles.borderStyle;
 			} else {
-				// @ts-ignore
 				node.style.borderStyle = undefined;
 			}
 		}
 
 		if (internalBorderColor === 'inherit') {
 			if (options?.parentStyles?.borderColor) {
-				// @ts-ignore
 				node.style.borderColor = options.parentStyles.borderColor;
 			} else {
-				// @ts-ignore
 				node.style.borderColor = undefined;
 			}
 		}

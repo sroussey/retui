@@ -46,3 +46,6 @@ export type StylesConfig = {
 export type Key = keyof SpecialKeys;
 export type KeyInputSingle = KeyInput;
 export type KeyInputUnion = KeyInput | KeyInput[];
+
+export type MutableTextProps = DropReadonly<TextProps>;
+export type MutableBaseProps = DropReadonly<BaseProps>;

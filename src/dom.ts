@@ -5,13 +5,14 @@ import wrapText from './wrap-text.js';
 import squashTextNodes from './squash-text-nodes.js';
 import {type OutputTransformer} from './render-node-to-output.js';
 import {TextProps} from './index.js';
+import {MutableBaseProps, MutableTextProps} from './utility/types.js';
 
 type InkNode = {
 	parentNode: DOMElement | undefined;
 	yogaNode?: YogaNode;
 	internal_static?: boolean;
 	// was just BaseProps
-	style: BaseProps & TextProps;
+	style: MutableBaseProps & MutableTextProps;
 };
 
 export type TextName = '#text';
