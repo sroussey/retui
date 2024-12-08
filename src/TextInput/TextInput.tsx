@@ -26,6 +26,8 @@ type Props = {
 	onChange: UseTextInputReturn['onChange'];
 	onExit?: (value: string, stdin: string) => unknown;
 	onEnter?: (value: string, stdin: string) => unknown;
+	onDownArrow?: () => unknown;
+	onUpArrow?: () => unknown;
 	onKeypress?: (char: string) => unknown;
 	enterKeymap?: Binding | Binding[];
 	exitKeymap?: Binding | Binding[];
@@ -37,8 +39,10 @@ type Props = {
 export function TextInput({
 	onChange,
 	onEnter,
-	onKeypress,
 	onExit,
+	onKeypress,
+	onUpArrow,
+	onDownArrow,
 	enterKeymap = ControlKeymap.defaultEnter,
 	exitKeymap = ControlKeymap.defaultExit,
 	cursorColor,
@@ -197,11 +201,11 @@ export function TextInput({
 	});
 
 	useEvent(ScopedEvents.up, () => {
-		// Handle differently if FormFocus
+		onUpArrow?.();
 	});
 
 	useEvent(ScopedEvents.down, () => {
-		// Handle differently if FormFocus
+		onDownArrow?.();
 	});
 
 	return (

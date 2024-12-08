@@ -4,7 +4,11 @@ import {Except} from 'type-fest';
 import {TextProps} from '../index.js';
 
 export type StyleType = 'INPUT' | 'RESOLVE' | 'REJECT';
-export type SetValue = (style: StyleType, value: string) => void;
+export type SetValue = (
+	style: StyleType,
+	value: string,
+	insert?: boolean,
+) => void;
 export type TextStyles = Except<TextProps, 'wrap' | 'children'>;
 
 /*
@@ -25,8 +29,12 @@ export function useCli({
 	const [textStyleType, setTextStyleType] = useState<StyleType>('INPUT');
 	const hasStyles = inputStyles || rejectStyles || resolveStyles;
 
-	const internalSetValue: SetValue = (style: StyleType, value: string) => {
-		setValue(value);
+	const internalSetValue: SetValue = (
+		style: StyleType,
+		value: string,
+		insert?: boolean,
+	) => {
+		setValue(value, insert);
 		if (hasStyles) {
 			setTextStyleType(style);
 		}

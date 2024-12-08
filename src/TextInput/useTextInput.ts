@@ -16,7 +16,7 @@ export type Return = {
 	value: State['value'];
 	insert: boolean;
 	onChange: () => {state: State; update: (nextState: State) => void};
-	setValue: (nextValue: string) => void;
+	setValue: (nextValue: string, insert?: boolean) => void;
 	enterInsert: () => void;
 };
 
@@ -54,12 +54,15 @@ export function useTextInput(initialValue: string = ''): Return {
 		}
 	};
 
-	const setValue = (nextValue: string) => {
+	const setValue = (nextValue: string, insert?: boolean) => {
 		setState(prev => {
+			const nextInsert = insert ?? prev.insert;
+
 			return {
 				...prev,
 				value: nextValue,
 				idx: nextValue.length,
+				insert: nextInsert,
 				window: {start: 0, end: nextValue.length},
 			};
 		});

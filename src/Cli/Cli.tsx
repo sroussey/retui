@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useTextInput} from '../TextInput/useTextInput.js';
 import Box from '../components/Box.js';
 import {TextInput} from '../TextInput/TextInput.js';
@@ -17,6 +17,7 @@ import {Props as ModalProps} from '../Modal/Modal.js';
 import {SetValue, TextStyles, useCli} from './useCli.js';
 import {Commands, Default, Handler} from './types.js';
 import InternalEvents from '../utility/InternalEvents.js';
+import {CliHistory} from './CliHistory.js';
 
 export type Props = {
 	commands: Commands;
@@ -34,6 +35,8 @@ export type AbstractProps = Props & {
 	autoEnter: boolean;
 	showModal?: () => void;
 	hideModal?: () => void;
+	onUpArrow?: () => unknown;
+	onDownArrow?: () => unknown;
 };
 
 const DEFAULT: Default = 'DEFAULT';
@@ -44,6 +47,22 @@ function AbstractCli(props: AbstractProps): React.ReactNode {
 	const {onChange, setValue, insert, textStyle, value} = useCli(props);
 	const {autoEnter, ...cliViewProps} = props;
 
+	const onUpArrow = () => {
+		const nextCommand = CliHistory.next();
+		setValue('INPUT', nextCommand, true);
+	};
+
+	const onDownArrow = () => {
+		const previousCommand = CliHistory.prev();
+		setValue('INPUT', previousCommand, true);
+	};
+
+	useEffect(() => {
+		if (!insert) {
+			CliHistory.resetIdx();
+		}
+	}, [insert]);
+
 	return (
 		<CliView
 			{...cliViewProps}
@@ -53,6 +72,8 @@ function AbstractCli(props: AbstractProps): React.ReactNode {
 			insert={insert}
 			textStyles={textStyle}
 			autoEnter={autoEnter}
+			onUpArrow={onUpArrow}
+			onDownArrow={onDownArrow}
 		/>
 	);
 }
@@ -124,19 +145,36 @@ function CliView({
 	insert,
 	textStyles,
 	hideModal,
-	// value,
+	onDownArrow,
+	onUpArrow,
 	autoEnter,
 }: CliViewProps): React.ReactNode {
 	const prefixValue = insert || persistPrefix ? prefix : '';
 
-	// need exitkeymaps to to handle exiting the modal here because they currently
-	// only exit in insert
-	// also modal should allow enter to toggle between insert
+	const NEXT_CLI_HISTORY = 'NEXT_CLI_HISTORY';
+	const PREV_CLI_HISTORY = 'PREV_CLI_HISTORY';
+	const HIDE_CLI_MODAL = 'HIDE_CLI_MODAL';
 
-	const keymap: KeyMap = hideModal ? {closeModal: {key: 'esc'}} : {};
+	const keymap: KeyMap = {
+		[NEXT_CLI_HISTORY]: {key: 'up'},
+		[PREV_CLI_HISTORY]: {key: 'down'},
+	};
+
+	if (hideModal) {
+		keymap[HIDE_CLI_MODAL] = {key: 'esc'};
+	}
+
 	const {useEvent} = useKeymap(keymap);
-	useEvent('closeModal', () => {
+	useEvent(HIDE_CLI_MODAL, () => {
 		hideModal?.();
+	});
+	useEvent(NEXT_CLI_HISTORY, () => {
+		const nextHistory = CliHistory.next();
+		setValue('INPUT', nextHistory, true);
+	});
+	useEvent(PREV_CLI_HISTORY, () => {
+		const prevHistory = CliHistory.prev();
+		setValue('INPUT', prevHistory, true);
 	});
 
 	return (
@@ -148,6 +186,8 @@ function CliView({
 				enterKeymap={enterKeymap}
 				exitKeymap={exitKeymap}
 				autoEnter={autoEnter}
+				onDownArrow={onDownArrow}
+				onUpArrow={onUpArrow}
 				// Enter and exit handlers in TextInput need to pass stdin to
 				// the callbacks so that we can handle events differently
 				// like in this case where esc and return should be handled differently
@@ -197,6 +237,8 @@ async function handleInput(
 	const rawInput = toRawInput(cliInput, command || '');
 	const defaultRawInput = toRawInput(cliInput, '');
 	const defaultArgs = [command ?? '', ...args];
+
+	CliHistory.push(defaultRawInput);
 
 	let handler: Handler | null = null;
 
