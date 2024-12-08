@@ -1,5 +1,5 @@
 import React, {useMemo, useState, useLayoutEffect, type ReactNode} from 'react';
-import {type Styles} from '../styles.js';
+import {type BaseProps} from '../baseProps.js';
 
 export type Props<T> = {
 	/**
@@ -8,9 +8,9 @@ export type Props<T> = {
 	readonly items: T[];
 
 	/**
-	 * Styles to apply to a container of child elements. See <Box> for supported properties.
+	 * BaseProps to apply to a container of child elements. See <Box> for supported properties.
 	 */
-	readonly style?: Styles;
+	readonly style?: BaseProps;
 
 	/**
 	 * Function that is called to render every item in `items` array.
@@ -48,7 +48,7 @@ export default function Static<T>(props: Props<T>) {
 		return render(item, index + itemIndex);
 	});
 
-	const style: Styles = useMemo(
+	const style: BaseProps = useMemo(
 		() => ({
 			position: 'absolute',
 			flexDirection: 'column',

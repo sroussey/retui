@@ -8,7 +8,7 @@ import StdoutContext from './StdoutContext.js';
 import StderrContext from './StderrContext.js';
 import FocusContext from './FocusContext.js';
 import ErrorOverview from './ErrorOverview.js';
-import {ShellCommmandProvider} from '../TPut/ShellCommandContext.js';
+import {ShellCommmandProvider} from '../preserveScreen/ShellCommandContext.js';
 
 const tab = '\t';
 const shiftTab = '\u001B[Z';

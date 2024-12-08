@@ -1,7 +1,6 @@
 import renderNodeToOutput from './render-node-to-output.js';
 import Output from './output.js';
 import {type DOMElement} from './dom.js';
-import {ALT_STDIN} from './Stdin/Stdin.js';
 
 type Result = {
 	output: string;

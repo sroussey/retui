@@ -2,7 +2,6 @@ import {useState, useRef, useEffect} from 'react';
 import measureElement from '../measure-element.js';
 import useStdout from '../hooks/use-stdout.js';
 import {useListener} from '../useListener/useListener.js';
-import {Node} from 'yoga-wasm-web';
 
 namespace UseResponsiveDimensions {
 	export type Dimensions = {height: number | null; width: number | null};

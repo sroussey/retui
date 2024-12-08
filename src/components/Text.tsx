@@ -1,20 +1,19 @@
 import React, {type ReactNode} from 'react';
-import chalk, {type ForegroundColorName} from 'chalk';
-import {type LiteralUnion} from 'type-fest';
+import chalk from 'chalk';
 import colorize from '../colorize.js';
-import {type Styles} from '../styles.js';
-import {logger} from '../index.js';
+import {type BaseProps} from '../baseProps.js';
+import {type Color} from '../utility/types.js';
 
 export type Props = {
 	/**
 	 * Change text color. Ink uses chalk under the hood, so all its functionality is supported.
 	 */
-	readonly color?: LiteralUnion<ForegroundColorName, string>;
+	readonly color?: Color;
 
 	/**
 	 * Same as `color`, but for background.
 	 */
-	readonly backgroundColor?: Styles['backgroundColor'];
+	readonly backgroundColor?: BaseProps['backgroundColor'];
 
 	/**
 	 * Dim the color (emit a small amount of light).
@@ -51,13 +50,13 @@ export type Props = {
 	 * If `wrap` is passed (by default), Ink will wrap text and split it into multiple lines.
 	 * If `truncate-*` is passed, Ink will truncate text instead, which will result in one line of text with the rest cut off.
 	 */
-	readonly wrap?: Styles['textWrap'];
+	readonly wrap?: BaseProps['textWrap'];
 
 	readonly children?: ReactNode;
 };
 
 export const styleText =
-	(style: Styles & Props) =>
+	(style: BaseProps & Props) =>
 	(children: string): string => {
 		if (style.dimColor) {
 			children = chalk.dim(children);
@@ -113,7 +112,7 @@ export default function Text({
 		return null;
 	}
 
-	const style: Styles & Props = {
+	const style: BaseProps & Props = {
 		flexGrow: 0,
 		flexShrink: 1,
 		flexDirection: 'row',

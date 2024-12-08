@@ -3,15 +3,14 @@ import chalk from 'chalk';
 import colorize from '../colorize.js';
 import {type DOMNode} from '../dom.js';
 import type Output from '../output.js';
-import {BoxProps, DOMElement, STDIN, Styles} from '../index.js';
-import {T as MouseTypes} from '../Stdin/Mouse.js';
+import {BoxProps, DOMElement} from '../index.js';
+import {BaseProps} from '../baseProps.js';
 import assert from 'assert';
-import {addTitleEventListeners} from '../Stdin/AddTitleEventListeners.js';
-import styles from '../styles.js';
+import {addTitleEventListeners} from '../stdin/AddTitleEventListeners.js';
+import {CornerPositions} from '../index.js';
+import {PickStartsWith} from '../utility/types.js';
 
-type StylesHandlers = {
-	[P in keyof Styles as P extends `on${infer _}` ? P : never]: Styles[P];
-};
+type MouseHandlers = PickStartsWith<BaseProps, 'on'>;
 
 export type Title = {
 	title: string;
@@ -20,7 +19,7 @@ export type Title = {
 	color?: BoxProps['backgroundColor'];
 	backgroundColor?: BoxProps['backgroundColor'];
 	style?: 'strike-through' | 'tab-deep' | 'tab-shallow';
-} & StylesHandlers;
+} & MouseHandlers;
 
 type MutableBoxStyle = {-readonly [P in keyof BoxStyle]: BoxStyle[P]};
 
@@ -241,7 +240,7 @@ function getPosition(
 	dxe: number,
 	displaceHeight: number,
 	hasPadding: boolean,
-): MouseTypes.Position {
+): CornerPositions {
 	if (displaceHeight) {
 		sy += displaceHeight - 1;
 	}

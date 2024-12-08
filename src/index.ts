@@ -2,6 +2,8 @@ export type {RenderOptions, Instance} from './render.js';
 export {default as render} from './render.js';
 export type {Props as TextProps} from './components/Text.js';
 export {default as Text} from './components/Text.js';
+export type {Props as BoxProps} from './components/Box.js';
+export {default as Box} from './components/Box.js';
 export type {Props as AppProps} from './components/AppContext.js';
 export type {Props as StdinProps} from './components/StdinContext.js';
 export type {Props as StdoutProps} from './components/StdoutContext.js';
@@ -24,92 +26,53 @@ export {default as useFocusManager} from './hooks/use-focus-manager.js';
 export {default as measureElement} from './measure-element.js';
 export type {DOMElement} from './dom.js';
 
-// Fork
-export {STDIN, ALT_STDIN, setMouse} from './Stdin/Stdin.js';
-export {ASCII as Key} from './Stdin/AsciiMap.js';
-export {default as useEvent} from './Stdin/KeyboardInputHooks/useEvent.js';
-export {useTypedEvent} from './Stdin/KeyboardInputHooks/useEvent.js';
-export {default as useKeymap} from './Stdin/KeyboardInputHooks/useKeymap.js';
+/***** AFTER FORK *****/
 
-// Add 'backgroundColor' property to Box component
-export type {Props as BoxProps} from './components/Box.js';
-export type {BoxStyles} from './styles.js';
-export {default as Box} from './components/Box.js';
-// export type {Props as BoxProps} from './BoxBgColor/Box.js';
-// export {Box} from './BoxBgColor/Box.js';
+// Types
+export {type Color} from './utility/types.js';
+export {type StylesConfig as Styles} from './utility/types.js';
+export {type KeyMap} from './stdin/Keyboard.js';
+export {type KeyInputUnion as KeyInput} from './utility/types.js';
+export {type ItemGenerator} from './window/Window.js';
+export {type CornerPositions} from './stdin/ElementPosition.js';
+export {type Handler as MouseEventHandler} from './stdin/Mouse.js';
+export {type MouseEvent} from './stdin/Mouse.js';
+export {type Commands} from './cli/types.js';
+export {type NodeMap} from './nodeMap/NavController.js';
+export {type ModalData} from './modal/useModal.js';
 
-export type {KeyMap, Binding} from './Stdin/Keyboard.js';
-
-// Window
-export {useWindow} from './Window/useWindow.js';
-export {Window} from './Window/Window.js';
-export type {ItemGenerator} from './Window/Window.js';
-// prettier-ignore
-export {useListItem, useIsFocus, usePage, useNode} from './FocusContext/FocusContext.js';
-
-// List
-export {useList} from './Window/List/useList.js';
-export {List} from './Window/List/List.js';
-
-// Pages
-export {usePages} from './Window/Pages/usePages.js';
-export {Pages} from './Window/Pages/Pages.js';
-
-// Lines
-export {VerticalLine, HorizontalLine} from './Lines/Line.js';
-
-// Navigator
-export {useNodeMap} from './NodeMap/useNodeMap.js';
-export type {NodeMap} from './NodeMap/NavController.js';
-export {Node} from './NodeMap/Node.js';
-
-// Modal
-export {Modal} from './Modal/Modal.js';
-export {useModal, useHideModal} from './Modal/useModal.js';
-export {type ModalData} from './Modal/useModal.js';
-
-// Logger
-export {default as logger, Logger} from './Logger/Logger.js';
-
-// Viewport
-export {Viewport} from './Viewport/Viewport.js';
-
-// Underline/Overline
-export {Underline, Overline} from './Lines/BorderedLines/BorderedLines.js';
-
-// TitleBox
-export {Title} from './Title/Title.js';
-
-// TextInput
-export {TextInput} from './TextInput/TextInput.js';
-export {useTextInput} from './TextInput/useTextInput.js';
-
-// STDIN Related
-import {STDIN} from './Stdin/Stdin.js';
-import {type T as MouseTypes} from './Stdin/Mouse.js';
-type MouseEventHandler = MouseTypes.Handler;
-export {type MouseEventHandler};
-const setMouseReporting = STDIN.setMouseReporting;
-const setCharRegisterSize = STDIN.Keyboard.setMaxChars;
-export {setMouseReporting, setCharRegisterSize};
-
-// Styles Types
-// Styles prop
-export {type StylesConfig as Styles} from './styles.js';
-export {type ClickEvent} from './styles.js';
-
-// tput
-export {preserveScreen} from './TPut/PreserveScreen.js';
-export {executeShellCommand} from './TPut/executeShellCommand.js';
-export {useShellCommand} from './TPut/ShellCommandContext.js';
-
-// CLI
-export {Cli, ModalCli} from './Cli/Cli.js';
-export {useCommand} from './Cli/useCommand.js';
-export {type Commands} from './Cli/types.js';
-
-// RegisterState
-export {RegisterState} from './RegisterState/RegisterState.js';
-
-// Util
+// Fns/objects
+export {ASCII as Key} from './stdin/AsciiMap.js';
+export {useEvent} from './stdin/hooks/useEvent.js';
+export {useTypedEvent} from './stdin/hooks/useEvent.js';
+export {useKeymap} from './stdin/hooks/useKeymap.js';
+export {useWindow} from './window/useWindow.js';
+export {useListItem} from './focus/FocusContext.js';
+export {useIsFocus} from './focus/FocusContext.js';
+export {usePage} from './focus/FocusContext.js';
+export {useNode} from './focus/FocusContext.js';
+export {useList} from './window/list/useList.js';
+export {List} from './window/list/List.js';
+export {usePages} from './window/pages/usePages.js';
+export {Pages} from './window/pages/Pages.js';
+export {useNodeMap} from './nodeMap/useNodeMap.js';
+export {Node} from './nodeMap/Node.js';
+export {Modal} from './modal/Modal.js';
+export {useModal, useHideModal} from './modal/useModal.js';
+export {logger} from './logger/Logger.js';
+export {Logger} from './logger/Logger.js';
+export {Viewport} from './viewport/Viewport.js';
+export {Underline, Overline} from './lines/BorderLines.js';
+export {TextInput} from './textInput/TextInput.js';
+export {useTextInput} from './textInput/useTextInput.js';
+export {setMouseReporting} from './stdin/Stdin.js';
+export {setCharRegisterSize} from './stdin/Stdin.js';
+export {preserveScreen} from './preserveScreen/PreserveScreen.js';
+export {executeShellCommand} from './preserveScreen/executeShellCommand.js';
+export {useShellCommand} from './preserveScreen/ShellCommandContext.js';
+export {Cli, ModalCli} from './cli/Cli.js';
+export {useCommand} from './cli/useCommand.js';
+export {RegisterState} from './registerState/RegisterState.js';
 export {useResponsiveDimensions} from './useResponsiveDimensions/useResponsiveDimensions.js';
+// deprecated titlebox
+export {Title} from './boxTitles/Title.js';

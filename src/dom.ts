@@ -1,6 +1,6 @@
 import Yoga, {type Node as YogaNode} from 'yoga-wasm-web/auto';
 import measureText from './measure-text.js';
-import {type Styles} from './styles.js';
+import {type BaseProps} from './baseProps.js';
 import wrapText from './wrap-text.js';
 import squashTextNodes from './squash-text-nodes.js';
 import {type OutputTransformer} from './render-node-to-output.js';
@@ -10,8 +10,8 @@ type InkNode = {
 	parentNode: DOMElement | undefined;
 	yogaNode?: YogaNode;
 	internal_static?: boolean;
-	// was just Styles
-	style: Styles & TextProps;
+	// was just BaseProps
+	style: BaseProps & TextProps;
 };
 
 export type TextName = '#text';
@@ -59,8 +59,8 @@ export type DOMNodeAttribute =
 	| string
 	| number
 	| Function
-	| Styles
-	| (Styles & TextProps);
+	| BaseProps
+	| (BaseProps & TextProps);
 
 export const createNode = (nodeName: ElementNames): DOMElement => {
 	const node: DOMElement = {
@@ -165,7 +165,7 @@ export const setAttribute = (
 	node.attributes[key] = value;
 };
 
-export const setStyle = (node: DOMNode, style: Styles): void => {
+export const setStyle = (node: DOMNode, style: BaseProps): void => {
 	node.style = style;
 };
 

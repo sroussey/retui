@@ -16,7 +16,7 @@ import {
 	type ElementNames,
 	type DOMElement,
 } from './dom.js';
-import applyStyles, {type Styles} from './styles.js';
+import applyBaseProps, {type BaseProps} from './baseProps.js';
 import {type OutputTransformer} from './render-node-to-output.js';
 
 // We need to conditionally perform devtools connection to avoid
@@ -92,7 +92,7 @@ type HostContext = {
 
 type UpdatePayload = {
 	props: Props | undefined;
-	style: Styles | undefined;
+	style: BaseProps | undefined;
 };
 
 export default createReconciler<
@@ -166,10 +166,10 @@ export default createReconciler<
 			}
 
 			if (key === 'style') {
-				setStyle(node, value as Styles);
+				setStyle(node, value as BaseProps);
 
 				if (node.yogaNode) {
-					applyStyles(node.yogaNode, value as Styles);
+					applyBaseProps(node.yogaNode, value as BaseProps);
 				}
 
 				continue;
@@ -255,8 +255,8 @@ export default createReconciler<
 		const props = diff(oldProps, newProps);
 
 		const style = diff(
-			oldProps['style'] as Styles,
-			newProps['style'] as Styles,
+			oldProps['style'] as BaseProps,
+			newProps['style'] as BaseProps,
 		);
 
 		if (!props && !style) {
@@ -269,7 +269,7 @@ export default createReconciler<
 		if (props) {
 			for (const [key, value] of Object.entries(props)) {
 				if (key === 'style') {
-					setStyle(node, value as Styles);
+					setStyle(node, value as BaseProps);
 					continue;
 				}
 
@@ -288,7 +288,7 @@ export default createReconciler<
 		}
 
 		if (style && node.yogaNode) {
-			applyStyles(node.yogaNode, style);
+			applyBaseProps(node.yogaNode, style);
 		}
 	},
 	commitTextUpdate(node, _oldText, newText) {

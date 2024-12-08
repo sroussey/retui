@@ -1,22 +1,17 @@
 import React, {
 	forwardRef,
 	useEffect,
-	useRef,
 	useState,
 	type PropsWithChildren,
 } from 'react';
 import {type Except} from 'type-fest';
-import {type Styles} from '../styles.js';
+import {type BaseProps} from '../baseProps.js';
 import {type DOMElement} from '../dom.js';
-import {usePageFocus} from '../FocusContext/FocusContext.js';
-import {T as MouseTypes} from '../Stdin/Mouse.js';
-import {STDIN} from '../Stdin/Stdin.js';
+import {usePageFocus} from '../focus/FocusContext.js';
+import {DefaultStdin} from '../stdin/Stdin.js';
 import {randomUUID} from 'crypto';
-import {logger} from '../index.js';
 
-export type ClickEvent = MouseTypes.Event;
-
-export type Props = Except<Styles, 'textWrap'>;
+export type Props = Except<BaseProps, 'textWrap'>;
 
 /**
  * `<Box>` is an essential Ink component to build your layout. It's like `<div style="display: flex">` in the browser.
@@ -79,7 +74,7 @@ const Box = forwardRef<DOMElement, PropsWithChildren<Props>>(
 
 		useEffect(() => {
 			return () => {
-				STDIN.Mouse.unsubscribeComponent(ID);
+				DefaultStdin.Mouse.unsubscribeComponent(ID);
 			};
 		}, []);
 

@@ -14,9 +14,8 @@ import * as dom from './dom.js';
 import logUpdate, {type LogUpdate} from './log-update.js';
 import instances from './instances.js';
 import App from './components/App.js';
-import {ALT_STDIN, STDIN} from './Stdin/Stdin.js';
-import PreserveScreen from './TPut/PreserveScreen.js';
-import {logger} from './index.js';
+import {AltStdin, DefaultStdin} from './stdin/Stdin.js';
+import PreserveScreen from './preserveScreen/PreserveScreen.js';
 
 const noop = () => {};
 
@@ -144,8 +143,8 @@ export default class Ink {
 	// Allows app to exit by clearing up excess listeners
 	private pauseStdin(): void {
 		setImmediate(() => {
-			STDIN.pause();
-			ALT_STDIN.pause();
+			DefaultStdin.pause();
+			AltStdin.pause();
 			process.stdin.removeAllListeners();
 			process.stdin.pause();
 			// process.exit for right now because I can't figure out what is
@@ -161,7 +160,7 @@ export default class Ink {
 
 		const {output, outputHeight, staticOutput} = render(this.rootNode);
 
-		if (ALT_STDIN.isListening()) {
+		if (AltStdin.isListening()) {
 			return;
 		}
 

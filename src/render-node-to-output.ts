@@ -8,10 +8,10 @@ import renderBorder from './render-border.js';
 import {type DOMElement} from './dom.js';
 import type Output from './output.js';
 import renderBackgroundColor from './render-background-color.js';
-import {Styles} from './styles.js';
-import {addMouseEventListeners} from './Stdin/AddMouseEventListeners.js';
-import {ALT_STDIN, STDIN} from './Stdin/Stdin.js';
-import {logger, TextProps} from './index.js';
+import {BaseProps} from './baseProps.js';
+import {addMouseEventListeners} from './stdin/AddMouseEventListeners.js';
+import {DefaultStdin} from './stdin/Stdin.js';
+import {TextProps} from './index.js';
 
 // If parent container is `<Box>`, text nodes will be treated as separate nodes in
 // the tree and will have their own coordinates in the layout.
@@ -44,7 +44,7 @@ const renderNodeToOutput = (
 		skipStaticElements: boolean;
 		isZIndexRoot?: boolean;
 		rootZIndex?: number;
-		parentStyles?: Styles;
+		parentStyles?: BaseProps;
 	},
 	zIndexes: {index: number; cb: () => void}[] = [],
 ) => {
@@ -68,7 +68,7 @@ const renderNodeToOutput = (
 	const y = offsetY + nextOffsetY;
 
 	const InternalStyles = node.attributes['internalStyles'] as
-		| (Styles & TextProps)
+		| (BaseProps & TextProps)
 		| undefined;
 
 	// Transformers are functions that transform final text output of each component
@@ -112,7 +112,7 @@ const renderNodeToOutput = (
 			node.style.inverse = internalInverse;
 		}
 
-		// Styles are applied in squashTextNodes
+		// BaseProps are applied in squashTextNodes
 		let text = squashTextNodes(node);
 
 		if (text.length > 0) {
@@ -251,7 +251,7 @@ const renderNodeToOutput = (
 		(node.nodeName === 'ink-box' && !hasZIndex)
 	) {
 		if (node.nodeName === 'ink-root') {
-			STDIN.Mouse.resetHandlers();
+			DefaultStdin.Mouse.resetHandlers();
 		}
 
 		for (const childNode of node.childNodes) {
