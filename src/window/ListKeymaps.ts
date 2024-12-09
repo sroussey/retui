@@ -1,4 +1,5 @@
 import {KeyMap} from '../stdin/Keyboard.js';
+import InternalEvents from '../utility/InternalEvents.js';
 
 export const CMDS = {
 	increment: 'USE_KEYBINDS_INCREMENT',
@@ -34,21 +35,22 @@ const vimHorizontal = {
 	[CMDS.decrement]: [{input: 'h'}, {key: 'left'}],
 } satisfies KeyMap;
 
-function prefixId(id: string, obj: KeyMap): KeyMap {
+function prefixId(ID: string, obj: KeyMap): KeyMap {
 	const next: {[key: string]: any} = {};
 	for (const [key, value] of Object.entries(obj)) {
-		next[`${key}-${id}`] = value;
+		next[InternalEvents.getInternalEvent(key, ID)] = value;
 	}
 	return next as KeyMap;
 }
 
+// prettier-ignore
 export const LIST_CMDS = {
-	increment: (ID: string) => `${CMDS.increment}-${ID}`,
-	decrement: (ID: string) => `${CMDS.decrement}-${ID}`,
-	scrollUp: (ID: string) => `${CMDS.scrollUp}-${ID}`,
-	scrollDown: (ID: string) => `${CMDS.scrollDown}-${ID}`,
-	goToTop: (ID: string) => `${CMDS.goToTop}-${ID}`,
-	goToBottom: (ID: string) => `${CMDS.goToBottom}-${ID}`,
+	increment: (ID: string) => InternalEvents.getInternalEvent(CMDS.increment, ID),
+	decrement: (ID: string) => InternalEvents.getInternalEvent(CMDS.decrement, ID),
+	scrollUp: (ID: string) => InternalEvents.getInternalEvent(CMDS.scrollUp, ID),
+	scrollDown: (ID: string) => InternalEvents.getInternalEvent(CMDS.scrollDown, ID),
+	goToTop: (ID: string) => InternalEvents.getInternalEvent(CMDS.goToTop, ID),
+	goToBottom: (ID: string) => InternalEvents.getInternalEvent(CMDS.goToBottom, ID),
 } as const;
 
 export const ListKeymaps = {
