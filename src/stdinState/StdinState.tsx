@@ -5,20 +5,28 @@ import {DefaultStdin} from '../stdin/Stdin.js';
 import Keyboard from '../stdin/Keyboard.js';
 import InternalEvents from '../utility/InternalEvents.js';
 import {deepEqual} from '../utility/deepEqual.js';
-import {TextProps} from '../index.js';
-import {BaseProps} from '../baseProps.js';
 import {Except} from 'type-fest';
+import {StylesConfig} from '../utility/types.js';
 
 type State = {event: string; register: string};
 
-type TextStyles = Except<TextProps, 'wrap' | 'children'>;
+type TextStyles = Except<StylesConfig['Text'], 'wrap'>;
 
 type Props = {
+	showEvents?: boolean;
+	showChars?: boolean;
 	eventStyles?: TextStyles;
 	registerStyles?: TextStyles;
+	width?: number;
 };
 
-export function RegisterState(props: Props): React.ReactNode {
+export function StdinState({
+	eventStyles = {},
+	registerStyles = {},
+	showEvents = true,
+	showChars = true,
+	width = 20,
+}: Props): React.ReactNode {
 	const [state, setState] = useState<State>({
 		event: '',
 		register: '',
@@ -54,19 +62,19 @@ export function RegisterState(props: Props): React.ReactNode {
 		};
 	});
 
-	let styles: BaseProps = {};
+	let styles: TextStyles = {};
 	let text = '';
-	if (state.event) {
-		styles = props.eventStyles ?? {};
+	if (state.event && showEvents) {
+		styles = eventStyles;
 		text = state.event;
 	}
-	if (!state.event && state.register) {
-		styles = props.registerStyles ?? {};
+	if (!state.event && state.register && showChars) {
+		styles = registerStyles;
 		text = state.register;
 	}
 
 	return (
-		<Box width="100">
+		<Box width={width}>
 			<Text wrap="truncate-end" {...styles}>
 				{text ?? ' '}
 			</Text>

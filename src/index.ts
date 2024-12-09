@@ -69,9 +69,9 @@ export {setCharRegisterSize} from './stdin/Stdin.js';
 export {preserveScreen} from './preserveScreen/PreserveScreen.js';
 export {executeShellCommand} from './preserveScreen/executeShellCommand.js';
 export {useShellCommand} from './preserveScreen/ShellCommandContext.js';
-export {Cli, ModalCli} from './cli/Cli.js';
+export {Cli, CliModal} from './cli/Cli.js';
 export {useCommand} from './cli/useCommand.js';
-export {RegisterState} from './registerState/RegisterState.js';
+export {StdinState} from './stdinState/StdinState.js';
 export {useResponsiveDimensions} from './useResponsiveDimensions/useResponsiveDimensions.js';
 // deprecated titlebox
 export {Title} from './boxTitles/Title.js';

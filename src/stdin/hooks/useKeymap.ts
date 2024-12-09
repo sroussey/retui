@@ -8,24 +8,19 @@ import ModalStack from '../../modal/ModalStack.js';
 import {useModalLevel} from '../../modal/ModalContext.js';
 import {KeyMap} from '../Keyboard.js';
 
-export namespace T {
-	export type Return<U extends KeyMap = any> = {
-		register: string;
-		event: string;
-		useEvent: typeof useEvent<U>;
-	};
+export type Return<U extends KeyMap = any> = {
+	useEvent: typeof useEvent<U>;
+};
 
-	export type Opts = {
-		trackState?: boolean;
-		priority: 'never' | 'always' | 'default' | 'override' | 'textinput';
-	};
-}
+export type Opts = {
+	priority: 'never' | 'always' | 'default' | 'override' | 'textinput';
+};
 
 export function useKeymap<U extends KeyMap = any>(
 	keymap: U,
-	opts?: T.Opts,
-): T.Return<U> {
-	opts = {trackState: false, priority: 'default', ...opts};
+	opts?: Opts,
+): Return<U> {
+	opts = {priority: 'default', ...opts};
 
 	const [ID] = useState(randomUUID());
 	const priority = opts.priority ?? 'default';
@@ -35,11 +30,6 @@ export function useKeymap<U extends KeyMap = any>(
 	if (priority !== 'never') {
 		DefaultStdin.listen();
 	}
-
-	const [data, setData] = useState<Omit<T.Return, 'useEvent'>>({
-		register: '',
-		event: '',
-	});
 
 	useEffect(() => {
 		ProcessGate.updatePriority(ID, priority);
@@ -59,17 +49,9 @@ export function useKeymap<U extends KeyMap = any>(
 				DefaultStdin.Keyboard.processConfig(keymap);
 			}
 
-			const register = DefaultStdin.Keyboard.getChars();
 			const event = DefaultStdin.Keyboard.getEvent();
 
 			DefaultStdin.Keyboard.emitEvent(event, stdin);
-			if (opts?.trackState) {
-				if (canProcess) {
-					setData({register, event: event || ''});
-				} else if (data.register !== '' || data.event !== '') {
-					setData({register: '', event: ''});
-				}
-			}
 		};
 
 		DefaultStdin.Keyboard.addComponentListener(handleStdin);
@@ -82,7 +64,6 @@ export function useKeymap<U extends KeyMap = any>(
 	const {useEvent} = useTypedEvent<U>();
 
 	return {
-		...data,
 		useEvent,
 	};
 }

@@ -1,5 +1,5 @@
 import assert from 'assert';
-import {T as UseKeymapTypes} from './hooks/useKeymap.js';
+import {Opts as UseKeymapOpts} from './hooks/useKeymap.js';
 
 /*
  * Sets priority levels for useKeymaps hooks so that control can be passed
@@ -13,7 +13,7 @@ import {T as UseKeymapTypes} from './hooks/useKeymap.js';
  * 'textinput' overrides everything including 'always'
  * */
 
-type Priority = UseKeymapTypes.Opts['priority'];
+type Priority = UseKeymapOpts['priority'];
 type Gate = {[HOOK_ID: string]: Priority};
 
 const gate: Gate = {};

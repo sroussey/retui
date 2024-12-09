@@ -82,7 +82,7 @@ export function Cli(props: Props): React.ReactNode {
 }
 
 type CliModalProps = Props & Except<ModalProps, 'modal'>;
-export function ModalCli(props: CliModalProps): React.ReactNode {
+export function CliModal(props: CliModalProps): React.ReactNode {
 	const {
 		commands,
 		displayUnknownCommand,
@@ -150,17 +150,19 @@ function CliView({
 }: CliViewProps): React.ReactNode {
 	const prefixValue = insert || persistPrefix ? prefix : '';
 
-	const NEXT_CLI_HISTORY = 'NEXT_CLI_HISTORY';
-	const PREV_CLI_HISTORY = 'PREV_CLI_HISTORY';
-	const HIDE_CLI_MODAL = 'HIDE_CLI_MODAL';
+	const NEXT_CLI_HISTORY = '$$NEXT_CLI_HISTORY';
+	const PREV_CLI_HISTORY = '$$PREV_CLI_HISTORY';
+	const HIDE_CLI_MODAL = '$$HIDE_CLI_MODAL';
 
-	const keymap: KeyMap = {
-		[NEXT_CLI_HISTORY]: {key: 'up'},
-		[PREV_CLI_HISTORY]: {key: 'down'},
-	};
+	const keymap: KeyMap = {};
 
-	if (hideModal) {
-		keymap[HIDE_CLI_MODAL] = {key: 'esc'};
+	if (insert) {
+		keymap[NEXT_CLI_HISTORY] = {key: 'up'};
+		keymap[PREV_CLI_HISTORY] = {key: 'down'};
+
+		if (hideModal) {
+			keymap[HIDE_CLI_MODAL] = {key: 'esc'};
+		}
 	}
 
 	const {useEvent} = useKeymap(keymap);
