@@ -1,7 +1,6 @@
 import {KeyMap, KeyInput} from '../index.js';
-import {Key} from '../stdin/Keyboard.js';
 import InternalEvents from '../utility/InternalEvents.js';
-import {KeyInputSingle} from '../utility/types.js';
+import {Key, KeyInputSingle} from '../utility/types.js';
 
 type InsertEvents =
 	| 'return'

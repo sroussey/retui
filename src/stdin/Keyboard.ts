@@ -2,6 +2,7 @@ import EventEmitter = require('events');
 import {SpecialKeys, newSpecialKeyRegister} from './AsciiMap.js';
 import {EVENT} from './Stdin.js';
 import {ASCII} from './AsciiMap.js';
+import {Key} from '../utility/types.js';
 
 export type KeyInput = {
 	key?: Key;
@@ -14,24 +15,24 @@ export type KeyMap = {
 	[eventName: string]: KeyInput | KeyInput[];
 };
 
-export type Key = keyof SpecialKeys;
+export type KeyboardState = {
+	chars: string;
+	specialKeys: SpecialKeys;
+	ctrlKeys: string;
+	listening: boolean;
+	event: string | null;
+	eventSet: boolean;
+	eventEmitted: boolean;
+	registerSize: number;
+	isTextInput: boolean;
+};
 
 export default class Keyboard {
 	private Emitter: EventEmitter;
 	private StateEmitter: EventEmitter;
-	private state: {
-		chars: string;
-		specialKeys: SpecialKeys;
-		ctrlKeys: string;
-		listening: boolean;
-		event: string | null;
-		eventSet: boolean;
-		eventEmitted: boolean;
-		registerSize: number;
-		isTextInput: boolean;
-	};
-
+	private state: KeyboardState;
 	public static StateUpdate = 'STATE_UPDATE';
+	public static InputRecieved = 'INPUT_RECIEVED';
 
 	constructor() {
 		this.Emitter = new EventEmitter();
@@ -49,6 +50,14 @@ export default class Keyboard {
 			isTextInput: false,
 		};
 	}
+
+	public getEmitter = (): EventEmitter => {
+		return this.Emitter;
+	};
+
+	public getStateEmitter = (): EventEmitter => {
+		return this.StateEmitter;
+	};
 
 	public getChars = (): string => {
 		return this.state.chars;
@@ -184,10 +193,12 @@ export default class Keyboard {
 
 		// Notify useKeymap hooks
 		this.Emitter.emit(EVENT.keypress, char);
+		this.Emitter.emit(Keyboard.InputRecieved, char, this.state);
 	};
 
 	public pause = (): void => {
 		this.Emitter.removeAllListeners(EVENT.keypress);
+		this.Emitter.removeAllListeners(Keyboard.InputRecieved);
 		this.Emitter.removeAllListeners(Keyboard.StateUpdate);
 	};
 

@@ -16,7 +16,7 @@ export type {Props as NewlineProps} from './components/Newline.js';
 export {default as Newline} from './components/Newline.js';
 export {default as Spacer} from './components/Spacer.js';
 // export type {Key} from './hooks/use-input.js';
-export {default as useInput} from './hooks/use-input.js';
+// export {default as useInput} from './hooks/use-input.js';
 export {default as useApp} from './hooks/use-app.js';
 export {default as useStdin} from './hooks/use-stdin.js';
 export {default as useStdout} from './hooks/use-stdout.js';
@@ -73,5 +73,6 @@ export {Cli, CliModal} from './cli/Cli.js';
 export {useCommand} from './cli/useCommand.js';
 export {StdinState} from './stdinState/StdinState.js';
 export {useResponsiveDimensions} from './useResponsiveDimensions/useResponsiveDimensions.js';
+export {useInput} from './useInput/useInput.js';
 // deprecated titlebox
 export {Title} from './boxTitles/Title.js';
