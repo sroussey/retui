@@ -11,6 +11,7 @@ import {
 	useKeymap,
 	useModal,
 	Box,
+	useInput,
 } from '../index.js';
 import {Except} from 'type-fest';
 import {Props as ModalProps} from '../modal/Modal.js';
@@ -141,6 +142,7 @@ function CliView({
 	persistPrefix = false,
 	onChange,
 	setValue,
+	value,
 	insert,
 	textStyles,
 	hideModal,
@@ -177,6 +179,15 @@ function CliView({
 		const prevHistory = CliHistory.prev();
 		setValue('INPUT', prevHistory, true);
 	});
+
+	useInput(
+		() => {
+			if (!insert && value) {
+				setValue('INPUT', '');
+			}
+		},
+		{isActive: !!(!insert && value)},
+	);
 
 	return (
 		<Box width="100" flexDirection="row" backgroundColor="inherit">

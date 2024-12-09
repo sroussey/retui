@@ -25,12 +25,12 @@ export function useInput(cb: UseInputCb, opts: Opts = {isActive: true}): void {
 	opts = {isActive: true, inputType: 'char', ...opts};
 
 	const wrapper = (char: string, state: KeyboardState) => {
+		if (!opts.isActive) return;
+
 		const input =
 			state.ctrlKeys || (opts.inputType === 'char' ? char : state.chars) || '';
 
-		if (opts.isActive) {
-			cb(input, state.specialKeys);
-		}
+		cb(input, state.specialKeys);
 	};
 
 	useListener(Emitter, Keyboard.InputRecieved, wrapper);
