@@ -53,7 +53,7 @@ export function Unit({
 	isShallowFocus,
 	isDeepFocus,
 	isHidden,
-	maintainState,
+	// maintainState,
 	node,
 }: Props) {
 	useMultipleEventsWithoutContextChecks(listeners);
@@ -64,28 +64,20 @@ export function Unit({
 	const flexShrink = stretch ? 1 : 0;
 	const flexGrow = stretch ? 1 : 0;
 
-	// excess keys effecting state loss?
-	const getUnit = () => {
-		return (
-			<>
-				{isHidden && maintainState ? (
-					<Box height={0} width={0} overflow="hidden" key={node.key}>
-						{node}
-					</Box>
-				) : !isHidden ? (
-					<Box
-						flexShrink={flexShrink}
-						flexGrow={flexGrow}
-						height={dimension}
-						width={dimension}
-						key={node.key}
-					>
-						{node}
-					</Box>
-				) : null}
-			</>
-		);
-	};
+	const display = isHidden ? 'none' : 'flex';
+
+	const unit = (
+		<Box
+			display={display}
+			flexShrink={flexShrink}
+			flexGrow={flexGrow}
+			height={dimension}
+			width={dimension}
+			key={node.key}
+		>
+			{node}
+		</Box>
+	);
 
 	if (type === 'PAGES') {
 		return (
@@ -93,7 +85,7 @@ export function Unit({
 				value={{isFocus: isDeepFocus, isShallowFocus, index, control}}
 				key={node.key}
 			>
-				{getUnit()}
+				{unit}
 			</PageContext.Provider>
 		);
 	}
@@ -111,7 +103,7 @@ export function Unit({
 				}}
 				key={node.key}
 			>
-				{getUnit()}
+				{unit}
 			</ListItemContext.Provider>
 		);
 	}
@@ -135,7 +127,10 @@ function useMultipleEventsWithoutContextChecks(nextListeners: Listener[]) {
 
 		return () => {
 			oldListeners.current.forEach(listener => {
-				DefaultStdin.Keyboard.removeEventListener(listener.event, listener.handler);
+				DefaultStdin.Keyboard.removeEventListener(
+					listener.event,
+					listener.handler,
+				);
 			});
 		};
 	});

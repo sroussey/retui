@@ -86,7 +86,7 @@ export function ModalCli(props: CliModalProps): React.ReactNode {
 	const {
 		commands,
 		displayUnknownCommand,
-		enterKeymap = [{input: ':'}, {key: 'return'}],
+		enterKeymap = [{input: ':'}],
 		exitKeymap = [{key: 'return'}, {key: 'esc'}],
 		prefix,
 		inputStyles,
