@@ -8,18 +8,12 @@ import {BaseProps} from '../baseProps.js';
 import assert from 'assert';
 import {addTitleEventListeners} from '../stdin/AddTitleEventListeners.js';
 import {CornerPositions} from '../index.js';
-import {PickStartsWith} from '../utility/types.js';
+import {PickStartsWith, StylesConfig} from '../utility/types.js';
+import {styleText} from '../components/Text.js';
 
 type MouseHandlers = PickStartsWith<BaseProps, 'on'>;
 
-export type Title = {
-	title: string;
-	inverse?: boolean;
-	dim?: boolean;
-	color?: BoxProps['backgroundColor'];
-	backgroundColor?: BoxProps['backgroundColor'];
-	style?: 'strike-through' | 'tab-deep' | 'tab-shallow';
-} & MouseHandlers;
+export type Title = StylesConfig['Title'] & MouseHandlers;
 
 type MutableBoxStyle = {-readonly [P in keyof BoxStyle]: BoxStyle[P]};
 
@@ -126,11 +120,11 @@ export function renderTitle(
 	leftGapSlice = leftGapSlice.map(_ => fillChar);
 	rightGapSlice = rightGapSlice.map(_ => fillChar);
 
-	const leftTitle = colorizeSlice(leftSlice.join(''), left);
+	const leftTitle = styleTitle(leftSlice.join(''), left);
 	const leftGap = leftGapSlice.join('');
-	const centerTitle = colorizeSlice(centerSlice.join(''), center);
+	const centerTitle = styleTitle(centerSlice.join(''), center);
 	const rightGap = rightGapSlice.join('');
-	const rightTitle = colorizeSlice(rightSlice.join(''), right);
+	const rightTitle = styleTitle(rightSlice.join(''), right);
 
 	const leftCorner = hasLeftBorder
 		? position === 'top'
@@ -215,22 +209,9 @@ export function renderTitle(
 	}
 }
 
-function colorizeSlice(text: string, title?: Title): string {
+function styleTitle(text: string, title?: Title) {
 	if (!title) return text;
-
-	if (title.color) {
-		text = colorize(text, title.color, 'foreground');
-	}
-	if (title.backgroundColor) {
-		text = colorize(text, title.backgroundColor, 'background');
-	}
-	if (title.inverse) {
-		text = chalk.inverse(text);
-	}
-	if (title.dim) {
-		text = chalk.dim(text);
-	}
-	return text;
+	return styleText(title)(text);
 }
 
 function getPosition(
@@ -334,182 +315,182 @@ function getBox(node: DOMNode, colorized?: boolean): MutableBoxStyle {
 	return box;
 }
 
-function getOneSideColorizedBox(
-	node: DOMNode,
-	side: 'top' | 'bottom' | 'left' | 'right',
-): MutableBoxStyle | undefined {
-	const _box =
-		typeof node.style.borderStyle === 'string'
-			? cliBoxes[node.style.borderStyle as keyof Boxes]
-			: node.style.borderStyle;
-
-	const box = typeof _box !== 'undefined' ? {..._box} : undefined;
-	if (box === undefined) return undefined;
-
-	const borderColor = node.style.borderColor;
-	const borderTopColor = node.style.borderTopColor ?? borderColor;
-	const borderBottomColor = node.style.borderBottomColor ?? borderColor;
-	const borderLeftColor = node.style.borderLeftColor ?? borderColor;
-	const borderRightColor = node.style.borderRightColor ?? borderColor;
-
-	const borderDim = node.style.borderDimColor ?? false;
-	const borderTopDim = node.style.borderTopDimColor ?? borderDim;
-	const borderBottomDim = node.style.borderBottomDimColor ?? borderDim;
-	const borderLeftDim = node.style.borderLeftDimColor ?? borderDim;
-	const borderRightDim = node.style.borderRightDimColor ?? borderDim;
-
-	const colorizeFactory = (color?: string) => (text: string) => {
-		if (!color) return;
-		return colorize(text, color, 'foreground');
-	};
-	const dimFactory = (dim: boolean) => (text: string) => {
-		if (!dim) return;
-		chalk.dim(text);
-	};
-
-	const controller = {
-		color: (_: string) => {},
-		dim: (_: string) => {},
-	};
-
-	if (side === 'top') {
-		controller.color = colorizeFactory(borderTopColor);
-		controller.dim = dimFactory(borderTopDim);
-	}
-	if (side === 'bottom') {
-		controller.color = colorizeFactory(borderBottomColor);
-		controller.dim = dimFactory(borderBottomDim);
-	}
-	if (side === 'left') {
-		controller.color = colorizeFactory(borderLeftColor);
-		controller.dim = dimFactory(borderLeftDim);
-	}
-	if (side === 'right') {
-		controller.color = colorizeFactory(borderRightColor);
-		controller.dim = dimFactory(borderRightDim);
-	}
-
-	for (const key in box) {
-		(box as any)[key] = controller.color((box as any)[key]);
-		(box as any)[key] = controller.dim((box as any)[key]);
-	}
-
-	return box;
-}
+// function getOneSideColorizedBox(
+// 	node: DOMNode,
+// 	side: 'top' | 'bottom' | 'left' | 'right',
+// ): MutableBoxStyle | undefined {
+// 	const _box =
+// 		typeof node.style.borderStyle === 'string'
+// 			? cliBoxes[node.style.borderStyle as keyof Boxes]
+// 			: node.style.borderStyle;
+//
+// 	const box = typeof _box !== 'undefined' ? {..._box} : undefined;
+// 	if (box === undefined) return undefined;
+//
+// 	const borderColor = node.style.borderColor;
+// 	const borderTopColor = node.style.borderTopColor ?? borderColor;
+// 	const borderBottomColor = node.style.borderBottomColor ?? borderColor;
+// 	const borderLeftColor = node.style.borderLeftColor ?? borderColor;
+// 	const borderRightColor = node.style.borderRightColor ?? borderColor;
+//
+// 	const borderDim = node.style.borderDimColor ?? false;
+// 	const borderTopDim = node.style.borderTopDimColor ?? borderDim;
+// 	const borderBottomDim = node.style.borderBottomDimColor ?? borderDim;
+// 	const borderLeftDim = node.style.borderLeftDimColor ?? borderDim;
+// 	const borderRightDim = node.style.borderRightDimColor ?? borderDim;
+//
+// 	const colorizeFactory = (color?: string) => (text: string) => {
+// 		if (!color) return;
+// 		return colorize(text, color, 'foreground');
+// 	};
+// 	const dimFactory = (dim: boolean) => (text: string) => {
+// 		if (!dim) return;
+// 		chalk.dim(text);
+// 	};
+//
+// 	const controller = {
+// 		color: (_: string) => {},
+// 		dim: (_: string) => {},
+// 	};
+//
+// 	if (side === 'top') {
+// 		controller.color = colorizeFactory(borderTopColor);
+// 		controller.dim = dimFactory(borderTopDim);
+// 	}
+// 	if (side === 'bottom') {
+// 		controller.color = colorizeFactory(borderBottomColor);
+// 		controller.dim = dimFactory(borderBottomDim);
+// 	}
+// 	if (side === 'left') {
+// 		controller.color = colorizeFactory(borderLeftColor);
+// 		controller.dim = dimFactory(borderLeftDim);
+// 	}
+// 	if (side === 'right') {
+// 		controller.color = colorizeFactory(borderRightColor);
+// 		controller.dim = dimFactory(borderRightDim);
+// 	}
+//
+// 	for (const key in box) {
+// 		(box as any)[key] = controller.color((box as any)[key]);
+// 		(box as any)[key] = controller.dim((box as any)[key]);
+// 	}
+//
+// 	return box;
+// }
 
 // box param is not optional, non-bordered tabs will not be drawn here
 // x, y must be dynamic.  This fn does not x or y offsets
-function drawTab(
-	x: number,
-	y: number,
-	title: Title,
-	location: 'top' | 'bottom',
-	output: Output,
-	box: MutableBoxStyle,
-): void {
-	const LENGTH = title.title.length;
-	let text = title.title;
-	if (title.color) {
-		text = colorize(text, title.color, 'foreground');
-	}
-	if (title.backgroundColor) {
-		text = colorize(text, title.backgroundColor, 'background');
-	}
-	if (title.inverse) {
-		text = chalk.inverse(text);
-	}
+// function drawTab(
+// 	x: number,
+// 	y: number,
+// 	title: Title,
+// 	location: 'top' | 'bottom',
+// 	output: Output,
+// 	box: MutableBoxStyle,
+// ): void {
+// 	const LENGTH = title.title.length;
+// 	let text = title.title;
+// 	if (title.color) {
+// 		text = colorize(text, title.color, 'foreground');
+// 	}
+// 	if (title.backgroundColor) {
+// 		text = colorize(text, title.backgroundColor, 'background');
+// 	}
+// 	if (title.inverse) {
+// 		text = chalk.inverse(text);
+// 	}
+//
+// 	if (location === 'top' && title.style === 'tab-shallow') {
+// 		let line1 = '';
+// 		line1 += box.bottomRight;
+// 		line1 += text;
+// 		line1 += box.bottomLeft;
+// 		output.write(x, y, line1, {transformers: []});
+//
+// 		let line2 = '';
+// 		line2 += box.topLeft;
+// 		line2 += box.top.repeat(LENGTH);
+// 		line2 += box.topRight;
+// 		output.write(x - 1, y, line2, {transformers: []});
+// 	}
+//
+// 	if (location === 'top' && title.style === 'tab-deep') {
+// 		let line1 = '';
+// 		line1 += box.bottomRight;
+// 		line1 += ' '.repeat(LENGTH);
+// 		line1 += box.bottomLeft;
+// 		output.write(x, y, line1, {transformers: []});
+//
+// 		let line2 = '';
+// 		line2 += box.left;
+// 		line2 += text;
+// 		line2 += box.right;
+// 		output.write(x - 1, y, line2, {transformers: []});
+//
+// 		let line3 = '';
+// 		line3 += box.topLeft;
+// 		line3 += box.top.repeat(LENGTH);
+// 		line3 += box.topRight;
+// 		output.write(x - 2, y, line3, {transformers: []});
+// 	}
+//
+// 	/***** NEED TO ADJUST Y OFFSET FOR BOTTOM!!! *****/
+// 	if (location === 'bottom' && title.style === 'tab-shallow') {
+// 		let line1 = '';
+// 		line1 += box.topRight;
+// 		line1 += text;
+// 		line1 += box.topLeft;
+// 		output.write(x, y, line1, {transformers: []});
+//
+// 		let line2 = '';
+// 		line2 += box.bottomLeft;
+// 		line2 += box.bottom.repeat(LENGTH);
+// 		line2 += box.bottomRight;
+// 		output.write(x + 1, y, line2, {transformers: []});
+// 	}
+//
+// 	if (location === 'bottom' && title.style === 'tab-deep') {
+// 		let line1 = '';
+// 		line1 += box.topRight;
+// 		line1 += ' '.repeat(LENGTH);
+// 		line1 += box.topLeft;
+// 		output.write(x, y, line1, {transformers: []});
+//
+// 		let line2 = '';
+// 		line2 += box.left;
+// 		line2 += text;
+// 		line2 += box.right;
+// 		output.write(x + 1, y, line2, {transformers: []});
+//
+// 		let line3 = '';
+// 		line3 += box.bottomLeft;
+// 		line3 += box.bottom.repeat(LENGTH);
+// 		line3 += box.bottomRight;
+// 		output.write(x + 2, y, line3, {transformers: []});
+// 	}
+// }
 
-	if (location === 'top' && title.style === 'tab-shallow') {
-		let line1 = '';
-		line1 += box.bottomRight;
-		line1 += text;
-		line1 += box.bottomLeft;
-		output.write(x, y, line1, {transformers: []});
-
-		let line2 = '';
-		line2 += box.topLeft;
-		line2 += box.top.repeat(LENGTH);
-		line2 += box.topRight;
-		output.write(x - 1, y, line2, {transformers: []});
-	}
-
-	if (location === 'top' && title.style === 'tab-deep') {
-		let line1 = '';
-		line1 += box.bottomRight;
-		line1 += ' '.repeat(LENGTH);
-		line1 += box.bottomLeft;
-		output.write(x, y, line1, {transformers: []});
-
-		let line2 = '';
-		line2 += box.left;
-		line2 += text;
-		line2 += box.right;
-		output.write(x - 1, y, line2, {transformers: []});
-
-		let line3 = '';
-		line3 += box.topLeft;
-		line3 += box.top.repeat(LENGTH);
-		line3 += box.topRight;
-		output.write(x - 2, y, line3, {transformers: []});
-	}
-
-	/***** NEED TO ADJUST Y OFFSET FOR BOTTOM!!! *****/
-	if (location === 'bottom' && title.style === 'tab-shallow') {
-		let line1 = '';
-		line1 += box.topRight;
-		line1 += text;
-		line1 += box.topLeft;
-		output.write(x, y, line1, {transformers: []});
-
-		let line2 = '';
-		line2 += box.bottomLeft;
-		line2 += box.bottom.repeat(LENGTH);
-		line2 += box.bottomRight;
-		output.write(x + 1, y, line2, {transformers: []});
-	}
-
-	if (location === 'bottom' && title.style === 'tab-deep') {
-		let line1 = '';
-		line1 += box.topRight;
-		line1 += ' '.repeat(LENGTH);
-		line1 += box.topLeft;
-		output.write(x, y, line1, {transformers: []});
-
-		let line2 = '';
-		line2 += box.left;
-		line2 += text;
-		line2 += box.right;
-		output.write(x + 1, y, line2, {transformers: []});
-
-		let line3 = '';
-		line3 += box.bottomLeft;
-		line3 += box.bottom.repeat(LENGTH);
-		line3 += box.bottomRight;
-		output.write(x + 2, y, line3, {transformers: []});
-	}
-}
-
-function getDim(
-	text: string,
-	style: Title['style'],
-	hasBorder: boolean,
-): [number, number] {
-	if (style === 'strike-through') return [text.length, 0];
-
-	let dx = text.length;
-	let dy = 0;
-	if (hasBorder) {
-		dx += 2;
-		dy += 1;
-	}
-
-	if (style === 'tab-shallow') {
-		dy += 1;
-	}
-
-	if (style === 'tab-deep') {
-		dy += 2;
-	}
-
-	return [dx, dy];
-}
+// function getDim(
+// 	text: string,
+// 	style: Title['style'],
+// 	hasBorder: boolean,
+// ): [number, number] {
+// 	if (style === 'strike-through') return [text.length, 0];
+//
+// 	let dx = text.length;
+// 	let dy = 0;
+// 	if (hasBorder) {
+// 		dx += 2;
+// 		dy += 1;
+// 	}
+//
+// 	if (style === 'tab-shallow') {
+// 		dy += 1;
+// 	}
+//
+// 	if (style === 'tab-deep') {
+// 		dy += 2;
+// 	}
+//
+// 	return [dx, dy];
+// }
