@@ -3,14 +3,14 @@ import Text from '../components/Text.js';
 import {ViewState} from './types.js';
 import {WindowProps} from './Window.js';
 import Box from '../components/Box.js';
+import {StylesConfig} from '../utility/types.js';
 
 type Props = {
 	viewState: ViewState;
 	height: number;
 	width: number;
-	color: string;
 	direction: WindowProps['direction'];
-	style: WindowProps['scrollBarStyle'];
+	scrollbar: StylesConfig['Scrollbar'];
 };
 
 function _ScrollBar({
@@ -18,8 +18,7 @@ function _ScrollBar({
 	direction,
 	height,
 	width,
-	color,
-	style,
+	scrollbar,
 }: Props): React.ReactNode {
 	const {_start, _end, _winSize, _itemsLen} = viewState;
 
@@ -37,13 +36,18 @@ function _ScrollBar({
 		let startHeight = Math.max(0, Math.floor(preStart));
 		let endHeight = Math.max(0, Math.floor(preEnd));
 
-		const barUnicode = style === 'bold' ? ' ' : '┃';
+		const barUnicode = scrollbar.style === 'bold' ? ' ' : '┃';
 
 		const barComponent: React.ReactElement[] = new Array(barHeight)
 			.fill(0)
 			.map((_, idx) => {
 				return (
-					<Text key={idx} color={color} inverse={style === 'bold'}>
+					<Text
+						key={idx}
+						color={scrollbar.color}
+						dimColor={scrollbar.dimColor}
+						inverse={scrollbar.style === 'bold'}
+					>
 						{barUnicode}
 					</Text>
 				);
@@ -74,10 +78,15 @@ function _ScrollBar({
 		let startWidth = Math.max(0, Math.floor(preStart));
 		let endWidth = Math.max(0, Math.floor(preEnd));
 
-		const barUnicode = style === 'bold' ? ' ' : '▬';
+		const barUnicode = scrollbar.style === 'bold' ? ' ' : '▬';
 
 		const barComponent = (
-			<Text color={color} inverse={style === 'bold'} bold>
+			<Text
+				color={scrollbar.color}
+				dimColor={scrollbar.dimColor}
+				inverse={scrollbar.style === 'bold'}
+				bold
+			>
 				{barUnicode.repeat(barWidth)}
 			</Text>
 		);

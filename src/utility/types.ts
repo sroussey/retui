@@ -43,6 +43,11 @@ export type StylesConfig = {
 	Title: DropReadonly<Except<TextProps, 'styles' | 'children' | 'wrap'>> & {
 		title: string;
 	};
+	Scrollbar: {
+		hide?: boolean;
+		align?: 'start' | 'end';
+		style?: 'single' | 'bold';
+	} & DropReadonly<Pick<TextProps, 'color' | 'dimColor'>>;
 };
 
 export type Key = keyof SpecialKeys;

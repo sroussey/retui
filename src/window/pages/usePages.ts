@@ -1,4 +1,4 @@
-import {useWindow} from '../../index.js';
+import {useWindow} from '../useWindow.js';
 import {UseWindowOpts} from '../types.js';
 
 type UseWindowReturn = ReturnType<typeof useWindow<number>>;

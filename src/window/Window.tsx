@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {UseEventTypes} from '../stdin/hooks/useEvent.js';
 import {useResponsiveDimensions} from '../useResponsiveDimensions/useResponsiveDimensions.js';
-import {BoxProps, KeyMap} from '../index.js';
+import {KeyMap} from '../index.js';
 import {isRenderable} from './isRenderable.js';
 import {Listener, ViewState} from './types.js';
 import {useIsFocus, WindowContext} from '../focus/FocusContext.js';
@@ -10,6 +10,7 @@ import ScrollBar from './ScrollBar.js';
 import Box from '../components/Box.js';
 import {useModalLevel} from '../modal/ModalContext.js';
 import ModalStack from '../modal/ModalStack.js';
+import {StylesConfig} from '../utility/types.js';
 
 export interface ItemGenerator<T extends KeyMap = any> {
 	(isFocus: boolean, onUnit: UseEventTypes.UseEvent<T>): React.ReactNode;
@@ -19,12 +20,9 @@ export type WindowProps = {
 	type: 'PAGES' | 'ITEMS';
 	viewState: ViewState;
 	generators?: ItemGenerator[];
-	scrollBar?: boolean;
-	scrollColor?: BoxProps['backgroundColor'];
-	scrollBarAlign?: 'start' | 'end';
-	scrollBarStyle?: 'single' | 'bold';
 	wordList?: string[];
 	direction?: 'column' | 'row';
+	scrollbar?: StylesConfig['Scrollbar'];
 
 	/**
 	 * There are two scenarios where this needs to be explicitly set.
@@ -55,10 +53,7 @@ export function Window({
 	generators,
 	viewState,
 	wordList,
-	scrollBar = true,
-	scrollColor = 'white',
-	scrollBarAlign = 'end',
-	scrollBarStyle = 'single',
+	scrollbar,
 	direction = 'column',
 	unitSize = 1,
 }: WindowProps): React.ReactNode {
@@ -67,6 +62,13 @@ export function Window({
 		// On the other hand, if there are no children and no generators we can't
 		// throw an error because empty lists need to be accomodated
 	}
+
+	scrollbar = scrollbar ?? {hide: true};
+	scrollbar.hide = scrollbar.hide ?? false;
+	scrollbar.style = scrollbar.style ?? 'single';
+	scrollbar.align = scrollbar.align ?? 'end';
+	scrollbar.color = scrollbar.color ?? 'white';
+	scrollbar.dimColor = scrollbar.dimColor ?? false;
 
 	const THIS_WINDOW_FOCUS = useIsFocus();
 	const THIS_WINDOW_LEVEL = useModalLevel();
@@ -118,7 +120,7 @@ export function Window({
 	}
 
 	const dimensions = useResponsiveDimensions({
-		shouldUpdate: viewState._fitWindow || scrollBar,
+		shouldUpdate: viewState._fitWindow || scrollbar.hide === false,
 	});
 
 	useEffect(() => {
@@ -140,14 +142,17 @@ export function Window({
 				viewState={viewState}
 				height={dimensions.height ?? 0}
 				width={dimensions.width ?? 0}
-				color={scrollColor}
 				direction={direction}
-				style={scrollBarStyle}
+				scrollbar={scrollbar}
 			/>
 		);
 	};
-	const scrollBarStart = getScrollBar(scrollBar && scrollBarAlign === 'start');
-	const scrollBarEnd = getScrollBar(scrollBar && scrollBarAlign === 'end');
+	const scrollBarStart = getScrollBar(
+		scrollbar.hide === false && scrollbar.align === 'start',
+	);
+	const scrollBarEnd = getScrollBar(
+		scrollbar.hide === false && scrollbar.align === 'end',
+	);
 
 	// Wordlist placeholder
 	wordList && viewState._winSize > 0;

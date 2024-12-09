@@ -22,7 +22,7 @@ export function Pages(props: Props): React.ReactNode {
 	const windowProps = {
 		...props,
 		type: 'PAGES',
-		scrollBar: false,
+		scrollbar: {hide: true},
 		viewState: props.pageView,
 	} satisfies WindowProps;
 

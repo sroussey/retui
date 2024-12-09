@@ -46,7 +46,6 @@ export {ASCII as Key} from './stdin/AsciiMap.js';
 export {useEvent} from './stdin/hooks/useEvent.js';
 export {useTypedEvent} from './stdin/hooks/useEvent.js';
 export {useKeymap} from './stdin/hooks/useKeymap.js';
-export {useWindow} from './window/useWindow.js';
 export {useListItem} from './focus/FocusContext.js';
 export {useIsFocus} from './focus/FocusContext.js';
 export {usePage} from './focus/FocusContext.js';
