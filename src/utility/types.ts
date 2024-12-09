@@ -46,7 +46,8 @@ export type StylesConfig = {
 	Scrollbar: {
 		hide?: boolean;
 		align?: 'start' | 'end';
-		style?: 'single' | 'bold';
+		style?: 'single' | 'bold' | {char: string};
+		position?: 'edge' | 'within';
 	} & DropReadonly<Pick<TextProps, 'color' | 'dimColor'>>;
 };
 

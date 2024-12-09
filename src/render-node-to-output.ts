@@ -13,6 +13,7 @@ import {addMouseEventListeners} from './stdin/AddMouseEventListeners.js';
 import {DefaultStdin} from './stdin/Stdin.js';
 import {TextProps} from './index.js';
 import {MutableBaseProps} from './utility/types.js';
+import {renderWindowToOutput} from './window/renderWindowToOutput.js';
 
 // If parent container is `<Box>`, text nodes will be treated as separate nodes in
 // the tree and will have their own coordinates in the layout.
@@ -46,6 +47,7 @@ const renderNodeToOutput = (
 		isZIndexRoot?: boolean;
 		rootZIndex?: number;
 		parentStyles?: MutableBaseProps;
+		skipRenderChildren?: boolean;
 	},
 	zIndexes: {index: number; cb: () => void}[] = [],
 ) => {
@@ -232,34 +234,43 @@ const renderNodeToOutput = (
 			output.clip({x1, x2, y1, y2});
 			clipped = true;
 		}
+	} else if (node.nodeName === 'ink-window') {
+		const shouldRenderChildren = renderWindowToOutput(x, y, node, output);
+		if (!shouldRenderChildren) {
+			options.skipRenderChildren = true;
+		}
 	}
 
 	if (
 		node.nodeName === 'ink-root' ||
+		node.nodeName === 'ink-window' ||
 		(node.nodeName === 'ink-box' && !hasZIndex)
 	) {
 		if (node.nodeName === 'ink-root') {
 			DefaultStdin.Mouse.resetHandlers();
 		}
 
+		const shouldRender = !options.skipRenderChildren;
+
 		for (const childNode of node.childNodes) {
-			renderNodeToOutput(
-				childNode as DOMElement,
-				output,
-				{
-					offsetX: x,
-					offsetY: y,
-					transformers: newTransformers,
-					skipStaticElements,
-					parentStyles: {
-						backgroundColor: node.style.backgroundColor,
-						borderStyle: node.style.borderStyle,
-						borderColor: node.style.borderColor,
+			shouldRender &&
+				renderNodeToOutput(
+					childNode as DOMElement,
+					output,
+					{
+						offsetX: x,
+						offsetY: y,
+						transformers: newTransformers,
+						skipStaticElements,
+						parentStyles: {
+							backgroundColor: node.style.backgroundColor,
+							borderStyle: node.style.borderStyle,
+							borderColor: node.style.borderColor,
+						},
+						rootZIndex: options.rootZIndex,
 					},
-					rootZIndex: options.rootZIndex,
-				},
-				zIndexes,
-			);
+					zIndexes,
+				);
 		}
 
 		if (clipped) {

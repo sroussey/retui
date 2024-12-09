@@ -6,13 +6,19 @@ import squashTextNodes from './squash-text-nodes.js';
 import {type OutputTransformer} from './render-node-to-output.js';
 import {TextProps} from './index.js';
 import {MutableBaseProps, MutableTextProps} from './utility/types.js';
+import {
+	IntrinsicWindowAttributes,
+	IntrinsicWindowBaseProps,
+} from './window/Window.js';
 
 type InkNode = {
 	parentNode: DOMElement | undefined;
 	yogaNode?: YogaNode;
 	internal_static?: boolean;
 	// was just BaseProps
-	style: MutableBaseProps & MutableTextProps;
+	style: MutableBaseProps &
+		MutableTextProps &
+		Partial<IntrinsicWindowBaseProps>;
 };
 
 export type TextName = '#text';
@@ -20,7 +26,8 @@ export type ElementNames =
 	| 'ink-root'
 	| 'ink-box'
 	| 'ink-text'
-	| 'ink-virtual-text';
+	| 'ink-virtual-text'
+	| 'ink-window';
 
 export type NodeNames = ElementNames | TextName;
 
@@ -61,7 +68,8 @@ export type DOMNodeAttribute =
 	| number
 	| Function
 	| BaseProps
-	| (BaseProps & TextProps);
+	| (BaseProps & TextProps)
+	| IntrinsicWindowAttributes['viewState'];
 
 export const createNode = (nodeName: ElementNames): DOMElement => {
 	const node: DOMElement = {

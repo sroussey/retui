@@ -47,7 +47,6 @@ export type ViewState = Readonly<{
 	_control: UseWindowControl;
 	_items: any;
 	_setItems: SetState<any>;
-	_fitWindow: boolean;
 }>;
 
 export type SetState<T> = Dispatch<SetStateAction<T>>;

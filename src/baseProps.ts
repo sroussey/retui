@@ -5,6 +5,7 @@ import {Title} from './renderTitles/renderTitleToOutput.js';
 import {Color} from './utility/types.js';
 import {MouseEventHandler} from './index.js';
 import {StylesConfig} from './utility/types.js';
+import {IntrinsicWindowBaseProps} from './window/Window.js';
 
 export type BaseProps = {
 	readonly textWrap?:
@@ -600,7 +601,10 @@ const applyDisplayStyles = (node: YogaNode, style: BaseProps): void => {
 // that tab extended a total of 2 rows above a normal single border, you would
 // need to set the borderWidth to 3 when executing the setBorder function with
 // Yoga.EDGE_TOP as an argument.
-const applyBorderStyles = (node: YogaNode, style: BaseProps): void => {
+const applyBorderStyles = (
+	node: YogaNode,
+	style: BaseProps & Partial<IntrinsicWindowBaseProps>,
+): void => {
 	if ('borderStyle' in style) {
 		const borderWidth = style.borderStyle ? 1 : 0;
 
@@ -639,6 +643,25 @@ const applyBorderStyles = (node: YogaNode, style: BaseProps): void => {
 			node.setBorder(Yoga.EDGE_RIGHT, borderWidth);
 		}
 	}
+
+	const scrollbar = style.scrollbar;
+	if (!scrollbar || scrollbar.hide || scrollbar.position !== 'within') {
+		return;
+	}
+	if (style.flexDirection === 'column') {
+		if (scrollbar.align === 'start') {
+			node.setBorder(Yoga.EDGE_LEFT, 1);
+		} else {
+			node.setBorder(Yoga.EDGE_RIGHT, 1);
+		}
+	}
+	if (style.flexDirection === 'row') {
+		if (scrollbar.align === 'start') {
+			node.setBorder(Yoga.EDGE_TOP, 1);
+		} else {
+			node.setBorder(Yoga.EDGE_BOTTOM, 1);
+		}
+	}
 };
 
 const applyGapStyles = (node: YogaNode, style: BaseProps): void => {
@@ -655,7 +678,10 @@ const applyGapStyles = (node: YogaNode, style: BaseProps): void => {
 	}
 };
 
-const applyBaseProps = (node: YogaNode, style: BaseProps = {}): void => {
+const applyBaseProps = (
+	node: YogaNode,
+	style: BaseProps & Partial<IntrinsicWindowBaseProps> = {},
+): void => {
 	applyPositionStyles(node, style);
 	applyMarginStyles(node, style);
 	applyPaddingStyles(node, style);

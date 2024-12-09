@@ -15,6 +15,7 @@ export type Props = Omit<
 	| 'scrollBarAlign'
 	| 'scrollColor'
 	| 'generators'
+	| 'unitSize'
 > &
 	PageSpecificProps;
 

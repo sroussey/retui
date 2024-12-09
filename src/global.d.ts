@@ -3,6 +3,11 @@ import {type Except} from 'type-fest';
 import {type DOMElement} from './dom.js';
 import {type BaseProps} from './baseProps.js';
 import {TextProps} from './index.ts';
+import {ViewState} from './window/types.ts';
+import {
+	IntrinsicWindowAttributes,
+	IntrinsicWindowBaseProps,
+} from './window/Window.tsx';
 
 declare global {
 	namespace JSX {
@@ -10,6 +15,7 @@ declare global {
 		interface IntrinsicElements {
 			'ink-box': Ink.Box;
 			'ink-text': Ink.Text;
+			'ink-window': Ink.Window;
 		}
 	}
 }
@@ -38,4 +44,6 @@ declare namespace Ink {
 		internal_transform?: (children: string, index: number) => string;
 		internalStyles?: TextProps;
 	};
+
+	type Window = IntrinsicWindowAttributes;
 }

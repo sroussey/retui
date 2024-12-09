@@ -17,22 +17,11 @@ export function useWindow<T extends any[] | number>(
 ): UseWindowReturn<T> {
 	// Set default opts
 	opts = {
-		windowSize: undefined,
 		centerScroll: false,
 		navigation: 'vi-vertical',
 		fallthrough: false,
 		...opts,
 	};
-
-	let fitWindow = false;
-	if (opts.windowSize === 'fit') {
-		fitWindow = true;
-		// Initially set to zero.  Once the parent component that contains the window
-		// has read its dimensions, it will adjust the window size accordingly
-		opts.windowSize = 0;
-	}
-
-	opts.windowSize;
 
 	const [items, setItems] = useState<any[]>(
 		typeof itemsOrLength === 'number'
@@ -42,6 +31,10 @@ export function useWindow<T extends any[] | number>(
 
 	const nextLength =
 		typeof itemsOrLength === 'number' ? itemsOrLength : items.length;
+
+	if (opts.windowSize === 'fit') {
+		opts.windowSize = nextLength;
+	}
 
 	const {scrollState, scrollAPI, LENGTH, WINDOW_SIZE} = useScroll(nextLength, {
 		centerScroll: opts.centerScroll,
@@ -100,7 +93,6 @@ export function useWindow<T extends any[] | number>(
 		_control: control,
 		_items: items,
 		_setItems: setItems,
-		_fitWindow: fitWindow,
 	});
 
 	const itemsReturn =
