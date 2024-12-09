@@ -39,8 +39,10 @@ export type Styles = OmitStartsWith<BaseProps, 'on'>;
 // For the styles prop
 export type StylesConfig = {
 	Box: DropReadonly<Except<Styles, 'styles' | 'textWrap'>>;
-	Text: DropReadonly<Except<TextProps, 'children'>>;
-	Title: DropReadonly<Except<TextProps, 'children' | 'wrap'>>;
+	Text: DropReadonly<Except<TextProps, 'styles' | 'children'>>;
+	Title: DropReadonly<Except<TextProps, 'styles' | 'children' | 'wrap'>> & {
+		title: string;
+	};
 };
 
 export type Key = keyof SpecialKeys;

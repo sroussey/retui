@@ -2,7 +2,12 @@ import React, {type ReactNode} from 'react';
 import chalk from 'chalk';
 import colorize from '../colorize.js';
 import {type BaseProps} from '../baseProps.js';
-import {type Color} from '../utility/types.js';
+import {
+	DropReadonly,
+	MutableBaseProps,
+	StylesConfig,
+	type Color,
+} from '../utility/types.js';
 
 export type Props = {
 	/**
@@ -53,6 +58,8 @@ export type Props = {
 	readonly wrap?: BaseProps['textWrap'];
 
 	readonly children?: ReactNode;
+
+	readonly styles?: StylesConfig['Text']; // isn't omitting styles
 };
 
 export const styleText =
@@ -106,13 +113,14 @@ export default function Text({
 	strikethrough = false,
 	inverse = false,
 	wrap = 'wrap',
+	styles,
 	children,
 }: Props) {
 	if (children === undefined || children === null) {
 		return null;
 	}
 
-	const style: BaseProps & Props = {
+	const textStyles: MutableBaseProps & DropReadonly<Props> = {
 		flexGrow: 0,
 		flexShrink: 1,
 		flexDirection: 'row',
@@ -128,13 +136,23 @@ export default function Text({
 		wrap,
 	};
 
-	const transform = styleText(style);
+	if (styles) {
+		for (const key in styles) {
+			// @ts-ignore
+			if (styles[key] && !textStyles[key]) {
+				// @ts-ignore
+				textStyles[key] = styles[key];
+			}
+		}
+	}
+
+	const transform = styleText(textStyles);
 
 	return (
 		<ink-text
-			style={style}
+			style={textStyles}
 			internal_transform={transform}
-			internalStyles={{...style}}
+			internalStyles={{...textStyles}}
 		>
 			{children}
 		</ink-text>

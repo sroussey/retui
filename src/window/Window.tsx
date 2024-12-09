@@ -25,7 +25,6 @@ export type WindowProps = {
 	scrollBarStyle?: 'single' | 'bold';
 	wordList?: string[];
 	direction?: 'column' | 'row';
-	maintainState?: boolean;
 
 	/**
 	 * There are two scenarios where this needs to be explicitly set.
@@ -61,7 +60,6 @@ export function Window({
 	scrollBarAlign = 'end',
 	scrollBarStyle = 'single',
 	direction = 'column',
-	maintainState = true,
 	unitSize = 1,
 }: WindowProps): React.ReactNode {
 	if (React.Children.count(children) && generators !== undefined) {
@@ -107,7 +105,6 @@ export function Window({
 				node={node as React.ReactElement}
 				listeners={listeners}
 				isHidden={isHidden}
-				maintainState={maintainState ?? true}
 				// context
 				isShallowFocus={isShallowFocus}
 				isDeepFocus={isDeepFocus}

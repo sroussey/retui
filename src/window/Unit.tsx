@@ -28,10 +28,6 @@ type Props = {
 	// Based on the ViewState, is the Unit visible within the viewing window?
 	isHidden: boolean;
 
-	// If the Unit is not visible, should the component be unmounted (lose its state)?
-	// Most of the time you would want this on
-	maintainState: boolean;
-
 	// Event listeners added if Units were rendered using the ItemGenerator method
 	listeners: Listener[];
 
@@ -53,7 +49,6 @@ export function Unit({
 	isShallowFocus,
 	isDeepFocus,
 	isHidden,
-	// maintainState,
 	node,
 }: Props) {
 	useMultipleEventsWithoutContextChecks(listeners);
