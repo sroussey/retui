@@ -53,11 +53,18 @@ export function Unit({
 }: Props) {
 	useMultipleEventsWithoutContextChecks(listeners);
 
-	const dimension = type === 'PAGES' || stretch ? '100' : undefined;
 	const display = isHidden ? 'none' : 'flex';
+	const dimension = type === 'PAGES' || stretch ? '100' : undefined;
+	const flexShrink = dimension ? 1 : 0;
 
 	const unit = (
-		<Box display={display} height={dimension} width={dimension} key={node.key}>
+		<Box
+			display={display}
+			height={dimension}
+			width={dimension}
+			flexShrink={flexShrink}
+			key={node.key}
+		>
 			{node}
 		</Box>
 	);

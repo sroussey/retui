@@ -47,7 +47,6 @@ const renderNodeToOutput = (
 		isZIndexRoot?: boolean;
 		rootZIndex?: number;
 		parentStyles?: MutableBaseProps;
-		skipRenderChildren?: boolean;
 	},
 	zIndexes: {index: number; cb: () => void}[] = [],
 ) => {
@@ -235,10 +234,7 @@ const renderNodeToOutput = (
 			clipped = true;
 		}
 	} else if (node.nodeName === 'ink-window') {
-		const shouldRenderChildren = renderWindowToOutput(x, y, node, output);
-		if (!shouldRenderChildren) {
-			options.skipRenderChildren = true;
-		}
+		renderWindowToOutput(x, y, node, output);
 	}
 
 	if (
@@ -250,27 +246,24 @@ const renderNodeToOutput = (
 			DefaultStdin.Mouse.resetHandlers();
 		}
 
-		const shouldRender = !options.skipRenderChildren;
-
 		for (const childNode of node.childNodes) {
-			shouldRender &&
-				renderNodeToOutput(
-					childNode as DOMElement,
-					output,
-					{
-						offsetX: x,
-						offsetY: y,
-						transformers: newTransformers,
-						skipStaticElements,
-						parentStyles: {
-							backgroundColor: node.style.backgroundColor,
-							borderStyle: node.style.borderStyle,
-							borderColor: node.style.borderColor,
-						},
-						rootZIndex: options.rootZIndex,
+			renderNodeToOutput(
+				childNode as DOMElement,
+				output,
+				{
+					offsetX: x,
+					offsetY: y,
+					transformers: newTransformers,
+					skipStaticElements,
+					parentStyles: {
+						backgroundColor: node.style.backgroundColor,
+						borderStyle: node.style.borderStyle,
+						borderColor: node.style.borderColor,
 					},
-					zIndexes,
-				);
+					rootZIndex: options.rootZIndex,
+				},
+				zIndexes,
+			);
 		}
 
 		if (clipped) {

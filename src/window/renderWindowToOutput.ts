@@ -11,7 +11,7 @@ export function renderWindowToOutput(
 	y: number,
 	node: DOMElement,
 	output: Output,
-): boolean {
+): void {
 	const viewState = node.attributes[WindowAttributes.viewState] as ViewState;
 	assert(viewState); // viewState is a required prop in Window components
 
@@ -44,32 +44,28 @@ export function renderWindowToOutput(
 		// There isn't enough room to render all units
 		if (maxCtrUnits < maxStateUnits) {
 			viewState._control.modifyWinSize(maxCtrUnits);
-			return false;
 		}
 		// There is room to render more units, but not excess
-		if (
+		else if (
 			maxCtrUnits > viewState._winSize &&
 			maxCtrUnits <= viewState._itemsLen
 		) {
 			viewState._control.modifyWinSize(maxCtrUnits);
-			return false;
 		}
 
 		// There is excess room to render more units
-		if (
+		else if (
 			maxCtrUnits > viewState._winSize &&
 			maxCtrUnits >= viewState._itemsLen
 		) {
 			// Don't want to update if viewState is already at itemsLen
 			if (viewState._winSize !== viewState._itemsLen) {
 				viewState._control.modifyWinSize(viewState._itemsLen);
-				return false;
 			}
 		}
 	}
 
 	renderScrollbar(x, y, node, output);
-	return true;
 }
 
 export function renderScrollbar(
