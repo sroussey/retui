@@ -61,7 +61,6 @@ export {useModal, useHideModal} from './modal/useModal.js';
 export {logger} from './logger/Logger.js';
 export {Logger} from './logger/Logger.js';
 export {Viewport} from './viewport/Viewport.js';
-export {Underline, Overline} from './lines/BorderLines.js';
 export {TextInput} from './textInput/TextInput.js';
 export {useTextInput} from './textInput/useTextInput.js';
 export {setMouseReporting} from './stdin/Stdin.js';
@@ -74,5 +73,6 @@ export {useCommand} from './cli/useCommand.js';
 export {StdinState} from './stdinState/StdinState.js';
 export {useResponsiveDimensions} from './useResponsiveDimensions/useResponsiveDimensions.js';
 export {useInput} from './useInput/useInput.js';
+export {VerticalLine, HorizontalLine} from './lines/Line.js';
 // deprecated titlebox
 export {Title} from './boxTitles/Title.js';

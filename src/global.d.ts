@@ -8,6 +8,7 @@ import {
 	IntrinsicWindowAttributes,
 	IntrinsicWindowBaseProps,
 } from './window/Window.tsx';
+import {IntrinsicLineProps} from './lines/Line.tsx';
 
 declare global {
 	namespace JSX {
@@ -16,6 +17,7 @@ declare global {
 			'ink-box': Ink.Box;
 			'ink-text': Ink.Text;
 			'ink-window': Ink.Window;
+			'ink-line': Ink.Line;
 		}
 	}
 }
@@ -46,4 +48,9 @@ declare namespace Ink {
 	};
 
 	type Window = IntrinsicWindowAttributes;
+
+	type Line = {
+		key?: Key;
+		style?: IntrinsicLineProps;
+	};
 }

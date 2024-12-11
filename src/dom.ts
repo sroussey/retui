@@ -10,6 +10,7 @@ import {
 	IntrinsicWindowAttributes,
 	IntrinsicWindowBaseProps,
 } from './window/Window.js';
+import {IntrinsicLineProps} from './lines/Line.js';
 
 type InkNode = {
 	parentNode: DOMElement | undefined;
@@ -18,7 +19,8 @@ type InkNode = {
 	// was just BaseProps
 	style: MutableBaseProps &
 		MutableTextProps &
-		Partial<IntrinsicWindowBaseProps>;
+		Partial<IntrinsicWindowBaseProps> &
+		Partial<IntrinsicLineProps>;
 };
 
 export type TextName = '#text';
@@ -27,7 +29,8 @@ export type ElementNames =
 	| 'ink-box'
 	| 'ink-text'
 	| 'ink-virtual-text'
-	| 'ink-window';
+	| 'ink-window'
+	| 'ink-line';
 
 export type NodeNames = ElementNames | TextName;
 

@@ -14,6 +14,7 @@ import {DefaultStdin} from './stdin/Stdin.js';
 import {TextProps} from './index.js';
 import {MutableBaseProps} from './utility/types.js';
 import {renderWindowToOutput} from './window/renderWindowToOutput.js';
+import {renderLineToOutput} from './lines/renderLineToOutput.js';
 
 // If parent container is `<Box>`, text nodes will be treated as separate nodes in
 // the tree and will have their own coordinates in the layout.
@@ -235,6 +236,8 @@ const renderNodeToOutput = (
 		}
 	} else if (node.nodeName === 'ink-window') {
 		renderWindowToOutput(x, y, node, output);
+	} else if (node.nodeName === 'ink-line') {
+		renderLineToOutput(x, y, node, output);
 	}
 
 	if (
