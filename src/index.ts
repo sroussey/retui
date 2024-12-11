@@ -74,5 +74,7 @@ export {StdinState} from './stdinState/StdinState.js';
 export {useResponsiveDimensions} from './useResponsiveDimensions/useResponsiveDimensions.js';
 export {useInput} from './useInput/useInput.js';
 export {VerticalLine, HorizontalLine} from './lines/Line.js';
+import InternalEvents from './utility/InternalEvents.js';
+export const InternalEventsPrefix = InternalEvents.Prefix;
 // deprecated titlebox
 export {Title} from './boxTitles/Title.js';
