@@ -6,18 +6,7 @@ type PageSpecificProps = {
 	pageView: PageView;
 };
 
-export type Props = Omit<
-	WindowProps,
-	| 'type'
-	| 'viewState'
-	| 'wordList'
-	| 'scrollBar'
-	| 'scrollBarAlign'
-	| 'scrollColor'
-	| 'generators'
-	| 'unitSize'
-> &
-	PageSpecificProps;
+export type Props = PageSpecificProps & React.PropsWithChildren;
 
 export function Pages(props: Props): React.ReactNode {
 	const windowProps = {

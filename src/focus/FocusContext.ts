@@ -1,10 +1,11 @@
 import {createContext, useContext} from 'react';
 import {NodesView} from '../nodeMap/useNodeMap.js';
 import {ViewState} from '../window/types.js';
+import {SetState} from '../utility/types.js';
 
-export type ListItemContext<T extends any[] = any> = {
+export type ListItemContext<T extends any[] | readonly any[] = any> = {
 	items: T;
-	setItems: (items: T) => void;
+	setItems: SetState<T>;
 	control: ViewState['_control'];
 	// Focus extends up the focus tree to the root node
 	isFocus: boolean;
@@ -72,7 +73,9 @@ export function useIsFocus(): boolean {
 // prettier-ignore
 const errMsg = (h: string, cmp: string) => `Attemping to use ${h} hook outside the context of a ${cmp} component.`;
 
-export function useListItem<T extends any[] = any>(): ListItemContext<T> & {
+export function useListItem<
+	T extends any[] | readonly any[] = any,
+>(): ListItemContext<T> & {
 	item: T[number];
 } {
 	const listItemContext = useContext(ListItemContext);

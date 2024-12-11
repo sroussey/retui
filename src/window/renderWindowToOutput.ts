@@ -1,5 +1,5 @@
 import assert from 'assert';
-import {DOMElement, logger, Logger} from '../index.js';
+import {DOMElement} from '../index.js';
 import Output from '../output.js';
 import {IntrinsicWindowBaseProps, WindowAttributes} from './Window.js';
 import {ViewState} from './types.js';
@@ -18,46 +18,53 @@ export function renderWindowToOutput(
 	const height = node.yogaNode!.getComputedHeight();
 	const width = node.yogaNode!.getComputedWidth();
 
-	// might need a variable passed to viewState that says if viewState was explicitly set
+	const explicitWindowSize = viewState._explicitWindowSize;
 
-	const unitsAreStretch = node.style.unitSize === 'stretch';
+	if (explicitWindowSize === undefined) {
+		// If the unitSize is 'stretch', still want to prune off excess
+		let unitSize =
+			typeof viewState._unitSize === 'number' ? viewState._unitSize : 1;
 
-	// If the unitSize is 'stretch', still want to prune off excess
-	const unitSize =
-		typeof node.style.unitSize === 'number' ? node.style.unitSize : 1;
+		if (node.style.gap) {
+			unitSize += node.style.gap;
+		}
 
-	// The maximum amount of units we can render based on the viewState.
-	const maxStateUnits = Math.min(viewState._winSize, viewState._itemsLen);
+		// The maximum amount of units we can render based on the viewState.
+		const maxStateUnits = Math.min(viewState._winSize, viewState._itemsLen);
 
-	// The maximum amount of units we can render based on the container.
-	let maxCtrUnits = viewState._winSize;
-	if (node.style.flexDirection === 'column') {
-		maxCtrUnits = Math.floor((height ?? 0) / unitSize);
-	}
-	if (node.style.flexDirection === 'row') {
-		maxCtrUnits = Math.floor((width ?? 0) / unitSize);
-	}
+		// The maximum amount of units we can render based on the container.
+		let maxCtrUnits = viewState._winSize;
+		if (node.style.flexDirection === 'column') {
+			maxCtrUnits = Math.floor((height ?? 0) / unitSize);
+		}
+		if (node.style.flexDirection === 'row') {
+			maxCtrUnits = Math.floor((width ?? 0) / unitSize);
+		}
 
-	logger.write(maxCtrUnits, {...viewState, _items: undefined});
+		// There isn't enough room to render all units
+		if (maxCtrUnits < maxStateUnits) {
+			viewState._control.modifyWinSize(maxCtrUnits);
+			return false;
+		}
+		// There is room to render more units, but not excess
+		if (
+			maxCtrUnits > viewState._winSize &&
+			maxCtrUnits <= viewState._itemsLen
+		) {
+			viewState._control.modifyWinSize(maxCtrUnits);
+			return false;
+		}
 
-	// There isn't enough room to render all units
-	if (maxCtrUnits < maxStateUnits) {
-		logger.write("isn't enough room, updating...");
-		viewState._control.modifyWinSize(maxCtrUnits);
-		return false;
-	}
-	// There is room to render more units, but not excess
-	if (maxCtrUnits > viewState._winSize && maxCtrUnits <= viewState._itemsLen) {
-		logger.write('have more room available, but not excess, updating...');
-		viewState._control.modifyWinSize(maxCtrUnits);
-		return false;
-	}
-
-	if (maxCtrUnits > viewState._winSize && maxCtrUnits >= viewState._itemsLen) {
-		// Don't want to update if viewState is already at itemsLen
-		if (viewState._winSize !== viewState._itemsLen) {
-			logger.write('have EXCESS more room available, updating...');
-			viewState._control.modifyWinSize(viewState._itemsLen);
+		// There is excess room to render more units
+		if (
+			maxCtrUnits > viewState._winSize &&
+			maxCtrUnits >= viewState._itemsLen
+		) {
+			// Don't want to update if viewState is already at itemsLen
+			if (viewState._winSize !== viewState._itemsLen) {
+				viewState._control.modifyWinSize(viewState._itemsLen);
+				return false;
+			}
 		}
 	}
 
@@ -86,38 +93,26 @@ export function renderScrollbar(
 	const height = node.yogaNode!.getComputedHeight();
 	const width = node.yogaNode!.getComputedWidth();
 
-	let scrollbarOutput = getUnstyledString(node, viewState, scrollbar);
+	let scrollbarOutput = getScrollbarString(node, viewState, scrollbar);
 
 	// Write scrollbar to output
 	let nx = x;
 	let ny = y;
 	if (node.style.flexDirection === 'column') {
-		if (scrollbar.align === 'start' && scrollbar.position === 'edge') {
-			--nx;
-		}
 		if (scrollbar.align === 'end') {
 			nx += width - 1;
-			if (scrollbar.position === 'edge') {
-				++nx;
-			}
 		}
 	}
 	if (node.style.flexDirection === 'row') {
-		if (scrollbar.align === 'start' && scrollbar.position === 'edge') {
-			--ny;
-		}
 		if (scrollbar.align === 'end') {
 			ny += height - 1;
-			if (scrollbar.position === 'edge') {
-				++ny;
-			}
 		}
 	}
 
 	output.write(nx, ny, scrollbarOutput, {transformers: []});
 }
 
-function getUnstyledString(
+function getScrollbarString(
 	node: DOMElement,
 	viewState: ViewState,
 	scrollbar: Exclude<IntrinsicWindowBaseProps['scrollbar'], undefined>,
@@ -163,7 +158,7 @@ function getUnstyledString(
 		const endLength = Math.max(0, Math.floor(preEnd));
 
 		const startStr = ' '.repeat(startLength);
-		const barStr = colorizeBar(colChar.repeat(barLength), scrollbar);
+		const barStr = colorizeBar(rowChar.repeat(barLength), scrollbar);
 		const endStr = ' '.repeat(endLength);
 
 		return startStr + barStr + endStr;

@@ -5,7 +5,17 @@ type ListSpecificProps = {
 	listView: WindowProps['viewState'];
 };
 
-type Props = Omit<WindowProps, 'type' | 'viewState'> & ListSpecificProps;
+type Props = ListSpecificProps &
+	React.PropsWithChildren &
+	Pick<
+		WindowProps,
+		| 'alignItems'
+		| 'justifyContent'
+		| 'flexDirection'
+		| 'gap'
+		// | 'wordList' TODO
+		| 'scrollbar'
+	>;
 
 export function List(props: Props): React.ReactNode {
 	const windowProps = {

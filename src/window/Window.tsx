@@ -9,27 +9,6 @@ import {useModalLevel} from '../modal/ModalContext.js';
 import ModalStack from '../modal/ModalStack.js';
 import {MutableBaseProps, StylesConfig} from '../utility/types.js';
 
-/**
- * There are two scenarios where unitSize needs to be explicitly set.
- *
- * 1. If the cross-sectional dimension given to each list item is not 1 and you
- * have set your windowSize to 'fit'.  Setting windowSize to 'fit' adjusts the
- * windowSize dynamically based on available space which means it needs the
- * cross-sectional dimension given to each list item to calculate this how many
- * units can be displayed.  For example, you have set your direction prop to
- * 'column' and your windowSize is set to 'fit'.  The windowSize will be adjusted
- * dynamically based on the available amount of rows within the List component.
- * If all of your list items have a height of 1, then you're all set.  However,
- * if you list items have a height of 3, unitSize needs to be set to 3 to avoid
- * overflow.
- *
- * 2. The cross-sectional dimension of your list items are dynamic.  For
- * example, a List with a windowSize of 3 and you want your list items that are
- * viewable within the window to stretch to fill available space.
- *
- * @default: 1
- * */
-
 export type IntrinsicWindowAttributes = {
 	key?: Key;
 	viewState?: ViewState;
@@ -40,7 +19,7 @@ export const WindowAttributes = {viewState: 'viewState'} as const;
 
 export type IntrinsicWindowBaseProps = Pick<
 	MutableBaseProps,
-	'flexDirection' | 'height' | 'width' | 'minHeight' | 'minWidth'
+	'flexDirection' | 'justifyContent' | 'alignItems' | 'gap' | 'height' | 'width'
 > & {
 	scrollbar?: StylesConfig['Scrollbar'];
 	unitSize?: number | 'stretch';
@@ -65,29 +44,24 @@ export type WindowProps = React.PropsWithChildren &
 export function Window({...props}: WindowProps): React.ReactNode {
 	if (React.Children.count(props.children) && props.generators !== undefined) {
 		throw new Error('Window cannot contain both children and generators prop');
-		// On the other hand, if there are no children and no generators we can't
+		// If there are no children and no generators we can't
 		// throw an error because empty lists need to be accomodated
 	}
 
-	props.scrollbar = props.scrollbar ?? {hide: true};
+	props.height = props.height ?? '100';
+	props.width = props.width ?? '100';
+	props.scrollbar = props.scrollbar ?? {hide: false};
 	props.scrollbar.hide = props.scrollbar.hide ?? false;
 	props.scrollbar.style = props.scrollbar.style ?? 'single';
 	props.scrollbar.align = props.scrollbar.align ?? 'end';
 	props.scrollbar.color = props.scrollbar.color ?? 'white';
 	props.scrollbar.dimColor = props.scrollbar.dimColor ?? false;
-	props.scrollbar.position = props.scrollbar.position ?? 'within';
-
 	props.flexDirection = props.flexDirection ?? 'column';
-	props.height = props.height ?? '100';
-	props.width = props.width ?? '100';
-	props.unitSize = props.unitSize ?? 1;
+	props.justifyContent = props.justifyContent ?? 'flex-start';
+	props.alignItems = props.alignItems ?? 'flex-start';
 
 	const THIS_WINDOW_FOCUS = useIsFocus();
 	const THIS_WINDOW_LEVEL = useModalLevel();
-
-	const generatedItems = props.generators
-		? props.generators.map(handleMap)
-		: React.Children.map(props.children, handleMap);
 
 	function handleMap(
 		item: ItemGenerator | React.ReactNode,
@@ -127,24 +101,18 @@ export function Window({...props}: WindowProps): React.ReactNode {
 				items={props.viewState._items}
 				setItems={props.viewState._setItems}
 				control={props.viewState._control}
-				stretch={props.unitSize === 'stretch'}
+				stretch={props.viewState._unitSize === 'stretch'}
 			/>
 		);
 	}
 
-	const style: IntrinsicWindowBaseProps = {
-		flexDirection: props.flexDirection,
-		height: props.height,
-		minHeight: props.minHeight,
-		width: props.width,
-		minWidth: props.minWidth,
-		scrollbar: props.scrollbar,
-		unitSize: props.unitSize,
-	};
+	const generatedItems = props.generators
+		? props.generators.map(handleMap)
+		: React.Children.map(props.children, handleMap);
 
 	return (
 		<WindowContext.Provider value={{isFocus: THIS_WINDOW_FOCUS}}>
-			<ink-window style={style} viewState={props.viewState}>
+			<ink-window style={{...props}} viewState={props.viewState}>
 				{generatedItems}
 			</ink-window>
 		</WindowContext.Provider>

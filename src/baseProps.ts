@@ -645,7 +645,7 @@ const applyBorderStyles = (
 	}
 
 	const scrollbar = style.scrollbar;
-	if (!scrollbar || scrollbar.hide || scrollbar.position !== 'within') {
+	if (!scrollbar || scrollbar.hide) {
 		return;
 	}
 	if (style.flexDirection === 'column') {

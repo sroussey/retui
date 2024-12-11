@@ -35,7 +35,7 @@ type Props = {
 	index: number;
 	items: any[];
 	control: ViewState['_control'];
-	setItems: (items: unknown[]) => void;
+	setItems: ViewState['_setItems'];
 };
 
 export function Unit({
@@ -44,32 +44,20 @@ export function Unit({
 	items,
 	setItems,
 	control,
-	stretch,
 	index,
 	isShallowFocus,
 	isDeepFocus,
+	stretch,
 	isHidden,
 	node,
 }: Props) {
 	useMultipleEventsWithoutContextChecks(listeners);
 
-	// Make sure that pages aren't accidently shrunk.  Could proably get rid of the
-	// wrapper around not hidden nodes and disregard this, but it works right now
-	const dimension = type === 'PAGES' ? '100' : undefined;
-	const flexShrink = stretch ? 1 : 0;
-	const flexGrow = stretch ? 1 : 0;
-
+	const dimension = type === 'PAGES' || stretch ? '100' : undefined;
 	const display = isHidden ? 'none' : 'flex';
 
 	const unit = (
-		<Box
-			display={display}
-			flexShrink={flexShrink}
-			flexGrow={flexGrow}
-			height={dimension}
-			width={dimension}
-			key={node.key}
-		>
+		<Box display={display} height={dimension} width={dimension} key={node.key}>
 			{node}
 		</Box>
 	);

@@ -1,20 +1,20 @@
 import {useWindow} from '../useWindow.js';
-import {UseWindowOpts} from '../types.js';
+import {Opts as UseWindowOpts} from '../useWindow.js';
+import {Return as UseWindowReturn} from '../useWindow.js';
 
-type UseWindowReturn = ReturnType<typeof useWindow<number>>;
 export type PageView = UseWindowReturn['viewState'] & {
 	_numPages: number;
 };
-type UsePagesReturn = {
+type Return = {
 	pageView: PageView;
 	control: UseWindowReturn['control'];
 };
-type UsePagesOpts = Pick<UseWindowOpts, 'fallthrough'>;
+type Opts = Pick<UseWindowOpts, 'fallthrough'>;
 
 export function usePages(
 	numPages: number,
-	opts: UsePagesOpts = {fallthrough: false},
-): UsePagesReturn {
+	opts: Opts = {fallthrough: false},
+): Return {
 	const windowOpts: UseWindowOpts = {
 		windowSize: 1,
 		centerScroll: false,

@@ -1,18 +1,35 @@
 import {produce} from 'immer';
 import assert from 'node:assert';
-import {ScrollAPIInit, ScrollAPIPublicFns} from './types.js';
+import {PrevBounds, State} from './useScroll.js';
+import {Opts as UseScrollOpts} from './useScroll.js';
 
-type State = ScrollAPIInit['state'];
-type SetState = ScrollAPIInit['setState'];
+export type Initializer = {
+	state: State;
+	setState: (next: State) => void;
+	LENGTH: number;
+	WINDOW_SIZE: number;
+	prevBounds?: PrevBounds;
+	opts: UseScrollOpts;
+};
+
+// Public functions used as utility functions in components
+export type ScrollAPIPublicFns = Omit<
+	{
+		[P in keyof ScrollAPI]: ScrollAPI[P] extends Function
+			? ScrollAPI[P]
+			: never;
+	},
+	'getAPI' | 'handle'
+>;
 
 export class ScrollAPI {
-	private readonly state: State;
-	private readonly setState: SetState;
-	private readonly LENGTH: ScrollAPIInit['LENGTH'];
-	private readonly WINDOW_SIZE: ScrollAPIInit['WINDOW_SIZE'];
-	private readonly centerScroll: boolean;
-	private readonly fallthrough: boolean;
-	private readonly prevBounds?: {start: number; end: number};
+	private readonly state: Initializer['state'];
+	private readonly setState: Initializer['setState'];
+	private readonly LENGTH: Initializer['LENGTH'];
+	private readonly WINDOW_SIZE: Initializer['WINDOW_SIZE'];
+	private readonly prevBounds?: Initializer['prevBounds'];
+	private readonly centerScroll: UseScrollOpts['centerScroll'];
+	private readonly fallthrough: UseScrollOpts['fallthrough'];
 
 	constructor({
 		state,
@@ -21,9 +38,9 @@ export class ScrollAPI {
 		WINDOW_SIZE,
 		opts,
 		prevBounds,
-	}: ScrollAPIInit) {
+	}: Initializer) {
 		this.state = state;
-		this.setState = (nextState: ScrollAPIInit['state']) => {
+		this.setState = (nextState: State) => {
 			try {
 				assert.deepStrictEqual(this.state, nextState);
 			} catch {
@@ -150,7 +167,7 @@ export class ScrollAPI {
 				--draft.start;
 				--draft.end;
 				trueWindowSize = this.getTrueWindowSize(draft.start, draft.end);
-				this.rangeCheck(draft, 'getNormalScrollChanges');
+				this.rangeCheck(draft, '1');
 			}
 
 			this.constrainWindow({draft, LENGTH});
@@ -161,7 +178,7 @@ export class ScrollAPI {
 			while (draft.idx >= draft.end && draft.end < LENGTH) {
 				++draft.end;
 				++draft.start;
-				this.rangeCheck(draft, 'getNormalScrollChanges');
+				this.rangeCheck(draft, '2');
 			}
 
 			//  next idx less than range (goToIndex)
@@ -170,14 +187,14 @@ export class ScrollAPI {
 			while (draft.idx < draft.start && draft.start >= 0) {
 				--draft.end;
 				--draft.start;
-				this.rangeCheck(draft, 'getNormalScrollChanges');
+				this.rangeCheck(draft, '3');
 			}
 
 			// next idx 'bumps' into end position, forcing new window
 			if (draft.idx === draft.end && draft.end < LENGTH) {
 				++draft.start;
 				++draft.end;
-				this.rangeCheck(draft, 'getNormalScrollChanges');
+				this.rangeCheck(draft, '4');
 				return;
 			}
 
@@ -185,7 +202,7 @@ export class ScrollAPI {
 			if (draft.idx === draft.start - 1 && draft.start > 0) {
 				--draft.start;
 				--draft.end;
-				this.rangeCheck(draft, 'getNormalScrollChanges');
+				this.rangeCheck(draft, '5');
 				return;
 			}
 		});
@@ -210,7 +227,7 @@ export class ScrollAPI {
 				--draft.start;
 				--draft.end;
 				trueWindowSize = this.getTrueWindowSize(draft.start, draft.end);
-				this.rangeCheck(draft, 'getCenterScrollChanges');
+				this.rangeCheck(draft, '1');
 			}
 
 			this.constrainWindow({draft, LENGTH});
@@ -222,13 +239,13 @@ export class ScrollAPI {
 			while (draft.idx >= draft.end && draft.end < LENGTH) {
 				++draft.end;
 				++draft.start;
-				this.rangeCheck(draft, 'getCenterScrollChanges');
+				this.rangeCheck(draft, '2');
 			}
 
 			while (draft.idx < draft.start && draft.start >= 0) {
 				--draft.end;
 				--draft.start;
-				this.rangeCheck(draft, 'getCenterScrollChanges');
+				this.rangeCheck(draft, '3');
 			}
 
 			// If possible, center idx in viewing window
@@ -303,6 +320,7 @@ export class ScrollAPI {
 			}
 
 			let target = nextSize === 0 ? 0 : nextSize - WINDOW_SIZE;
+
 			while (target) {
 				/* Increase window size
 				 * nextSize is greater than current size. */
@@ -365,6 +383,6 @@ export class ScrollAPI {
 			return;
 		}
 
-		throw new Error(`Out of range: ${msg}`);
+		throw new Error(`Out of range: ${msg}, ${JSON.stringify(draft)}`);
 	};
 }

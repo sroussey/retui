@@ -1,38 +1,63 @@
 import {randomUUID} from 'crypto';
 import {useEvent} from '../stdin/hooks/useEvent.js';
 import {ListKeymaps, LIST_CMDS} from './ListKeymaps.js';
-import {
-	UseWindowOpts,
-	UseWindowReturn,
-	UseWindowControl,
-	ViewState,
-} from './types.js';
+import {ViewState, WindowControl, PublicWindowControl} from './types.js';
 import {useScroll} from './useScroll.js';
 import {useState} from 'react';
 import {useKeymap} from '../stdin/hooks/useKeymap.js';
+import {Except} from 'type-fest';
+import {SetState} from '../utility/types.js';
 
-export function useWindow<T extends any[] | number>(
+export type Opts = {
+	windowSize?: number | 'fit';
+	unitSize?: number | 'stretch';
+	centerScroll?: boolean;
+	fallthrough?: boolean;
+	navigation?:
+		| 'none'
+		| 'vi-vertical'
+		| 'vi-horizontal'
+		| 'arrow-vertical'
+		| 'arrow-horizontal';
+};
+
+type ReturnObject<T> = {
+	viewState: ViewState;
+	control: Except<WindowControl, 'modifyWinSize'>;
+	items: T;
+	setItems: SetState<T>;
+};
+
+export type Return<T extends readonly any[] | any[] | number = any[]> =
+	T extends readonly any[]
+		? ReturnObject<T[number][]>
+		: T extends any[]
+			? ReturnObject<T>
+			: ReturnObject<null[]>;
+
+export function useWindow<T extends readonly any[] | any[] | number>(
 	itemsOrLength: T,
-	opts: UseWindowOpts = {},
-): UseWindowReturn<T> {
-	// Set default opts
-	opts = {
-		centerScroll: false,
-		navigation: 'vi-vertical',
-		fallthrough: false,
-		...opts,
-	};
+	opts: Opts = {},
+): Return<T> {
+	opts.centerScroll = opts.centerScroll ?? false;
+	opts.navigation = opts.navigation ?? 'vi-vertical';
+	opts.fallthrough = opts.fallthrough ?? false;
+	opts.windowSize = opts.windowSize ?? 'fit';
+	opts.unitSize = opts.unitSize ?? (opts.windowSize === 'fit' ? 1 : 'stretch');
 
-	const [items, setItems] = useState<any[]>(
+	const [items, setItems] = useState<readonly any[] | null[]>(
 		typeof itemsOrLength === 'number'
 			? new Array(itemsOrLength).fill(null)
 			: itemsOrLength,
 	);
 
-	const nextLength =
+	let nextLength =
 		typeof itemsOrLength === 'number' ? itemsOrLength : items.length;
+	let explicitWindowSize: number | undefined = undefined;
 
-	if (opts.windowSize === 'fit') {
+	if (typeof opts.windowSize === 'number') {
+		explicitWindowSize = opts.windowSize;
+	} else {
 		opts.windowSize = nextLength;
 	}
 
@@ -40,6 +65,7 @@ export function useWindow<T extends any[] | number>(
 		centerScroll: opts.centerScroll,
 		fallthrough: opts.fallthrough,
 		windowSize: opts.windowSize,
+		fixedWindowSize: explicitWindowSize,
 	});
 
 	const [ID] = useState(randomUUID());
@@ -79,31 +105,37 @@ export function useWindow<T extends any[] | number>(
 		scrollAPI.scrollUp();
 	});
 
-	const control: UseWindowControl = {
+	const control: PublicWindowControl = {
 		currentIndex: scrollState.idx,
-		...scrollAPI,
+		scrollUp: scrollAPI.scrollUp,
+		scrollDown: scrollAPI.scrollDown,
+		nextItem: scrollAPI.nextItem,
+		prevItem: scrollAPI.prevItem,
+		goToIndex: scrollAPI.goToIndex,
 	};
 
-	const viewState: ViewState = Object.freeze({
+	const viewStateControl: WindowControl = {
+		...scrollAPI,
+		currentIndex: scrollState.idx,
+	};
+
+	const viewState = Object.freeze<ViewState>({
 		_start: scrollState.start,
 		_end: scrollState.end,
 		_idx: scrollState.idx,
 		_winSize: WINDOW_SIZE,
 		_itemsLen: LENGTH,
-		_control: control,
+		_control: viewStateControl,
 		_items: items,
 		_setItems: setItems,
+		_explicitWindowSize: explicitWindowSize,
+		_unitSize: opts.unitSize,
 	});
-
-	const itemsReturn =
-		typeof itemsOrLength === 'number'
-			? new Array(itemsOrLength).fill(null)
-			: items;
 
 	return {
 		viewState,
 		control,
-		items: itemsReturn,
-		setItems,
-	} as UseWindowReturn<T>;
+		items: items as unknown,
+		setItems: setItems as unknown,
+	} as Return<T>;
 }

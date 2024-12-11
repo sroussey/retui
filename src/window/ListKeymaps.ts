@@ -30,7 +30,7 @@ const vimVertical = {
 } satisfies KeyMap;
 
 const vimHorizontal = {
-	...vimVertical,
+	// ...vimVertical,
 	[CMDS.increment]: [{input: 'l'}, {key: 'right'}, {key: 'tab'}],
 	[CMDS.decrement]: [{input: 'h'}, {key: 'left'}],
 } satisfies KeyMap;
