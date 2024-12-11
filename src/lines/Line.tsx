@@ -7,10 +7,7 @@ export type LineStyleOptions = Pick<
 	'color' | 'bold' | 'dimColor' | 'backgroundColor'
 >;
 
-export type IntrinsicLineProps = Pick<
-	BaseProps,
-	'height' | 'width' | 'minHeight' | 'minWidth'
-> & {
+export type IntrinsicLineProps = BaseProps & {
 	direction: 'horizontal' | 'vertical';
 	char?: string;
 };
@@ -20,6 +17,10 @@ export function Line({...props}: IntrinsicLineProps): React.ReactNode {
 	} else {
 		props.height = props.height ?? '100';
 	}
+
+	props.position = 'relative';
+	props.flexGrow = props.flexGrow ?? 0;
+	props.flexShrink = props.flexShrink ?? 1;
 
 	return <ink-line style={{...props}} />;
 }

@@ -19,7 +19,16 @@ export const WindowAttributes = {viewState: 'viewState'} as const;
 
 export type IntrinsicWindowBaseProps = Pick<
 	MutableBaseProps,
-	'flexDirection' | 'justifyContent' | 'alignItems' | 'gap' | 'height' | 'width'
+	| 'flexDirection'
+	| 'justifyContent'
+	| 'alignItems'
+	| 'gap'
+	| 'height'
+	| 'width'
+	| 'position'
+	| 'flexGrow'
+	| 'flexWrap'
+	| 'flexShrink'
 > & {
 	scrollbar?: StylesConfig['Scrollbar'];
 	unitSize?: number | 'stretch';
@@ -59,6 +68,12 @@ export function Window({...props}: WindowProps): React.ReactNode {
 	props.flexDirection = props.flexDirection ?? 'column';
 	props.justifyContent = props.justifyContent ?? 'flex-start';
 	props.alignItems = props.alignItems ?? 'flex-start';
+
+	// Make sure component is rendered properly in the layout
+	props.position = 'relative';
+	props.flexWrap = 'nowrap';
+	props.flexGrow = props.flexGrow ?? 0;
+	props.flexShrink = props.flexShrink ?? 1;
 
 	const THIS_WINDOW_FOCUS = useIsFocus();
 	const THIS_WINDOW_LEVEL = useModalLevel();
