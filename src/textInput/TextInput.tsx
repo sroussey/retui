@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Text from '../components/Text.js';
 import {
 	State as UseTextInputState,
@@ -12,6 +12,7 @@ import {
 	KeyInput,
 	useIsFocus,
 	useKeymap,
+	logger,
 } from '../index.js';
 import ControlKeymap from './ControlKeymap.js';
 import chalk from 'chalk';
@@ -45,7 +46,7 @@ export function TextInput({
 	onDownArrow,
 	enterKeymap = ControlKeymap.defaultEnter,
 	exitKeymap = ControlKeymap.defaultExit,
-	cursorColor,
+	cursorColor = 'white',
 	textStyle,
 	autoEnter,
 }: Props): React.ReactNode {
@@ -117,12 +118,25 @@ export function TextInput({
 
 		update({
 			...state,
+			value: state.value,
 			insert: true,
 			idx: state.value.length,
 			window: {...state.window, start: nextStart, end: nextEnd},
 		});
 		onEnter?.(state.value, stdin);
 	};
+
+	const firstEnter = useRef(true);
+	useEffect(() => {
+		logger.write({fistEnter: firstEnter.current});
+		if (availableWidth === 0 || !firstEnter.current) {
+			return;
+		}
+		if (autoEnter && isFocus) {
+			firstEnter.current = false;
+			handleEnter('');
+		}
+	}, [availableWidth]);
 
 	useEffect(() => {
 		// If autoenter make sure insert is toggled to true

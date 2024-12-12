@@ -4,7 +4,7 @@ import {BoxProps, useStdout} from '../index.js';
 
 export type Props = Omit<
 	BoxProps,
-	'height' | 'width' | 'minHeight' | 'minWidth'
+	'height' | 'width' | 'minHeight' | 'minWidth' | 'alignSelf'
 > &
 	React.PropsWithChildren;
 

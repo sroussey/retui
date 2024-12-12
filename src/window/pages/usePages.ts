@@ -5,9 +5,17 @@ import {Return as UseWindowReturn} from '../useWindow.js';
 export type PageView = UseWindowReturn['viewState'] & {
 	_numPages: number;
 };
+
+export type PagesControl = {
+	currentPage: UseWindowReturn['control']['currentIndex'];
+	goToPage: UseWindowReturn['control']['goToIndex'];
+	nextPage: UseWindowReturn['control']['nextItem'];
+	prevPage: UseWindowReturn['control']['prevItem'];
+};
+
 type Return = {
 	pageView: PageView;
-	control: UseWindowReturn['control'];
+	control: PagesControl;
 };
 type Opts = Pick<UseWindowOpts, 'fallthrough'>;
 
@@ -31,6 +39,11 @@ export function usePages(
 
 	return {
 		pageView,
-		control: pages.control,
+		control: {
+			currentPage: pages.control.currentIndex,
+			goToPage: pages.control.goToIndex,
+			nextPage: pages.control.nextItem,
+			prevPage: pages.control.prevItem,
+		},
 	};
 }

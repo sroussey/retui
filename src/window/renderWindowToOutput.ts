@@ -80,6 +80,10 @@ export function renderScrollbar(
 	const viewState = node.attributes[WindowAttributes.viewState] as ViewState;
 	assert(viewState);
 
+	if (scrollbar.hide) {
+		return;
+	}
+
 	// There are no items or the winSize is not constrained by the viewing window,
 	// so we don't need a scrollbar.
 	if (!viewState._itemsLen || viewState._winSize >= viewState._itemsLen) {

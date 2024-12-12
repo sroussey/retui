@@ -66,7 +66,7 @@ export function useNodeMap<T extends string = string>(
 		// navigationMap size has decreased AND shifted previousIteration out of
 		// range. Shift focus to the last node in the new map
 		if (nextSize <= previousIteration) {
-			return setNode(controller.current.goTo(nextSize - 1));
+			return setNode(controller.current.goToNode(nextSize - 1));
 		}
 	}, [nodeMap]);
 
@@ -99,8 +99,8 @@ export function useNodeMap<T extends string = string>(
 	useEvent(ID_NAV_EVENTS.prev(ID), set(controller.current.prev));
 
 	const control: NavControllerAPI = {
-		goTo: (nodeName: string | number) => {
-			const node = controller.current.goTo(nodeName);
+		goToNode: (nodeName: string | number) => {
+			const node = controller.current.goToNode(nodeName);
 			setNode(node);
 			return node;
 		},

@@ -105,7 +105,7 @@ export class NavController {
 		return this.size;
 	};
 
-	public goTo = (nextNode: string | number): string => {
+	public goToNode = (nextNode: string | number): string => {
 		if (typeof nextNode === 'string') {
 			return this.goToNodeName(nextNode);
 		}
