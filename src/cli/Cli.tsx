@@ -23,11 +23,10 @@ import InternalEvents from '../utility/InternalEvents.js';
 
 export type Props = {
 	commands: Commands;
-	prefix?: string;
-	persistPrefix?: boolean;
+	prompt?: string;
+	persistPrompt?: boolean;
 	enterKeymap?: KeyInput;
 	exitKeymap?: KeyInput;
-	displayUnknownCommand?: boolean;
 	inputStyles?: TextStyles;
 	resolveStyles?: TextStyles;
 	rejectStyles?: TextStyles;
@@ -88,14 +87,13 @@ type CliModalProps = Props & Except<ModalProps, 'modal'>;
 export function CliModal(props: CliModalProps): React.ReactNode {
 	const {
 		commands,
-		displayUnknownCommand,
 		enterKeymap = [{input: ':'}],
 		exitKeymap = [{key: 'return'}, {key: 'esc'}],
-		prefix,
+		prompt,
 		inputStyles,
 		resolveStyles,
 		rejectStyles,
-		persistPrefix,
+		persistPrompt,
 		...modalProps
 	} = props;
 
@@ -109,13 +107,12 @@ export function CliModal(props: CliModalProps): React.ReactNode {
 			<AbstractCli
 				commands={commands}
 				autoEnter={true}
-				displayUnknownCommand={displayUnknownCommand}
 				enterKeymap={enterKeymap}
 				exitKeymap={exitKeymap}
 				hideModal={hideModal}
 				showModal={showModal}
-				prefix={prefix}
-				persistPrefix={persistPrefix}
+				prompt={prompt}
+				persistPrompt={persistPrompt}
 				inputStyles={inputStyles}
 				resolveStyles={resolveStyles}
 				rejectStyles={rejectStyles}
@@ -140,8 +137,8 @@ function CliView({
 	commands,
 	enterKeymap = {input: ':'},
 	exitKeymap = [{key: 'return'}, {key: 'esc'}],
-	prefix = ':',
-	persistPrefix = false,
+	prompt = ':',
+	persistPrompt = false,
 	onChange,
 	setValue,
 	value,
@@ -152,7 +149,7 @@ function CliView({
 	onUpArrow,
 	autoEnter,
 }: CliViewProps): React.ReactNode {
-	const prefixValue = insert || persistPrefix ? prefix : '';
+	const prefixValue = insert || persistPrompt ? prompt : '';
 
 	const NEXT_CLI_HISTORY = InternalEvents.Prefix + 'NEXT_CLI_HISTORY';
 	const PREV_CLI_HISTORY = InternalEvents.Prefix + 'PREV_CLI_HISTORY';

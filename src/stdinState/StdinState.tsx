@@ -14,7 +14,7 @@ type TextStyles = Except<StylesConfig['Text'], 'wrap'>;
 
 type Props = {
 	showEvents?: boolean;
-	showChars?: boolean;
+	showRegister?: boolean;
 	eventStyles?: TextStyles;
 	registerStyles?: TextStyles;
 	width?: number;
@@ -24,7 +24,7 @@ export function StdinState({
 	eventStyles = {},
 	registerStyles = {},
 	showEvents = true,
-	showChars = true,
+	showRegister = true,
 	width = 20,
 }: Props): React.ReactNode {
 	const [state, setState] = useState<State>({
@@ -68,7 +68,7 @@ export function StdinState({
 		styles = eventStyles;
 		text = state.event;
 	}
-	if (!state.event && state.register && showChars) {
+	if (!state.event && state.register && showRegister) {
 		styles = registerStyles;
 		text = state.register;
 	}

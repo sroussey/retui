@@ -64,12 +64,12 @@ export function useModal(keymap: ModalControlKeyMap): Return {
 	};
 }
 
-export function useHideModal(): {hide: () => void} {
+export function useHideModal(): {hideModal: () => void} {
 	const modalContext = useContext(ModalContext);
 
 	if (!modalContext) {
 		throw new Error('Cannot use useHideModal outside of a Modal component.');
 	}
 
-	return {hide: modalContext.hide};
+	return {hideModal: modalContext.hide};
 }

@@ -1,6 +1,6 @@
-## Phileas
+## **Phileas**
 
-#### A terminal UI library with a focus on events, keymaps, and navigation.  A fork of [Ink](https://github.com/vadimdemedes/ink).
+#### A terminal UI library with a focus on events, keymaps, and navigation.  Forked from [Ink](https://github.com/vadimdemedes/ink).
 
 Easily manages:
 - dynamically sized lists
@@ -13,42 +13,208 @@ Easily manages:
 - in-app command lines
 - click events
 - styling options such as background colors and titles
--
-### Overview
-
-#### Focus Focus is derived from the context provided by Page, List, Node, and
-Modal components. A component that has no context from any of these providers is
-assumed to be in focus, whereas if context is available, the component is
-considered focused only if all of its providers have it as focused.
-
-#### Events Events can be created with the `useKeymap` hook which accepts a
-keymap object and emits events when `stdin` matches a keymap. On every `stdin`
-event, every keymap object from every `useKeymap` hook is processed, but only if
-the component dispatching `useKeymap` is focused. If an event matches, the event
-is emitted throughout the entire app and can be responded to anywhere with the
-`useEvent` hook. Like the `useKeymap` hook, the `useEvent` hook will not respond
-to the event unless the component dispatching `useEvent` is focused. Once an
-event is emitted, any other `useKeymap` hooks waiting to process their keymap
-objects will be blocked until the next `stdin` event is received by the app.
-
-#### Navigation Pages, Lists, and Nodes handle page, 1D, and 2D navigation in
-the app. Each of these is tied to a hook that manages the focus state and
-provides a control utility that can control navigation and focus. Tying each of
-these components to a hook allows for less opinionated handling by exposing the
-state and utility functions that control them.
-
-`Note`: This document won't go into detail about the features available from the
-original fork.  Read about these in the
-[Ink](https://github.com/vadimdemedes/ink) documentation which goes into detail
-about `Box` and `Text` components.  Only features additional features from this
-library will be detailed. Some of the packages made for `Ink` *might* work, but
-this library handles input differently.
 
 ---
 
-### List / useList
+### **Overview**
 
-#### Example
+#### `Focus`
+Focus is derived from the context provided by `Page`, `List`, `Node`, and
+`Modal` components. A component that has no context from any of these providers is
+assumed to be in focus, whereas if context is available, the component is
+considered focused only if all of its providers are also focused.  Shallow focus
+exists for leaf nodes that are focused relative to a parent that is not deeply
+focused.
+
+```
+Root *focus by default*
+│
+Pages *focus*
+│
+├───── Page *focus*
+│      │
+│      ├──────── List *focus*
+│      │         │
+│      │         ├───────── List Item *focus*
+│      │         ├───────── List Item
+│      │         ├───────── List Item
+│      │         └───────── List Item
+│      │
+│      │
+│      └──────── List
+│                │
+│                ├───────── List Item *shallow-focus*
+│                ├───────── List Item
+│                ├───────── List Item
+│                └───────── List Item
+│
+└───── Page
+       │
+       │
+       ├──────── Node *shallow-focus*
+       │         │
+       │         └──────── List *shallow-focus*
+       │                   │
+       │                   ├───────── List Item *shallow-focus*
+       │                   ├───────── List Item
+       │                   ├───────── List Item
+       │                   └───────── List Item
+       │
+       └──────── Node
+                 │
+                 └──────── List *shallow-focus*
+                           │
+                           ├───────── List Item *shallow-focus*
+                           ├───────── List Item
+                           ├───────── List Item
+                           └───────── List Item
+```
+
+---
+
+#### `Events`
+Events can be emitted with the `useKeymap` hook and responded to anywhere in the
+app with the `useEvent` hook.  Both of these hooks are only active if the
+component dispatching them is deeply focused.  On every standard input event,
+every active useKeymap hook processes its `KeyMap` object and will emit an event
+if there is a match.  Once an event has been emitted, all hooks are blocked from
+processing until the next standard input event.
+
+```typescript
+const { useEvent } = useKeymap({
+	foo: { input: "f" },
+	bar: { input: "b" }
+});
+useEvent("foo", () => {
+	/* ... */
+})
+useEvent("bar", () => {
+	/* ... */
+})
+```
+
+---
+
+#### `Navigation`
+`Pages`, `Lists`, `Node`, and `Modal` components display the state of focus in
+the app. Each of these core components has a corresponding hook that manages the
+focus state and returns utilities that help control navigation.
+
+- **`Pages / usePages`**: Handles page navigation.
+
+```typescript
+const { pagesView, control } = usePages(3);
+
+const { useEvent } = useKeymap({
+	goToPage: [
+		{ input: "1" },
+		{ input: "2" },
+		{ input: "3" },
+	]
+});
+
+useEvent("goToPage", (char) => {
+	const pageNumber = Number(char);
+	if (!Number.isNaN) {
+		control.goToPage(pageNumber);
+	}
+});
+
+return (
+	<Viewport>
+		<PageOne />
+		<PageTwo />
+		<PageThree />
+	</Viewport>
+);
+```
+
+- **`Lists / useList`**: Handles 1d navigation
+
+```typescript
+const { listView, items } = useList(["foo", "bar", "baz"], {
+	navigation: "vi-vertical",
+});
+
+return  (
+	<Box height="50" width="50" borderStyle="round">
+		<List listView={listView}>
+			{items.map(item => <Text key={item}></Text>)}
+		</List listView={listView}>
+	</Box>
+
+);
+```
+
+- **`Node / useNodeMap`**: Handles 2d navigation
+
+```typescript
+const nodeMap = [
+	["1", "2"],
+	["3", "3"],
+];
+
+const { register } = useNodeMap(nodeMap, { navigation: "vi" });
+
+return (
+	<Box height="100" width="100" flexDirection="column">
+		<Box height="100" width="100" flexDirection="row">
+			<Node {...register("1")}>
+				<NodeOne />
+			</Node>
+			<Node {...register("2")}>
+				<NodeTwo />
+			</Node>
+		</Box>
+		<Box height="100" width="100">
+			<Node {...register("3")}>
+				<NodeThree />
+			</Node>
+		</Box>
+	</Box>
+)
+```
+
+- **`Modal / useModal`**: Handles modal display and unfocuses components below the
+  modal.
+
+```typescript
+const { modal, showModal } = useModal({
+	show: { key: "?" }, // ? because maybe this is a help modal?
+	hide: { key: "esc" },
+});
+
+return (
+	<Viewport>
+		<MainApp />
+		<Modal
+			modal={modal}
+			height="50"
+			width="50"
+			borderStyle="round"
+			justifySelf="center"
+			alignSelf="center"
+		>
+			{ /* modal content */ }
+		</Modal>
+	</Viewport>
+)
+```
+
+---
+
+`Note`: This document won't go into detail about the features available from the
+original fork, such as `Box` and `Text` components.  Read about these in the
+[Ink](https://github.com/vadimdemedes/ink) documentation which goes into more
+detail. Only features in this library that differ will be detailed.
+
+Some of the packages made for Ink *might* work, but input is handled
+differently.
+
+---
+
+### **List / useList**
+
 ```typescript
 const initGroceryList = [
     "Bananas", "Eggs", "Milk", "Bread", "Chicken breast",
@@ -92,48 +258,48 @@ function Item(): React.ReactNode {
 <!-- list demo -->
 https://github.com/user-attachments/assets/a0d684c2-1023-4149-84f6-fdd7b187785b
 
-### `useList(itemsOrLength, Options): Return`
+### `useList(itemsOrLength, Options): { listView, control, items, setItems }`
 
-#### itemsOrLength: any[] | number
+#### `itemsOrLength: any[] | number`
 - If an array argument is provided, useList will manage state for you. A number
   argument states how many items will be included in the list.
 
-#### Options:
+#### `Options:`
 - **`windowSize: "fit" | number`**
-  - Default: `fit`
+  - Default: 'fit'
   - `'fit'`: Maximizes the number of list items displayed within the available
-	cross-sectional space, based on the `unitSize` value. When `windowSize` is
-	set to `'fit'`, `unitSize` defaults to `1`.
+	cross-sectional space, based on the `unitSize` value. When windowSize is set
+	to 'fit', unitSize defaults to 1.
   - `number`: Sets the window size explicitly, up to the lesser of the provided
 	number and the total number of list items. This option is most effective
-	when paired with a `unitSize` of `'stretch'`. `unitSize` defaults to
-	`'stretch'` when `windowSize` is set to a number.
+	when paired with a unitSize of `stretch`. unitSize defaults to
+	'stretch' when windowSize is set to a number.
 
-- **`unitSize: "stretch" | number`**
- - Default: Defaults to `1` when `windowSize` is `'fit'`.  Defaults to
-   `'stretch'` when `windowSize` is a number.
+- **`unitSize: 'stretch' | number`**
+ - Default: Defaults to 1 when windowSize is 'fit'.  Defaults to 'stretch' when
+   windowSize is a number.
   - `number`: Assumes a fixed size for each list item's cross-sectional
 	dimension. Displays as many items as possible based on this size.
   - `'stretch'`: Dynamically adjusts the size of the list items to fit within
-	the available space. If `windowSize` is `'fit'`, displays as many possible
+	the available space. If windowSize is 'fit', displays as many possible
 	items as possible and adjusts the size to shrink dynamically, down to a
-	minimum `unitSize` of `1`.
+	minimum unitSize of 1.
 
 - **`navigation: 'none' | 'vi-vertical' | 'vi-horizontal' | 'arrow-vertical' |
   'arrow-horizontal'`**
-  - Default: `'vi-vertical'`
+  - Default: 'vi-vertical'
   - `'none'`: No keymaps will control the list for you.  You can control
 	navigation in the list with the `control` object returned from useList along
 	with `useEvent`/`useKeymap`.
-  - `'vi-vertical'`: `j`: down, `k`: up, `ctrl+d`: scroll down half window,
-	`ctrl+u`: scroll up half window, `gg`: go to first index, `G`: go to last
+  - `'vi-vertical'`: 'j': down, 'k': up, 'ctrl+d': scroll down half window,
+	'ctrl+u': scroll up half window, 'gg': go to first index, 'G': go to last
 	index, arrow keys also supported.
-  - `'vi-horizontal'`: `h`: left, `l`: right, arrow keys also supported.
-  - `'arrow-vertical'`: `up`: up, `down`: down.
-  - `'arrow-horizontal'`: `left`: left, `right`: right.
+  - `'vi-horizontal'`: 'h': left, 'l': right, arrow keys also supported.
+  - `'arrow-vertical'`: 'up': up, 'down': down.
+  - `'arrow-horizontal'`: 'left': left, 'right': right.
 
 - **`centerScroll: boolean`**
-  - Default: `false`
+  - Default: 'false'
   - Keeps the focused item in the center of the visible window slice when
 	possible. This could be useful when a scrollbar isn't desired because it
 	provides feedback when at the start/end of lists because the focused item
@@ -144,7 +310,7 @@ https://github.com/user-attachments/assets/ec816010-4d9f-46bc-a043-2f132569be03
 
 
 - **`fallthrough: boolean`**
-  - Default: `false`
+  - Default: 'false'
   - Controls navigation behavior at list boundaries. If `true`, when focus
 	reaches the end of the list, wraps around to the opposite end. If `false`,
 	focus stops at the list boundaries and cannot move further.
@@ -152,58 +318,59 @@ https://github.com/user-attachments/assets/ec816010-4d9f-46bc-a043-2f132569be03
 <!-- list fallthrough demo -->
 https://github.com/user-attachments/assets/869bae25-8cd5-43cc-bbac-0d8f9c6312e3
 
-#### Return: { listView, control, items, setItems }
+#### `Return: { listView, control, items, setItems }`
 - **`listView`**: Required prop for List component.
 - **`control`**: Utilities for controlling the list:
-  - `currentIndex`: the current index that is focused.
+  - `currentIndex: number`: The current index that is focused.
   - `goToIndex(nextIdx: number, center?: boolean): void`: Shifts focus to a
 	given index. If `center` is true, center the focus if possible.
   - `nextItem(): void`: Shift focus to the next list item.
   - `prevItem(): void`: Shift focus to the previous list item.
   - `scrollDown(n?: number): void`: Shifts focus down `n` items. If a number is
 	not provided, shifts focus down half of the viewing slice.
-  - `scrollUp(n?: number): void`: Opposite of `scrollDown`.
+  - `scrollUp(n?: number): void`: Opposite of scrollDown.
 
 - **`items, setItems`**:
-  - If an array was provided, these are the state related variables that useList
-	is internally storing for you.
-  - If an array was not provided, this is a dummy array of `null`.
+  - If an array was provided, these are the state related variables managed
+	internally by `useList`.
+  - If an array was not provided, items defaults to a dummy array of `null`.
 
 ---
 
-### List
-The viewing window that contains list items, which are the child nodes of the
-component.  The List component has a height and width of 100% of its parent
-container, so it needs a parent container to inherit dimensions from.  If a
-column List has a height of 0, then no list items will be rendered.
+### `List`
+The component responsible for displaying the state of the list.  The List
+component has a height and width of 100% of its parent container, so it needs a
+parent container to inherit dimensions from.  If a column List has a height of
+0, then no list items will be rendered.
 
 #### Required Props:
-- **`listView`**: The object recieved from useList
+- **`listView`**: The object received from useList
 
 #### Optional Props
 - **`flexDirection: 'row' | 'column'`**: 'column' renders the list items vertically,
   while 'row' renders the list items horizontally
 	- Default: 'column'
 - **`scrollbar`**: Value is a config object that styles the scrollbar
-	- **`hide?: boolean`**: Show or hide the scrollbar
+	- `hide?: boolean`: Show or hide the scrollbar
+		- Default: 'false'
+	- `color?: string`: Color of the scrollbar
+		- Default: 'undefined'
+	- `dimColor?: boolean`:
 		- Default: `false`
-	- **`color?: string`**: Color of the scrollbar
-		- Default: `undefined`
-	- **`dimColor?: boolean`**:
-		- Default: `false`
-	- **`style?: 'single' | 'bold' : { char: string }`**: The thickness of the
+	- `style?: 'single' | 'bold' : { char: string }`: The thickness of the
 	  scrollbar.  Add your own style with the config object option
-	- **`align?: 'start' | 'end'`**: 'start' aligns on the left and top of
+	- `align?: 'start' | 'end'` 'start' aligns on the left and top of
 	  column and row lists respectively and 'end' the right and bottom.
 	  	- Default: `end`
 - **`justifyContent: 'flex-start' | 'center' | flex-end' | 'space-between' |
-  'space-around'`**: Control how the list items are displayed within the viewing window.
-	- Default: `flex-start`
-- **`alignItems: 'flex-start' | 'center' | 'flex-end`**: Control how the list
+  'space-around'`**: Control how the list items are displayed within the viewing
+  window.
+	- Default: 'flex-start'
+- **`alignItems: 'flex-start' | 'center' | 'flex-end' | 'stretch'`**: Control how the list
   items are displayed within the viewing window.
-  	- Default: `flex-start`
+  	- Default: 'flex-start'
 - **`gap: number`**: The `gap` between list items.
-	- Default: `0`
+	- Default: '0'
 
 ---
 
@@ -211,20 +378,20 @@ column List has a height of 0, then no list items will be rendered.
 Returns data about the list-rendered component and the list.
 
 #### Generic Argument:
-- **`<T>`**: Represents the type of the items in the `items` array.
-	- Default: `any`
+- **`<T>`**: Represents the type of the items array.
+	- Default: 'any[]'
 
 #### Properties:
-- **`item`**: The corresponding value in the `items` array for this list item
+- **`item`**: The corresponding value in the 'items' array for this list item
   node.
 - **`items`**: The array responsible for rendering the list items.
 - **`setItems`**: State action for updating the list items. If the `useList`
   hook is managing the state of the provided array, this is the setState
   function.
-- **`index`**: The index of this node within the `items` array. Not to be
-  confused with `control.currentIndex` which represents the current focused
+- **`index`**: The index of this node within the 'items' array. Not to be
+  confused with `control.currentIndex` which represents the currently focused
   index of the List.
-- **`isFocus`**: `true` if the index of this node matches the currently focused
+- **`isFocus`**: 'true' if the index of this node matches the currently focused
   index in the list *and* the List itself is also focused.
 - **`isShallowFocus`**: `true` if the node is focused relative to the List, but
   the List itself is not focused.
@@ -232,12 +399,11 @@ Returns data about the list-rendered component and the list.
   list.
 
 ---
-### List: windowSize and unitSize examples
+### `List: windowSize and unitSize examples`
 
 #### **Fixed windowSize with unitSize of 'stretch'**.
 
-`Note:` When windowSize is a number, unitSize will default to 'stretch'.
-
+`Note:` When windowSize is a `number`, unitSize will default to `stretch`.
 
 ```typescript
 const { listView, items, control } = useList(initGroceryList, {
@@ -270,15 +436,15 @@ function Item(): React.ReactNode {
     );
 }
 ```
-<!-- demo-fixed-window-stretch-unit.mp4 -->
 
+<!-- demo-fixed-window-stretch-unit.mp4 -->
 https://github.com/user-attachments/assets/55204fc7-914a-4f7e-a2d0-af3cd99f54b2
 
 ---
 
-#### 'fit' windowSize with fixed unitSize.
+#### **'fit' windowSize with fixed unitSize.**
 
-`Note:` When windowSize is set to 'fit', unitSize defaults to 1.
+`Note:` When windowSize is set to `fit`, unitSize defaults to `1`
 
 If unitSize is a fixed number, then all list items are assumed to have that
 dimension. Excess height could lead to improper fit.  This is why the wrap
@@ -322,17 +488,15 @@ function Item(): React.ReactNode {
 }
 ```
 <!-- demo-fit-window-fixed-unit.mp4 -->
-
 https://github.com/user-attachments/assets/e5eb2f04-cc96-4d26-98fc-03f5fbab4457
 
 ---
 
-### useKeymap, useEvent, useInput
+### **useKeymap, useEvent, useInput**
 This example continues on from the `List` example.
 
-`Note`: `useEvent` can also be imported, but you lose autocomplete unless a
-generic argument is provided.  The generic being the type of the object that
-satisfies the KeyMap type that the hook derives event names from.
+`Note`: useEvent can also be imported, but you lose autocomplete unless a
+generic argument is provided.  The generic must satisfy the `KeyMap` type.
 
 ```typescript
 function Item(): React.ReactNode {
@@ -364,77 +528,122 @@ function Item(): React.ReactNode {
 }
 ```
 
-All events are derived from the same input stream.  Once an event has been
-matched, no other `useKeymap` hook can mutate the event that will be emitted
-until the the next input is recieved.
-
-#### useKeymap<T>(T: KeyMap, opts?: Opts): { useEvent<T> }
-<!-- Clean up this section -->
-The useKeymap hook can be placed within any component and it will only process
-its `KeyMap` object if the component is focused.  The `useKeymap` hook along with
-the `useEvent` hook allow you to define and handle keymaps that are specific to
-the component they exist in.  This means you can handle events anywhere in your
-app without needing to track global indices or states.
-
-Events are emitted with `node:events`, so any event can be responded to anywhere
-with any `useEvent` hook as long as that hook is focused.
-
-Beyond handling localized keymaps and events, `useKeymap` can also provide event
-emitting for events that are relevant throughout the entire app.
-
-#### KeyMap: { [eventName: string]: KeyInput | KeyInput[] }
-The keys in the `KeyMap` object are the names of the events that will be emitted
-when stdin finds a match.
-
-- **`KeyInput`**: { key?: Key; input?: string; notKey?: Key[]; notInput?: string[] }
-	- **`Key`**: Non alphanumeric keys
-	- **`input`**: Any combination of alphanumeric keys.
-	- **`notKey`**: Any input *except* the Keys in this array will trigger this
-	  event
-	- **`notInput`**: Any input *except* the strings in this array will trigger
-	  this event.
-
-#### Opts
-- **`priority`**: `never` | `always` | `default` | `override` | `textinput`
-	- Default: `default`
-	- Sets priority levels for useKeymap hooks so that control can be passed
-	  between different hook instances.  This allows you to keep separate
-	  keybind configurations while not interrupting operations such as filling
-	  out form fields. Or maybe you want to temporarily override your normal
-	  settings.
-	- `always` and `never` do not interfere with other priority levels
-	- `override` overrides anything set to default
-	- `textinput` overrides everything inlcuding `always`
-
-#### useEvent<T>(eventName: keyof T, handler: (char: char) => unknown, additionalFocusCheck?: boolean = true)
-- **`eventName`**: The event derived from the keys of the `KeyMap` object
-- **`handler`**: The last keypress that triggered the event.
-- **`additionalFocusCheck`**: When false, the specific hook will not respond to
-  any events.
-  -	Default: `true`
-
-
-#### useInput(handler: (input: string, key: Key) => unknown, opts: Opts)
-Disregards focus and responds to stdin anywhere and anytime this hook is
-dispatched.  Functions the same as the `useInput` hook in `Ink`.
-
-
-#### setCharRegisterSize(num: number): void
-By default, the app stores up to 2 non-alphanumeric chars before resetting to an
-empty string.  Once an event is emitted, the register resets again.  If this
-default size of 2 is not desired, you can set it with the `setCharRegisterSize`
-size which accepts any positive number as an argument.
-
-#### RegisterState component
-The `RegisterState` component keeps track of stdin and emitted events and
-displays them.  This is useful because of the visual feedback it gives.  For
-example, if pressing 'a' doesn't trigger an event, it could be because the char
-register was 'ja' at the time.
-
+All events are derived from the same standard input stream.  Once an event has
+been matched, it is emitted and all other useKeymap hooks are blocked until the
+next standard input event.
 
 ---
 
-### Pages / usePages
+#### `useKeymap(KeyMap, Opts): { useEvent }`
+```typescript
+const keymap = {
+	quit: { input: "q" },
+	foobar: { input: "fb" },
+} satisfies KeyMap;
+
+useKeymap(keymap);
+```
+
+If the component is focused, useKeymap processes its KeyMap and emits events
+with `node:events`.  Any `useEvent` hook that is focused within the app can
+respond to these events.
+
+Beyond handling localized keymaps and events, useKeymap can be placed at the top
+level of the app and provide events that are relevant at different scopes.
+
+---
+
+#### `KeyMap: { [eventName: string]: KeyInput | KeyInput[] }`
+
+The keys in the KeyMap object are the names of the events that will be emitted
+when standard input matches the KeyInput.
+
+- **`KeyInput`**: { key?: Key; input?: string; notKey?: Key[]; notInput?: string[] }
+	- `Key`: Non alphanumeric keys.
+	- `input`: Any combination of alphanumeric keys.
+	- `notKey`: Any input *except* the Keys in this array will trigger this
+	  event.
+	- `notInput`: Any input *except* the strings in this array will trigger
+	  this event.
+
+#### `Opts`
+- **`priority`**: `never` | `always` | `default` | `override` | `textinput`
+	- Default: 'default'
+	- Sets priority levels for useKeymap hooks so that control can be passed
+	  between different hook instances.  This is necessary for operations such
+	  as text input.
+	- `always` and `never` do not interfere with other priority levels
+	- `override` overrides anything set to default
+	- `textinput` overrides everything including `always`
+
+---
+
+#### `useEvent<T extends KeyMap>(eventName: keyof T, handler: (char: char) => unknown, additionalFocusCheck?: boolean = true): void`
+
+```typescript
+useEvent<typeof keymap>("foo", () => { /* do something */ })
+```
+
+- **`eventName`**: The event derived from the keys of the `KeyMap` object
+- **`handler`**: The last keypress that triggered the event.
+- **`additionalFocusCheck`**: When 'false', the specific hook will not respond to
+  any events.
+  -	Default: 'true'
+
+---
+
+#### `useTypedEvent<T extends KeyMap>(): { useEvent<T> }`
+useEvent can be returned from the useKeymap hook, or it can be imported.  If
+imported, you need to provide the generic argument to receive autocomplete.
+useTypedEvent returns a type-safe version of useEvent for better autocomplete.
+
+```typescript
+const keymap = { foo: { input: "f" } } satisfies KeyMap;
+/* ... */
+const { useEvent } = useTypedEvent<typeof keymap>()
+```
+
+---
+
+#### `useInput(handler: (input: string, key: Key) => unknown, opts?: Opts): void`
+
+```typescript
+useInput((input, key) => {
+	if (key.return) {
+		console.log("'Return' pressed");
+	}
+	if (input === "f") {
+		console.log("'f' pressed")
+	}
+}, { isActive: true, inputType: "char" });
+```
+
+Disregards focus and responds to standard input anywhere and anytime this hook
+is dispatched.  Functions the same as the `useInput` hook in
+[Ink](https://github.com/vadimdemedes/ink).  This is useful if you want to
+escape the focus dependent response to standard input. Its also exists as a less
+boilerplate option when focus isn't as much of a concern.
+
+- **`isActive: boolean`**: Control whether or not the hooks read from standard input
+- **`inputType: 'char' | 'register'`**: Controls what kind of `input` is recieved
+	- Default: 'char'
+	- `char`: Check input against single chars
+	- `register`: Check input against however many chars are in the `char
+	  register`.
+
+---
+
+#### `setCharRegisterSize: (num: number): void`
+By default, the app stores up to 2 non-alphanumeric chars before resetting to an
+empty string.  Once an event is emitted, the register resets again.  If this
+default size of 2 is not desired, you can set it with the `setCharRegisterSize`
+size which accepts any positive number as an argument.  The `StdinState`
+component offers visual feedback for the char register and events that are
+emitted.
+
+---
+
+### **Pages / usePages**
 Pages are just Lists with a windowSize of 1 and unitSize of 'stretch'.  There
 are no default keymaps to control navigation of pages.  If you want your app to
 have different pages, you might also want to use the `Viewport` component which
@@ -476,45 +685,30 @@ export default function Docs(): React.ReactNode {
 <!-- demo-pages.mp4 -->
 https://github.com/user-attachments/assets/68700c6f-6a7f-47fc-945e-d76c887c42f8
 
-### `usePages(amountOfPages: number, opts?: Opts): { pageView, control }`
+### `usePages(amountOfPages, Opts?): { pageView, control }`
 
-**`amountOfPages`**: The number of pages must match how many pages are rendered.
+**`amountOfPages: number`**: The number of pages must match how many pages are rendered.
 
 **`Opts`**: { fallthrough: boolean }
 - Default: `false`
-- The same as in the `useList` hook.
+- The same as in the `useList` hook.  If at the last page and
+  `control.lastPage()` is executed, focus is shifted to the first page if is
+  this option is true.
 
 **`pageView`**:  Required prop for `Pages` component.
 
 **`control`**: Utilities for controlling the Pages component.
-- **`currentPage`**: the current index that is focused.
-- **`goToPage(num: number)`**: Go to a page with specified index.
-- **`nextPage`**: Shift focus to the next page.
-- **`prevPage`**: Shift focus to the previous page.
+- `currentPage: number`: the current index that is focused.
+- `goToPage(num: number): void`: Go to a page with specified index.
+- `nextPage(): void`: Shift focus to the next page.
+- `prevPage(): void`: Shift focus to the previous page.
 
 ---
 
 ### `Page`
 
 #### Props:
-**`pageView`**: The object recieved from `usePages`.
-
----
-
-### Viewport
-A `Box` component that is set to the same dimensions as the terminal screen.
-
-#### Props
-All of the `Box` properties are available except for `height` | `width` |
-`minHeight` | `minWidth` | `alignSelf`.
-
-```typescript
-return (
-	<Viewport justifyContent="center" alignItems="center">
-		<Text>Hello World!</Text>
-	</Viewport>
-);
-```
+**`pageView`**: The object received from `usePages`.
 
 ---
 
@@ -728,6 +922,93 @@ containing the `useNodeMap` hook is *not* focused.
 
 ---
 
+### **Modal / useModal**
+
+```typescript
+function ModalDemo(): React.ReactNode {
+    const { modal } = useModal({
+        show: { input: "m" },
+        hide: { key: "esc" },
+    });
+
+    return (
+        <>
+            <Modal
+                modal={modal}
+                closeOnOutsideClick={true}
+                justifySelf="center"
+                alignSelf="center"
+
+                // Normal Box props
+                height="75"
+                width="75"
+                borderStyle="round"
+                flexDirection="column"
+                titleTopCenter={{ title: " Modal Demo " }}
+            >
+                <ModalContents />
+            </Modal>
+        </>
+    );
+}
+
+function ModalContents(): React.ReactNode {
+    const { hide } = useHideModal();
+
+    return (
+        <>
+            <Text>Modal contents...</Text>
+            <Text>To close:</Text>
+            <Text>- Press Esc</Text>
+            <Text>- Click outside this modal</Text>
+            <Text>- Click the close button</Text>
+            <Box onClick={hide} borderStyle="round" width="10">
+                <Text>close</Text>
+            </Box>
+        </>
+    );
+}
+```
+
+<!-- modal-demo.mp4 -->
+https://github.com/user-attachments/assets/507e3bc7-b036-45cc-9186-aebae9ae1f07
+
+Modal components unfocus all components that are not themselves or their
+children.  Modals have a default `zIndex` of 1, but zIndex has no effect on
+focus handling.  A `Box` with a zIndex of 5 would still be unfocused when modal
+component pops up if that Box is not a child of the modal.
+
+---
+
+#### `useModal(ToggleKeymaps): { modal, showModal, hideModal }`
+
+**`ToggleKeymaps: { show: KeyInput | KeyInput[] | null; hide: KeyInput | KeyInput[] | null
+}`**: The keymaps assigned to show and hide the modal.
+	- If show or hide is assigned to `null`, then you'll need to show or hide
+	  the modal with `showModal` or `hideModal`.
+- **`modal`**: Required prop in the Modal component
+- **`showModal(): void`**: Method other than assigning keymap to show the modal.
+- **`hideModal(): void`**: Method other than assigning keymap to hide the modal.
+
+#### `useHideModal(): { hideModal }`
+Can be called within a Modal component to receive the `hideModal` function.
+
+---
+
+#### `Modal`:
+- **`Required Props`**:
+	- `modal`: Object returned from `useModal`
+- **`Props`**:
+	- `all of the props available to *Box* components are also available`
+	- `justifySelf: 'flex-start | 'center' | flex-end`: Position the modal
+	  left/right within the parent element.
+	- `alignSelf: 'flex-start' | 'center' | 'flex-end'`: Position the modal
+	  up/down within the parent element.
+	- `xOffset: number / yOffset: number`: Fine tune the positioning relative to
+	  the parent element.
+
+---
+
 ### `TextInput / useTextInput`
 
 ```typescript
@@ -735,7 +1016,7 @@ function TextInputDemo(): React.ReactNode {
     const { onChange, setValue } = useTextInput("");
 
     const onExit = (value: string) => {
-        // Do something with the value when done inserting text
+		/* do something with the value */
     };
 
 	// Reset the value to '' every time we enter insert mode
@@ -791,25 +1072,25 @@ https://github.com/user-attachments/assets/2b88fefe-4436-42f4-b338-1357e86d8cbe
 	- Default: [{ key: "return" }, { input: "i" }]
 - **`exitKeymap: KeyInput`**:
 	- Default [{ key: "return" }, { key: "esc" }]
-- **`onExit(value: string, char: string): unknown`**: Allows you to do
+- **`onExit(value: string, char: string)`**: Allows you to do
   something with the value when exiting insert mode.
-  	- `char` is the key that triggered the `TextInput` to exit insert.
+  	- `char` is the key that triggered the TextInput to exit insert.
 - **`onEnter(value: string, char: string)`**: Allows you to do something with
   the value when entering insert mode.
-  	- `char` is the key that triggered the `TextInput` to enter insert.
+  	- `char` is the key that triggered the TextInput to enter insert.
 - **`onKeypress(char: string)`**: Called on every keypress event when inserting
   text.
-- **`onUpArrow() / onDownArrow`**: Control what happens when these keys are
+- **`onUpArrow() / onDownArrow()`**: Control what happens when these keys are
   pressed while inserting text.  Could be used to shift focus.
 - **`textStyles`**: Style the displayed text
 - **`cursorColor`**: Color the cursor block
 - **`autoEnter`**: When focus is gained, does TextInput automatically enter
   insert mode?
-	- Default: `false`
+	- Default: 'false'
 
 ---
 
-### `Box Styling`
+### **Box Styling**
 
 #### `styles? Styles["Box"]`
 - Default: `undefined`
@@ -890,9 +1171,10 @@ Nothing is styled unless explicitly set.
 </Box>
 ```
 
----
-
 <!-- zindex-demo.png -->
+![zindex-demo](https://github.com/user-attachments/assets/a1d9269a-a4e1-4f58-9cb7-21941f1ceee1)
+
+---
 
 #### `wipeBackground?: boolean`
 - Default: `false`
@@ -901,18 +1183,18 @@ default.  Can be a drain on performance if this happens too often.
 
 ---
 
-### Mouse Events
+### **Mouse Events**
 Mouse event handlers can be attached to `Box` components and to any
 `titleTopLeft, titleTopCenter, etc...` prop object on a Box.
 
 Requires manually telling the app to listen for mouse input events with the
 **`setMouseReporting(b: boolean)`** function.
 
-**`IMPORTANT**: Mouse events are only accurate if the app is using the entire
-screen, so if you aren't using the *Viewport* component, clicks will not be
-accurate`.
+**`IMPORTANT: Mouse events are only accurate if the app is using the entire
+screen, so if you aren't using the Viewport component, clicks will not be
+accurate`**.
 
-All handlers accept a **`MouseEventHandler`**
+All handlers accept a callback in the form of `(e: MouseEvent) => unknown`.
 
 - **`onClick`**
 - **`onDoubleClick`**
@@ -926,16 +1208,14 @@ All handlers accept a **`MouseEventHandler`**
 - **`onScrollDown`**
 - **`onScrollClick`**
 
-**`MouseEventHandler: (e: MouseEvent) => unknown `**
-
 **`MouseEvent: { clientX, clientY, target, targetPosition}`**: Object that
 contains information about the click.
-- **`clientX`**: The x coordinate relative to the entire screen where the mouse
+- `clientX`: The x coordinate relative to the entire screen where the mouse
   event occured.
-- **`clientY`**: The y coordiante relative to the entire screen where the mouse
+- `clientY`: The y coordiante relative to the entire screen where the mouse
   event occured.
-- **`target`**: The reference to the component's YogaNode.
-- **`targetPosition`**: The corner positions of the component.
+- `target`: The reference to the component's YogaNode.
+- `targetPosition`: The corner positions of the component.
 	- `{
 			topleft: [number, number];
 			topRight: [number, number];
@@ -946,15 +1226,31 @@ contains information about the click.
 
 ---
 
-### `Box leftActive and rightActive`
+#### `Box leftActive and rightActive`
 These are props for the `Box` component which allow you to apply different
 styles for when the left or right mouse is pressed down over the component.
+
+```typescript
+<Box
+	width={10}
+	borderStyle="round"
+	leftActive={{
+		borderColor: "blue",
+	}}
+	onClick={() => setCount(count + 1)}
+>
+	<Text>{count}</Text>
+</Box>
+```
+
+<!-- left-active-demo.mp4 -->
+https://github.com/user-attachments/assets/eea00621-319b-463f-a361-4b47edf05e9c
 
 ---
 
 ### Cli
 
-Manage emitting events throughout the app with the command-line.
+Manage emitting events throughout the app with the `Cli` component.
 
 ```typescript
 const commands = {
@@ -980,16 +1276,19 @@ const commands = {
 } satisfies Commands;
 
 useCommand("greet", (args) => {
-	// You can respond to events with useCommand as well.
-	// But they won't have any effect on the inputStyles, rejectStyles, or resolveStyles
+	/*
+	 * You can respond to commands with useCommand as well, but they won't
+	 * have any effect on inputStyles, resolveStyles, or rejectStyles like
+	 * the handlers in the Commands object does.
+	 */
 })
 
 return (
 	<Viewport flexDirection="column">
 		<Box height="100" width="100"></Box>
 		<Cli
-			prefix={"~ > "}
 			commands={commands}
+			prompt={"~ > "}
 			inputStyles={{
 				italic: true,
 				color: "magenta",
@@ -1013,39 +1312,55 @@ return (
 <!-- cli-demo.mp4 -->
 https://github.com/user-attachments/assets/9d9d9f4c-3577-4f3c-afad-9bd54a0af64f
 
-**`Commands: { [command: string]: CommandHandler }`**
+**`Commands: { [command: string | 'DEFAULT']: CommandHandler }`**
 **`CommandHandler: (args: string[])`**
 
-The returned string or number value, or Promise result, of the `CommandHandler`
-is what is outputted to the `Cli` component after a command is executed.
+- The `args` array is an array of all the words written to the cli `*after*` the
+  command.  The first word, the command itself, is omitted from the args array.
+- The `DEFAULT` handler is a special handler that executes its callback when
+  input does not match any command.  Unlike the other handlers, `args` is an
+  array of *all* the words written to the cli.
+- When a handler returns a string or number value (either directly or as the
+  result of a Promise), that value is displayed as the CLI output after the
+  command finishes.
 
 **`Controls`**
 - `:` opens the `Cli`
 - `return`: executes the command
 - `esc` closes the `Cli`
+- `up arrow / down arrow`: Cycle through the history of commands entered within
+  the current session.
 
-If a `CommandHandler` returns nothing, the `Cli` is closed automatically
+If the handler returns nothing, the Cli is closed automatically.
 
-**`Props`**
-- `commands: **required**`: The `Commands` object.
-- `prefix`: The prompt visible when entering a command
+**`Required Props:`**
+- `commands:`: The `Commands` object.
+
+**`Optional Props:`**
+- `prompt`: The prompt visible when entering a command
+	- Default: ":"
 - `inputStyles, resolveStyles, rejectStyles`: Style the text differently based
   on the different scenarios.
+- `persistPrompt: boolean`: When the Cli in inactive should the prompt be visible?
+	- Default: `false`
 
+#### `useCommand(commandName | 'DEFAULT', CommandHandler): void`
+The equivalent of `useEvent` but for events emitted from the Cli.  Just like
+useEvent, useCommand becomes inactive when the component dispatching it is not
+focused.
+
+---
 
 #### `CliModal`
 The `Cli` component but as a pop up modal.  Accepts the same props as the
-`Modal` component.
+`Modal` component and `Cli` component.
 
 ```typescript
 <CliModal
-	prefix={"~ > "}
-	persistPrefix
-	borderStyle="round"
-	width="75"
-	titleTopCenter={{ title: " Command Line ", color: "green" }}
-	borderColor="green"
+	// Cli props
 	commands={commands}
+	prompt={"~ > "}
+	persistPrompt
 	inputStyles={{
 		italic: true,
 		color: "magenta",
@@ -1060,6 +1375,12 @@ The `Cli` component but as a pop up modal.  Accepts the same props as the
 		italic: true,
 		dimColor: true,
 	}}
+
+	// Modal props
+	borderStyle="round"
+	width="75"
+	titleTopCenter={{ title: " Command Line ", color: "green" }}
+	borderColor="green"
 />
 ```
 <!-- cli-modal-demo.mp4 -->
@@ -1067,13 +1388,163 @@ https://github.com/user-attachments/assets/9756e56f-0106-489a-a3b9-cf959b4dd178
 
 ---
 
-### Modals
-Modals position themselves relative to their parent component and have a default
-`zIndex` of 1.
+### **Viewport Component**
+A `Box` component that is set to the same dimensions as the terminal screen.
 
+#### Props
+All of the `Box` properties are available except for `height` | `width` |
+`minHeight` | `minWidth` | `alignSelf`.
 
+```typescript
+return (
+	<Viewport justifyContent="center" alignItems="center">
+		<Text>Hello World!</Text>
+	</Viewport>
+);
+```
 
+---
 
+### **StdinState Component**
+
+```typescript
+useKeymap({
+	foo: { input: "F" },
+	bar: { input: "B" },
+	foobar: { input: "fb" },
+});
+
+/* ... */
+
+return <StdinState
+		showEvents={true}
+		showRegister={true}
+		eventStyles={{
+			color: "green",
+		}}
+		registerStyles={{
+			color: "blue",
+		}}
+		width={25}
+	/>
+```
+
+<!-- stdin-state-demo.mp4 -->
+https://github.com/user-attachments/assets/b6f39a00-85a5-495b-b473-c3bbe532a283
+
+The `StdinState` component keeps track of stdin and emitted events and
+displays them.  This is useful because of the visual feedback it gives.  For
+example, if pressing 'a' doesn't trigger an event, it could be because the char
+register was 'ja' at the time.
+
+#### `Optional Props`:
+- **`showEvents: boolean`**: Display event names when they are emitted?
+	- Default: 'true'
+- **`showRegister: boolean`**: Show keypresses in the char register?
+- **`eventStyles`**: Value is an object that, if provided, styles the text of
+  the displayed events.
+- **`registerStyles`**: Value is an object that, if provided, styles the text of
+  the displayed keypresses.
+- **`width: number`**: How much space the component takes up.  When an event is
+  too long to fit inside this number, it is truncated.
+	- Default: 20
+
+---
+
+### **preserveScreen(): void**
+Call this function before your app renders anything and when your app closes it
+will return your terminal screen to the original state before the app started.
+
+```typescript
+preserveScreen();
+render(<App />)
+```
+<!-- preserve-screen-demo.mp4 -->
+https://github.com/user-attachments/assets/194b1789-b189-42e2-bc02-268d655d2a47
+
+---
+
+### **useShellCommand(): { exec }**
+
+- **`Should be used along with *preserveScreen*`**
+This hook returns a function called `exec` that runs a shell command and
+temporarily leaves the app to output the results.
+
+- **`exec(command: string, reattachedMessage?: string)`**
+	- The exec function returns a Promise with the exit status which is either a
+	  `number` or `null` based on whether or not the spawned command provides an
+	  exit status.
+	- `reattachedMessage` is the text that is displayed in the terminal when the
+	  command is finished executing, prompting you to re-attach to the app.
+		- Default: `press any key to continue`
+
+```typescript
+const { exec } = useShellCommand();
+
+const commands = {
+	exec: async (args) => {
+		const command = args.join(" ");
+		const exitStatus = await exec(command);
+		if (exitStatus !== 0) {
+			return Promise.reject(
+				`Running shell command: exit status ${exitStatus}`,
+			);
+		}
+	},
+	DEFAULT: (args) => {
+		return Promise.reject(`Unknown Command: ${args[0] ?? ""}`);
+	},
+} satisfies Commands;
+
+/* implement Cli component */
+
+```
+
+<!-- use-shell-command.mp4 -->
+https://github.com/user-attachments/assets/51b244c6-1a16-4231-a488-2fbdb59a2c22
+
+---
+
+### **VerticalLine / HorizontalLine Components**
+**`Optional Props`**:
+- `length: string | number`: The height or width or the VerticalLine or
+  Horizontal line respectively.
+	- Default: `'100%'`
+- `color`: The color of the line.
+- `bold`: Increase thickness of the line.
+- `dimColor`: Dim the color of the line.
+- `char`: Build the line with a character of your own choosing.
+
+```typescript
+return <Box
+		width="50"
+		height="50"
+		borderStyle="round"
+		flexDirection="column"
+		justifyContent="space-around"
+	>
+		<HorizontalLine />
+		<HorizontalLine />
+		<HorizontalLine />
+	</Box>
+```
+```typescript
+return <Box
+		width="50"
+		height="50"
+		borderStyle="round"
+		flexDirection="row"
+		justifyContent="space-around"
+	>
+		<VerticalLine />
+		<VerticalLine />
+		<VerticalLine />
+	</Box>
+
+```
+![horizontal-lines](https://github.com/user-attachments/assets/99b74e7b-1c60-4b04-80c9-293890ad92ad)
+
+![vertical-lines](https://github.com/user-attachments/assets/60dd7013-aeb5-4e90-bedf-0ad2f298ba08)
 
 
 
