@@ -1,6 +1,6 @@
 ## **Phileas**
 
-#### A terminal UI library with a focus on events, keymaps, and navigation.  Forked from [Ink](https://github.com/vadimdemedes/ink).
+#### A terminal UI + React library with a focus on events, keymaps, and navigation.  Forked from [Ink](https://github.com/vadimdemedes/ink).
 
 Easily manages:
 - dynamically sized lists
