@@ -16,6 +16,8 @@ import instances from './instances.js';
 import App from './components/App.js';
 import {AltStdin, DefaultStdin} from './stdin/Stdin.js';
 import PreserveScreen from './preserveScreen/PreserveScreen.js';
+// @ts-ignore
+import XXH from 'xxhashjs';
 
 const noop = () => {};
 
@@ -44,10 +46,12 @@ export default class Ink {
 	private exitPromise?: Promise<void>;
 	private restoreConsole?: () => void;
 	private readonly unsubscribeResize?: () => void;
+	private lastRenderHash: string;
 
 	constructor(options: Options) {
 		autoBind(this);
 
+		this.lastRenderHash = this.getHash('');
 		this.options = options;
 		this.rootNode = dom.createNode('ink-root');
 		this.rootNode.onComputeLayout = this.calculateLayout;
@@ -117,6 +121,28 @@ export default class Ink {
 		}
 	}
 
+	/*
+	 * Hashes the output string.  This value is used to compare the hash of the previous
+	 * render with the hash of the next render to see if the screen should be repainted.
+	 * */
+	private getHash(outputString: string): string {
+		return XXH.h32(outputString, 0xcafebabe).toString(16);
+	}
+
+	/*
+	 * Only repaint the screen if the output has been modified.
+	 * */
+	private shouldPaint(output: string): boolean {
+		const nextRenderHash = this.getHash(output);
+
+		if (nextRenderHash === this.lastRenderHash) {
+			return false;
+		} else {
+			this.lastRenderHash = nextRenderHash;
+			return true;
+		}
+	}
+
 	resized = () => {
 		this.calculateLayout();
 		this.onRender();
@@ -160,9 +186,8 @@ export default class Ink {
 
 		const {output, outputHeight, staticOutput} = render(this.rootNode);
 
-		if (AltStdin.isListening()) {
-			return;
-		}
+		if (!this.shouldPaint(output)) return;
+		if (AltStdin.isListening()) return;
 
 		// If <Static> output isn't empty, it means new children have been added to it
 		const hasStaticOutput = staticOutput && staticOutput !== '\n';

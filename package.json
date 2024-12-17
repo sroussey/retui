@@ -68,6 +68,7 @@
 		"widest-line": "^5.0.0",
 		"wrap-ansi": "^9.0.0",
 		"ws": "^8.15.0",
+		"xxhashjs": "^0.2.2",
 		"yoga-wasm-web": "^0.3.3"
 	},
 	"devDependencies": {
