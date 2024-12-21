@@ -1,13 +1,13 @@
 {
 	"name": "phileas",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"description": "React for CLI",
 	"license": "MIT",
 	"repository": "max5961/react-terminal",
 	"author": {
 		"name": "Maxwell Morrissey",
 		"email": "mmorrissey92@proton.me",
-		"url": "https://github.com/max5961/react-terminal"
+		"url": "https://github.com/max5961/phileas"
 	},
 	"type": "module",
 	"exports": {
