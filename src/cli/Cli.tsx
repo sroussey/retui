@@ -12,7 +12,6 @@ import {
 	useModal,
 	Box,
 	useInput,
-	logger,
 } from '../index.js';
 import {Except} from 'type-fest';
 import {Props as ModalProps} from '../modal/Modal.js';

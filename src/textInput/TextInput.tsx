@@ -12,7 +12,6 @@ import {
 	KeyInput,
 	useIsFocus,
 	useKeymap,
-	logger,
 } from '../index.js';
 import ControlKeymap from './ControlKeymap.js';
 import chalk from 'chalk';
@@ -25,6 +24,7 @@ type Color = Exclude<BoxProps['borderColor'], 'inherit'>;
 
 type Props = {
 	onChange: UseTextInputReturn['onChange'];
+	inputStyle?: 'line' | 'area';
 	onExit?: (value: string, stdin: string) => unknown;
 	onEnter?: (value: string, stdin: string) => unknown;
 	onDownArrow?: () => unknown;
@@ -49,6 +49,7 @@ export function TextInput({
 	cursorColor = 'white',
 	textStyle,
 	autoEnter,
+	inputStyle = 'line',
 }: Props): React.ReactNode {
 	const {state, update} = onChange();
 	const {availableWidth, ref} = useAdjustWindowSize(state, update);
@@ -99,10 +100,12 @@ export function TextInput({
 		priority,
 	});
 
-	const handleExit = (stdin: string) => {
+	const handleExit = () => {
 		DefaultStdin.Keyboard.setTextInputMode(false);
 		update({...state, insert: false});
-		onExit?.(state.value, stdin);
+
+		// This is a bad idea.  onExit should be explicit
+		// onExit?.(state.value, stdin);
 	};
 
 	const handleEnter = (stdin: string) => {
@@ -128,7 +131,6 @@ export function TextInput({
 
 	const firstEnter = useRef(true);
 	useEffect(() => {
-		logger.write({fistEnter: firstEnter.current});
 		if (availableWidth === 0 || !firstEnter.current) {
 			return;
 		}
@@ -146,12 +148,15 @@ export function TextInput({
 
 		// Make sure unfocusing also sets insert to false and executes exit handler
 		if (!isFocus) {
-			handleExit('');
+			handleExit();
 		}
 	}, [isFocus]);
 
 	useEvent(Enter, handleEnter);
-	useEvent(Exit, handleExit);
+	useEvent(Exit, (stdin: string) => {
+		handleExit();
+		onExit?.(state.value, stdin);
+	});
 
 	useEvent(ScopedEvents.keypress, (char: string) => {
 		char = pruneSpecialChars(char);
@@ -235,6 +240,7 @@ export function TextInput({
 				availableWidth={availableWidth}
 				cursorColor={cursorColor}
 				textStyle={textStyle}
+				inputStyle={inputStyle}
 			/>
 		</Box>
 	);
@@ -245,6 +251,7 @@ type DisplayTextProps = {
 	availableWidth: number;
 	cursorColor: Color;
 	textStyle: Props['textStyle'];
+	inputStyle: 'line' | 'area';
 };
 
 function DisplayText(props: DisplayTextProps): React.ReactNode {
@@ -259,15 +266,23 @@ function DisplayText(props: DisplayTextProps): React.ReactNode {
 	const cursorColor = props.cursorColor;
 
 	if (!insert) {
-		return (
-			<Text wrap="truncate-end" {...styles}>
-				{value.length ? value : ' '}
-			</Text>
-		);
+		if (props.inputStyle === 'line') {
+			return (
+				<Text wrap="truncate-end" {...styles}>
+					{value.length ? value : ' '}
+				</Text>
+			);
+		} else {
+			return (
+				<Text wrap="wrap" {...styles}>
+					{value.length ? value : ' '}
+				</Text>
+			);
+		}
 	}
 
 	let leftValue = value.slice(start, idx);
-	let cursorValue = value[idx] ?? ' ';
+	let cursorValue = value[idx] ?? '\u00A0'; // non-breaking space
 
 	let rightStop = end;
 	rightStop = Math.max(end, props.availableWidth);
@@ -277,17 +292,28 @@ function DisplayText(props: DisplayTextProps): React.ReactNode {
 	cursorValue = colorize(cursorValue, cursorColor, 'foreground');
 	cursorValue = chalk.inverse(cursorValue);
 
-	return (
-		<Box backgroundColor="inherit">
-			<Text wrap="overflow" {...styles}>
-				{leftValue}
-			</Text>
-			<Text wrap="overflow">{cursorValue}</Text>
-			<Text wrap="overflow" {...styles}>
-				{rightValue}
-			</Text>
-		</Box>
-	);
+	if (props.inputStyle === 'line') {
+		return (
+			<Box backgroundColor="inherit">
+				<Text wrap="overflow" {...styles}>
+					{leftValue}
+				</Text>
+				<Text wrap="overflow">{cursorValue}</Text>
+				<Text wrap="overflow" {...styles}>
+					{rightValue}
+				</Text>
+			</Box>
+		);
+	} else {
+		const leftValue = value.slice(0, idx);
+		const rightValue = value.slice(idx + 1);
+		const textContent = `${leftValue}${cursorValue}${rightValue}`;
+		return (
+			<Box height="100" width="100" backgroundColor="inherit">
+				<Text {...styles}>{textContent}</Text>
+			</Box>
+		);
+	}
 }
 
 function pruneSpecialChars(c: string): string {

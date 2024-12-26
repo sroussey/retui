@@ -47,7 +47,7 @@ export function useEvent<T extends KeyMap = any>(
 		return () => {
 			DefaultStdin.Keyboard.removeEventListener(event, innerHandler);
 		};
-	});
+	}, [{}]);
 }
 
 export function useTypedEvent<T extends KeyMap>(): {
