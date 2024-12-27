@@ -12,6 +12,7 @@ import {
 	KeyInput,
 	useIsFocus,
 	useKeymap,
+	logger,
 } from '../index.js';
 import ControlKeymap from './ControlKeymap.js';
 import chalk from 'chalk';
@@ -89,7 +90,9 @@ export function TextInput({
 
 	const [ID] = useState(randomUUID());
 	const ScopedEvents = ControlKeymap.getScopedEvents(ID);
-	const [InsertKeymap, Exit] = ControlKeymap.getInsertKeymap(ID, exitKeymap);
+	const [InsertKeymap, Exit] = ControlKeymap.getInsertKeymap(ID, exitKeymap, {
+		allowBreaking: inputStyle === 'area',
+	});
 	const [NormalKeymap, Enter] = ControlKeymap.getNormalKeymap(ID, enterKeymap);
 
 	const isFocus = useIsFocus();
@@ -159,7 +162,7 @@ export function TextInput({
 	});
 
 	useEvent(ScopedEvents.keypress, (char: string) => {
-		char = pruneSpecialChars(char);
+		char = pruneNonPrintables(char, {allowBreaking: inputStyle === 'area'});
 		onKeypress?.(char);
 		if (char === '') return;
 
@@ -213,10 +216,22 @@ export function TextInput({
 	useEvent(ScopedEvents.return, () => {
 		// Reminder that this event (or any of these events) will be pruned if
 		// they are assigned to the exit binding
+		if (inputStyle !== 'area') return;
+
+		const nextValue =
+			state.value.slice(0, state.idx) + '\n' + state.value.slice(state.idx);
+		const nextIdx = state.idx + 1;
+		update({...state, idx: nextIdx, value: nextValue});
 	});
 
 	useEvent(ScopedEvents.tab, () => {
 		// Handle differently if FormFocus
+		if (inputStyle !== 'area') return;
+
+		const nextValue =
+			state.value.slice(0, state.idx) + '    ' + state.value.slice(state.idx);
+
+		update({...state, idx: state.idx + 4, value: nextValue});
 	});
 
 	useEvent(ScopedEvents.up, () => {
@@ -283,6 +298,9 @@ function DisplayText(props: DisplayTextProps): React.ReactNode {
 
 	let leftValue = value.slice(start, idx);
 	let cursorValue = value[idx] ?? '\u00A0'; // non-breaking space
+	if (cursorValue === '\n') {
+		cursorValue = '\u00A0' + '\n';
+	}
 
 	let rightStop = end;
 	rightStop = Math.max(end, props.availableWidth);
@@ -316,7 +334,15 @@ function DisplayText(props: DisplayTextProps): React.ReactNode {
 	}
 }
 
-function pruneSpecialChars(c: string): string {
+function pruneNonPrintables(c: string, opts: {allowBreaking: boolean}) {
+	if (opts.allowBreaking) {
+		return pruneTextAreaInput(c);
+	} else {
+		return pruneSingleLineInput(c);
+	}
+}
+
+function pruneSingleLineInput(c: string): string {
 	const charCode = c.charCodeAt(0);
 
 	if (charCode <= 31) return '';
@@ -337,4 +363,24 @@ function pruneSpecialChars(c: string): string {
 	} else {
 		return c;
 	}
+}
+
+function pruneTextAreaInput(c: string): string {
+	let word = '';
+	for (let i = 0; i < c.length; ++i) {
+		const char = c[i];
+		if (char) {
+			if (char !== '\n' && char !== '\t') {
+				const charCode = char.charCodeAt(0);
+				if (charCode <= 31 || charCode === 127) {
+					continue;
+				}
+			}
+			if (char === '\t') {
+				word += '    ';
+			}
+			word += char;
+		}
+	}
+	return word;
 }

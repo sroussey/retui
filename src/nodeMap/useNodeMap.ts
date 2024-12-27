@@ -2,7 +2,7 @@ import {randomUUID} from 'crypto';
 import {EffectCallback, useEffect, useRef, useState} from 'react';
 import {NavController, NavControllerAPI} from './NavController.js';
 import assert from 'assert';
-import {KeyMap, useEvent, useKeymap} from '../index.js';
+import {KeyMap, logger, useEvent, useKeymap} from '../index.js';
 import {ARROW_KEYMAP, ID_NAV_EVENTS, VI_KEYMAP} from './keymaps.js';
 
 type NodeMap<T extends string = string> = T[][];
@@ -38,12 +38,12 @@ export function useNodeMap<T extends string = string>(
 	nodeMap: NodeMap<T>,
 	opts: Opts<T> = {},
 ): Return<T> {
-	const controller = useRef<NavController>(
+	const [controller, setController] = useState(
 		new NavController(nodeMap, opts.initialFocus),
 	);
 
 	const [ID] = useState(randomUUID());
-	const [node, setNode] = useState<string>(controller.current.getLocation());
+	const [node, setNode] = useState<string>(controller.getLocation());
 
 	// NavController accepts an initial focus, but if the initial focus does
 	// not exist in the initializer map, then the focus defaults to the first
@@ -53,20 +53,21 @@ export function useNodeMap<T extends string = string>(
 	// node where indexes are determined from reading the matrix left to right,
 	// line by line
 	useDeepEffect(() => {
-		const previousIteration = controller.current.getIteration();
-		controller.current = new NavController(nodeMap, previousIteration);
+		const previousIteration = controller.getIteration();
+		const nextController = new NavController(nodeMap, previousIteration);
+		setController(nextController);
 
-		const nextIteration = controller.current.getIteration();
-		const nextSize = controller.current.getSize();
+		const nextIteration = nextController.getIteration();
+		const nextSize = nextController.getSize();
 
 		if (previousIteration === nextIteration) {
-			return setNode(controller.current.getLocation());
+			return setNode(nextController.getLocation());
 		}
 
 		// navigationMap size has decreased AND shifted previousIteration out of
 		// range. Shift focus to the last node in the new map
 		if (nextSize <= previousIteration) {
-			return setNode(controller.current.goToNode(nextSize - 1));
+			return setNode(nextController.goToNode(nextSize - 1));
 		}
 	}, [nodeMap]);
 
@@ -91,28 +92,28 @@ export function useNodeMap<T extends string = string>(
 	useKeymap(keymap, {
 		priority: opts.navigation === 'none' ? 'never' : 'default',
 	});
-	useEvent(ID_NAV_EVENTS.up(ID), set(controller.current.up));
-	useEvent(ID_NAV_EVENTS.down(ID), set(controller.current.down));
-	useEvent(ID_NAV_EVENTS.left(ID), set(controller.current.left));
-	useEvent(ID_NAV_EVENTS.right(ID), set(controller.current.right));
-	useEvent(ID_NAV_EVENTS.next(ID), set(controller.current.next));
-	useEvent(ID_NAV_EVENTS.prev(ID), set(controller.current.prev));
+	useEvent(ID_NAV_EVENTS.up(ID), set(controller.up));
+	useEvent(ID_NAV_EVENTS.down(ID), set(controller.down));
+	useEvent(ID_NAV_EVENTS.left(ID), set(controller.left));
+	useEvent(ID_NAV_EVENTS.right(ID), set(controller.right));
+	useEvent(ID_NAV_EVENTS.next(ID), set(controller.next));
+	useEvent(ID_NAV_EVENTS.prev(ID), set(controller.prev));
 
 	const control: NavControllerAPI = {
 		goToNode: (nodeName: string | number) => {
-			const node = controller.current.goToNode(nodeName);
+			const node = controller.goToNode(nodeName);
 			setNode(node);
 			return node;
 		},
-		getIteration: controller.current.getIteration,
-		getSize: controller.current.getSize,
-		getLocation: controller.current.getLocation,
-		up: set(controller.current.up),
-		down: set(controller.current.down),
-		left: set(controller.current.left),
-		right: set(controller.current.right),
-		next: set(controller.current.next),
-		prev: set(controller.current.prev),
+		getIteration: controller.getIteration,
+		getSize: controller.getSize,
+		getLocation: controller.getLocation,
+		up: set(controller.up),
+		down: set(controller.down),
+		left: set(controller.left),
+		right: set(controller.right),
+		next: set(controller.next),
+		prev: set(controller.prev),
 	};
 
 	function getFocusMap(): FocusMap {

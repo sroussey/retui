@@ -39,7 +39,13 @@ function getScopedEvents(ID: string): {[K in InsertEvents]: string} {
 	};
 }
 
-function getDefaultInsertKeymap(): KeyMap {
+function getDefaultInsertKeymap(opts: {allowBreaking: boolean}): KeyMap {
+	const ignore: Key[] = ['left', 'right', 'up', 'down', 'backspace'];
+	if (!opts.allowBreaking) {
+		ignore.push('return');
+		ignore.push('tab');
+	}
+
 	return {
 		[EVENTS.return]: {key: 'return'},
 		[EVENTS.left]: {key: 'left'},
@@ -49,7 +55,7 @@ function getDefaultInsertKeymap(): KeyMap {
 		[EVENTS.backspace]: {key: 'backspace'},
 		[EVENTS.tab]: {key: 'tab'},
 		[EVENTS.keypress]: {
-			notKey: ['return', 'left', 'right', 'up', 'down', 'backspace', 'tab'],
+			notKey: ignore,
 			notInput: [],
 		},
 	};
@@ -66,8 +72,14 @@ function getNormalKeymap(
 /*
  * Removes conflicting entries from the provided exitKeyInput
  * */
-function getInsertKeymap(ID: string, exitKeyInput: KeyInput): [KeyMap, string] {
-	const defaultInsert = getDefaultInsertKeymap();
+function getInsertKeymap(
+	ID: string,
+	exitKeyInput: KeyInput,
+	opts: {allowBreaking: boolean},
+): [KeyMap, string] {
+	const defaultInsert = getDefaultInsertKeymap({
+		allowBreaking: opts.allowBreaking,
+	});
 	exitKeyInput = [
 		...(Array.isArray(exitKeyInput) ? exitKeyInput : [exitKeyInput]),
 	];
