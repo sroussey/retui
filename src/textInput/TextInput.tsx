@@ -20,6 +20,7 @@ import colorize from '../colorize.js';
 import {Except} from 'type-fest';
 import {useAdjustWindowSize} from './useAdjustWindowSize.js';
 import {DefaultStdin} from '../stdin/Stdin.js';
+import {ASCII} from '../stdin/AsciiMap.js';
 
 type Color = Exclude<BoxProps['borderColor'], 'inherit'>;
 
@@ -335,10 +336,14 @@ function DisplayText(props: DisplayTextProps): React.ReactNode {
 }
 
 function pruneNonPrintables(c: string, opts: {allowBreaking: boolean}) {
+	// Trim escape codes that somehow made their way through.  left/right arrow
+	// keys were slipping through.
+	const prePrune = c.replace(/\x1b\[[0-9;]*[A-Za-z]/g, '');
+
 	if (opts.allowBreaking) {
-		return pruneTextAreaInput(c);
+		return pruneTextAreaInput(prePrune);
 	} else {
-		return pruneSingleLineInput(c);
+		return pruneSingleLineInput(prePrune);
 	}
 }
 
