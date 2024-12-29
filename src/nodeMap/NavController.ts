@@ -41,34 +41,34 @@ export class NavController {
 
 				if (!name) continue;
 
-				this.nameMap[name] = {position: currPosition, iteration: size};
+				if (!this.nameMap[name]) {
+					this.nameMap[name] = {position: currPosition, iteration: size++};
+					if (!currStartPosition) {
+						currStartPosition = currPosition;
+					}
+					if (typeof startingNode === 'string' && startingNode === name) {
+						currStartPosition = currPosition;
+					}
+					if (typeof startingNode === 'number' && startingNode === size - 1) {
+						currStartPosition = currPosition;
+					}
 
-				if (!currStartPosition) {
-					currStartPosition = currPosition;
-				}
-				if (typeof startingNode === 'string' && startingNode === name) {
-					currStartPosition = currPosition;
-				}
-				if (typeof startingNode === 'number' && startingNode === size) {
-					currStartPosition = currPosition;
-				}
+					if (prevPosition === null) {
+						startName = name;
+						startPosition = currPosition;
+					}
 
-				if (prevPosition === null) {
-					startName = name;
-					startPosition = currPosition;
-				}
+					if (prevName) {
+						this.nextMap[prevName] = currPosition;
+					}
+					prevName = name;
 
-				if (prevName) {
-					this.nextMap[prevName] = currPosition;
-				}
-				prevName = name;
+					if (prevPosition) {
+						this.prevMap[name] = prevPosition;
+					}
 
-				if (prevPosition) {
-					this.prevMap[name] = prevPosition;
+					prevPosition = currPosition;
 				}
-
-				prevPosition = currPosition;
-				++size;
 			}
 		}
 
@@ -95,10 +95,13 @@ export class NavController {
 		}
 	};
 
-	public getIteration = (): number => {
-		const name = this.getLocation();
+	public getNodeIndex = (name: string): number => {
+		return this.nameMap[name]?.iteration ?? -1;
+	};
 
-		return this.nameMap[name]?.iteration || -1;
+	public getCurrentIndex = (): number => {
+		const name = this.getLocation();
+		return this.nameMap[name]?.iteration ?? -1;
 	};
 
 	public getSize = (): number => {
@@ -116,7 +119,7 @@ export class NavController {
 		return this.getLocation();
 	};
 
-	public goToIteration = (n: number): string => {
+	private goToIteration = (n: number): string => {
 		if (n >= this.getSize() || n < 0) {
 			return this.getLocation();
 		}
@@ -174,6 +177,7 @@ export class NavController {
 	};
 
 	private move = (dy: number, dx: number): string => {
+		const prevName = this.getLocation();
 		const [y, x] = this.currPosition;
 		const ny = y + dy;
 		let nx = x + dx;
@@ -182,7 +186,21 @@ export class NavController {
 			this.currPosition = [ny, nx];
 		}
 
-		if (this.nav[ny]?.[nx] === undefined) {
+		if (this.getLocation() === prevName) {
+			let lny = ny;
+			let lnx = nx;
+
+			while (
+				this.nav[lny + dy]?.[lnx + dx] !== undefined &&
+				this.nav[lny + dy]?.[lnx + dx] !== ''
+			) {
+				lny += dy;
+				lnx += dx;
+				this.currPosition = [lny, lnx];
+			}
+		}
+
+		if (this.nav[ny]?.[nx] === undefined || this.nav[ny]?.[nx] === '') {
 			if (this.nav[ny]?.length === 0 || nx <= 0) {
 				return this.getLocation();
 			}

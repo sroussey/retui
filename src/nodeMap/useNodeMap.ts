@@ -2,7 +2,7 @@ import {randomUUID} from 'crypto';
 import {EffectCallback, useEffect, useRef, useState} from 'react';
 import {NavController, NavControllerAPI} from './NavController.js';
 import assert from 'assert';
-import {KeyMap, logger, useEvent, useKeymap} from '../index.js';
+import {KeyMap, useEvent, useKeymap} from '../index.js';
 import {ARROW_KEYMAP, ID_NAV_EVENTS, VI_KEYMAP} from './keymaps.js';
 
 type NodeMap<T extends string = string> = T[][];
@@ -53,11 +53,11 @@ export function useNodeMap<T extends string = string>(
 	// node where indexes are determined from reading the matrix left to right,
 	// line by line
 	useDeepEffect(() => {
-		const previousIteration = controller.getIteration();
+		const previousIteration = controller.getCurrentIndex();
 		const nextController = new NavController(nodeMap, previousIteration);
 		setController(nextController);
 
-		const nextIteration = nextController.getIteration();
+		const nextIteration = nextController.getCurrentIndex();
 		const nextSize = nextController.getSize();
 
 		if (previousIteration === nextIteration) {
@@ -105,7 +105,8 @@ export function useNodeMap<T extends string = string>(
 			setNode(node);
 			return node;
 		},
-		getIteration: controller.getIteration,
+		getNodeIndex: controller.getNodeIndex,
+		getCurrentIndex: controller.getCurrentIndex,
 		getSize: controller.getSize,
 		getLocation: controller.getLocation,
 		up: set(controller.up),
