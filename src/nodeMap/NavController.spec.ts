@@ -76,7 +76,7 @@ describe('Handles different initializers', () => {
 		expect(nav.getLocation()).toBe('');
 		expect(nav.next()).toBe('');
 		expect(nav.prev()).toBe('');
-		expect(nav.goToIteration(0)).toBe('');
+		expect(nav.goToNode(0)).toBe('');
 		expect(nav.left()).toBe('');
 		expect(nav.right()).toBe('');
 		expect(nav.down()).toBe('');
@@ -90,7 +90,7 @@ describe('Handles different initializers', () => {
 		expect(nav.getLocation()).toBe('');
 		expect(nav.next()).toBe('');
 		expect(nav.prev()).toBe('');
-		expect(nav.goToIteration(0)).toBe('');
+		expect(nav.goToNode(0)).toBe('');
 		expect(nav.left()).toBe('');
 		expect(nav.right()).toBe('');
 		expect(nav.down()).toBe('');
@@ -114,7 +114,7 @@ describe('Handles different initializers', () => {
 	});
 });
 
-describe('goToIteration()', () => {
+describe('goToNode()', () => {
 	const map = [
 		['0', '1'],
 		['2', '3'],
@@ -122,18 +122,18 @@ describe('goToIteration()', () => {
 	const nav = new NavController(map);
 
 	test('Out of range', () => {
-		expect(nav.goToIteration(4)).toBe('0');
-		expect(nav.goToIteration(5)).toBe('0');
-		expect(nav.goToIteration(6)).toBe('0');
-		expect(nav.goToIteration(7)).toBe('0');
+		expect(nav.goToNode(4)).toBe('0');
+		expect(nav.goToNode(5)).toBe('0');
+		expect(nav.goToNode(6)).toBe('0');
+		expect(nav.goToNode(7)).toBe('0');
 	});
 
 	test('In range', () => {
-		expect(nav.goToIteration(0)).toBe('0');
-		expect(nav.goToIteration(1)).toBe('1');
-		expect(nav.goToIteration(2)).toBe('2');
-		expect(nav.goToIteration(3)).toBe('3');
-		expect(nav.goToIteration(0)).toBe('0');
+		expect(nav.goToNode(0)).toBe('0');
+		expect(nav.goToNode(1)).toBe('1');
+		expect(nav.goToNode(2)).toBe('2');
+		expect(nav.goToNode(3)).toBe('3');
+		expect(nav.goToNode(0)).toBe('0');
 	});
 });
 
@@ -197,6 +197,35 @@ test('Will either travel to a valid node, or not travel at all', () => {
 	expect(nav.up()).not.toBe(null);
 });
 
+describe('getNodeIndex(name)', () => {
+	test('one cell per node', () => {
+		const map = [
+			['a', 'b'],
+			['c', 'd'],
+			['e', 'f'],
+		];
+		const nav = new NavController(map);
+		expect(nav.getNodeIndex('a')).toBe(0);
+		expect(nav.getNodeIndex('b')).toBe(1);
+		expect(nav.getNodeIndex('c')).toBe(2);
+		expect(nav.getNodeIndex('d')).toBe(3);
+		expect(nav.getNodeIndex('e')).toBe(4);
+		expect(nav.getNodeIndex('f')).toBe(5);
+	});
+
+	test('nodes may stretch cells', () => {
+		const map = [
+			['a', 'a'],
+			['b', 'b'],
+			['c', 'c'],
+		];
+		const nav = new NavController(map);
+		expect(nav.getNodeIndex('a')).toBe(0);
+		expect(nav.getNodeIndex('b')).toBe(1);
+		expect(nav.getNodeIndex('c')).toBe(2);
+	});
+});
+
 describe('next, prev functions', () => {
 	const map: string[][] = [
 		['1', '2'],
@@ -224,6 +253,64 @@ describe('next, prev functions', () => {
 	});
 	test('PREV: 3 => 2', () => {
 		expect(nav.prev()).toBe('2');
+	});
+});
+
+describe('stretched node cells and irregular maps', () => {
+	// Some maps are not predictable.  b->down can be either d or c
+	// 	["b", "b"],
+	// 	["b", "c"],
+	// 	["d", "e"],
+
+	// However, maps should be able to be irregular and stretch cells while still
+	// being predictable.
+
+	// prettier-ignore
+	const mapA = [
+		["a"],
+		["b", "b", "b", "b", "c"],
+		["d", "d", "d", "d", "d"]
+	]
+
+	describe('mapA', () => {
+		const nav = new NavController(mapA);
+		test('next', () => {
+			expect(nav.getLocation()).toBe('a');
+			expect(nav.next()).toBe('b');
+			expect(nav.next()).toBe('c');
+			expect(nav.next()).toBe('d');
+		});
+		test('prev', () => {
+			expect(nav.prev()).toBe('c');
+			expect(nav.prev()).toBe('b');
+			expect(nav.prev()).toBe('a');
+		});
+		test('directions', () => {
+			expect(nav.right()).toBe('a');
+			expect(nav.down()).toBe('b');
+			expect(nav.right()).toBe('c');
+			expect(nav.right()).toBe('c');
+			expect(nav.down()).toBe('d');
+			expect(nav.up()).toBe('c');
+			expect(nav.left()).toBe('b');
+			expect(nav.up()).toBe('a');
+		});
+	});
+});
+
+describe('getSize', () => {
+	const mapA = [['1'], ['2'], ['3'], ['4'], ['5'], ['6']];
+	const mapB = [
+		['1', '1', '1'],
+		['2', '3', '4'],
+	];
+	test('normal cells', () => {
+		const nav = new NavController(mapA);
+		expect(nav.getSize()).toBe(6);
+	});
+	test('stretched cells', () => {
+		const nav = new NavController(mapB);
+		expect(nav.getSize()).toBe(4);
 	});
 });
 
