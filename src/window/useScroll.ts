@@ -5,7 +5,7 @@ import {Opts as UseWindowOpts} from './useWindow.js';
 
 export type Opts = Pick<
 	UseWindowOpts,
-	'fallthrough' | 'centerScroll' | 'windowSize'
+	'fallthrough' | 'centerScroll' | 'windowSize' | 'startIndex'
 > & {fixedWindowSize?: number};
 
 export type State = {
@@ -51,6 +51,7 @@ export function useScroll(itemsLength: number, opts: Opts): Return {
 		end: state.end,
 	});
 
+	const firstScroll = useRef(true);
 	const scrollAPI = new ScrollAPI({
 		state,
 		setState,
@@ -68,7 +69,10 @@ export function useScroll(itemsLength: number, opts: Opts): Return {
 	if (desiredWinSize !== state._winSize) {
 		scrollAPI.modifyWinSize(desiredWinSize);
 	} else {
-		scrollAPI.handle();
+		scrollAPI.handle(
+			firstScroll.current && opts.startIndex ? opts.startIndex : undefined,
+		);
+		firstScroll.current = false;
 	}
 
 	if (state._winSize > 0) {

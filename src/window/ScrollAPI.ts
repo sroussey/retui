@@ -68,6 +68,7 @@ export class ScrollAPI {
 
 	public handle = (nextIdx: number = this.state.idx): void => {
 		nextIdx = Math.floor(nextIdx);
+		if (nextIdx >= this.LENGTH || nextIdx < 0) nextIdx = this.state.idx;
 
 		if (this.centerScroll) {
 			const nextState = this.getCenterScrollChanges(nextIdx);

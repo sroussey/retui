@@ -13,6 +13,7 @@ export type Opts = {
 	unitSize?: number | 'stretch';
 	centerScroll?: boolean;
 	fallthrough?: boolean;
+	startIndex?: number;
 	navigation?:
 		| 'none'
 		| 'vi-vertical'
@@ -66,6 +67,7 @@ export function useWindow<T extends readonly any[] | any[] | number>(
 		fallthrough: opts.fallthrough,
 		windowSize: opts.windowSize,
 		fixedWindowSize: explicitWindowSize,
+		startIndex: opts.startIndex,
 	});
 
 	const [ID] = useState(randomUUID());
