@@ -1,13 +1,13 @@
 {
-	"name": "phileas",
-	"version": "1.2.3",
-	"description": "React for CLI",
+	"name": "tuir",
+	"version": "1.0.0",
+	"description": "Node TUI with React",
 	"license": "MIT",
-	"repository": "max5961/react-terminal",
+	"repository": "max5961/tuir",
 	"author": {
 		"name": "Maxwell Morrissey",
 		"email": "mmorrissey92@proton.me",
-		"url": "https://github.com/max5961/phileas"
+		"url": "https://github.com/max5961/tuir"
 	},
 	"type": "module",
 	"exports": {
