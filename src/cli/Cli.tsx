@@ -20,8 +20,11 @@ import {Commands, Default, Handler} from './types.js';
 import {CliHistory} from './CliHistory.js';
 import InternalEvents from '../utility/InternalEvents.js';
 
+export type CliMessage = Parameters<ReturnType<typeof useCli>['setValue']>;
+
 export type Props = {
 	commands: Commands;
+	message?: CliMessage;
 	prompt?: string;
 	persistPrompt?: boolean;
 	enterKeymap?: KeyInput;
@@ -62,6 +65,12 @@ function AbstractCli(props: AbstractProps): React.ReactNode {
 			CliHistory.resetIdx();
 		}
 	}, [insert]);
+
+	useEffect(() => {
+		if (props.message) {
+			setValue(...props.message);
+		}
+	}, [props.message]);
 
 	return (
 		<CliView

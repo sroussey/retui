@@ -40,6 +40,7 @@ export {type MouseEvent} from './stdin/Mouse.js';
 export {type Commands} from './cli/types.js';
 export {type NodeMap} from './nodeMap/NavController.js';
 export {type ModalData} from './modal/useModal.js';
+export {type CliMessage} from './cli/Cli.js';
 
 // Fns/objects
 export {List} from './window/list/List.js';
