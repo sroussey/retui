@@ -71,34 +71,121 @@ export function Unit({
 
 	if (type === 'PAGES') {
 		return (
-			<PageContext.Provider
-				value={{isFocus: isDeepFocus, isShallowFocus, index, control}}
+			<Page
 				key={node.key}
+				isFocus={isDeepFocus}
+				isShallowFocus={isShallowFocus}
+				index={index}
+				control={control}
 			>
 				{unit}
-			</PageContext.Provider>
+			</Page>
 		);
 	}
 
 	if (type === 'ITEMS') {
 		return (
-			<ListItemContext.Provider
-				value={{
-					isFocus: isDeepFocus,
-					isShallowFocus,
-					index,
-					items,
-					setItems,
-					control,
-				}}
+			<ListItem
 				key={node.key}
+				isFocus={isDeepFocus}
+				isShallowFocus={isShallowFocus}
+				index={index}
+				items={items}
+				setItems={setItems}
+				control={control}
 			>
 				{unit}
-			</ListItemContext.Provider>
+			</ListItem>
 		);
 	}
 
 	throw new Error('Unhandled Window Unit type');
+}
+
+type ListItemProps = {
+	isFocus: Props['isDeepFocus'];
+	isShallowFocus: Props['isShallowFocus'];
+	index: Props['index'];
+	items: Props['items'];
+	setItems: Props['setItems'];
+	control: Props['control'];
+} & React.PropsWithChildren;
+
+function ListItem(props: ListItemProps): React.ReactNode {
+	const onFocusChangeGenerator = useFocusChangeGenerators(props.isFocus);
+
+	return (
+		<ListItemContext.Provider
+			value={{
+				isFocus: props.isFocus,
+				isShallowFocus: props.isShallowFocus,
+				index: props.index,
+				items: props.items,
+				setItems: props.setItems,
+				control: props.control,
+				onFocus: onFocusChangeGenerator('onFocus'),
+				onBlur: onFocusChangeGenerator('onBlur'),
+			}}
+		>
+			{props.children}
+		</ListItemContext.Provider>
+	);
+}
+
+type PageProps = Pick<
+	ListItemProps,
+	'isFocus' | 'isShallowFocus' | 'index' | 'control'
+> &
+	React.PropsWithChildren;
+
+function Page(props: PageProps): React.ReactNode {
+	const onFocusChangeGenerator = useFocusChangeGenerators(props.isFocus);
+
+	return (
+		<PageContext.Provider
+			value={{
+				isFocus: props.isFocus,
+				isShallowFocus: props.isShallowFocus,
+				index: props.index,
+				control: props.control,
+				onPageFocus: onFocusChangeGenerator('onFocus'),
+				onPageBlur: onFocusChangeGenerator('onBlur'),
+			}}
+		>
+			{props.children}
+		</PageContext.Provider>
+	);
+}
+
+function useFocusChangeGenerators(isFocus: boolean) {
+	// Like a ref, but not not preserved across renders.  Calling the generated
+	// functions from onFocusChangeGenerator changes these values which can
+	// then be called in the effect callback.  Basically, a way of moving state
+	// back up, so that the end user doesn't need to write the useEffect themselves
+	const cache: {onFocus: null | (() => any); onLeaveFocus: null | (() => any)} =
+		{onFocus: null, onLeaveFocus: null};
+
+	const exits = useRef(0);
+
+	const onFocusChangeGenerator = (type: 'onFocus' | 'onBlur') => {
+		return (cb: () => any) => {
+			if (type === 'onFocus') {
+				cache.onFocus = cb;
+			} else if (exits.current++) {
+				cache.onLeaveFocus = cb;
+			}
+		};
+	};
+
+	useEffect(() => {
+		if (isFocus) {
+			cache.onFocus?.();
+		} else {
+			cache.onLeaveFocus?.();
+		}
+	}, [isFocus]);
+
+	return onFocusChangeGenerator;
 }
 
 /*

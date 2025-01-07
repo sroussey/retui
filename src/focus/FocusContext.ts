@@ -12,6 +12,8 @@ export type ListItemContext<T extends any[] | readonly any[] = any> = {
 	// Focus based only on whatever focus given by the List component containing this list item
 	isShallowFocus: boolean;
 	index: number;
+	onFocus: (cb: () => any) => void;
+	onBlur: (cb: () => any) => void;
 };
 
 export type PageContext = {
@@ -21,6 +23,8 @@ export type PageContext = {
 	// Focus based only on whatever focus given by the Pages component containing this page
 	isShallowFocus: boolean;
 	index: number;
+	onPageFocus: (cb: () => any) => void;
+	onPageBlur: (cb: () => any) => void;
 };
 
 export type WindowContext = {
@@ -91,8 +95,20 @@ export function useListItem<
 	const isFocus = listItemContext.isFocus;
 	const isShallowFocus = listItemContext.isShallowFocus;
 	const item = items[index];
+	const onFocus = listItemContext.onFocus;
+	const onBlur = listItemContext.onBlur;
 
-	return {items, setItems, index, isFocus, isShallowFocus, item, control};
+	return {
+		items,
+		setItems,
+		index,
+		isFocus,
+		isShallowFocus,
+		item,
+		control,
+		onFocus,
+		onBlur,
+	};
 }
 
 export function usePage(): PageContext {
