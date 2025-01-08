@@ -32,7 +32,7 @@ export function useScroll(itemsLength: number, opts: Opts): Return {
 		idx: 0,
 		start: 0,
 		end: Math.min(Math.floor(opts.windowSize ?? itemsLength), itemsLength),
-		_winSize: Math.floor(opts.windowSize ?? itemsLength),
+		_winSize: Math.min(Math.floor(opts.windowSize ?? itemsLength), itemsLength),
 	});
 
 	const LENGTH = itemsLength;

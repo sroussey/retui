@@ -12,7 +12,6 @@ import {
 	KeyInput,
 	useIsFocus,
 	useKeymap,
-	logger,
 } from '../index.js';
 import ControlKeymap from './ControlKeymap.js';
 import chalk from 'chalk';
@@ -20,7 +19,6 @@ import colorize from '../colorize.js';
 import {Except} from 'type-fest';
 import {useAdjustWindowSize} from './useAdjustWindowSize.js';
 import {DefaultStdin} from '../stdin/Stdin.js';
-import {ASCII} from '../stdin/AsciiMap.js';
 
 type Color = Exclude<BoxProps['borderColor'], 'inherit'>;
 
