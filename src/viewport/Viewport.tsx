@@ -11,7 +11,7 @@ export type Props = Omit<
 type Dimensions = {height: number; width: number};
 
 export function Viewport(props: Props): React.ReactNode {
-	const {height, width} = useViewport();
+	const {height, width} = useViewportDimensions();
 
 	return (
 		<Box {...props} height={height} width={width}>
@@ -20,7 +20,7 @@ export function Viewport(props: Props): React.ReactNode {
 	);
 }
 
-function useViewport(): Dimensions {
+export function useViewportDimensions(): Dimensions {
 	const {stdout} = useStdout();
 
 	const [dimensions, setDimensions] = useState<Dimensions>({

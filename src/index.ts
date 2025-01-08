@@ -60,7 +60,7 @@ export {useModal, useHideModal} from './modal/useModal.js';
 export {Modal} from './modal/Modal.js';
 export {logger} from './logger/Logger.js';
 export {Logger} from './logger/Logger.js';
-export {Viewport} from './viewport/Viewport.js';
+export {Viewport, useViewportDimensions} from './viewport/Viewport.js';
 export {TextInput} from './textInput/TextInput.js';
 export {useTextInput} from './textInput/useTextInput.js';
 export {setMouseReporting} from './stdin/Stdin.js';
