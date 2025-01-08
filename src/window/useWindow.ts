@@ -10,7 +10,7 @@ import {SetState} from '../utility/types.js';
 
 export type Opts = {
 	windowSize?: number | 'fit';
-	unitSize?: number | 'stretch';
+	unitSize?: number | 'stretch' | 'fit-unit';
 	centerScroll?: boolean;
 	fallthrough?: boolean;
 	startIndex?: number;

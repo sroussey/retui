@@ -15,9 +15,15 @@ type Props = ListSpecificProps &
 		| 'gap'
 		// | 'wordList' TODO
 		| 'scrollbar'
-	>;
+	> & {
+		fitX?: boolean;
+		fitY?: boolean;
+	};
 
-export function List(props: Props): React.ReactNode {
+export function List({...props}: Props): React.ReactNode {
+	props.fitX = props.fitX ?? false;
+	props.fitY = props.fitY ?? false;
+
 	const windowProps = {
 		...props,
 		viewState: props.listView,

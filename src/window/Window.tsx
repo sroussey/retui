@@ -29,6 +29,7 @@ export type IntrinsicWindowBaseProps = Pick<
 	| 'flexGrow'
 	| 'flexWrap'
 	| 'flexShrink'
+	| 'flexBasis'
 > & {
 	scrollbar?: StylesConfig['Scrollbar'];
 	unitSize?: number | 'stretch';
@@ -48,6 +49,8 @@ export type WindowProps = React.PropsWithChildren &
 			StylesConfig['Box']['flexDirection'],
 			'column' | 'row'
 		>;
+		fitX?: boolean;
+		fitY?: boolean;
 	};
 
 export function Window({...props}: WindowProps): React.ReactNode {
@@ -57,8 +60,10 @@ export function Window({...props}: WindowProps): React.ReactNode {
 		// throw an error because empty lists need to be accomodated
 	}
 
-	props.height = props.height ?? '100';
-	props.width = props.width ?? '100';
+	props.fitX = props.fitX ?? false;
+	props.fitY = props.fitY ?? false;
+	props.height = props.fitY ? undefined : (props.height ?? '100');
+	props.width = props.fitX ? undefined : (props.width ?? '100');
 	props.scrollbar = props.scrollbar ?? {hide: false};
 	props.scrollbar.hide = props.scrollbar.hide ?? false;
 	props.scrollbar.style = props.scrollbar.style ?? 'single';
