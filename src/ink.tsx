@@ -18,6 +18,8 @@ import {AltStdin, DefaultStdin} from './stdin/Stdin.js';
 import PreserveScreen from './preserveScreen/PreserveScreen.js';
 // @ts-ignore
 import XXH from 'xxhashjs';
+import {Console} from './logger/Console.js';
+import {logger} from './logger/Logger.js';
 
 const noop = () => {};
 
@@ -358,6 +360,12 @@ export default class Ink {
 		}
 
 		this.restoreConsole = patchConsole((stream, data) => {
+			// Direct stdout to a specified file that can be set with setConsole
+			const {enabled, path} = Console;
+			if (enabled && path) {
+				return logger.file(path).write(data.trimEnd());
+			}
+
 			if (stream === 'stdout') {
 				this.writeToStdout(data);
 			}

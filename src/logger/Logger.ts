@@ -20,7 +20,7 @@ export class Logger {
 	private _validPaths: Set<string>;
 
 	static Default = {
-		file: 'logger.log',
+		file: 'console.log',
 		time: true,
 		color: null,
 		prefixColor: null,
@@ -43,12 +43,6 @@ export class Logger {
 		this._prefix = prefix;
 		this._validPaths = new Set<string>();
 		this.ensureValidPath(this._file);
-		// prettier-ignore
-		process.on("warning", (warning) => {
-            this.prefixColor("yellow").prefix("WARNING_NAME", "name", warning.name);
-            this.prefixColor("yellow").prefix("WARNING_MESSAGE", "message", warning.message);
-            this.prefixColor("yellow").prefix("WARNING_STACK_TRACE", "stack trace", warning.stack);
-        });
 	}
 
 	public file(file: string): Logger {

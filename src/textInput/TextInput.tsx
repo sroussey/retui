@@ -133,6 +133,8 @@ export function TextInput({
 
 	const firstEnter = useRef(true);
 	useEffect(() => {
+		if (!isFocus) return;
+
 		if (availableWidth === 0 || !firstEnter.current) {
 			return;
 		}
@@ -140,7 +142,7 @@ export function TextInput({
 			firstEnter.current = false;
 			handleEnter('');
 		}
-	}, [availableWidth]);
+	}, [availableWidth, isFocus]);
 
 	useEffect(() => {
 		// If autoenter make sure insert is toggled to true
