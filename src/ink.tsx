@@ -175,9 +175,12 @@ export default class Ink {
 			AltStdin.pause();
 			process.stdin.removeAllListeners();
 			process.stdin.pause();
+
 			// process.exit for right now because I can't figure out what is
 			// causing the hang up which occurs after executing shell commands
-			process.exit();
+			if (!process.env?.['TEST_ENV']) {
+				process.exit();
+			}
 		});
 	}
 
@@ -188,7 +191,7 @@ export default class Ink {
 
 		const {output, outputHeight, staticOutput} = render(this.rootNode);
 
-		if (!this.shouldPaint(output)) return;
+		if (!this.shouldPaint(output) && !staticOutput) return;
 		if (AltStdin.isListening()) return;
 
 		// If <Static> output isn't empty, it means new children have been added to it

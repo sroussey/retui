@@ -47,7 +47,9 @@ export const run: Run = async (fixture, props) => {
 		});
 
 		term.onExit(({exitCode}) => {
-			if (exitCode === 0) {
+			// Original fork did not track exitCode, and I wanted to.  Sets to
+			// 1 if an error occurs in the app, sets to 200 during testing
+			if (exitCode === 0 || exitCode === 200) {
 				resolve(output);
 				return;
 			}

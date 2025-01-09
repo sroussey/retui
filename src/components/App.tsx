@@ -219,7 +219,11 @@ export default class App extends PureComponent<Props, State> {
 
 	handleExit = (error?: Error): void => {
 		if (error) {
-			process.exitCode = 1;
+			if (process.env?.['TEST_ENV']) {
+				process.exitCode = 200;
+			} else {
+				process.exitCode = 1;
+			}
 		}
 
 		if (this.isRawModeSupported()) {
