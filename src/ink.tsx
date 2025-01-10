@@ -1,4 +1,4 @@
-import process, {exitCode} from 'node:process';
+import process from 'node:process';
 import React, {type ReactNode} from 'react';
 import {throttle} from 'es-toolkit/compat';
 import ansiEscapes from 'ansi-escapes';

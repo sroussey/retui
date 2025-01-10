@@ -11,7 +11,12 @@ export type ListItemContext<T extends any[] | readonly any[] = any> = {
 	isFocus: boolean;
 	// Focus based only on whatever focus given by the List component containing this list item
 	isShallowFocus: boolean;
-	index: number;
+
+	// The index of the list item
+	itemIndex: number;
+
+	// The currently focused index
+	listIndex: number;
 	onFocus: (cb: () => any) => void;
 	onBlur: (cb: () => any) => void;
 };
@@ -90,18 +95,20 @@ export function useListItem<
 
 	const items = listItemContext.items;
 	const setItems = listItemContext.setItems;
-	const index = listItemContext.index;
+	const itemIndex = listItemContext.itemIndex;
+	const listIndex = listItemContext.control.currentIndex;
 	const control = listItemContext.control;
 	const isFocus = listItemContext.isFocus;
 	const isShallowFocus = listItemContext.isShallowFocus;
-	const item = items[index];
+	const item = items[itemIndex];
 	const onFocus = listItemContext.onFocus;
 	const onBlur = listItemContext.onBlur;
 
 	return {
 		items,
 		setItems,
-		index,
+		itemIndex,
+		listIndex,
 		isFocus,
 		isShallowFocus,
 		item,

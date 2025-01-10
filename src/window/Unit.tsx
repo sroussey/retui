@@ -119,7 +119,8 @@ function ListItem(props: ListItemProps): React.ReactNode {
 			value={{
 				isFocus: props.isFocus,
 				isShallowFocus: props.isShallowFocus,
-				index: props.index,
+				itemIndex: props.index,
+				listIndex: props.control.currentIndex,
 				items: props.items,
 				setItems: props.setItems,
 				control: props.control,
