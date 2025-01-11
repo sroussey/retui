@@ -1,5 +1,6 @@
 import {describe, expect, test} from 'vitest';
-import {NodeMap, NavController} from './NavController.js';
+import {NodeMap} from '../../src/index.js';
+import {NavController} from '../../src/nodeMap/NavController.js';
 import assert from 'assert';
 
 const deepEqual = (a: any, b: any) => {

@@ -21,11 +21,10 @@
 		"dev": "tsc --watch",
 		"build": "tsc",
 		"prepare": "npm run build",
-		"test": "npx vitest",
+		"test": "tsc && TEST_ENV=true vitest",
 		"test:original": "tsc --noEmit && FORCE_COLOR=true TEST_ENV=true ava",
 		"example": "NODE_NO_WARNINGS=1 node --loader ts-node/esm",
-		"benchmark": "NODE_NO_WARNINGS=1 node --loader ts-node/esm",
-		"vitest": "tsc && npx vitest"
+		"benchmark": "NODE_NO_WARNINGS=1 node --loader ts-node/esm"
 	},
 	"files": [
 		"build"

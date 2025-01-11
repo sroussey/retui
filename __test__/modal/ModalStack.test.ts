@@ -1,5 +1,5 @@
 import {describe, it, expect} from 'vitest';
-import ModalStack from './ModalStack.js';
+import ModalStack from '../../src/modal/ModalStack.js';
 
 const child1 = 'child1';
 const child2 = 'child2';

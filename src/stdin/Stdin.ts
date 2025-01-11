@@ -48,7 +48,10 @@ class Stdin {
 		if (process.stdin.isTTY) {
 			process.stdin.setRawMode(true);
 		} else {
-			return console.warn('Raw mode not supported.  Stdin not supported');
+			if (!process.env?.['TEST_ENV']) {
+				console.warn('Raw mode not supported.  Stdin not supported');
+			}
+			return;
 		}
 
 		process.stdin.resume();

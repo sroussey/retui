@@ -1,11 +1,8 @@
 import React from 'react';
-import Box from '../../../components/Box.js';
+import {Box, Text, List, useList, logger} from '../../src/index.js';
+import {WindowControl} from '../../src/window/types.js';
 import {describe, expect, test} from 'vitest';
-import {renderToString} from '../../../../test/helpers/render-to-string.js';
-import {List} from '../List.js';
-import Text from '../../../components/Text.js';
-import {WindowControl} from '../../types.js';
-import {useList} from '../useList.js';
+import {renderToString} from '../../test/helpers/render-to-string.js';
 import boxen from 'boxen';
 
 describe('Slices list', () => {
@@ -130,7 +127,7 @@ describe('unit sizes and window sizes', () => {
 		const {listView} = useList(3, {windowSize: 1, unitSize: 'fit-unit'});
 		return (
 			<Box height={5} flexDirection={props.fd}>
-				<List listView={listView}>
+				<List listView={listView} scrollbar={{hide: true}}>
 					<Box borderStyle="round">
 						<Text>0</Text>
 					</Box>
@@ -145,12 +142,92 @@ describe('unit sizes and window sizes', () => {
 		);
 	}
 
-	// The unit rendered unit does not 'stretch' to fill up
-	// test('ws: 1, us: fit-unit, flexDirection: "column"', () => {
-	// 	const output = renderToString(<UnitSizeFitUnit fd="column" />);
-	// 	const box = boxen('0', {borderStyle: 'round', width: 3, height: 3});
-	// 	expect(output).toBe(`${box}`);
-	// });
+	// The unit does not 'stretch' to fill up
+	test('ws: 1, us: fit-unit, flexDirection: "column"', () => {
+		const output = renderToString(<UnitSizeFitUnit fd="column" />);
+		const box = boxen('0', {borderStyle: 'round', width: 3, height: 3});
+		expect(output).toBe(`${box}\n\n`);
+	});
+
+	test('ws: 1, us: fit-unit, flexDirection: "row"', () => {
+		const output = renderToString(<UnitSizeFitUnit fd="row" />);
+		const box = boxen('0', {borderStyle: 'round', width: 3, height: 3});
+		expect(output).toBe(`${box}\n\n`);
+	});
+});
+
+describe('List fitX and fitY', () => {
+	function View({
+		fitX,
+		fitY,
+		mod = true,
+		testNotY = false,
+	}: {
+		fitX: boolean;
+		fitY: boolean;
+		mod?: boolean;
+		testNotY?: boolean;
+	}) {
+		const {listView} = useList(5, {windowSize: 3, unitSize: 1});
+		return (
+			<Box
+				height={7}
+				width={fitX || !mod ? undefined : 3}
+				justifyContent="flex-start"
+				alignItems={!testNotY ? 'flex-start' : undefined}
+			>
+				<Box borderStyle="round">
+					<List
+						listView={listView}
+						fitX={fitX}
+						fitY={fitY}
+						scrollbar={{hide: true}}
+					>
+						<Text>0</Text>
+						<Text>1</Text>
+						<Text>2</Text>
+						<Text>3</Text>
+						<Text>4</Text>
+					</List>
+				</Box>
+			</Box>
+		);
+	}
+	const expectedOutput =
+		boxen('0\n1\n2', {
+			borderStyle: 'round',
+			width: 3,
+			height: 5,
+		}) + '\n\n';
+
+	test('fitX', () => {
+		const output = renderToString(<View fitX={true} fitY={false} />);
+		expect(output).toBe(expectedOutput);
+	});
+
+	test('fitY', () => {
+		const output = renderToString(<View fitX={false} fitY={true} />);
+		expect(output).toBe(expectedOutput);
+	});
+
+	test('fitX and fitY', () => {
+		const output = renderToString(<View fitX={true} fitY={true} />);
+		expect(output).toBe(expectedOutput);
+	});
+
+	test('not fitX', () => {
+		const output = renderToString(
+			<View fitX={false} fitY={false} mod={false} />,
+		);
+		expect(output).not.toBe(expectedOutput);
+	});
+
+	test('not fitY', () => {
+		const output = renderToString(
+			<View fitX={false} fitY={false} mod={false} testNotY={true} />,
+		);
+		expect(output).not.toBe(expectedOutput);
+	});
 });
 
 type ListView = ReturnType<typeof useList>['listView'];
