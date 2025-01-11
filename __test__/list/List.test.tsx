@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, Text, List, useList, logger} from '../../src/index.js';
+import {Box, Text, List, useList} from '../../src/index.js';
 import {WindowControl} from '../../src/window/types.js';
 import {describe, expect, test} from 'vitest';
 import {renderToString} from '../../test/helpers/render-to-string.js';
@@ -227,6 +227,39 @@ describe('List fitX and fitY', () => {
 			<View fitX={false} fitY={false} mod={false} testNotY={true} />,
 		);
 		expect(output).not.toBe(expectedOutput);
+	});
+});
+
+describe('Start index', () => {
+	function View({startIndex}: {startIndex: number}) {
+		const {listView, items, control} = useList([0, 1, 2, 3, 4, 5], {
+			startIndex: startIndex,
+		});
+		return (
+			<Box height={1}>
+				<List listView={listView} scrollbar={{hide: true}}>
+					{items.map((item, idx) => {
+						return (
+							<Text
+								key={item}
+							>{`${control.currentIndex === idx ? item + 'x' : item}`}</Text>
+						);
+					})}
+				</List>
+			</Box>
+		);
+	}
+	test('Start at 3', () => {
+		const output = renderToString(<View startIndex={3} />);
+		expect(output).toBe('3x');
+	});
+	test('Start out of range + num', () => {
+		const output = renderToString(<View startIndex={10} />);
+		expect(output).toBe('0x');
+	});
+	test('Start out of range - num', () => {
+		const output = renderToString(<View startIndex={-10} />);
+		expect(output).toBe('0x');
 	});
 });
 

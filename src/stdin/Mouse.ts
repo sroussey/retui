@@ -388,13 +388,21 @@ export default class Mouse {
 		}
 	};
 
+	/*
+	 * man console-codes
+	 * https://www.xfree86.org/current/ctlseqs.html#Mouse%20Tracking
+	 *
+	 * Sending "\033[?1000h" and "\033[?1000l" to stdin turns on/off mouse
+	 * tracking respectively.  Mouse events start with \033[M which is 0x1b, 0x5b,
+	 * and 0x4d
+	 * */
 	public isMouseEvent = (buffer: Buffer): boolean => {
 		let codes: any[] = [];
 		for (let i = 0; i < buffer.length; ++i) {
+			// Convert byte to hex string.
 			codes.push(`${buffer[i]?.toString(16)}`);
 		}
 
-		// Mouse event ESC[M
 		if (codes[0] === '1b' && codes[1] === '5b' && codes[2] === '4d') {
 			return true;
 		} else {
@@ -403,6 +411,7 @@ export default class Mouse {
 	};
 
 	public handleStdin = (buffer: Buffer): void => {
+		// xterm offsets the codes by 0x20 (32) so that chars like \n aren't sent
 		const buttonCode = buffer[3]! - 0x20;
 		let x = buffer[4]! - 0x20 - 1;
 		let y = buffer[5]! - 0x20 - 1;
