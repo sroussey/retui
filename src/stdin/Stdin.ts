@@ -82,7 +82,7 @@ class Stdin {
 		process.stdin.on(EVENT.data, this.handleStdin);
 	};
 
-	private handleStdin = (stdin: string): void => {
+	public handleStdin = (stdin: string): void => {
 		// Handle SIGINT
 		if (stdin === '03') {
 			process.exit();
