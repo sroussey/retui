@@ -64,11 +64,74 @@ describe('Does not go out of bounds', () => {
 		expect(ctl.current.list.control.currentIndex).toBe(1);
 	});
 
-	// Will break
-	test.todo('Does not throw on certain resizes', () => {
+	const setItems = () => {
 		act(() => ctl.current.list.setItems(newArr(20)));
 		act(() => ctl.current.list.control.goToIndex(19));
 		expect(ctl.current.list.control.currentIndex).toBe(19);
+	};
+
+	test('delete at current idx', () => {
+		setItems();
+
+		expect(() => {
+			for (let i = 0; i < 100; ++i) {
+				act(() => ctl.current.delIdx(ctl.current.list.control.currentIndex));
+			}
+		}).not.toThrow();
+	});
+
+	test('delete at end', () => {
+		setItems();
+
+		expect(() => {
+			for (let i = 0; i < 100; ++i) {
+				act(() => ctl.current.delEnd());
+			}
+		}).not.toThrow();
+	});
+
+	test('delete at start', () => {
+		setItems();
+
+		expect(() => {
+			for (let i = 0; i < 100; ++i) {
+				act(() => ctl.current.delStart());
+			}
+		}).not.toThrow();
+	});
+
+	test('add at current idx', () => {
+		setItems();
+
+		expect(() => {
+			for (let i = 0; i < 100; ++i) {
+				act(() => ctl.current.addIdx(ctl.current.list.control.currentIndex));
+			}
+		}).not.toThrow();
+	});
+
+	test('add at start', () => {
+		setItems();
+
+		expect(() => {
+			for (let i = 0; i < 100; ++i) {
+				act(() => ctl.current.addStart());
+			}
+		}).not.toThrow();
+	});
+
+	test('add at end', () => {
+		setItems();
+
+		expect(() => {
+			for (let i = 0; i < 100; ++i) {
+				act(() => ctl.current.addEnd());
+			}
+		}).not.toThrow();
+	});
+
+	test('Does not throw on certain deletions/resizes', () => {
+		setItems();
 
 		expect(() => {
 			// narrow window, then widen with less length than prev index
@@ -77,11 +140,8 @@ describe('Does not go out of bounds', () => {
 		}).not.toThrow();
 	});
 
-	// Will break
-	test.todo('Does not throw on certain resizes', () => {
-		act(() => ctl.current.list.setItems(newArr(20)));
-		act(() => ctl.current.list.control.goToIndex(19));
-		expect(ctl.current.list.control.currentIndex).toBe(19);
+	test('Does not throw on certain deletions/resizes', () => {
+		setItems();
 
 		expect(() => {
 			// narrow window, then widen with less length than prev index

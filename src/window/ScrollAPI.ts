@@ -70,6 +70,12 @@ export class ScrollAPI {
 		nextIdx = Math.floor(nextIdx);
 		if (nextIdx >= this.LENGTH || nextIdx < 0) nextIdx = this.state.idx;
 
+		try {
+			this.rangeCheck(this.state);
+		} catch {
+			return this.normalizeWindow();
+		}
+
 		if (this.centerScroll) {
 			const nextState = this.getCenterScrollChanges(nextIdx);
 			return this.setState(nextState);
@@ -305,6 +311,24 @@ export class ScrollAPI {
 		}
 	};
 
+	private normalizeWindow = (): void => {
+		const normalized = produce(this.state, draft => {
+			while (draft.end > this.LENGTH) {
+				draft.start = Math.max(0, draft.start - 1);
+				draft.end = Math.max(0, draft.end - 1);
+			}
+
+			while (draft.start > this.LENGTH) {
+				draft.start = Math.max(0, draft.end - 1);
+			}
+
+			while (draft.idx > this.LENGTH || draft.idx > draft.end) {
+				draft.idx = Math.max(0, draft.idx - 1);
+			}
+		});
+		this.setState(normalized);
+	};
+
 	public modifyWinSize = (nextSize: number): void => {
 		nextSize = Math.floor(nextSize);
 
@@ -351,6 +375,17 @@ export class ScrollAPI {
 			}
 
 			draft._winSize = nextSize;
+
+			// Leaving this commented out means that resizes to 0 keep old index if
+			// when modifying back to expanded size.  The idx will be normalized on
+			// the next handleScroll
+			// if (draft.idx < draft.start) {
+			// 	draft.idx = Math.max(0, draft.start);
+			// }
+			//
+			// if (draft.idx >= draft.end) {
+			// 	draft.idx = Math.max(0, draft.end - 1);
+			// }
 
 			if (this.centerScroll) {
 				this.centerIdx({draft, LENGTH});
