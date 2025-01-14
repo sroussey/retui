@@ -25,7 +25,7 @@ export function useCli({
 	rejectStyles?: TextStyles;
 	resolveStyles?: TextStyles;
 }) {
-	const {onChange, setValue, insert, value} = useTextInput();
+	const {onChange, setValue, insert, enterInsert, value} = useTextInput();
 	const [textStyleType, setTextStyleType] = useState<StyleType>('INPUT');
 	const hasStyles = inputStyles || rejectStyles || resolveStyles;
 
@@ -53,5 +53,12 @@ export function useCli({
 		}
 	}
 
-	return {onChange, setValue: internalSetValue, value, insert, textStyle};
+	return {
+		onChange,
+		setValue: internalSetValue,
+		value,
+		insert,
+		enterInsert,
+		textStyle,
+	};
 }

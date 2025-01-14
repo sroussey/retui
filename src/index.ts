@@ -37,7 +37,7 @@ export {type ItemGenerator} from './window/Window.js';
 export {type CornerPositions} from './stdin/ElementPosition.js';
 export {type Handler as MouseEventHandler} from './stdin/Mouse.js';
 export {type MouseEvent} from './stdin/Mouse.js';
-export {type Commands} from './cli/types.js';
+export {type CliConfig} from './cli/types.js';
 export {type NodeMap} from './nodeMap/NavController.js';
 export {type ModalData} from './modal/useModal.js';
 export {type CliMessage} from './cli/Cli.js';

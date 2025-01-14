@@ -12,9 +12,13 @@ export function useListener(
 	dependencies: any[] = [{}],
 ) {
 	useEffect(() => {
-		emitter.on(event, cb);
+		setImmediate(() => {
+			emitter.on(event, cb);
+		});
 		return () => {
-			emitter.off(event, cb);
+			setImmediate(() => {
+				emitter.off(event, cb);
+			});
 		};
 	}, dependencies);
 }

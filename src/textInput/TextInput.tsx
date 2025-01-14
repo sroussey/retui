@@ -156,6 +156,12 @@ export function TextInput({
 		}
 	}, [isFocus]);
 
+	useEffect(() => {
+		if (state.insert) {
+			onEnter?.(state.value, '');
+		}
+	}, [state.insert]);
+
 	useEvent(Enter, handleEnter);
 	useEvent(Exit, (stdin: string) => {
 		handleExit();

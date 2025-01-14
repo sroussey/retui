@@ -7,7 +7,7 @@ import {useModal} from '../modal/useModal.js';
 type CliModalProps = CliProps & Except<ModalProps, 'modal'>;
 export function CliModal(props: CliModalProps): React.ReactNode {
 	const {
-		commands,
+		config,
 		enterKeymap = [{input: ':'}],
 		exitKeymap = [{key: 'return'}, {key: 'esc'}],
 		prompt,
@@ -26,7 +26,7 @@ export function CliModal(props: CliModalProps): React.ReactNode {
 	return (
 		<Modal modal={modal} {...modalProps}>
 			<AbstractCli
-				commands={commands}
+				config={config}
 				autoEnter={true}
 				enterKeymap={enterKeymap}
 				exitKeymap={exitKeymap}

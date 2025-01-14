@@ -5,10 +5,14 @@ import {KeyOf} from '../../utility/types.js';
 import {useModalLevel} from '../../modal/ModalContext.js';
 import ModalStack from '../../modal/ModalStack.js';
 import {KeyMap} from '../Keyboard.js';
+import {KeyInput} from '../../index.js';
 
 export namespace T {
 	export interface UseEvent<T extends KeyMap = any> {
-		(cmd: keyof T, handler: (stdin: string) => unknown): void;
+		(
+			cmd: keyof T,
+			handler: (stdin: string, keyinput: KeyInput | KeyInput[]) => unknown,
+		): void;
 	}
 	export type Listener = {
 		event: string;
@@ -25,7 +29,7 @@ export type {T as UseEventTypes};
 
 export function useEvent<T extends KeyMap = any>(
 	event: KeyOf<T>,
-	handler: (stdin: string) => unknown,
+	handler: (stdin: string, keyinput: KeyInput | KeyInput[]) => unknown,
 	extraFocusCheck?: boolean,
 ) {
 	const isFocus = useIsFocus();
@@ -36,9 +40,9 @@ export function useEvent<T extends KeyMap = any>(
 	useEffect(() => {
 		if (!isFocus || !extraFocusCheck) return;
 
-		const innerHandler = (stdin: string) => {
+		const innerHandler = (stdin: string, keyinput: KeyInput | KeyInput[]) => {
 			if (ModalStack.isActiveModalLevel(componentLevel)) {
-				handler(stdin);
+				handler(stdin, keyinput);
 			}
 		};
 

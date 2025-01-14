@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import EventEmitter from 'events';
 import {
 	KeyInput,
@@ -13,14 +13,13 @@ import {
 } from '../index.js';
 import {Except} from 'type-fest';
 import {SetValue, TextStyles, useCli} from './useCli.js';
-import {Commands, Default, Handler} from './types.js';
+import {CliConfig, CliMessage, Commands, Handler} from './types.js';
 import {CliHistory} from './CliHistory.js';
 import InternalEvents from '../utility/InternalEvents.js';
-
-export type CliMessage = Parameters<ReturnType<typeof useCli>['setValue']>;
+import {useActionPrompt} from './useActionPrompt.js';
 
 export type CliProps = {
-	commands: Commands;
+	config: CliConfig;
 	message?: CliMessage;
 	prompt?: string;
 	persistPrompt?: boolean;
@@ -29,6 +28,7 @@ export type CliProps = {
 	inputStyles?: TextStyles;
 	resolveStyles?: TextStyles;
 	rejectStyles?: TextStyles;
+	promptStyles?: TextStyles;
 };
 
 export type AbstractProps = CliProps & {
@@ -39,12 +39,13 @@ export type AbstractProps = CliProps & {
 	onDownArrow?: () => unknown;
 };
 
-export const DEFAULT: Default = 'DEFAULT';
+export const DEFAULT = 'DEFAULT';
 export const CliEmitter = new EventEmitter();
 
 export function AbstractCli(props: AbstractProps): React.ReactNode {
-	const {onChange, setValue, insert, textStyle, value} = useCli(props);
 	const {autoEnter, ...cliViewProps} = props;
+	const {onChange, setValue, insert, enterInsert, textStyle, value} =
+		useCli(props);
 
 	const onUpArrow = () => {
 		const nextCommand = CliHistory.next();
@@ -75,10 +76,12 @@ export function AbstractCli(props: AbstractProps): React.ReactNode {
 			onChange={onChange}
 			setValue={setValue}
 			insert={insert}
+			enterInsert={enterInsert}
 			textStyles={textStyle}
 			autoEnter={autoEnter}
 			onUpArrow={onUpArrow}
 			onDownArrow={onDownArrow}
+			promptStyles={props.promptStyles}
 		/>
 	);
 }
@@ -90,28 +93,39 @@ type CliViewProps = Except<
 	onChange: ReturnType<typeof useTextInput>['onChange'];
 	setValue: SetValue;
 	insert: boolean;
+	enterInsert: () => void;
 	value: string;
 } & {
 	textStyles: TextStyles;
 };
 
 function CliView({
-	commands,
+	config,
 	enterKeymap = {input: ':'},
 	exitKeymap = [{key: 'return'}, {key: 'esc'}],
 	prompt = ':',
 	persistPrompt = false,
+	promptStyles,
 	onChange,
 	setValue,
 	value,
 	insert,
+	enterInsert,
 	textStyles,
 	hideModal,
 	onDownArrow,
 	onUpArrow,
 	autoEnter,
 }: CliViewProps): React.ReactNode {
-	const prefixValue = insert || persistPrompt ? prompt : '';
+	const {actionPrompt, setActionPrompt, scopedPromptEvent} = useActionPrompt(
+		config,
+		setValue,
+		enterInsert,
+	);
+
+	const prefixValue = () => {
+		return insert || persistPrompt ? prompt : '';
+	};
 
 	const NEXT_CLI_HISTORY = InternalEvents.Prefix + 'NEXT_CLI_HISTORY';
 	const PREV_CLI_HISTORY = InternalEvents.Prefix + 'PREV_CLI_HISTORY';
@@ -146,54 +160,71 @@ function CliView({
 			if (!insert && value) {
 				setValue('INPUT', '');
 			}
+
+			if (!insert) {
+				setActionPrompt(null);
+			}
 		},
 		{isActive: !!(!insert && value)},
 	);
 
 	return (
 		<Box width="100" flexDirection="row" backgroundColor="inherit">
-			<Text wrap="truncate-end">{prefixValue}</Text>
-			<TextInput
-				textStyle={textStyles}
-				onChange={onChange}
-				enterKeymap={enterKeymap}
-				exitKeymap={exitKeymap}
-				autoEnter={autoEnter}
-				onDownArrow={onDownArrow}
-				onUpArrow={onUpArrow}
-				// Enter and exit handlers in TextInput need to pass stdin to
-				// the callbacks so that we can handle events differently
-				// like in this case where esc and return should be handled differently
-				onExit={(rawInput, stdin) => {
-					if (stdin === Key.esc) {
-						if (hideModal) {
-							return hideModal();
-						} else {
-							return setValue('INPUT', '');
-						}
-					}
-
-					handleInput(commands, rawInput)
-						.then((result: unknown) => {
-							const sanitized: string = sanitizeResult(result);
-							setValue('RESOLVE', sanitized);
-							return sanitized;
-						})
-						.catch((error: unknown) => {
-							const sanitized: string = sanitizeResult(error);
-							setValue('REJECT', sanitized);
-							return sanitized;
-						})
-						.then((sanitized: string) => {
-							if (!sanitized) {
-								hideModal?.();
+			<Box height={1} width={prefixValue().length} flexShrink={0}>
+				<Text wrap="truncate-end">{prefixValue()}</Text>
+			</Box>
+			<Box height={1} width={actionPrompt?.length ?? 0} flexShrink={0}>
+				<Text wrap="truncate-end" styles={promptStyles}>
+					{actionPrompt}
+				</Text>
+			</Box>
+			<Box height={1} width="100" flexShrink={2}>
+				<TextInput
+					textStyle={textStyles}
+					onChange={onChange}
+					enterKeymap={enterKeymap}
+					exitKeymap={exitKeymap}
+					autoEnter={autoEnter}
+					onDownArrow={onDownArrow}
+					onUpArrow={onUpArrow}
+					// Enter and exit handlers in TextInput need to pass stdin to
+					// the callbacks so that we can handle events differently
+					// like in this case where esc and return should be handled differently
+					onExit={(value, stdin) => {
+						if (stdin === Key.esc) {
+							if (hideModal) {
+								return hideModal();
+							} else {
+								return setValue('INPUT', '');
 							}
-						});
-				}}
-				onEnter={() => {
-					setValue('INPUT', '');
-				}}
-			/>
+						}
+
+						if (actionPrompt === null) {
+							handleInput(config, value)
+								.then((result: unknown) => {
+									const sanitized: string = sanitizeResult(result);
+									setValue('RESOLVE', sanitized);
+									return sanitized;
+								})
+								.catch((error: unknown) => {
+									const sanitized: string = sanitizeResult(error);
+									setValue('REJECT', sanitized);
+									return sanitized;
+								})
+								.then((sanitized: string) => {
+									if (!sanitized) {
+										hideModal?.();
+									}
+								});
+						} else {
+							handlePromptInput(scopedPromptEvent, value);
+						}
+					}}
+					onEnter={() => {
+						setValue('INPUT', '');
+					}}
+				/>
+			</Box>
 		</Box>
 	);
 }
@@ -204,47 +235,65 @@ function CliView({
  * for the command, with whitespace on either end trimmed.  This exists to supply whoever
  * is writing the callback with more information if desired.
  *
- * defaultRawArgs/defaultRawInput is the same as args/rawInput, but without the first
+ * defaultRawArgs/fullInput is the same as parsedArgs/parsedInput, but without the first
  * word extracted. The DEFAULT event is emitted every single time input is handled.
  * Because of that, we don't extract the first word, we pass in everything.
  * */
 async function handleInput(
-	commands: Commands,
+	config: CliConfig,
 	cliInput: string,
 ): Promise<unknown> {
-	const [command, ...args] = toSanitizedArray(cliInput);
-	const rawInput = toRawInput(cliInput, command || '');
-	const defaultRawInput = toRawInput(cliInput, '');
-	const defaultArgs = [command ?? '', ...args];
+	const {command, parsedArgs, parsedInput, fullInput, fullArgs} =
+		getData(cliInput);
 
-	CliHistory.push(defaultRawInput);
-	CliEmitter.emit(DEFAULT, defaultArgs, defaultRawInput);
+	CliHistory.push(fullInput);
+	CliEmitter.emit(DEFAULT, fullArgs, fullInput);
 
 	let handler: Handler | null = null;
 
-	if (command && commands[command]) {
+	if (command && config.commands?.[command]) {
 		if (command !== DEFAULT) {
-			handler = commands[command] as Handler;
-			CliEmitter.emit(command, args, rawInput);
+			handler = config.commands[command] as Handler;
+			CliEmitter.emit(command, parsedArgs, parsedInput);
 		}
 	}
 
 	if (handler) {
-		return await handler(args, rawInput);
-	} else if (DEFAULT in commands) {
-		return await commands[DEFAULT]?.(defaultArgs, defaultRawInput);
+		return await handler(parsedArgs, parsedInput);
+	} else if (DEFAULT in (config.commands ?? {})) {
+		return await config.commands?.[DEFAULT]?.(fullArgs, fullInput);
 	} else {
 		return '';
 	}
 }
 
-// Returns just the args from a cli command
+function handlePromptInput(scopedPromptEvent: string, cliInput: string): void {
+	const {fullArgs, fullInput} = getData(cliInput);
+	CliEmitter.emit(scopedPromptEvent, fullArgs, fullInput);
+}
+
+function getData(cliInput: string) {
+	const [command, ...parsedArgs] = toSanitizedArray(cliInput);
+	const parsedInput = toRawInput(cliInput, command || '');
+	const fullInput = toRawInput(cliInput, '');
+	const fullArgs = [command ?? '', ...parsedArgs];
+
+	return {
+		command,
+		parsedArgs,
+		parsedInput,
+		fullInput,
+		fullArgs,
+	};
+}
+
+// Returns just the parsedArgs from a cli command
 function toRawInput(cliInput: string, command: string): string {
 	return cliInput.replace(command, '').trimStart().trimEnd();
 }
 
-function toSanitizedArray(rawInput: string): string[] {
-	return rawInput
+function toSanitizedArray(parsedInput: string): string[] {
+	return parsedInput
 		.trimStart()
 		.trimEnd()
 		.split(' ')

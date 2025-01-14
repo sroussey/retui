@@ -25,6 +25,7 @@ export type KeyboardState = {
 	eventEmitted: boolean;
 	registerSize: number;
 	isTextInput: boolean;
+	keyInput: KeyInput | KeyInput[] | null;
 };
 
 export default class Keyboard {
@@ -48,6 +49,7 @@ export default class Keyboard {
 			eventEmitted: false,
 			registerSize: 2,
 			isTextInput: false,
+			keyInput: null,
 		};
 	}
 
@@ -89,6 +91,11 @@ export default class Keyboard {
 		this.StateEmitter.emit(Keyboard.StateUpdate, this.state);
 	};
 
+	private setKeyInput = (keyInput: KeyboardState['keyInput']) => {
+		if (this.state.keyInput) return;
+		this.state.keyInput = keyInput;
+	};
+
 	private appendChar = (c: string): void => {
 		if (c === '') return;
 
@@ -104,7 +111,7 @@ export default class Keyboard {
 	public emitEvent = (event: string | null, stdin: string): void => {
 		if (this.state.eventEmitted || event === null) return;
 
-		this.Emitter.emit(event, stdin);
+		this.Emitter.emit(event, stdin, this.state.keyInput);
 		this.state.eventEmitted = true;
 	};
 
@@ -124,6 +131,7 @@ export default class Keyboard {
 		this.state.eventEmitted = false;
 		this.state.event = null;
 		this.state.ctrlKeys = '';
+		this.state.keyInput = null;
 
 		// Handle sigint before all else
 		if (char === ASCII.sigint) {
@@ -228,14 +236,14 @@ export default class Keyboard {
 
 	public addEventListener = (
 		event: string,
-		handler: (stdin: string) => unknown,
+		handler: (stdin: string, keyinput: KeyInput | KeyInput[]) => unknown,
 	): void => {
 		this.Emitter.on(event, handler);
 	};
 
 	public removeEventListener = (
 		event: string,
-		handler: (stdin: string) => unknown,
+		handler: (stdin: string, keyinput: KeyInput | KeyInput[]) => unknown,
 	): void => {
 		this.Emitter.off(event, handler);
 	};
@@ -257,7 +265,10 @@ export default class Keyboard {
 				match = this.checkMatch(binding, hasNonAlphaKey);
 			}
 
-			if (match) this.setEvent(event);
+			if (match) {
+				this.setEvent(event);
+				this.setKeyInput(config[event] ?? null);
+			}
 		}
 	};
 
