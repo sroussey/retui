@@ -258,16 +258,16 @@ export default class Keyboard {
 		for (const event in config) {
 			const binding = config[event] as KeyInput | KeyInput[];
 
-			let match = false;
+			let match: undefined | KeyInput;
 			if (Array.isArray(binding)) {
-				match = binding.some(b => this.checkMatch(b, hasNonAlphaKey));
+				match = binding.find(b => this.checkMatch(b, hasNonAlphaKey));
 			} else {
-				match = this.checkMatch(binding, hasNonAlphaKey);
+				match = this.checkMatch(binding, hasNonAlphaKey) ? binding : undefined;
 			}
 
 			if (match) {
 				this.setEvent(event);
-				this.setKeyInput(config[event] ?? null);
+				this.setKeyInput(match);
 			}
 		}
 	};

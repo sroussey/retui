@@ -6,6 +6,7 @@ import {KeyInput, useEvent, useKeymap} from '../index.js';
 import {deepEqual} from '../utility/deepEqual.js';
 import {CliEmitter} from './AbstractCli.js';
 import {SetValue} from './useCli.js';
+import {toArray} from '../utility/toArray.js';
 
 export function useActionPrompt(
 	config: CliConfig,
@@ -41,7 +42,10 @@ export function useActionPrompt(
 
 			const [prompt, ...rest] = prompts;
 
-			if (prompt && deepEqual(prompt.keyinput, keyinput)) {
+			if (
+				prompt &&
+				toArray(prompt.keyinput).some(ki => deepEqual(ki, keyinput))
+			) {
 				const cb = (args: string[], unsanitizedUserInput: string) => {
 					prompt.handler(args, unsanitizedUserInput);
 					setActionPrompt(null);
