@@ -140,7 +140,7 @@ return  (
 	<Box height="50" width="50" borderStyle="round">
 		<List listView={listView}>
 			{items.map(item => <Text key={item}></Text>)}
-		</List listView={listView}>
+		</List>
 	</Box>
 
 );
