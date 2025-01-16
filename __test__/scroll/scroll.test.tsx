@@ -66,6 +66,7 @@ describe('Does not go out of bounds', () => {
 
 	const setItems = () => {
 		act(() => ctl.current.list.setItems(newArr(20)));
+		expect(ctl.current.list.items.length).toBe(20);
 		act(() => ctl.current.list.control.goToIndex(19));
 		expect(ctl.current.list.control.currentIndex).toBe(19);
 	};
@@ -91,6 +92,7 @@ describe('Does not go out of bounds', () => {
 	});
 
 	test('delete at start', () => {
+		expect(ctl.current.list.items.length).toBe(0);
 		setItems();
 
 		expect(() => {
@@ -147,5 +149,26 @@ describe('Does not go out of bounds', () => {
 			// narrow window, then widen with less length than prev index
 			act(() => ctl.current.list.setItems(newArr(2)));
 		}).not.toThrow();
+	});
+
+	test('Resets index back to zero on 0 to > 0 window size changes', () => {
+		setItems();
+		act(() => ctl.current.list.setItems(newArr(0)));
+		expect(ctl.current.list.control.currentIndex).toBe(0);
+		act(() => ctl.current.list.setItems(newArr(20)));
+		expect(ctl.current.list.control.currentIndex).toBe(0);
+	});
+
+	// This *should* work.  windowSize is modified based on computed dim during
+	// rendering, and it doesn't look like the test environment is consistently
+	// running the rendering function
+	test.todo('Resets index back to zero when minimizing', () => {
+		setItems(); // we are at a list of 20, at the last index
+		act(() => ctl.current.setHeight(0));
+		expect(ctl.current.list.control.currentIndex).toBe(0);
+		act(() => ctl.current.setHeight(3));
+		expect(ctl.current.list.control.currentIndex).toBe(0);
+		act(() => ctl.current.list.control.goToIndex(19));
+		expect(ctl.current.list.control.currentIndex).toBe(19);
 	});
 });

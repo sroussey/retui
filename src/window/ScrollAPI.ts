@@ -335,7 +335,14 @@ export class ScrollAPI {
 		const LENGTH = this.LENGTH;
 		const WINDOW_SIZE = this.WINDOW_SIZE;
 
-		if (LENGTH === 0) return;
+		if (LENGTH === 0) {
+			return this.setState({
+				...this.state,
+				idx: 0,
+				// Allow the function to handle setting endpoints.
+			});
+		}
+
 		const nextState = produce(this.state, draft => {
 			nextSize = Math.abs(nextSize);
 			nextSize = Math.min(nextSize, LENGTH);
