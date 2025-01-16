@@ -341,7 +341,13 @@ export class ScrollAPI {
 			nextSize = Math.min(nextSize, LENGTH);
 
 			if (nextSize === 0) {
-				draft.start = draft.end = draft.idx;
+				// Constrain window to 0.  Could allow idx to NOT be set to 0, in which
+				// case, minimizing/maximizing windows would be able to 'remember'
+				// the previous idx, but this could create issues if that wasn't the
+				// desired behavior and if that behavior is desired, you could always
+				// just store the idx in a state variable before minimizing and use
+				// the list startIndex option when maximizing again
+				draft.start = draft.end = draft.idx = 0;
 			}
 
 			let target = nextSize === 0 ? 0 : nextSize - WINDOW_SIZE;
@@ -376,16 +382,15 @@ export class ScrollAPI {
 
 			draft._winSize = nextSize;
 
-			// Leaving this commented out means that resizes to 0 keep old index if
-			// when modifying back to expanded size.  The idx will be normalized on
-			// the next handleScroll
-			// if (draft.idx < draft.start) {
-			// 	draft.idx = Math.max(0, draft.start);
-			// }
-			//
-			// if (draft.idx >= draft.end) {
-			// 	draft.idx = Math.max(0, draft.end - 1);
-			// }
+			// Contstrain idx when idx < start
+			if (draft.idx < draft.start) {
+				draft.idx = Math.max(0, draft.start);
+			}
+
+			// Constrain idx when idx >= end
+			if (draft.idx >= draft.end) {
+				draft.idx = Math.max(0, draft.end - 1);
+			}
 
 			if (this.centerScroll) {
 				this.centerIdx({draft, LENGTH});
