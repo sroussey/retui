@@ -163,26 +163,31 @@ function useFocusChangeGenerators(isFocus: boolean) {
 	// functions from onFocusChangeGenerator changes these values which can
 	// then be called in the effect callback.  Basically, a way of moving state
 	// back up, so that the end user doesn't need to write the useEffect themselves
-	const cache: {onFocus: null | (() => any); onLeaveFocus: null | (() => any)} =
-		{onFocus: null, onLeaveFocus: null};
-
-	const exits = useRef(0);
+	const cache: {
+		onFocus: (() => any)[];
+		onLeaveFocus: (() => any)[];
+	} = {onFocus: [], onLeaveFocus: []};
 
 	const onFocusChangeGenerator = (type: 'onFocus' | 'onBlur') => {
 		return (cb: () => any) => {
 			if (type === 'onFocus') {
-				cache.onFocus = cb;
-			} else if (exits.current++) {
-				cache.onLeaveFocus = cb;
+				cache.onFocus.push(cb);
+			} else {
+				cache.onLeaveFocus.push(cb);
 			}
 		};
 	};
 
+	const hasBeenFocused = useRef(false);
+
 	useEffect(() => {
 		if (isFocus) {
-			cache.onFocus?.();
+			cache.onFocus.forEach(cb => cb());
+			hasBeenFocused.current = true;
 		} else {
-			cache.onLeaveFocus?.();
+			if (hasBeenFocused.current) {
+				cache.onLeaveFocus.forEach(cb => cb());
+			}
 		}
 	}, [isFocus]);
 
