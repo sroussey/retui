@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import EventEmitter from 'events';
 import {
 	KeyInput,
@@ -13,14 +13,14 @@ import {
 } from '../index.js';
 import {Except} from 'type-fest';
 import {SetValue, TextStyles, useCli} from './useCli.js';
-import {CliConfig, CliMessage, Commands, Handler} from './types.js';
+import {Commands, CliMessage, Handler, CliActionPrompt} from './types.js';
 import {CliHistory} from './CliHistory.js';
 import InternalEvents from '../utility/InternalEvents.js';
-import {useActionPrompt} from './useActionPrompt.js';
 
 export type CliProps = {
-	config: CliConfig;
+	commands: Commands;
 	message?: CliMessage;
+	actionPrompt?: CliActionPrompt;
 	prompt?: string;
 	persistPrompt?: boolean;
 	enterKeymap?: KeyInput;
@@ -64,9 +64,11 @@ export function AbstractCli(props: AbstractProps): React.ReactNode {
 	}, [insert]);
 
 	useEffect(() => {
-		if (props.message) {
-			setValue(...props.message);
-		}
+		setImmediate(() => {
+			if (props.message) {
+				setValue(...props.message);
+			}
+		});
 	}, [props.message]);
 
 	return (
@@ -82,6 +84,7 @@ export function AbstractCli(props: AbstractProps): React.ReactNode {
 			onUpArrow={onUpArrow}
 			onDownArrow={onDownArrow}
 			promptStyles={props.promptStyles}
+			actionPrompt={props.actionPrompt}
 		/>
 	);
 }
@@ -100,7 +103,7 @@ type CliViewProps = Except<
 };
 
 function CliView({
-	config,
+	commands,
 	enterKeymap = {input: ':'},
 	exitKeymap = [{key: 'return'}, {key: 'esc'}],
 	prompt = ':',
@@ -110,19 +113,14 @@ function CliView({
 	setValue,
 	value,
 	insert,
-	enterInsert,
 	textStyles,
 	hideModal,
 	onDownArrow,
 	onUpArrow,
 	autoEnter,
+	enterInsert,
+	actionPrompt = ['', () => {}],
 }: CliViewProps): React.ReactNode {
-	const {actionPrompt, setActionPrompt, scopedPromptEvent} = useActionPrompt(
-		config,
-		setValue,
-		enterInsert,
-	);
-
 	const prefixValue = () => {
 		return insert || persistPrompt ? prompt : '';
 	};
@@ -160,24 +158,35 @@ function CliView({
 			if (!insert && value) {
 				setValue('INPUT', '');
 			}
-
-			if (!insert) {
-				setActionPrompt(null);
-			}
 		},
 		{isActive: !!(!insert && value)},
 	);
+
+	const [showAP, setShowAP] = useState(false);
+
+	useEffect(() => {
+		if (actionPrompt[0] !== '') {
+			setShowAP(true);
+			enterInsert();
+		} else {
+			setShowAP(false);
+		}
+	}, [actionPrompt]);
+
+	const [actionPromptText, actionPromptHandler] = actionPrompt;
 
 	return (
 		<Box width="100" flexDirection="row" backgroundColor="inherit">
 			<Box height={1} width={prefixValue().length} flexShrink={0}>
 				<Text wrap="truncate-end">{prefixValue()}</Text>
 			</Box>
-			<Box height={1} width={actionPrompt?.length ?? 0} flexShrink={0}>
-				<Text wrap="truncate-end" styles={promptStyles}>
-					{actionPrompt}
-				</Text>
-			</Box>
+			{showAP && (
+				<Box height={1} width={actionPromptText.length ?? 0} flexShrink={0}>
+					<Text wrap="truncate-end" styles={promptStyles}>
+						{actionPromptText}
+					</Text>
+				</Box>
+			)}
 			<Box height={1} width="100" flexShrink={2}>
 				<TextInput
 					textStyle={textStyles}
@@ -191,6 +200,8 @@ function CliView({
 					// the callbacks so that we can handle events differently
 					// like in this case where esc and return should be handled differently
 					onExit={(value, stdin) => {
+						setShowAP(false);
+
 						if (stdin === Key.esc) {
 							if (hideModal) {
 								return hideModal();
@@ -199,26 +210,30 @@ function CliView({
 							}
 						}
 
-						if (actionPrompt === null) {
-							handleInput(config, value)
-								.then((result: unknown) => {
-									const sanitized: string = sanitizeResult(result);
+						const promise = showAP
+							? handlePromptInput(actionPromptHandler, value)
+							: handleInput(commands, value);
+
+						promise
+							.then((result: unknown) => {
+								const sanitized: string = sanitizeResult(result);
+								setImmediate(() => {
 									setValue('RESOLVE', sanitized);
-									return sanitized;
-								})
-								.catch((error: unknown) => {
-									const sanitized: string = sanitizeResult(error);
-									setValue('REJECT', sanitized);
-									return sanitized;
-								})
-								.then((sanitized: string) => {
-									if (!sanitized) {
-										hideModal?.();
-									}
 								});
-						} else {
-							handlePromptInput(scopedPromptEvent, value);
-						}
+								return sanitized;
+							})
+							.catch((error: unknown) => {
+								const sanitized: string = sanitizeResult(error);
+								setImmediate(() => {
+									setValue('REJECT', sanitized);
+								});
+								return sanitized;
+							})
+							.then((sanitized: string) => {
+								if (!sanitized) {
+									hideModal?.();
+								}
+							});
 					}}
 					onEnter={() => {
 						setValue('INPUT', '');
@@ -240,7 +255,7 @@ function CliView({
  * Because of that, we don't extract the first word, we pass in everything.
  * */
 async function handleInput(
-	config: CliConfig,
+	commands: Commands,
 	cliInput: string,
 ): Promise<unknown> {
 	const {command, parsedArgs, parsedInput, fullInput, fullArgs} =
@@ -251,25 +266,28 @@ async function handleInput(
 
 	let handler: Handler | null = null;
 
-	if (command && config.commands?.[command]) {
+	if (command && commands?.[command]) {
 		if (command !== DEFAULT) {
-			handler = config.commands[command] as Handler;
+			handler = commands[command] as Handler;
 			CliEmitter.emit(command, parsedArgs, parsedInput);
 		}
 	}
 
 	if (handler) {
 		return await handler(parsedArgs, parsedInput);
-	} else if (DEFAULT in (config.commands ?? {})) {
-		return await config.commands?.[DEFAULT]?.(fullArgs, fullInput);
+	} else if (DEFAULT in (commands ?? {})) {
+		return await commands?.[DEFAULT]?.(fullArgs, fullInput);
 	} else {
 		return '';
 	}
 }
 
-function handlePromptInput(scopedPromptEvent: string, cliInput: string): void {
+async function handlePromptInput(
+	handler: Handler,
+	cliInput: string,
+): Promise<unknown> {
 	const {fullArgs, fullInput} = getData(cliInput);
-	CliEmitter.emit(scopedPromptEvent, fullArgs, fullInput);
+	return await handler(fullArgs, fullInput);
 }
 
 function getData(cliInput: string) {
