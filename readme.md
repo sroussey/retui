@@ -236,7 +236,7 @@ render(<App />)
 #### setConsole({ enabled: boolean; path: string }): void
 Call this function to configure the behavior of console.log statements in the
 app.  This can be helpful if you are using the `Viewport` component, which will
-block any stdout coming from the nodejs console object.
+obscure any stdout coming from the nodejs console object.
 
 ```typescript
 setConsole({ enabled: true, path: "console.log" })
@@ -427,7 +427,7 @@ parent container to inherit dimensions from.  If a column List has a height of
 
 ---
 
-### useListItem<T>(): { item, items, setItems, index, control, isFocus, isShallowFocus }
+### useListItem<T>(): { item, items, setItems, onFocus, onBlur, itemIndex, listIndex, control, isFocus, isShallowFocus }
 Returns data about the list-rendered component and the list.
 
 #### Generic Argument:
