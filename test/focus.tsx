@@ -3,7 +3,9 @@ import React, {useEffect} from 'react';
 import delay from 'delay';
 import test from 'ava';
 import {spy, stub} from 'sinon';
-import {render, Box, Text, useFocus, useFocusManager} from '../src/index.js';
+import {render, Box, Text} from '../src/index.js';
+import useFocus from '../src/hooks/use-focus.js';
+import useFocusManager from '../src/hooks/use-focus-manager.js';
 import createStdout from './helpers/create-stdout.js';
 
 const createStdin = () => {

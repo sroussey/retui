@@ -21,8 +21,8 @@ export {default as useApp} from './hooks/use-app.js';
 export {default as useStdin} from './hooks/use-stdin.js';
 export {default as useStdout} from './hooks/use-stdout.js';
 export {default as useStderr} from './hooks/use-stderr.js';
-export {default as useFocus} from './hooks/use-focus.js';
-export {default as useFocusManager} from './hooks/use-focus-manager.js';
+// export {default as useFocus} from './hooks/use-focus.js';
+// export {default as useFocusManager} from './hooks/use-focus-manager.js';
 export {default as measureElement} from './measure-element.js';
 export type {DOMElement} from './dom.js';
 
