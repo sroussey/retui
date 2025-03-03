@@ -41,6 +41,13 @@ export type RenderOptions = {
 	 * @default true
 	 */
 	patchConsole?: boolean;
+
+	/**
+	 * Throttle renders to at most once every *throttleMs*
+	 *
+	 * @default 8
+	 */
+	throttle?: number;
 };
 
 export type Instance = {

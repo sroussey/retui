@@ -30,6 +30,7 @@ export type Options = {
 	exitOnCtrlC: boolean;
 	patchConsole: boolean;
 	waitUntilExit?: () => Promise<void>;
+	throttle?: number;
 };
 
 export default class Ink {
@@ -57,7 +58,7 @@ export default class Ink {
 
 		this.rootNode.onRender = options.debug
 			? this.onRender
-			: throttle(this.onRender, 32, {
+			: throttle(this.onRender, options.throttle ?? 8, {
 					leading: true,
 					trailing: true,
 				});

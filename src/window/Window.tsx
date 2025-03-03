@@ -1,4 +1,4 @@
-import React, {Key, useMemo} from 'react';
+import React, {Key} from 'react';
 import {UseEventTypes} from '../stdin/hooks/useEvent.js';
 import {KeyMap} from '../index.js';
 import {isRenderable} from './isRenderable.js';
@@ -8,7 +8,6 @@ import {Unit} from './Unit.js';
 import {useModalLevel} from '../modal/ModalContext.js';
 import ModalStack from '../modal/ModalStack.js';
 import {MutableBaseProps, StylesConfig} from '../utility/types.js';
-import {map} from 'es-toolkit/compat';
 
 export type IntrinsicWindowAttributes = {
 	key?: Key;
@@ -159,7 +158,7 @@ export function Window({...props}: WindowProps): React.ReactNode {
 
 		const toRender: any[] = [];
 		for (let i = start; i < end; ++i) {
-			if (!slicedItems[i]) continue;
+			if (slicedItems[i] === undefined) continue;
 			toRender.push(map(slicedItems[i]));
 		}
 
