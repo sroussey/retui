@@ -57,14 +57,16 @@ export type WindowProps<BatchItem = any> = React.PropsWithChildren &
 			batchSize?: number;
 			items: readonly BatchItem[];
 			map: (
-				item: NoInfer<BatchItem>,
+				item: BatchItem,
 				/** The index of the item from the provided `items` array. */
 				index: number,
 			) => React.ReactNode;
 		};
 	};
 
-export function Window({...props}: WindowProps): React.ReactNode {
+export function Window<T extends any>({
+	...props
+}: WindowProps<T>): React.ReactNode {
 	if (React.Children.count(props.children) && props.generators !== undefined) {
 		throw new Error('Window cannot contain both children and generators prop');
 		// If there are no children and no generators we can't
@@ -84,7 +86,6 @@ export function Window({...props}: WindowProps): React.ReactNode {
 	props.flexDirection = props.flexDirection ?? 'column';
 	props.justifyContent = props.justifyContent ?? 'flex-start';
 	props.alignItems = props.alignItems ?? 'flex-start';
-	props.retainState = props.retainState ?? false;
 
 	// Make sure component is rendered properly in the layout
 	props.position = 'relative';
@@ -164,7 +165,7 @@ export function Window({...props}: WindowProps): React.ReactNode {
 		const toRender: any[] = [];
 		for (let i = start; i < end; ++i) {
 			if (slicedItems[i] === undefined) continue;
-			toRender.push(map(slicedItems[i], i + sliceStart));
+			toRender.push(map(slicedItems[i]!, i + sliceStart));
 		}
 
 		const rendered: React.ReactNode[] = [];
@@ -187,3 +188,20 @@ export function Window({...props}: WindowProps): React.ReactNode {
 		</WindowContext.Provider>
 	);
 }
+
+// const foo: number[] = [1, 2, 3, 4, 5];
+//
+// function Foo(): React.ReactNode {
+// 	return (
+// 		<Window
+// 			type="ITEMS"
+// 			viewState={{} as ViewState}
+// 			batchMap={{
+// 				items: foo,
+// 				map: (item, idx) => {
+// 					return null;
+// 				},
+// 			}}
+// 		></Window>
+// 	);
+// }

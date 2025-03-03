@@ -1,11 +1,11 @@
 import React from 'react';
 import {Window, WindowProps} from '../Window.js';
 
-type ListSpecificProps = {
-	listView: WindowProps['viewState'];
+type ListSpecificProps<BatchItem = any> = {
+	listView: WindowProps<BatchItem>['viewState'];
 };
 
-type Props = ListSpecificProps &
+type Props<BatchItem extends any> = ListSpecificProps<BatchItem> &
 	React.PropsWithChildren &
 	Pick<
 		WindowProps,
@@ -15,13 +15,17 @@ type Props = ListSpecificProps &
 		| 'gap'
 		// | 'wordList' TODO
 		| 'scrollbar'
-		| 'batchMap'
+		// | 'batchMap' // Pass 'BatchItem' generic to batchMap below (forward to Window component)
 	> & {
 		fitX?: boolean;
 		fitY?: boolean;
+	} & {
+		batchMap?: WindowProps<BatchItem>['batchMap'];
 	};
 
-export function List({...props}: Props): React.ReactNode {
+export function List<BatchItem extends any>({
+	...props
+}: Props<BatchItem>): React.ReactNode {
 	props.fitX = props.fitX ?? false;
 	props.fitY = props.fitY ?? false;
 
@@ -29,7 +33,7 @@ export function List({...props}: Props): React.ReactNode {
 		...props,
 		viewState: props.listView,
 		type: 'ITEMS',
-	} satisfies WindowProps;
+	} satisfies WindowProps<BatchItem>;
 
 	return <Window {...windowProps}>{props.children}</Window>;
 }
