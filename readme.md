@@ -1,6 +1,10 @@
 - _A terminal UI + React library with a focus on events, keymaps, and
   navigation. Forked from [Ink](https://github.com/vadimdemedes/ink)._
 
+```sh
+npm install tuir
+```
+
 # Tuir
 
 Easily manages:
