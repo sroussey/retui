@@ -229,6 +229,14 @@ will return your terminal screen to the original state before the app started.
 preserveScreen();
 render(<App />)
 ```
+
+#### Throttle rendering
+Throttle renders to at most once every *throttleMs*
+
+```typescript
+render(<App />, { throttle: 8 })
+```
+
 <!-- preserve-screen-demo.mp4 -->
 <!-- github refuses to NOT embed this -->
 <!-- [demo](https://github.com/user-attachments/assets/194b1789-b189-42e2-bc02-268d655d2a47) -->
@@ -424,6 +432,26 @@ parent container to inherit dimensions from.  If a column List has a height of
   	- Default: 'flex-start'
 - `gap: number`: The `gap` between list items.
 	- Default: '0'
+- `batchMap`: `batchMap?: { batchSize?: number; items: any[]; map: (item: any) => ReactNode; };`
+	- Default `batchSize`: 250
+
+#### batchMap
+If performance becomes an issue with *excessively* large lists, render list items
+within the `map` callback *instead of* how you would normally list render
+something within the JSX.  This renders only the `batchSize` of items.
+
+```typescript
+batchMap={{
+	batchSize: 100,
+	items: myLongList as Foo[],
+	map: (item: Foo) => {
+		return <Item key={item} item={item} />;
+	},
+}}
+```
+**Note**: In the example, any state local to the `Item` component is lost once
+it goes out of the viewing window.  This is only the case for `batchMap`.
+List items rendered normally always stay mounted and therefore maintain state.
 
 ---
 
@@ -1249,9 +1277,9 @@ Requires manually telling the app to listen for mouse input events with the
 `setMouseReporting(b: boolean)` function.
 
 #### Important:
-	- Mouse events are only accurate if the app is using the entire terminal
-	  screen, so if you aren't using the Viewport component, clicks will not be
-	  accurate.
+- Mouse events are only accurate if the app is using the entire terminal
+  screen, so if you aren't using the Viewport component, clicks will not be
+  accurate.
 
 All handlers accept a callback in the form of `(e: MouseEvent) => unknown`.
 
