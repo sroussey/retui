@@ -432,7 +432,7 @@ parent container to inherit dimensions from.  If a column List has a height of
   	- Default: 'flex-start'
 - `gap: number`: The `gap` between list items.
 	- Default: '0'
-- `batchMap`: `batchMap?: { batchSize?: number; items: any[]; map: (item: any) => ReactNode; };`
+- `batchMap`: `batchMap?: { batchSize?: number; items: T[]; map: (item: T, index: number) => ReactNode; };`
 	- Default `batchSize`: 250
 
 #### batchMap
@@ -444,7 +444,7 @@ something within the JSX.  This renders only the `batchSize` of items.
 batchMap={{
 	batchSize: 100,
 	items: myLongList as Foo[],
-	map: (item: Foo) => {
+	map: (item, index) => {
 		return <Item key={item} item={item} />;
 	},
 }}
