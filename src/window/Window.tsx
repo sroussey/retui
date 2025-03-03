@@ -1,4 +1,4 @@
-import React, {Key} from 'react';
+import React, {Key, useMemo} from 'react';
 import {UseEventTypes} from '../stdin/hooks/useEvent.js';
 import {KeyMap} from '../index.js';
 import {isRenderable} from './isRenderable.js';
@@ -8,6 +8,7 @@ import {Unit} from './Unit.js';
 import {useModalLevel} from '../modal/ModalContext.js';
 import ModalStack from '../modal/ModalStack.js';
 import {MutableBaseProps, StylesConfig} from '../utility/types.js';
+import {map} from 'es-toolkit/compat';
 
 export type IntrinsicWindowAttributes = {
 	key?: Key;
@@ -51,6 +52,12 @@ export type WindowProps = React.PropsWithChildren &
 		>;
 		fitX?: boolean;
 		fitY?: boolean;
+		retainState?: boolean;
+		batchMap?: {
+			batchSize?: number;
+			items: any[];
+			map: (items: any) => React.ReactNode;
+		};
 	};
 
 export function Window({...props}: WindowProps): React.ReactNode {
@@ -73,6 +80,7 @@ export function Window({...props}: WindowProps): React.ReactNode {
 	props.flexDirection = props.flexDirection ?? 'column';
 	props.justifyContent = props.justifyContent ?? 'flex-start';
 	props.alignItems = props.alignItems ?? 'flex-start';
+	props.retainState = props.retainState ?? false;
 
 	// Make sure component is rendered properly in the layout
 	props.position = 'relative';
@@ -83,23 +91,11 @@ export function Window({...props}: WindowProps): React.ReactNode {
 	const THIS_WINDOW_FOCUS = useIsFocus();
 	const THIS_WINDOW_LEVEL = useModalLevel();
 
-	function handleMap(
-		item: ItemGenerator | React.ReactNode,
+	function getItem(
+		node: React.ReactElement,
 		idx: number,
+		listeners: Listener[] = [],
 	): React.ReactElement {
-		const listeners: Listener[] = [];
-
-		const isFocus = idx === props.viewState._idx;
-		const onUnit = (event: string, handler: any) => {
-			if (!isFocus || !THIS_WINDOW_FOCUS) return;
-			if (!ModalStack.isActiveModalLevel(THIS_WINDOW_LEVEL)) return;
-			listeners.push({event, handler});
-		};
-
-		const node = isRenderable(item)
-			? item
-			: (item as ItemGenerator)(isFocus, onUnit as any);
-
 		const key = (node as React.ReactElement).key;
 		const isHidden =
 			idx < props.viewState._start || idx >= props.viewState._end;
@@ -126,6 +122,55 @@ export function Window({...props}: WindowProps): React.ReactNode {
 		);
 	}
 
+	function handleMap(
+		item: ItemGenerator | React.ReactNode,
+		idx: number,
+	): React.ReactElement {
+		const listeners: Listener[] = [];
+
+		const isFocus = idx === props.viewState._idx;
+		const onUnit = (event: string, handler: any) => {
+			if (!isFocus || !THIS_WINDOW_FOCUS) return;
+			if (!ModalStack.isActiveModalLevel(THIS_WINDOW_LEVEL)) return;
+			listeners.push({event, handler});
+		};
+
+		const node = isRenderable(item)
+			? item
+			: (item as ItemGenerator)(isFocus, onUnit as any);
+
+		return getItem(node as React.ReactElement, idx, listeners);
+	}
+
+	function getSlicedItems() {
+		if (!props.batchMap) throw new Error('internal error');
+		props.batchMap.batchSize = props.batchMap.batchSize ?? 250;
+
+		const {batchSize, items, map} = props.batchMap;
+
+		const start = 0;
+		const end = batchSize;
+		const sliceStart = props.viewState._start;
+		const sliceEnd = Math.max(
+			props.viewState._start + batchSize,
+			props.viewState._end,
+		);
+		const slicedItems = items.slice(sliceStart, sliceEnd);
+
+		const toRender: any[] = [];
+		for (let i = start; i < end; ++i) {
+			if (!slicedItems[i]) continue;
+			toRender.push(map(slicedItems[i]));
+		}
+
+		const rendered: React.ReactNode[] = [];
+		for (let i = 0; i < toRender.length; ++i) {
+			rendered.push(getItem(toRender[i], i + props.viewState._start));
+		}
+
+		return rendered;
+	}
+
 	const generatedItems = props.generators
 		? props.generators.map(handleMap)
 		: React.Children.map(props.children, handleMap);
@@ -133,7 +178,7 @@ export function Window({...props}: WindowProps): React.ReactNode {
 	return (
 		<WindowContext.Provider value={{isFocus: THIS_WINDOW_FOCUS}}>
 			<ink-window style={{...props}} viewState={props.viewState}>
-				{generatedItems}
+				{props.batchMap ? getSlicedItems() : generatedItems}
 			</ink-window>
 		</WindowContext.Provider>
 	);

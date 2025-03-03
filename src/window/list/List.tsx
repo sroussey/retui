@@ -15,6 +15,7 @@ type Props = ListSpecificProps &
 		| 'gap'
 		// | 'wordList' TODO
 		| 'scrollbar'
+		| 'batchMap'
 	> & {
 		fitX?: boolean;
 		fitY?: boolean;
