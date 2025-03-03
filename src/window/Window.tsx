@@ -39,7 +39,7 @@ export interface ItemGenerator<T extends KeyMap = any> {
 	(isFocus: boolean, onUnit: UseEventTypes.UseEvent<T>): React.ReactNode;
 }
 
-export type WindowProps = React.PropsWithChildren &
+export type WindowProps<BatchItem = any> = React.PropsWithChildren &
 	IntrinsicWindowBaseProps & {
 		type: 'PAGES' | 'ITEMS';
 		viewState: ViewState;
@@ -51,11 +51,16 @@ export type WindowProps = React.PropsWithChildren &
 		>;
 		fitX?: boolean;
 		fitY?: boolean;
+		/** @deprecated Currently unused. */
 		retainState?: boolean;
 		batchMap?: {
 			batchSize?: number;
-			items: any[];
-			map: (items: any) => React.ReactNode;
+			items: readonly BatchItem[];
+			map: (
+				item: NoInfer<BatchItem>,
+				/** The index of the item from the provided `items` array. */
+				index: number,
+			) => React.ReactNode;
 		};
 	};
 
@@ -159,12 +164,12 @@ export function Window({...props}: WindowProps): React.ReactNode {
 		const toRender: any[] = [];
 		for (let i = start; i < end; ++i) {
 			if (slicedItems[i] === undefined) continue;
-			toRender.push(map(slicedItems[i]));
+			toRender.push(map(slicedItems[i], i + sliceStart));
 		}
 
 		const rendered: React.ReactNode[] = [];
 		for (let i = 0; i < toRender.length; ++i) {
-			rendered.push(getItem(toRender[i], i + props.viewState._start));
+			rendered.push(getItem(toRender[i], i + sliceStart));
 		}
 
 		return rendered;
