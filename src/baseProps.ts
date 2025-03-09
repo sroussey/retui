@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 import { type Boxes, type BoxStyle } from "cli-boxes";
-import Yoga, { type Node as YogaNode } from "yoga-wasm-web/auto";
-import { Title } from "./renderTitles/renderTitleToOutput.js";
-import { Color } from "./utility/types.js";
+import Yoga, { type Node as YogaNode } from "yoga-layout";
 import { MouseEventHandler } from "./index.js";
-import { StylesConfig } from "./utility/types.js";
+import { Title } from "./renderTitles/renderTitleToOutput.js";
+import { Color, StylesConfig } from "./utility/types.js";
 import { IntrinsicWindowBaseProps } from "./window/Window.js";
 
 export type BaseProps = {

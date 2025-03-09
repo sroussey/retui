@@ -1,13 +1,13 @@
-import Yoga, { type Node as YogaNode } from "yoga-wasm-web/auto";
-import measureText from "./measure-text.js";
+import Yoga, { type Node as YogaNode } from "yoga-layout";
 import { type BaseProps } from "./baseProps.js";
-import wrapText from "./wrap-text.js";
-import squashTextNodes from "./squash-text-nodes.js";
-import { type OutputTransformer } from "./render-node-to-output.js";
 import { TextProps } from "./index.js";
+import { IntrinsicLineProps } from "./lines/Line.js";
+import measureText from "./measure-text.js";
+import { type OutputTransformer } from "./render-node-to-output.js";
+import squashTextNodes from "./squash-text-nodes.js";
 import { MutableBaseProps, MutableTextProps } from "./utility/types.js";
 import { IntrinsicWindowAttributes, IntrinsicWindowBaseProps } from "./window/Window.js";
-import { IntrinsicLineProps } from "./lines/Line.js";
+import wrapText from "./wrap-text.js";
 
 type InkNode = {
 	parentNode: DOMElement | undefined;

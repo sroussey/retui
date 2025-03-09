@@ -1,22 +1,22 @@
 import process from "node:process";
 import createReconciler from "react-reconciler";
 import { DefaultEventPriority } from "react-reconciler/constants.js";
-import Yoga, { type Node as YogaNode } from "yoga-wasm-web/auto";
+import Yoga, { type Node as YogaNode } from "yoga-layout";	
+import applyBaseProps, { type BaseProps } from "./baseProps.js";
 import {
-	createTextNode,
 	appendChildNode,
+	createNode,
+	createTextNode,
 	insertBeforeNode,
 	removeChildNode,
+	setAttribute,
 	setStyle,
 	setTextNodeValue,
-	createNode,
-	setAttribute,
-	type DOMNodeAttribute,
-	type TextNode,
-	type ElementNames,
 	type DOMElement,
+	type DOMNodeAttribute,
+	type ElementNames,
+	type TextNode,
 } from "./dom.js";
-import applyBaseProps, { type BaseProps } from "./baseProps.js";
 import { type OutputTransformer } from "./render-node-to-output.js";
 
 // We need to conditionally perform devtools connection to avoid

@@ -1,20 +1,20 @@
-import widestLine from "widest-line";
 import indentString from "indent-string";
-import Yoga from "yoga-wasm-web/auto";
-import wrapText from "./wrap-text.js";
-import getMaxWidth from "./get-max-width.js";
-import squashTextNodes from "./squash-text-nodes.js";
-import renderBorder from "./render-border.js";
+import widestLine from "widest-line";
+import { BaseProps } from "./baseProps.js";
 import { type DOMElement } from "./dom.js";
+import getMaxWidth from "./get-max-width.js";
+import { TextProps } from "./index.js";
+import { renderLineToOutput } from "./lines/renderLineToOutput.js";
 import type Output from "./output.js";
 import renderBackgroundColor from "./render-background-color.js";
-import { BaseProps } from "./baseProps.js";
+import renderBorder from "./render-border.js";
+import squashTextNodes from "./squash-text-nodes.js";
 import { addMouseEventListeners } from "./stdin/AddMouseEventListeners.js";
 import { DefaultStdin } from "./stdin/Stdin.js";
-import { TextProps } from "./index.js";
 import { MutableBaseProps } from "./utility/types.js";
 import { renderWindowToOutput } from "./window/renderWindowToOutput.js";
-import { renderLineToOutput } from "./lines/renderLineToOutput.js";
+import wrapText from "./wrap-text.js";
+import Yoga from "yoga-layout";
 
 // If parent container is `<Box>`, text nodes will be treated as separate nodes in
 // the tree and will have their own coordinates in the layout.
