@@ -1,11 +1,11 @@
-import process from 'node:process';
-import url from 'node:url';
-import path from 'node:path';
-import test, {type ExecutionContext} from 'ava';
-import stripAnsi from 'strip-ansi';
-import {spawn} from 'node-pty';
+import process from "node:process";
+import url from "node:url";
+import path from "node:path";
+import test, { type ExecutionContext } from "ava";
+import stripAnsi from "strip-ansi";
+import { spawn } from "node-pty";
 
-const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
 
 const term = (fixture: string, args: string[] = []) => {
 	let resolve: (value?: any) => void;
@@ -19,20 +19,20 @@ const term = (fixture: string, args: string[] = []) => {
 	const env: Record<string, string> = {
 		...process.env,
 		// eslint-disable-next-line @typescript-eslint/naming-convention
-		NODE_NO_WARNINGS: '1',
+		NODE_NO_WARNINGS: "1",
 		// eslint-disable-next-line @typescript-eslint/naming-convention
-		CI: 'false',
+		CI: "false",
 	};
 
 	const ps = spawn(
-		'node',
+		"node",
 		[
-			'--loader=ts-node/esm',
+			"--loader=ts-node/esm",
 			path.join(__dirname, `./fixtures/${fixture}.tsx`),
 			...args,
 		],
 		{
-			name: 'xterm-color',
+			name: "xterm-color",
 			cols: 100,
 			cwd: __dirname,
 			env,
@@ -47,15 +47,15 @@ const term = (fixture: string, args: string[] = []) => {
 				ps.write(input);
 			}, 3000);
 		},
-		output: '',
+		output: "",
 		waitForExit: async () => exitPromise,
 	};
 
-	ps.onData(data => {
+	ps.onData((data) => {
 		result.output += data;
 	});
 
-	ps.onExit(({exitCode}) => {
+	ps.onExit(({ exitCode }) => {
 		if (exitCode === 0) {
 			resolve();
 			return;
@@ -278,20 +278,20 @@ const term = (fixture: string, args: string[] = []) => {
 // 	},
 // );
 //
-test.serial('useStdout - write to stdout', async t => {
-	const ps = term('use-stdout');
+test.serial("useStdout - write to stdout", async (t) => {
+	const ps = term("use-stdout");
 	await ps.waitForExit();
 
-	const lines = stripAnsi(ps.output).split('\r\n');
+	const lines = stripAnsi(ps.output).split("\r\n");
 
 	t.deepEqual(lines.slice(1, -1), [
-		'Hello from Ink to stdout',
-		'Hello World',
-		'exited',
+		"Hello from Ink to stdout",
+		"Hello World",
+		"exited",
 	]);
 });
 
 // `node-pty` doesn't support streaming stderr output, so I need to figure out
 // how to test useStderr() hook. child_process.spawn() can't be used, because
 // Ink fails with "raw mode unsupported" error.
-test.todo('useStderr - write to stderr');
+test.todo("useStderr - write to stderr");

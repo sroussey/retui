@@ -1,5 +1,5 @@
-import process from 'node:process';
-import {createContext} from 'react';
+import process from "node:process";
+import { createContext } from "react";
 
 export type Props = {
 	/**
@@ -24,6 +24,6 @@ const StderrContext = createContext<Props>({
 	write() {},
 });
 
-StderrContext.displayName = 'InternalStderrContext';
+StderrContext.displayName = "InternalStderrContext";
 
 export default StderrContext;

@@ -1,9 +1,9 @@
-import {render} from '../../src/index.js';
-import createStdout from './create-stdout.js';
+import { render } from "../../src/index.js";
+import createStdout from "./create-stdout.js";
 
 export const renderToString: (
 	node: JSX.Element,
-	options?: {columns: number},
+	options?: { columns: number },
 ) => string = (node, options) => {
 	const stdout = createStdout(options?.columns ?? 100);
 

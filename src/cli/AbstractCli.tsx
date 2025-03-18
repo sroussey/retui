@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import EventEmitter from 'events';
+import React, { useEffect, useState } from "react";
+import EventEmitter from "events";
 import {
 	KeyInput,
 	Key,
@@ -10,12 +10,12 @@ import {
 	useKeymap,
 	Box,
 	useInput,
-} from '../index.js';
-import {Except} from 'type-fest';
-import {SetValue, TextStyles, useCli} from './useCli.js';
-import {Commands, CliMessage, Handler, CliActionPrompt} from './types.js';
-import {CliHistory} from './CliHistory.js';
-import InternalEvents from '../utility/InternalEvents.js';
+} from "../index.js";
+import { Except } from "type-fest";
+import { SetValue, TextStyles, useCli } from "./useCli.js";
+import { Commands, CliMessage, Handler, CliActionPrompt } from "./types.js";
+import { CliHistory } from "./CliHistory.js";
+import InternalEvents from "../utility/InternalEvents.js";
 
 export type CliProps = {
 	commands: Commands;
@@ -39,22 +39,21 @@ export type AbstractProps = CliProps & {
 	onDownArrow?: () => unknown;
 };
 
-export const DEFAULT = 'DEFAULT';
+export const DEFAULT = "DEFAULT";
 export const CliEmitter = new EventEmitter();
 
 export function AbstractCli(props: AbstractProps): React.ReactNode {
-	const {autoEnter, ...cliViewProps} = props;
-	const {onChange, setValue, insert, enterInsert, textStyle, value} =
-		useCli(props);
+	const { autoEnter, ...cliViewProps } = props;
+	const { onChange, setValue, insert, enterInsert, textStyle, value } = useCli(props);
 
 	const onUpArrow = () => {
 		const nextCommand = CliHistory.next();
-		setValue('INPUT', nextCommand, true);
+		setValue("INPUT", nextCommand, true);
 	};
 
 	const onDownArrow = () => {
 		const previousCommand = CliHistory.prev();
-		setValue('INPUT', previousCommand, true);
+		setValue("INPUT", previousCommand, true);
 	};
 
 	useEffect(() => {
@@ -91,9 +90,9 @@ export function AbstractCli(props: AbstractProps): React.ReactNode {
 
 type CliViewProps = Except<
 	AbstractProps,
-	'rejectStyles' | 'resolveStyles' | 'inputStyles'
+	"rejectStyles" | "resolveStyles" | "inputStyles"
 > & {
-	onChange: ReturnType<typeof useTextInput>['onChange'];
+	onChange: ReturnType<typeof useTextInput>["onChange"];
 	setValue: SetValue;
 	insert: boolean;
 	enterInsert: () => void;
@@ -104,9 +103,9 @@ type CliViewProps = Except<
 
 function CliView({
 	commands,
-	enterKeymap = {input: ':'},
-	exitKeymap = [{key: 'return'}, {key: 'esc'}],
-	prompt = ':',
+	enterKeymap = { input: ":" },
+	exitKeymap = [{ key: "return" }, { key: "esc" }],
+	prompt = ":",
 	persistPrompt = false,
 	promptStyles,
 	onChange,
@@ -119,53 +118,53 @@ function CliView({
 	onUpArrow,
 	autoEnter,
 	enterInsert,
-	actionPrompt = ['', () => {}],
+	actionPrompt = ["", () => {}],
 }: CliViewProps): React.ReactNode {
 	const prefixValue = () => {
-		return insert || persistPrompt ? prompt : '';
+		return insert || persistPrompt ? prompt : "";
 	};
 
-	const NEXT_CLI_HISTORY = InternalEvents.Prefix + 'NEXT_CLI_HISTORY';
-	const PREV_CLI_HISTORY = InternalEvents.Prefix + 'PREV_CLI_HISTORY';
-	const HIDE_CLI_MODAL = InternalEvents.Prefix + 'HIDE_CLI_MODAL';
+	const NEXT_CLI_HISTORY = InternalEvents.Prefix + "NEXT_CLI_HISTORY";
+	const PREV_CLI_HISTORY = InternalEvents.Prefix + "PREV_CLI_HISTORY";
+	const HIDE_CLI_MODAL = InternalEvents.Prefix + "HIDE_CLI_MODAL";
 
 	const keymap: KeyMap = {};
 
 	if (insert) {
-		keymap[NEXT_CLI_HISTORY] = {key: 'up'};
-		keymap[PREV_CLI_HISTORY] = {key: 'down'};
+		keymap[NEXT_CLI_HISTORY] = { key: "up" };
+		keymap[PREV_CLI_HISTORY] = { key: "down" };
 	}
 
 	if (hideModal) {
-		keymap[HIDE_CLI_MODAL] = {key: 'esc'};
+		keymap[HIDE_CLI_MODAL] = { key: "esc" };
 	}
 
-	const {useEvent} = useKeymap(keymap);
+	const { useEvent } = useKeymap(keymap);
 	useEvent(HIDE_CLI_MODAL, () => {
 		hideModal?.();
 	});
 	useEvent(NEXT_CLI_HISTORY, () => {
 		const nextHistory = CliHistory.next();
-		setValue('INPUT', nextHistory, true);
+		setValue("INPUT", nextHistory, true);
 	});
 	useEvent(PREV_CLI_HISTORY, () => {
 		const prevHistory = CliHistory.prev();
-		setValue('INPUT', prevHistory, true);
+		setValue("INPUT", prevHistory, true);
 	});
 
 	useInput(
 		() => {
 			if (!insert && value) {
-				setValue('INPUT', '');
+				setValue("INPUT", "");
 			}
 		},
-		{isActive: !!(!insert && value)},
+		{ isActive: !!(!insert && value) },
 	);
 
 	const [showAP, setShowAP] = useState(false);
 
 	useEffect(() => {
-		if (actionPrompt[0] !== '') {
+		if (actionPrompt[0] !== "") {
 			setShowAP(true);
 			enterInsert();
 		} else {
@@ -206,7 +205,7 @@ function CliView({
 							if (hideModal) {
 								return hideModal();
 							} else {
-								return setValue('INPUT', '');
+								return setValue("INPUT", "");
 							}
 						}
 
@@ -218,14 +217,14 @@ function CliView({
 							.then((result: unknown) => {
 								const sanitized: string = sanitizeResult(result);
 								setImmediate(() => {
-									setValue('RESOLVE', sanitized);
+									setValue("RESOLVE", sanitized);
 								});
 								return sanitized;
 							})
 							.catch((error: unknown) => {
 								const sanitized: string = sanitizeResult(error);
 								setImmediate(() => {
-									setValue('REJECT', sanitized);
+									setValue("REJECT", sanitized);
 								});
 								return sanitized;
 							})
@@ -236,7 +235,7 @@ function CliView({
 							});
 					}}
 					onEnter={() => {
-						setValue('INPUT', '');
+						setValue("INPUT", "");
 					}}
 				/>
 			</Box>
@@ -254,12 +253,8 @@ function CliView({
  * word extracted. The DEFAULT event is emitted every single time input is handled.
  * Because of that, we don't extract the first word, we pass in everything.
  * */
-async function handleInput(
-	commands: Commands,
-	cliInput: string,
-): Promise<unknown> {
-	const {command, parsedArgs, parsedInput, fullInput, fullArgs} =
-		getData(cliInput);
+async function handleInput(commands: Commands, cliInput: string): Promise<unknown> {
+	const { command, parsedArgs, parsedInput, fullInput, fullArgs } = getData(cliInput);
 
 	CliHistory.push(fullInput);
 	CliEmitter.emit(DEFAULT, fullArgs, fullInput);
@@ -278,23 +273,20 @@ async function handleInput(
 	} else if (DEFAULT in (commands ?? {})) {
 		return await commands?.[DEFAULT]?.(fullArgs, fullInput);
 	} else {
-		return '';
+		return "";
 	}
 }
 
-async function handlePromptInput(
-	handler: Handler,
-	cliInput: string,
-): Promise<unknown> {
-	const {fullArgs, fullInput} = getData(cliInput);
+async function handlePromptInput(handler: Handler, cliInput: string): Promise<unknown> {
+	const { fullArgs, fullInput } = getData(cliInput);
 	return await handler(fullArgs, fullInput);
 }
 
 function getData(cliInput: string) {
 	const [command, ...parsedArgs] = toSanitizedArray(cliInput);
-	const parsedInput = toRawInput(cliInput, command || '');
-	const fullInput = toRawInput(cliInput, '');
-	const fullArgs = [command ?? '', ...parsedArgs];
+	const parsedInput = toRawInput(cliInput, command || "");
+	const fullInput = toRawInput(cliInput, "");
+	const fullArgs = [command ?? "", ...parsedArgs];
 
 	return {
 		command,
@@ -307,21 +299,21 @@ function getData(cliInput: string) {
 
 // Returns just the parsedArgs from a cli command
 function toRawInput(cliInput: string, command: string): string {
-	return cliInput.replace(command, '').trimStart().trimEnd();
+	return cliInput.replace(command, "").trimStart().trimEnd();
 }
 
 function toSanitizedArray(parsedInput: string): string[] {
 	return parsedInput
 		.trimStart()
 		.trimEnd()
-		.split(' ')
-		.filter(c => c !== '');
+		.split(" ")
+		.filter((c) => c !== "");
 }
 
 function sanitizeResult(result: unknown): string {
-	const replace = (result: string) => result.replace(/\t|\n/g, ' ');
+	const replace = (result: string) => result.replace(/\t|\n/g, " ");
 
-	if (typeof result === 'string' || typeof result === 'number') {
+	if (typeof result === "string" || typeof result === "number") {
 		return replace(`${result}`);
 	}
 
@@ -329,5 +321,5 @@ function sanitizeResult(result: unknown): string {
 		return replace(result.message);
 	}
 
-	return '';
+	return "";
 }

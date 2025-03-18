@@ -1,6 +1,6 @@
-import renderNodeToOutput from './render-node-to-output.js';
-import Output from './output.js';
-import {type DOMElement} from './dom.js';
+import renderNodeToOutput from "./render-node-to-output.js";
+import Output from "./output.js";
+import { type DOMElement } from "./dom.js";
 
 type Result = {
 	output: string;
@@ -15,7 +15,7 @@ const renderer = (node: DOMElement): Result => {
 			height: node.yogaNode.getComputedHeight(),
 		});
 
-		renderNodeToOutput(node, output, {skipStaticElements: true});
+		renderNodeToOutput(node, output, { skipStaticElements: true });
 
 		let staticOutput;
 
@@ -30,21 +30,21 @@ const renderer = (node: DOMElement): Result => {
 			});
 		}
 
-		const {output: generatedOutput, height: outputHeight} = output.get();
+		const { output: generatedOutput, height: outputHeight } = output.get();
 
 		return {
 			output: generatedOutput,
 			outputHeight,
 			// Newline at the end is needed, because static output doesn't have one, so
 			// interactive output will override last line of static output
-			staticOutput: staticOutput ? `${staticOutput.get().output}\n` : '',
+			staticOutput: staticOutput ? `${staticOutput.get().output}\n` : "",
 		};
 	}
 
 	return {
-		output: '',
+		output: "",
 		outputHeight: 0,
-		staticOutput: '',
+		staticOutput: "",
 	};
 };
 

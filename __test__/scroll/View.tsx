@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
-import {Box, Text, List, useList} from '../../src/index.js';
-import {randomUUID} from 'crypto';
+import React, { useState } from "react";
+import { Box, Text, List, useList } from "../../src/index.js";
+import { randomUUID } from "crypto";
 
-export type Item = {id: string; value: number};
+export type Item = { id: string; value: number };
 
 export type Controls = {
 	list: ReturnType<typeof useList<Item[]>>;
@@ -20,12 +20,12 @@ export type Controls = {
 };
 
 export type Props = {
-	ctl: {current: Controls};
+	ctl: { current: Controls };
 	startHeight: number;
 	startItems: Item[];
 };
 
-export function View({ctl, startHeight, startItems}: Props) {
+export function View({ ctl, startHeight, startItems }: Props) {
 	const [height, setHeight] = useState(startHeight);
 	const list = useList(startItems);
 
@@ -39,7 +39,7 @@ export function View({ctl, startHeight, startItems}: Props) {
 		const copy = list.items.slice();
 		const left = copy.slice(0, idx + 1);
 		const right = copy.slice(idx + 1);
-		left.push({id: randomUUID(), value: 100});
+		left.push({ id: randomUUID(), value: 100 });
 		list.setItems([...left, ...right]);
 	};
 
@@ -50,7 +50,7 @@ export function View({ctl, startHeight, startItems}: Props) {
 
 	const addEnd = () => {
 		const copy = list.items.slice();
-		copy.push({id: randomUUID(), value: 100});
+		copy.push({ id: randomUUID(), value: 100 });
 		list.setItems(copy);
 	};
 
@@ -60,7 +60,7 @@ export function View({ctl, startHeight, startItems}: Props) {
 
 	const addStart = () => {
 		const copy = list.items.slice();
-		copy.unshift({id: randomUUID(), value: 100});
+		copy.unshift({ id: randomUUID(), value: 100 });
 		list.setItems(copy);
 	};
 
@@ -78,7 +78,7 @@ export function View({ctl, startHeight, startItems}: Props) {
 	return (
 		<Box height={height}>
 			<List listView={list.listView}>
-				{list.items.map(item => {
+				{list.items.map((item) => {
 					return <Text key={item.id}>{item.value}</Text>;
 				})}
 			</List>
@@ -87,7 +87,7 @@ export function View({ctl, startHeight, startItems}: Props) {
 }
 
 export function newArr(length: number): Item[] {
-	return Array.from({length}).map((_, idx) => {
-		return {id: randomUUID(), value: idx};
+	return Array.from({ length }).map((_, idx) => {
+		return { id: randomUUID(), value: idx };
 	});
 }

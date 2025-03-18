@@ -1,7 +1,7 @@
-import process from 'node:process';
-import createReconciler from 'react-reconciler';
-import {DefaultEventPriority} from 'react-reconciler/constants.js';
-import Yoga, {type Node as YogaNode} from 'yoga-wasm-web/auto';
+import process from "node:process";
+import createReconciler from "react-reconciler";
+import { DefaultEventPriority } from "react-reconciler/constants.js";
+import Yoga, { type Node as YogaNode } from "yoga-wasm-web/auto";
 import {
 	createTextNode,
 	appendChildNode,
@@ -15,18 +15,18 @@ import {
 	type TextNode,
 	type ElementNames,
 	type DOMElement,
-} from './dom.js';
-import applyBaseProps, {type BaseProps} from './baseProps.js';
-import {type OutputTransformer} from './render-node-to-output.js';
+} from "./dom.js";
+import applyBaseProps, { type BaseProps } from "./baseProps.js";
+import { type OutputTransformer } from "./render-node-to-output.js";
 
 // We need to conditionally perform devtools connection to avoid
 // accidentally breaking other third-party code.
 // See https://github.com/vadimdemedes/ink/issues/384
-if (process.env['DEV'] === 'true') {
+if (process.env["DEV"] === "true") {
 	try {
-		await import('./devtools.js');
+		await import("./devtools.js");
 	} catch (error: any) {
-		if (error.code === 'ERR_MODULE_NOT_FOUND') {
+		if (error.code === "ERR_MODULE_NOT_FOUND") {
 			console.warn(
 				`
 The environment variable DEV is set to true, so Ink tried to import \`react-devtools-core\`,
@@ -35,7 +35,7 @@ but this failed as it was not installed. Debugging with React Devtools requires 
 To install use this command:
 
 $ npm install --save-dev react-devtools-core
-				`.trim() + '\n',
+				`.trim() + "\n",
 			);
 		} else {
 			// eslint-disable-next-line @typescript-eslint/no-throw-literal
@@ -117,7 +117,7 @@ export default createReconciler<
 	preparePortalMount: () => null,
 	clearContainer: () => false,
 	resetAfterCommit(rootNode) {
-		if (typeof rootNode.onComputeLayout === 'function') {
+		if (typeof rootNode.onComputeLayout === "function") {
 			rootNode.onComputeLayout();
 		}
 
@@ -126,46 +126,46 @@ export default createReconciler<
 		// trigger an immediate render to ensure <Static> children are written to output before they get erased
 		if (rootNode.isStaticDirty) {
 			rootNode.isStaticDirty = false;
-			if (typeof rootNode.onImmediateRender === 'function') {
+			if (typeof rootNode.onImmediateRender === "function") {
 				rootNode.onImmediateRender();
 			}
 
 			return;
 		}
 
-		if (typeof rootNode.onRender === 'function') {
+		if (typeof rootNode.onRender === "function") {
 			rootNode.onRender();
 		}
 	},
 	getChildHostContext(parentHostContext, type) {
 		const previousIsInsideText = parentHostContext.isInsideText;
-		const isInsideText = type === 'ink-text' || type === 'ink-virtual-text';
+		const isInsideText = type === "ink-text" || type === "ink-virtual-text";
 
 		if (previousIsInsideText === isInsideText) {
 			return parentHostContext;
 		}
 
-		return {isInsideText};
+		return { isInsideText };
 	},
 	shouldSetTextContent: () => false,
 	createInstance(originalType, newProps, _root, hostContext) {
-		if (hostContext.isInsideText && originalType === 'ink-box') {
+		if (hostContext.isInsideText && originalType === "ink-box") {
 			throw new Error(`<Box> can’t be nested inside <Text> component`);
 		}
 
 		const type =
-			originalType === 'ink-text' && hostContext.isInsideText
-				? 'ink-virtual-text'
+			originalType === "ink-text" && hostContext.isInsideText
+				? "ink-virtual-text"
 				: originalType;
 
 		const node = createNode(type);
 
 		for (const [key, value] of Object.entries(newProps)) {
-			if (key === 'children') {
+			if (key === "children") {
 				continue;
 			}
 
-			if (key === 'style') {
+			if (key === "style") {
 				setStyle(node, value as BaseProps);
 
 				if (node.yogaNode) {
@@ -175,12 +175,12 @@ export default createReconciler<
 				continue;
 			}
 
-			if (key === 'internal_transform') {
+			if (key === "internal_transform") {
 				node.internal_transform = value as OutputTransformer;
 				continue;
 			}
 
-			if (key === 'internal_static') {
+			if (key === "internal_static") {
 				node.internal_static = true;
 				continue;
 			}
@@ -201,12 +201,12 @@ export default createReconciler<
 	},
 	resetTextContent() {},
 	hideTextInstance(node) {
-		setTextNodeValue(node, '');
+		setTextNodeValue(node, "");
 	},
 	unhideTextInstance(node, text) {
 		setTextNodeValue(node, text);
 	},
-	getPublicInstance: instance => instance,
+	getPublicInstance: (instance) => instance,
 	hideInstance(node) {
 		node.yogaNode?.setDisplay(Yoga.DISPLAY_NONE);
 	},
@@ -255,30 +255,30 @@ export default createReconciler<
 		const props = diff(oldProps, newProps);
 
 		const style = diff(
-			oldProps['style'] as BaseProps,
-			newProps['style'] as BaseProps,
+			oldProps["style"] as BaseProps,
+			newProps["style"] as BaseProps,
 		);
 
 		if (!props && !style) {
 			return null;
 		}
 
-		return {props, style};
+		return { props, style };
 	},
-	commitUpdate(node, {props, style}) {
+	commitUpdate(node, { props, style }) {
 		if (props) {
 			for (const [key, value] of Object.entries(props)) {
-				if (key === 'style') {
+				if (key === "style") {
 					setStyle(node, value as BaseProps);
 					continue;
 				}
 
-				if (key === 'internal_transform') {
+				if (key === "internal_transform") {
 					node.internal_transform = value as OutputTransformer;
 					continue;
 				}
 
-				if (key === 'internal_static') {
+				if (key === "internal_static") {
 					node.internal_static = true;
 					continue;
 				}

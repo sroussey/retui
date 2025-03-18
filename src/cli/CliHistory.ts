@@ -1,5 +1,5 @@
 class CliHistoryBuilder {
-	private history: {[idx: number]: string};
+	private history: { [idx: number]: string };
 	private set: Set<string>;
 	private idx: number;
 
@@ -23,7 +23,7 @@ class CliHistoryBuilder {
 
 	public current = (): string => {
 		const current = this.history[this.idx];
-		return current ?? '';
+		return current ?? "";
 	};
 
 	public next = (): string => {

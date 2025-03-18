@@ -1,9 +1,9 @@
-import React from 'react';
-import test from 'ava';
-import {Box, Text} from '../src/index.js';
-import {renderToString} from './helpers/render-to-string.js';
+import React from "react";
+import test from "ava";
+import { Box, Text } from "../src/index.js";
+import { renderToString } from "./helpers/render-to-string.js";
 
-test('row - align text to center', t => {
+test("row - align text to center", (t) => {
 	const output = renderToString(
 		<Box height={3}>
 			<Box alignSelf="center">
@@ -12,10 +12,10 @@ test('row - align text to center', t => {
 		</Box>,
 	);
 
-	t.is(output, '\nTest\n');
+	t.is(output, "\nTest\n");
 });
 
-test('row - align multiple text nodes to center', t => {
+test("row - align multiple text nodes to center", (t) => {
 	const output = renderToString(
 		<Box height={3}>
 			<Box alignSelf="center">
@@ -25,10 +25,10 @@ test('row - align multiple text nodes to center', t => {
 		</Box>,
 	);
 
-	t.is(output, '\nAB\n');
+	t.is(output, "\nAB\n");
 });
 
-test('row - align text to bottom', t => {
+test("row - align text to bottom", (t) => {
 	const output = renderToString(
 		<Box height={3}>
 			<Box alignSelf="flex-end">
@@ -37,10 +37,10 @@ test('row - align text to bottom', t => {
 		</Box>,
 	);
 
-	t.is(output, '\n\nTest');
+	t.is(output, "\n\nTest");
 });
 
-test('row - align multiple text nodes to bottom', t => {
+test("row - align multiple text nodes to bottom", (t) => {
 	const output = renderToString(
 		<Box height={3}>
 			<Box alignSelf="flex-end">
@@ -50,10 +50,10 @@ test('row - align multiple text nodes to bottom', t => {
 		</Box>,
 	);
 
-	t.is(output, '\n\nAB');
+	t.is(output, "\n\nAB");
 });
 
-test('column - align text to center', t => {
+test("column - align text to center", (t) => {
 	const output = renderToString(
 		<Box flexDirection="column" width={10}>
 			<Box alignSelf="center">
@@ -62,10 +62,10 @@ test('column - align text to center', t => {
 		</Box>,
 	);
 
-	t.is(output, '   Test');
+	t.is(output, "   Test");
 });
 
-test('column - align text to right', t => {
+test("column - align text to right", (t) => {
 	const output = renderToString(
 		<Box flexDirection="column" width={10}>
 			<Box alignSelf="flex-end">
@@ -74,5 +74,5 @@ test('column - align text to right', t => {
 		</Box>,
 	);
 
-	t.is(output, '      Test');
+	t.is(output, "      Test");
 });

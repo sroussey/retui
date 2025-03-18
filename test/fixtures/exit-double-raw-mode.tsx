@@ -1,6 +1,6 @@
-import process from 'node:process';
-import React from 'react';
-import {Text, render, useStdin} from '../../src/index.js';
+import process from "node:process";
+import React from "react";
+import { Text, render, useStdin } from "../../src/index.js";
 
 class ExitDoubleRawMode extends React.Component<{
 	setRawMode: (value: boolean) => void;
@@ -10,7 +10,7 @@ class ExitDoubleRawMode extends React.Component<{
 	}
 
 	override componentDidMount() {
-		const {setRawMode} = this.props;
+		const { setRawMode } = this.props;
 
 		setRawMode(true);
 
@@ -19,24 +19,24 @@ class ExitDoubleRawMode extends React.Component<{
 			setRawMode(true);
 
 			// Start the test
-			process.stdout.write('s');
+			process.stdout.write("s");
 		}, 500);
 	}
 }
 
 function Test() {
-	const {setRawMode} = useStdin();
+	const { setRawMode } = useStdin();
 
 	return <ExitDoubleRawMode setRawMode={setRawMode} />;
 }
 
-const {unmount, waitUntilExit} = render(<Test />);
+const { unmount, waitUntilExit } = render(<Test />);
 
-process.stdin.on('data', data => {
-	if (String(data) === 'q') {
+process.stdin.on("data", (data) => {
+	if (String(data) === "q") {
 		unmount();
 	}
 });
 
 await waitUntilExit();
-console.log('exited');
+console.log("exited");

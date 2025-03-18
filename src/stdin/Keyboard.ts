@@ -1,8 +1,8 @@
-import EventEmitter = require('events');
-import {SpecialKeys, newSpecialKeyRegister} from './AsciiMap.js';
-import {EVENT} from './Stdin.js';
-import {ASCII} from './AsciiMap.js';
-import {Key} from '../utility/types.js';
+import EventEmitter = require("events");
+import { SpecialKeys, newSpecialKeyRegister } from "./AsciiMap.js";
+import { EVENT } from "./Stdin.js";
+import { ASCII } from "./AsciiMap.js";
+import { Key } from "../utility/types.js";
 
 export type KeyInput = {
 	key?: Key;
@@ -32,17 +32,17 @@ export default class Keyboard {
 	private Emitter: EventEmitter;
 	private StateEmitter: EventEmitter;
 	private state: KeyboardState;
-	public static StateUpdate = 'STATE_UPDATE';
-	public static InputRecieved = 'INPUT_RECIEVED';
+	public static StateUpdate = "STATE_UPDATE";
+	public static InputRecieved = "INPUT_RECIEVED";
 
 	constructor() {
 		this.Emitter = new EventEmitter();
 		this.StateEmitter = new EventEmitter();
 		this.Emitter.setMaxListeners(Infinity);
 		this.state = {
-			chars: '',
+			chars: "",
 			specialKeys: newSpecialKeyRegister(),
-			ctrlKeys: '',
+			ctrlKeys: "",
 			listening: false,
 			event: null,
 			eventSet: false,
@@ -66,7 +66,7 @@ export default class Keyboard {
 	};
 
 	private clearChars = (): void => {
-		this.state.chars = '';
+		this.state.chars = "";
 	};
 
 	public setMaxChars = (n: number): void => {
@@ -86,21 +86,21 @@ export default class Keyboard {
 		if (this.state.eventSet) return;
 		this.state.eventSet = true;
 
-		this.state.event = typeof event === 'string' ? event : String(event);
-		this.state.chars = '';
+		this.state.event = typeof event === "string" ? event : String(event);
+		this.state.chars = "";
 		this.StateEmitter.emit(Keyboard.StateUpdate, this.state);
 	};
 
-	private setKeyInput = (keyInput: KeyboardState['keyInput']) => {
+	private setKeyInput = (keyInput: KeyboardState["keyInput"]) => {
 		if (this.state.keyInput) return;
 		this.state.keyInput = keyInput;
 	};
 
 	private appendChar = (c: string): void => {
-		if (c === '') return;
+		if (c === "") return;
 
 		if (this.state.chars.length >= this.state.registerSize) {
-			this.state.chars = '';
+			this.state.chars = "";
 		}
 
 		this.state.chars += c;
@@ -125,12 +125,12 @@ export default class Keyboard {
 
 	public handleStdin = (buffer: Buffer): void => {
 		if (buffer[0] === undefined) return;
-		const char = buffer.toString('utf-8');
+		const char = buffer.toString("utf-8");
 
 		this.state.eventSet = false;
 		this.state.eventEmitted = false;
 		this.state.event = null;
-		this.state.ctrlKeys = '';
+		this.state.ctrlKeys = "";
 		this.state.keyInput = null;
 
 		// Handle sigint before all else
@@ -186,7 +186,7 @@ export default class Keyboard {
 		if (charCode >= 1 && charCode <= 26) {
 			const letter = String.fromCharCode(charCode + 96);
 			this.state.ctrlKeys = letter;
-			this.state.chars = '';
+			this.state.chars = "";
 
 			map.ctrl = true;
 			dirtySpecKey = true;
@@ -223,13 +223,13 @@ export default class Keyboard {
 	};
 
 	public subscribeComponentToStateChanges = (
-		cb: (s: Keyboard['state']) => unknown,
+		cb: (s: Keyboard["state"]) => unknown,
 	): void => {
 		this.StateEmitter.on(Keyboard.StateUpdate, cb);
 	};
 
 	public unsubscribeComponentToStateChanges = (
-		cb: (s: Keyboard['state']) => unknown,
+		cb: (s: Keyboard["state"]) => unknown,
 	): void => {
 		this.StateEmitter.off(Keyboard.StateUpdate, cb);
 	};
@@ -253,14 +253,14 @@ export default class Keyboard {
 
 		/* Is there a non alphanumeric keypress?  We need to know so that bindings
 		 * such as just "f" should not trigger ctrl + f for example. */
-		const hasNonAlphaKey = Object.values(this.state.specialKeys).some(b => b);
+		const hasNonAlphaKey = Object.values(this.state.specialKeys).some((b) => b);
 
 		for (const event in config) {
 			const binding = config[event] as KeyInput | KeyInput[];
 
 			let match: undefined | KeyInput;
 			if (Array.isArray(binding)) {
-				match = binding.find(b => this.checkMatch(b, hasNonAlphaKey));
+				match = binding.find((b) => this.checkMatch(b, hasNonAlphaKey));
 			} else {
 				match = this.checkMatch(binding, hasNonAlphaKey) ? binding : undefined;
 			}
@@ -272,10 +272,7 @@ export default class Keyboard {
 		}
 	};
 
-	private checkMatch = (
-		binding: KeyInput,
-		hasNonAlphakey: boolean,
-	): boolean => {
+	private checkMatch = (binding: KeyInput, hasNonAlphakey: boolean): boolean => {
 		// Empty object triggers any key press
 		if (!Object.keys(binding).length) {
 			return true;
@@ -288,13 +285,12 @@ export default class Keyboard {
 
 		// key + char input
 		if (binding.key && binding.input) {
-			if (binding.key === 'ctrl') {
+			if (binding.key === "ctrl") {
 				return this.state.ctrlKeys === binding.input;
 			}
 			// This should always evaluate to false
 			return (
-				this.state.specialKeys[binding.key] &&
-				this.state.chars === binding.input
+				this.state.specialKeys[binding.key] && this.state.chars === binding.input
 			);
 		}
 

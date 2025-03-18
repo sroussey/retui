@@ -1,5 +1,5 @@
-import React from 'react';
-import {render, Text, useApp, useStdin} from '../../src/index.js';
+import React from "react";
+import { render, Text, useApp, useStdin } from "../../src/index.js";
 
 class Exit extends React.Component<{
 	onSetRawMode: (value: boolean) => void;
@@ -13,14 +13,14 @@ class Exit extends React.Component<{
 		this.props.onSetRawMode(true);
 
 		setTimeout(() => {
-			this.props.onExit(new Error('errored'));
+			this.props.onExit(new Error("errored"));
 		}, 500);
 	}
 }
 
 function Test() {
-	const {exit} = useApp();
-	const {setRawMode} = useStdin();
+	const { exit } = useApp();
+	const { setRawMode } = useStdin();
 
 	return <Exit onExit={exit} onSetRawMode={setRawMode} />;
 }

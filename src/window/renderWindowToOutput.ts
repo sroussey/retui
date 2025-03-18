@@ -1,10 +1,10 @@
-import assert from 'assert';
-import {DOMElement} from '../index.js';
-import Output from '../output.js';
-import {IntrinsicWindowBaseProps, WindowAttributes} from './Window.js';
-import {ViewState} from './types.js';
-import colorize from '../colorize.js';
-import chalk from 'chalk';
+import assert from "assert";
+import { DOMElement } from "../index.js";
+import Output from "../output.js";
+import { IntrinsicWindowBaseProps, WindowAttributes } from "./Window.js";
+import { ViewState } from "./types.js";
+import colorize from "../colorize.js";
+import chalk from "chalk";
 
 export function renderWindowToOutput(
 	x: number,
@@ -22,8 +22,7 @@ export function renderWindowToOutput(
 
 	if (explicitWindowSize === undefined) {
 		// If the unitSize is 'stretch', still want to prune off excess
-		let unitSize =
-			typeof viewState._unitSize === 'number' ? viewState._unitSize : 1;
+		let unitSize = typeof viewState._unitSize === "number" ? viewState._unitSize : 1;
 
 		if (node.style.gap) {
 			unitSize += node.style.gap;
@@ -34,10 +33,10 @@ export function renderWindowToOutput(
 
 		// The maximum amount of units we can render based on the container.
 		let maxCtrUnits = viewState._winSize;
-		if (node.style.flexDirection === 'column') {
+		if (node.style.flexDirection === "column") {
 			maxCtrUnits = Math.floor((height ?? 0) / unitSize);
 		}
-		if (node.style.flexDirection === 'row') {
+		if (node.style.flexDirection === "row") {
 			maxCtrUnits = Math.floor((width ?? 0) / unitSize);
 		}
 
@@ -46,18 +45,12 @@ export function renderWindowToOutput(
 			viewState._control.modifyWinSize(maxCtrUnits);
 		}
 		// There is room to render more units, but not excess
-		else if (
-			maxCtrUnits > viewState._winSize &&
-			maxCtrUnits <= viewState._itemsLen
-		) {
+		else if (maxCtrUnits > viewState._winSize && maxCtrUnits <= viewState._itemsLen) {
 			viewState._control.modifyWinSize(maxCtrUnits);
 		}
 
 		// There is excess room to render more units
-		else if (
-			maxCtrUnits > viewState._winSize &&
-			maxCtrUnits >= viewState._itemsLen
-		) {
+		else if (maxCtrUnits > viewState._winSize && maxCtrUnits >= viewState._itemsLen) {
 			// Don't want to update if viewState is already at itemsLen
 			if (viewState._winSize !== viewState._itemsLen) {
 				viewState._control.modifyWinSize(viewState._itemsLen);
@@ -98,41 +91,41 @@ export function renderScrollbar(
 	// Write scrollbar to output
 	let nx = x;
 	let ny = y;
-	if (node.style.flexDirection === 'column') {
-		if (scrollbar.align === 'end') {
+	if (node.style.flexDirection === "column") {
+		if (scrollbar.align === "end") {
 			nx += width - 1;
 		}
 	}
-	if (node.style.flexDirection === 'row') {
-		if (scrollbar.align === 'end') {
+	if (node.style.flexDirection === "row") {
+		if (scrollbar.align === "end") {
 			ny += height - 1;
 		}
 	}
 
-	output.write(nx, ny, scrollbarOutput, {transformers: []});
+	output.write(nx, ny, scrollbarOutput, { transformers: [] });
 }
 
 function getScrollbarString(
 	node: DOMElement,
 	viewState: ViewState,
-	scrollbar: Exclude<IntrinsicWindowBaseProps['scrollbar'], undefined>,
+	scrollbar: Exclude<IntrinsicWindowBaseProps["scrollbar"], undefined>,
 ): string {
 	const height = node.yogaNode!.getComputedHeight();
 	const width = node.yogaNode!.getComputedWidth();
 
-	let colChar = '';
-	let rowChar = '';
-	if (typeof scrollbar.style === 'object') {
+	let colChar = "";
+	let rowChar = "";
+	if (typeof scrollbar.style === "object") {
 		colChar = scrollbar.style.char;
 		rowChar = scrollbar.style.char;
 	} else {
-		colChar = scrollbar.style === 'bold' ? ' ' : '┃';
-		rowChar = scrollbar.style === 'bold' ? ' ' : '▬';
+		colChar = scrollbar.style === "bold" ? " " : "┃";
+		rowChar = scrollbar.style === "bold" ? " " : "▬";
 	}
 
-	const {_itemsLen, _winSize, _start, _end} = viewState;
+	const { _itemsLen, _winSize, _start, _end } = viewState;
 
-	if (node.style.flexDirection === 'column') {
+	if (node.style.flexDirection === "column") {
 		const barLength = Math.max(
 			0,
 			Math.ceil(height * (Math.min(_itemsLen, _winSize) / _itemsLen)),
@@ -142,9 +135,9 @@ function getScrollbarString(
 		const startLength = Math.max(0, Math.floor(preStart));
 		const endLength = Math.max(0, Math.floor(preEnd));
 
-		const startStr = ' \n'.repeat(startLength);
+		const startStr = " \n".repeat(startLength);
 		const barStr = colorizeBar(`${colChar}\n`.repeat(barLength), scrollbar);
-		const endStr = ' \n'.repeat(endLength);
+		const endStr = " \n".repeat(endLength);
 
 		return startStr + barStr + endStr;
 	} else {
@@ -157,9 +150,9 @@ function getScrollbarString(
 		const startLength = Math.max(0, Math.floor(preStart));
 		const endLength = Math.max(0, Math.floor(preEnd));
 
-		const startStr = ' '.repeat(startLength);
+		const startStr = " ".repeat(startLength);
 		const barStr = colorizeBar(rowChar.repeat(barLength), scrollbar);
-		const endStr = ' '.repeat(endLength);
+		const endStr = " ".repeat(endLength);
 
 		return startStr + barStr + endStr;
 	}
@@ -167,15 +160,15 @@ function getScrollbarString(
 
 function colorizeBar(
 	bar: string,
-	scrollbar: Exclude<IntrinsicWindowBaseProps['scrollbar'], undefined>,
+	scrollbar: Exclude<IntrinsicWindowBaseProps["scrollbar"], undefined>,
 ): string {
-	bar = colorize(bar, scrollbar.color, 'foreground');
+	bar = colorize(bar, scrollbar.color, "foreground");
 
 	if (scrollbar.dimColor) {
 		bar = chalk.dim(bar);
 	}
 
-	if (scrollbar.style === 'bold') {
+	if (scrollbar.style === "bold") {
 		bar = chalk.inverse(bar);
 	}
 

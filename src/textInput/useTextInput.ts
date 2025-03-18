@@ -1,5 +1,5 @@
-import {useState} from 'react';
-import {deepEqual} from '../utility/deepEqual.js';
+import { useState } from "react";
+import { deepEqual } from "../utility/deepEqual.js";
 
 export type State = {
 	value: string;
@@ -13,14 +13,14 @@ export type State = {
 };
 
 export type Return = {
-	value: State['value'];
+	value: State["value"];
 	insert: boolean;
-	onChange: () => {state: State; update: (nextState: State) => void};
+	onChange: () => { state: State; update: (nextState: State) => void };
 	setValue: (nextValue: string, insert?: boolean) => void;
 	enterInsert: () => void;
 };
 
-export function useTextInput(initialValue: string = ''): Return {
+export function useTextInput(initialValue: string = ""): Return {
 	const [state, setState] = useState<State>({
 		value: initialValue,
 		idx: initialValue.length,
@@ -33,7 +33,7 @@ export function useTextInput(initialValue: string = ''): Return {
 	});
 
 	const update = (nextState: State) => {
-		setState(prev => {
+		setState((prev) => {
 			if (!deepEqual(prev, nextState)) {
 				return nextState;
 			} else {
@@ -43,19 +43,19 @@ export function useTextInput(initialValue: string = ''): Return {
 	};
 
 	const onChange = () => {
-		return {update, state};
+		return { update, state };
 	};
 
 	const enterInsert = () => {
 		if (!state.insert) {
-			setState(prev => {
-				return {...prev, insert: true};
+			setState((prev) => {
+				return { ...prev, insert: true };
 			});
 		}
 	};
 
 	const setValue = (nextValue: string, insert?: boolean) => {
-		setState(prev => {
+		setState((prev) => {
 			const nextInsert = insert ?? prev.insert;
 
 			return {
@@ -63,7 +63,7 @@ export function useTextInput(initialValue: string = ''): Return {
 				value: nextValue,
 				idx: nextValue.length,
 				insert: nextInsert,
-				window: {start: 0, end: nextValue.length},
+				window: { start: 0, end: nextValue.length },
 			};
 		});
 	};

@@ -1,16 +1,16 @@
-import React, {useEffect, useState} from 'react';
-import Text from '../components/Text.js';
-import Box from '../components/Box.js';
-import {DefaultStdin} from '../stdin/Stdin.js';
-import Keyboard from '../stdin/Keyboard.js';
-import InternalEvents from '../utility/InternalEvents.js';
-import {deepEqual} from '../utility/deepEqual.js';
-import {Except} from 'type-fest';
-import {StylesConfig} from '../utility/types.js';
+import React, { useEffect, useState } from "react";
+import Text from "../components/Text.js";
+import Box from "../components/Box.js";
+import { DefaultStdin } from "../stdin/Stdin.js";
+import Keyboard from "../stdin/Keyboard.js";
+import InternalEvents from "../utility/InternalEvents.js";
+import { deepEqual } from "../utility/deepEqual.js";
+import { Except } from "type-fest";
+import { StylesConfig } from "../utility/types.js";
 
-type State = {event: string; register: string};
+type State = { event: string; register: string };
 
-type TextStyles = Except<StylesConfig['Text'], 'wrap'>;
+type TextStyles = Except<StylesConfig["Text"], "wrap">;
 
 type Props = {
 	showEvents?: boolean;
@@ -28,18 +28,18 @@ export function StdinState({
 	width = 20,
 }: Props): React.ReactNode {
 	const [state, setState] = useState<State>({
-		event: '',
-		register: '',
+		event: "",
+		register: "",
 	});
 
 	useEffect(() => {
-		const handler = (keyboardState: Keyboard['state']) => {
+		const handler = (keyboardState: Keyboard["state"]) => {
 			const isTextInput = keyboardState.isTextInput;
-			const nextEvent = keyboardState.event ?? '';
-			const nextRegister = keyboardState.chars ?? '';
+			const nextEvent = keyboardState.event ?? "";
+			const nextRegister = keyboardState.chars ?? "";
 
 			const update = (next: State) => {
-				setState(prev => {
+				setState((prev) => {
 					if (!deepEqual(next, prev)) {
 						return next;
 					} else {
@@ -49,10 +49,10 @@ export function StdinState({
 			};
 
 			if (isTextInput || nextEvent.startsWith(InternalEvents.Prefix)) {
-				return update({event: '', register: ''});
+				return update({ event: "", register: "" });
 			}
 
-			update({event: nextEvent, register: nextRegister});
+			update({ event: nextEvent, register: nextRegister });
 		};
 
 		DefaultStdin.Keyboard.subscribeComponentToStateChanges(handler);
@@ -63,7 +63,7 @@ export function StdinState({
 	});
 
 	let styles: TextStyles = {};
-	let text = '';
+	let text = "";
 	if (state.event && showEvents) {
 		styles = eventStyles;
 		text = state.event;
@@ -76,7 +76,7 @@ export function StdinState({
 	return (
 		<Box width={width}>
 			<Text wrap="truncate-end" {...styles}>
-				{text ?? ' '}
+				{text ?? " "}
 			</Text>
 		</Box>
 	);

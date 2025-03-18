@@ -1,11 +1,11 @@
-import {BoxProps} from '../index.js';
+import { BoxProps } from "../index.js";
 
-type BorderStyleHelper = Exclude<BoxProps['borderStyle'], undefined>;
+type BorderStyleHelper = Exclude<BoxProps["borderStyle"], undefined>;
 export type BorderStyle = keyof Omit<
 	{
 		[P in BorderStyleHelper as P extends string ? P : never]: string;
 	},
-	'inherit'
+	"inherit"
 >;
 export type BorderConfiguration = {
 	topLeft: string;
@@ -20,7 +20,7 @@ export type BorderConfiguration = {
 type StyleUnits = {
 	[P in BorderStyle]: string;
 };
-type Map = {[P in keyof BorderConfiguration]: StyleUnits};
+type Map = { [P in keyof BorderConfiguration]: StyleUnits };
 type Return = {
 	top: BorderConfiguration;
 	bottom: BorderConfiguration;
@@ -28,84 +28,84 @@ type Return = {
 
 const MAP: Map = {
 	top: {
-		round: '─',
-		bold: '━',
-		single: '─',
-		double: '═',
-		doubleSingle: '═',
-		singleDouble: '─',
-		arrow: '↓',
-		classic: '-',
+		round: "─",
+		bold: "━",
+		single: "─",
+		double: "═",
+		doubleSingle: "═",
+		singleDouble: "─",
+		arrow: "↓",
+		classic: "-",
 	},
 	bottom: {
-		round: '─',
-		bold: '━',
-		single: '─',
-		double: '═',
-		doubleSingle: '═',
-		singleDouble: '─',
-		arrow: '↑',
-		classic: '-',
+		round: "─",
+		bold: "━",
+		single: "─",
+		double: "═",
+		doubleSingle: "═",
+		singleDouble: "─",
+		arrow: "↑",
+		classic: "-",
 	},
 	left: {
-		round: '│',
-		bold: '┃',
-		single: '│',
-		double: '║',
-		doubleSingle: '│',
-		singleDouble: '║',
-		arrow: '→',
-		classic: '|',
+		round: "│",
+		bold: "┃",
+		single: "│",
+		double: "║",
+		doubleSingle: "│",
+		singleDouble: "║",
+		arrow: "→",
+		classic: "|",
 	},
 	right: {
-		round: '│',
-		bold: '┃',
-		single: '│',
-		double: '║',
-		doubleSingle: '│',
-		singleDouble: '║',
-		arrow: '←',
-		classic: '|',
+		round: "│",
+		bold: "┃",
+		single: "│",
+		double: "║",
+		doubleSingle: "│",
+		singleDouble: "║",
+		arrow: "←",
+		classic: "|",
 	},
 	topLeft: {
-		round: '╭',
-		bold: '┏',
-		single: '┌',
-		double: '╔',
-		doubleSingle: '╒',
-		singleDouble: '╓',
-		arrow: '↘',
-		classic: '+',
+		round: "╭",
+		bold: "┏",
+		single: "┌",
+		double: "╔",
+		doubleSingle: "╒",
+		singleDouble: "╓",
+		arrow: "↘",
+		classic: "+",
 	},
 	topRight: {
-		round: '╮',
-		bold: '┓',
-		single: '┐',
-		double: '╗',
-		doubleSingle: '╕',
-		singleDouble: '╖',
-		arrow: '↙',
-		classic: '+',
+		round: "╮",
+		bold: "┓",
+		single: "┐",
+		double: "╗",
+		doubleSingle: "╕",
+		singleDouble: "╖",
+		arrow: "↙",
+		classic: "+",
 	},
 	bottomLeft: {
-		round: '╰',
-		bold: '┗',
-		single: '└',
-		double: '╚',
-		doubleSingle: '╘',
-		singleDouble: '╙',
-		arrow: '↗',
-		classic: '+',
+		round: "╰",
+		bold: "┗",
+		single: "└",
+		double: "╚",
+		doubleSingle: "╘",
+		singleDouble: "╙",
+		arrow: "↗",
+		classic: "+",
 	},
 	bottomRight: {
-		round: '╯',
-		bold: '┛',
-		single: '┘',
-		double: '╝',
-		doubleSingle: '╛',
-		singleDouble: '╜',
-		arrow: '↖',
-		classic: '+',
+		round: "╯",
+		bold: "┛",
+		single: "┘",
+		double: "╝",
+		doubleSingle: "╛",
+		singleDouble: "╜",
+		arrow: "↖",
+		classic: "+",
 	},
 };
 
@@ -121,18 +121,18 @@ function shallow(borderStyle: BorderStyle): Return {
 	// overwrite bottom
 	bottom.left = bottom.topRight;
 	bottom.right = bottom.topLeft;
-	bottom.top = ' ';
-	bottom.topLeft = ' ';
-	bottom.topRight = ' ';
+	bottom.top = " ";
+	bottom.topLeft = " ";
+	bottom.topRight = " ";
 
 	// overwrite top
 	top.left = top.bottomRight;
 	top.right = top.bottomLeft;
-	top.bottom = ' ';
-	top.bottomLeft = ' ';
-	top.bottomRight = ' ';
+	top.bottom = " ";
+	top.bottomLeft = " ";
+	top.bottomRight = " ";
 
-	return {top, bottom};
+	return { top, bottom };
 }
 
 function deep(borderStyle: BorderStyle): Return {
@@ -147,14 +147,14 @@ function deep(borderStyle: BorderStyle): Return {
 	// overwrite bottom
 	bottom.topLeft = MAP.topRight[borderStyle];
 	bottom.topRight = MAP.topLeft[borderStyle];
-	bottom.top = ' ';
+	bottom.top = " ";
 
 	// overwrite top
 	top.bottomLeft = MAP.bottomRight[borderStyle];
 	top.bottomRight = MAP.bottomLeft[borderStyle];
-	top.bottom = ' ';
+	top.bottom = " ";
 
-	return {top, bottom};
+	return { top, bottom };
 }
 
 export default {

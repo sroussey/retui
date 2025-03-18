@@ -1,59 +1,59 @@
-import {KeyMap, KeyInput} from '../index.js';
-import InternalEvents from '../utility/InternalEvents.js';
-import {Key, KeyInputSingle} from '../utility/types.js';
+import { KeyMap, KeyInput } from "../index.js";
+import InternalEvents from "../utility/InternalEvents.js";
+import { Key, KeyInputSingle } from "../utility/types.js";
 
 type InsertEvents =
-	| 'return'
-	| 'left'
-	| 'right'
-	| 'up'
-	| 'down'
-	| 'backspace'
-	| 'tab'
-	| 'keypress';
+	| "return"
+	| "left"
+	| "right"
+	| "up"
+	| "down"
+	| "backspace"
+	| "tab"
+	| "keypress";
 
-const defaultEnter: KeyInput = [{key: 'return'}, {input: 'i'}];
-const defaultExit: KeyInput = [{key: 'return'}, {key: 'esc'}];
+const defaultEnter: KeyInput = [{ key: "return" }, { input: "i" }];
+const defaultExit: KeyInput = [{ key: "return" }, { key: "esc" }];
 
-const EVENTS: {[K in InsertEvents]: string} = {
-	return: 'return',
-	left: 'left',
-	right: 'right',
-	up: 'up',
-	down: 'down',
-	backspace: 'backspace',
-	tab: 'tab',
-	keypress: 'keypress',
+const EVENTS: { [K in InsertEvents]: string } = {
+	return: "return",
+	left: "left",
+	right: "right",
+	up: "up",
+	down: "down",
+	backspace: "backspace",
+	tab: "tab",
+	keypress: "keypress",
 } as const;
 
-function getScopedEvents(ID: string): {[K in InsertEvents]: string} {
+function getScopedEvents(ID: string): { [K in InsertEvents]: string } {
 	return {
-		return: InternalEvents.getInternalEvent('return', ID),
-		left: InternalEvents.getInternalEvent('left', ID),
-		right: InternalEvents.getInternalEvent('right', ID),
-		up: InternalEvents.getInternalEvent('up', ID),
-		down: InternalEvents.getInternalEvent('down', ID),
-		backspace: InternalEvents.getInternalEvent('backspace', ID),
-		tab: InternalEvents.getInternalEvent('tab', ID),
-		keypress: InternalEvents.getInternalEvent('keypress', ID),
+		return: InternalEvents.getInternalEvent("return", ID),
+		left: InternalEvents.getInternalEvent("left", ID),
+		right: InternalEvents.getInternalEvent("right", ID),
+		up: InternalEvents.getInternalEvent("up", ID),
+		down: InternalEvents.getInternalEvent("down", ID),
+		backspace: InternalEvents.getInternalEvent("backspace", ID),
+		tab: InternalEvents.getInternalEvent("tab", ID),
+		keypress: InternalEvents.getInternalEvent("keypress", ID),
 	};
 }
 
-function getDefaultInsertKeymap(opts: {allowBreaking: boolean}): KeyMap {
-	const ignore: Key[] = ['left', 'right', 'up', 'down', 'backspace'];
+function getDefaultInsertKeymap(opts: { allowBreaking: boolean }): KeyMap {
+	const ignore: Key[] = ["left", "right", "up", "down", "backspace"];
 	if (!opts.allowBreaking) {
-		ignore.push('return');
-		ignore.push('tab');
+		ignore.push("return");
+		ignore.push("tab");
 	}
 
 	return {
-		[EVENTS.return]: {key: 'return'},
-		[EVENTS.left]: {key: 'left'},
-		[EVENTS.right]: {key: 'right'},
-		[EVENTS.up]: {key: 'up'},
-		[EVENTS.down]: {key: 'down'},
-		[EVENTS.backspace]: {key: 'backspace'},
-		[EVENTS.tab]: {key: 'tab'},
+		[EVENTS.return]: { key: "return" },
+		[EVENTS.left]: { key: "left" },
+		[EVENTS.right]: { key: "right" },
+		[EVENTS.up]: { key: "up" },
+		[EVENTS.down]: { key: "down" },
+		[EVENTS.backspace]: { key: "backspace" },
+		[EVENTS.tab]: { key: "tab" },
 		[EVENTS.keypress]: {
 			notKey: ignore,
 			notInput: [],
@@ -61,12 +61,9 @@ function getDefaultInsertKeymap(opts: {allowBreaking: boolean}): KeyMap {
 	};
 }
 
-function getNormalKeymap(
-	ID: string,
-	enterKeyInput: KeyInput,
-): [KeyMap, string] {
-	const ScopedEnterEvent = InternalEvents.getInternalEvent('enter', ID);
-	return [{[ScopedEnterEvent]: enterKeyInput}, ScopedEnterEvent];
+function getNormalKeymap(ID: string, enterKeyInput: KeyInput): [KeyMap, string] {
+	const ScopedEnterEvent = InternalEvents.getInternalEvent("enter", ID);
+	return [{ [ScopedEnterEvent]: enterKeyInput }, ScopedEnterEvent];
 }
 
 /*
@@ -75,14 +72,12 @@ function getNormalKeymap(
 function getInsertKeymap(
 	ID: string,
 	exitKeyInput: KeyInput,
-	opts: {allowBreaking: boolean},
+	opts: { allowBreaking: boolean },
 ): [KeyMap, string] {
 	const defaultInsert = getDefaultInsertKeymap({
 		allowBreaking: opts.allowBreaking,
 	});
-	exitKeyInput = [
-		...(Array.isArray(exitKeyInput) ? exitKeyInput : [exitKeyInput]),
-	];
+	exitKeyInput = [...(Array.isArray(exitKeyInput) ? exitKeyInput : [exitKeyInput])];
 
 	const notKey: Key[] = [];
 	const notInput: string[] = [];
@@ -121,7 +116,7 @@ function getInsertKeymap(
 		}
 	}
 
-	const ScopedExitEvent = InternalEvents.getInternalEvent('exit', ID);
+	const ScopedExitEvent = InternalEvents.getInternalEvent("exit", ID);
 	defaultInsert[ScopedExitEvent] = exitKeyInput;
 
 	return [defaultInsert, ScopedExitEvent];

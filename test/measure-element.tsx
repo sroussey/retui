@@ -1,17 +1,11 @@
-import React, {useState, useRef, useEffect} from 'react';
-import test from 'ava';
-import delay from 'delay';
-import stripAnsi from 'strip-ansi';
-import {
-	Box,
-	Text,
-	render,
-	measureElement,
-	type DOMElement,
-} from '../src/index.js';
-import createStdout from './helpers/create-stdout.js';
+import React, { useState, useRef, useEffect } from "react";
+import test from "ava";
+import delay from "delay";
+import stripAnsi from "strip-ansi";
+import { Box, Text, render, measureElement, type DOMElement } from "../src/index.js";
+import createStdout from "./helpers/create-stdout.js";
 
-test('measure element', async t => {
+test("measure element", async (t) => {
 	const stdout = createStdout();
 
 	function Test() {
@@ -33,13 +27,13 @@ test('measure element', async t => {
 		);
 	}
 
-	render(<Test />, {stdout, debug: true});
-	t.is((stdout.write as any).firstCall.args[0], 'Width: 0');
+	render(<Test />, { stdout, debug: true });
+	t.is((stdout.write as any).firstCall.args[0], "Width: 0");
 	await delay(100);
-	t.is((stdout.write as any).lastCall.args[0], 'Width: 100');
+	t.is((stdout.write as any).lastCall.args[0], "Width: 100");
 });
 
-test.serial('calculate layout while rendering is throttled', async t => {
+test.serial("calculate layout while rendering is throttled", async (t) => {
 	const stdout = createStdout();
 
 	function Test() {
@@ -61,12 +55,12 @@ test.serial('calculate layout while rendering is throttled', async t => {
 		);
 	}
 
-	const {rerender} = render(null, {stdout, patchConsole: false});
+	const { rerender } = render(null, { stdout, patchConsole: false });
 	rerender(<Test />);
 	await delay(50);
 
 	t.is(
 		stripAnsi((stdout.write as any).lastCall.firstArg as string).trim(),
-		'Width: 100',
+		"Width: 100",
 	);
 });

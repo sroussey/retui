@@ -1,11 +1,11 @@
-import React, {useEffect} from 'react';
-import {render, useStdout, Text} from '../../src/index.js';
+import React, { useEffect } from "react";
+import { render, useStdout, Text } from "../../src/index.js";
 
 function WriteToStdout() {
-	const {write} = useStdout();
+	const { write } = useStdout();
 
 	useEffect(() => {
-		write('Hello from Ink to stdout\n');
+		write("Hello from Ink to stdout\n");
 	}, []);
 
 	return <Text>Hello World</Text>;
@@ -14,4 +14,4 @@ function WriteToStdout() {
 const app = render(<WriteToStdout />);
 
 await app.waitUntilExit();
-console.log('exited');
+console.log("exited");

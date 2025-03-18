@@ -1,8 +1,8 @@
-import {createContext} from 'react';
+import { createContext } from "react";
 
 export type Props = {
 	readonly activeId?: string;
-	readonly add: (id: string, options: {autoFocus: boolean}) => void;
+	readonly add: (id: string, options: { autoFocus: boolean }) => void;
 	readonly remove: (id: string) => void;
 	readonly activate: (id: string) => void;
 	readonly deactivate: (id: string) => void;
@@ -27,6 +27,6 @@ const FocusContext = createContext<Props>({
 	focus() {},
 });
 
-FocusContext.displayName = 'InternalFocusContext';
+FocusContext.displayName = "InternalFocusContext";
 
 export default FocusContext;

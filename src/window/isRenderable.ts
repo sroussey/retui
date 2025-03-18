@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 /*
  * This won't catch boolean, string, number types but that way errors will
@@ -9,7 +9,7 @@ export function isRenderable(val: Function | React.ReactNode): boolean {
 		return true;
 	} else if (val === null) {
 		return true;
-	} else if (typeof val !== 'object' && typeof val !== 'function') {
+	} else if (typeof val !== "object" && typeof val !== "function") {
 		return true;
 	} else {
 		return false;

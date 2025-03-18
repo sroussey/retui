@@ -1,10 +1,10 @@
-import React, {useEffect} from 'react';
-import Box from '../components/Box.js';
-import {BoxProps, useKeymap} from '../index.js';
-import {usePageFocus} from '../focus/FocusContext.js';
-import ModalStack from './ModalStack.js';
-import {ModalContext, useModalContext} from './ModalContext.js';
-import {ModalData} from './useModal.js';
+import React, { useEffect } from "react";
+import Box from "../components/Box.js";
+import { BoxProps, useKeymap } from "../index.js";
+import { usePageFocus } from "../focus/FocusContext.js";
+import ModalStack from "./ModalStack.js";
+import { ModalContext, useModalContext } from "./ModalContext.js";
+import { ModalData } from "./useModal.js";
 
 /*
  * Absolutely positions a box the same dimensions as the parent node and applies
@@ -14,12 +14,12 @@ import {ModalData} from './useModal.js';
 export type Props = {
 	modal: ModalData;
 	zIndex?: number;
-	justifySelf?: 'flex-start' | 'center' | 'flex-end';
-	alignSelf?: 'flex-start' | 'center' | 'flex-end';
+	justifySelf?: "flex-start" | "center" | "flex-end";
+	alignSelf?: "flex-start" | "center" | "flex-end";
 	xOffset?: number;
 	yOffset?: number;
 	closeOnOutsideClick?: boolean;
-} & Omit<BoxProps, 'wipeBackground'> &
+} & Omit<BoxProps, "wipeBackground"> &
 	React.PropsWithChildren;
 
 export function Modal(props: Props): React.ReactNode {
@@ -42,12 +42,12 @@ export function Modal(props: Props): React.ReactNode {
 	);
 }
 
-function ModalConsumer(props: Props & {visible: boolean}): React.ReactNode {
+function ModalConsumer(props: Props & { visible: boolean }): React.ReactNode {
 	let {
 		modal,
 		visible,
-		justifySelf = 'center',
-		alignSelf = 'center',
+		justifySelf = "center",
+		alignSelf = "center",
 		xOffset = 0,
 		yOffset = 0,
 		zIndex = 1,
@@ -72,8 +72,8 @@ function ModalConsumer(props: Props & {visible: boolean}): React.ReactNode {
 	const hideEvent = modal._hideEvent;
 	const hideModal = modal._hideModal;
 
-	const internalKeymap = hideKeymap ? {[hideEvent]: hideKeymap} : {};
-	const {useEvent} = useKeymap(internalKeymap);
+	const internalKeymap = hideKeymap ? { [hideEvent]: hideKeymap } : {};
+	const { useEvent } = useKeymap(internalKeymap);
 	useEvent(hideEvent, hideModal);
 
 	if (!visible) return null;

@@ -1,4 +1,4 @@
-import {createContext} from 'react';
+import { createContext } from "react";
 
 export type Props = {
 	/**
@@ -15,6 +15,6 @@ const AppContext = createContext<Props>({
 	exit() {},
 });
 
-AppContext.displayName = 'InternalAppContext';
+AppContext.displayName = "InternalAppContext";
 
 export default AppContext;

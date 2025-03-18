@@ -1,42 +1,42 @@
-import {KeyMap} from '../stdin/Keyboard.js';
-import InternalEvents from '../utility/InternalEvents.js';
+import { KeyMap } from "../stdin/Keyboard.js";
+import InternalEvents from "../utility/InternalEvents.js";
 
 export const CMDS = {
-	increment: 'USE_KEYBINDS_INCREMENT',
-	decrement: 'USE_KEYBINDS_DECREMENT',
-	scrollUp: 'USE_KEYBINDS_SCROLL_UP',
-	scrollDown: 'USE_KEYBINDS_SCROLL_DOWN',
-	goToTop: 'USE_KEYBINDS_GO_TO_TOP',
-	goToBottom: 'USE_KEYBINDS_GO_TO_BOTTOM',
+	increment: "USE_KEYBINDS_INCREMENT",
+	decrement: "USE_KEYBINDS_DECREMENT",
+	scrollUp: "USE_KEYBINDS_SCROLL_UP",
+	scrollDown: "USE_KEYBINDS_SCROLL_DOWN",
+	goToTop: "USE_KEYBINDS_GO_TO_TOP",
+	goToBottom: "USE_KEYBINDS_GO_TO_BOTTOM",
 } as const;
 
 const arrowVertical = {
-	[CMDS.increment]: [{key: 'down'}, {key: 'tab'}],
-	[CMDS.decrement]: [{key: 'up'}],
+	[CMDS.increment]: [{ key: "down" }, { key: "tab" }],
+	[CMDS.decrement]: [{ key: "up" }],
 } satisfies KeyMap;
 
 const arrowHorizontal = {
-	[CMDS.increment]: [{key: 'right'}, {key: 'tab'}],
-	[CMDS.decrement]: [{key: 'left'}],
+	[CMDS.increment]: [{ key: "right" }, { key: "tab" }],
+	[CMDS.decrement]: [{ key: "left" }],
 } satisfies KeyMap;
 
 const vimVertical = {
-	[CMDS.increment]: [{input: 'j'}, {key: 'down'}, {key: 'tab'}],
-	[CMDS.decrement]: [{input: 'k'}, {key: 'up'}],
-	[CMDS.scrollUp]: {key: 'ctrl', input: 'u'},
-	[CMDS.scrollDown]: {key: 'ctrl', input: 'd'},
-	[CMDS.goToTop]: {input: 'gg'},
-	[CMDS.goToBottom]: {input: 'G'},
+	[CMDS.increment]: [{ input: "j" }, { key: "down" }, { key: "tab" }],
+	[CMDS.decrement]: [{ input: "k" }, { key: "up" }],
+	[CMDS.scrollUp]: { key: "ctrl", input: "u" },
+	[CMDS.scrollDown]: { key: "ctrl", input: "d" },
+	[CMDS.goToTop]: { input: "gg" },
+	[CMDS.goToBottom]: { input: "G" },
 } satisfies KeyMap;
 
 const vimHorizontal = {
 	// ...vimVertical,
-	[CMDS.increment]: [{input: 'l'}, {key: 'right'}, {key: 'tab'}],
-	[CMDS.decrement]: [{input: 'h'}, {key: 'left'}],
+	[CMDS.increment]: [{ input: "l" }, { key: "right" }, { key: "tab" }],
+	[CMDS.decrement]: [{ input: "h" }, { key: "left" }],
 } satisfies KeyMap;
 
 function prefixId(ID: string, obj: KeyMap): KeyMap {
-	const next: {[key: string]: any} = {};
+	const next: { [key: string]: any } = {};
 	for (const [key, value] of Object.entries(obj)) {
 		next[InternalEvents.getInternalEvent(key, ID)] = value;
 	}

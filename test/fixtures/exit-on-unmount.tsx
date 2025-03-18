@@ -1,7 +1,7 @@
-import React from 'react';
-import {render, Text} from '../../src/index.js';
+import React from "react";
+import { render, Text } from "../../src/index.js";
 
-class Test extends React.Component<Record<string, unknown>, {counter: number}> {
+class Test extends React.Component<Record<string, unknown>, { counter: number }> {
 	timer?: NodeJS.Timeout;
 
 	override state = {
@@ -14,7 +14,7 @@ class Test extends React.Component<Record<string, unknown>, {counter: number}> {
 
 	override componentDidMount() {
 		this.timer = setInterval(() => {
-			this.setState(prevState => ({
+			this.setState((prevState) => ({
 				counter: prevState.counter + 1,
 			}));
 		}, 100);
@@ -32,4 +32,4 @@ setTimeout(() => {
 }, 500);
 
 await app.waitUntilExit();
-console.log('exited');
+console.log("exited");

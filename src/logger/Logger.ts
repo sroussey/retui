@@ -1,7 +1,7 @@
-import {Color} from '../utility/types.js';
-import path from 'path';
-import fs from 'fs';
-import chalk from 'chalk';
+import { Color } from "../utility/types.js";
+import path from "path";
+import fs from "fs";
+import chalk from "chalk";
 
 export type Props = {
 	file?: string;
@@ -12,15 +12,15 @@ export type Props = {
 };
 
 export class Logger {
-	private _file: Props['file'];
-	private _time: Props['time'];
-	private _color: Props['color'];
-	private _prefix: Props['prefix'];
-	private _prefixColor: Props['color'];
+	private _file: Props["file"];
+	private _time: Props["time"];
+	private _color: Props["color"];
+	private _prefix: Props["prefix"];
+	private _prefixColor: Props["color"];
 	private _validPaths: Set<string>;
 
 	static Default = {
-		file: 'console.log',
+		file: "console.log",
 		time: true,
 		color: null,
 		prefixColor: null,
@@ -65,12 +65,12 @@ export class Logger {
 		return this;
 	}
 
-	public color(c: Props['color']): Logger {
+	public color(c: Props["color"]): Logger {
 		const next = Object.setPrototypeOf({}, this);
 		return next.setColor(c);
 	}
 
-	public setColor(c: Props['color']): Logger {
+	public setColor(c: Props["color"]): Logger {
 		this._color = c;
 		return this;
 	}
@@ -80,18 +80,18 @@ export class Logger {
 		return this;
 	}
 
-	public prefixColor(val: Props['color']): Logger {
+	public prefixColor(val: Props["color"]): Logger {
 		const next = Object.setPrototypeOf({}, this);
 		return next.setPrefixColor(val);
 	}
 
-	public setPrefixColor(val: Props['color']): Logger {
+	public setPrefixColor(val: Props["color"]): Logger {
 		this._prefixColor = val;
 		return this;
 	}
 
 	public clearLog(): Logger {
-		fs.writeFileSync(path.resolve(this._file!), '');
+		fs.writeFileSync(path.resolve(this._file!), "");
 		return this;
 	}
 
@@ -102,7 +102,7 @@ export class Logger {
 		const time = this.getTime();
 		const text = this.colorText(formattedData, this._color);
 		const logStream = fs.createWriteStream(path.resolve(this._file!), {
-			flags: 'a',
+			flags: "a",
 		});
 		logStream.write(time + prefix + text);
 	}
@@ -114,9 +114,9 @@ export class Logger {
 
 	private getPrefix(): string {
 		const prefix = this?._prefix;
-		if (!prefix) return '';
+		if (!prefix) return "";
 
-		const separator = ' ⇒ ';
+		const separator = " ⇒ ";
 		if (!this._prefixColor) {
 			return prefix + separator;
 		}
@@ -127,21 +127,21 @@ export class Logger {
 		// Check for circular references and any other errors that might occur
 		const stringify = (...args: [any, any?, any?]) => {
 			try {
-				return {stringifiedData: JSON.stringify(...args), errors: false};
+				return { stringifiedData: JSON.stringify(...args), errors: false };
 			} catch (err: unknown) {
 				if (err instanceof Error) {
-					return {stringifiedData: err.message, errors: true};
+					return { stringifiedData: err.message, errors: true };
 				}
-				return {stringifiedData: '', errors: true};
+				return { stringifiedData: "", errors: true };
 			}
 		};
 
 		const formatData = (data: any) => {
-			if (data === null) return 'null';
-			if (data === undefined) return 'undefined';
+			if (data === null) return "null";
+			if (data === undefined) return "undefined";
 
-			if (typeof data !== 'string' && typeof data !== 'number') {
-				const {stringifiedData, errors} = stringify(data);
+			if (typeof data !== "string" && typeof data !== "number") {
+				const { stringifiedData, errors } = stringify(data);
 
 				if (stringifiedData.length > 25 && !errors) {
 					return stringify(data, null, 4).stringifiedData;
@@ -153,18 +153,18 @@ export class Logger {
 			return data;
 		};
 
-		let formattedData = '';
+		let formattedData = "";
 		for (let i = 0; i < data.length; ++i) {
-			const comma = i !== 0 ? ', ' : '';
+			const comma = i !== 0 ? ", " : "";
 			formattedData += `${comma}${formatData(data[i])}`;
 		}
-		formattedData += '\n';
+		formattedData += "\n";
 
 		return formattedData;
 	}
 
 	private getTime(): string {
-		if (!this._time) return '';
+		if (!this._time) return "";
 
 		const date = new Date();
 		const times: string[] = [
@@ -184,7 +184,7 @@ export class Logger {
 		return `${times[0]}:${times[1]}:${times[2]}:${times[3]}: `;
 	}
 
-	private colorText(value: string, color?: Props['color'] | null): string {
+	private colorText(value: string, color?: Props["color"] | null): string {
 		color = color ? color : this._color;
 
 		if (color && (chalk as any)[color]) {
@@ -196,7 +196,7 @@ export class Logger {
 
 	private ensureValidPath(filePath: string): void {
 		if (this._validPaths.has(filePath)) return;
-		this.validatePath(filePath.split('/'));
+		this.validatePath(filePath.split("/"));
 		this._validPaths.add(filePath);
 	}
 
@@ -209,7 +209,7 @@ export class Logger {
 			fs.mkdirSync(path.resolve(p[0]!));
 		}
 
-		const joined = p[1] ? [p[0], p[1]].join('/') : p[0];
+		const joined = p[1] ? [p[0], p[1]].join("/") : p[0];
 		const next = p.length > 2 ? [joined, ...p.slice(2)] : [joined];
 
 		return this.validatePath(next as string[]);

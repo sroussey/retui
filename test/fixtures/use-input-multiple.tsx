@@ -1,5 +1,5 @@
-import React, {useState, useCallback, useEffect} from 'react';
-import {render, useInput, useApp, Text} from '../../src/index.js';
+import React, { useState, useCallback, useEffect } from "react";
+import { render, useInput, useApp, Text } from "../../src/index.js";
 
 // function App() {
 // 	const {exit} = useApp();

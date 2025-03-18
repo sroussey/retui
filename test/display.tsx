@@ -1,18 +1,18 @@
-import React from 'react';
-import test from 'ava';
-import {Box, Text} from '../src/index.js';
-import {renderToString} from './helpers/render-to-string.js';
+import React from "react";
+import test from "ava";
+import { Box, Text } from "../src/index.js";
+import { renderToString } from "./helpers/render-to-string.js";
 
-test('display flex', t => {
+test("display flex", (t) => {
 	const output = renderToString(
 		<Box display="flex">
 			<Text>X</Text>
 		</Box>,
 	);
-	t.is(output, 'X');
+	t.is(output, "X");
 });
 
-test('display none', t => {
+test("display none", (t) => {
 	const output = renderToString(
 		<Box flexDirection="column">
 			<Box display="none">
@@ -22,5 +22,5 @@ test('display none', t => {
 		</Box>,
 	);
 
-	t.is(output, 'Doggo');
+	t.is(output, "Doggo");
 });

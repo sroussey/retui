@@ -1,18 +1,18 @@
-import assert from 'assert';
+import assert from "assert";
 
 export type NodeMap<T extends string = string> = T[][];
 export type Position = [number, number];
 export type NavControllerAPI = Omit<
-	{[P in keyof NavController]: NavController[P]},
-	'goToIteration' | 'goToNodeName'
+	{ [P in keyof NavController]: NavController[P] },
+	"goToIteration" | "goToNodeName"
 >;
 
 export class NavController {
 	private nav: NodeMap;
 	private currPosition!: Position;
-	private nameMap: {[name: string]: {position: Position; iteration: number}};
-	private prevMap: {[name: string]: Position};
-	private nextMap: {[name: string]: Position};
+	private nameMap: { [name: string]: { position: Position; iteration: number } };
+	private prevMap: { [name: string]: Position };
+	private nextMap: { [name: string]: Position };
 	private size: number;
 
 	constructor(nav: NodeMap, startingNode?: string | number) {
@@ -42,14 +42,14 @@ export class NavController {
 				if (!name) continue;
 
 				if (!this.nameMap[name]) {
-					this.nameMap[name] = {position: currPosition, iteration: size++};
+					this.nameMap[name] = { position: currPosition, iteration: size++ };
 					if (!currStartPosition) {
 						currStartPosition = currPosition;
 					}
-					if (typeof startingNode === 'string' && startingNode === name) {
+					if (typeof startingNode === "string" && startingNode === name) {
 						currStartPosition = currPosition;
 					}
-					if (typeof startingNode === 'number' && startingNode === size - 1) {
+					if (typeof startingNode === "number" && startingNode === size - 1) {
 						currStartPosition = currPosition;
 					}
 
@@ -91,7 +91,7 @@ export class NavController {
 			const [y, x] = this.currPosition;
 			return this.nav[y]![x]!;
 		} catch {
-			return '';
+			return "";
 		}
 	};
 
@@ -109,10 +109,10 @@ export class NavController {
 	};
 
 	public goToNode = (nextNode: string | number): string => {
-		if (typeof nextNode === 'string') {
+		if (typeof nextNode === "string") {
 			return this.goToNodeName(nextNode);
 		}
-		if (typeof nextNode === 'number') {
+		if (typeof nextNode === "number") {
 			return this.goToIteration(nextNode);
 		}
 
@@ -158,7 +158,7 @@ export class NavController {
 
 	private autoMove = (dir: -1 | 1): string => {
 		const name = this.getLocation();
-		if (name === '') return '';
+		if (name === "") return "";
 
 		const nextCoords = dir < 0 ? this.prevMap[name] : this.nextMap[name];
 
@@ -192,7 +192,7 @@ export class NavController {
 
 			while (
 				this.nav[lny + dy]?.[lnx + dx] !== undefined &&
-				this.nav[lny + dy]?.[lnx + dx] !== ''
+				this.nav[lny + dy]?.[lnx + dx] !== ""
 			) {
 				lny += dy;
 				lnx += dx;
@@ -200,7 +200,7 @@ export class NavController {
 			}
 		}
 
-		if (this.nav[ny]?.[nx] === undefined || this.nav[ny]?.[nx] === '') {
+		if (this.nav[ny]?.[nx] === undefined || this.nav[ny]?.[nx] === "") {
 			if (this.nav[ny]?.length === 0 || nx <= 0) {
 				return this.getLocation();
 			}

@@ -1,8 +1,8 @@
-import {randomUUID} from 'crypto';
-import {useContext, useState} from 'react';
-import {KeyInput, useKeymap} from '../index.js';
-import InternalEvents from '../utility/InternalEvents.js';
-import {ModalContext} from './ModalContext.js';
+import { randomUUID } from "crypto";
+import { useContext, useState } from "react";
+import { KeyInput, useKeymap } from "../index.js";
+import InternalEvents from "../utility/InternalEvents.js";
+import { ModalContext } from "./ModalContext.js";
 
 export type ModalControlKeyMap = {
 	show: KeyInput | null;
@@ -26,8 +26,8 @@ export type Return = {
 	hideModal: () => void;
 };
 
-export const SHOW = 'SHOW';
-export const HIDE = 'HIDE';
+export const SHOW = "SHOW";
+export const HIDE = "HIDE";
 
 /*
  * Gives you the modal object that is required for the Modal component.
@@ -44,8 +44,8 @@ export function useModal(keymap: ModalControlKeyMap): Return {
 	const showModal = () => setVis(true);
 	const hideModal = () => setVis(false);
 
-	const internalKeymap = keymap.show ? {[showEvent]: keymap.show} : {};
-	const {useEvent} = useKeymap(internalKeymap);
+	const internalKeymap = keymap.show ? { [showEvent]: keymap.show } : {};
+	const { useEvent } = useKeymap(internalKeymap);
 	useEvent(showEvent, showModal);
 
 	return {
@@ -64,12 +64,12 @@ export function useModal(keymap: ModalControlKeyMap): Return {
 	};
 }
 
-export function useHideModal(): {hideModal: () => void} {
+export function useHideModal(): { hideModal: () => void } {
 	const modalContext = useContext(ModalContext);
 
 	if (!modalContext) {
-		throw new Error('Cannot use useHideModal outside of a Modal component.');
+		throw new Error("Cannot use useHideModal outside of a Modal component.");
 	}
 
-	return {hideModal: modalContext.hide};
+	return { hideModal: modalContext.hide };
 }

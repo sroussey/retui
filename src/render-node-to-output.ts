@@ -1,20 +1,20 @@
-import widestLine from 'widest-line';
-import indentString from 'indent-string';
-import Yoga from 'yoga-wasm-web/auto';
-import wrapText from './wrap-text.js';
-import getMaxWidth from './get-max-width.js';
-import squashTextNodes from './squash-text-nodes.js';
-import renderBorder from './render-border.js';
-import {type DOMElement} from './dom.js';
-import type Output from './output.js';
-import renderBackgroundColor from './render-background-color.js';
-import {BaseProps} from './baseProps.js';
-import {addMouseEventListeners} from './stdin/AddMouseEventListeners.js';
-import {DefaultStdin} from './stdin/Stdin.js';
-import {TextProps} from './index.js';
-import {MutableBaseProps} from './utility/types.js';
-import {renderWindowToOutput} from './window/renderWindowToOutput.js';
-import {renderLineToOutput} from './lines/renderLineToOutput.js';
+import widestLine from "widest-line";
+import indentString from "indent-string";
+import Yoga from "yoga-wasm-web/auto";
+import wrapText from "./wrap-text.js";
+import getMaxWidth from "./get-max-width.js";
+import squashTextNodes from "./squash-text-nodes.js";
+import renderBorder from "./render-border.js";
+import { type DOMElement } from "./dom.js";
+import type Output from "./output.js";
+import renderBackgroundColor from "./render-background-color.js";
+import { BaseProps } from "./baseProps.js";
+import { addMouseEventListeners } from "./stdin/AddMouseEventListeners.js";
+import { DefaultStdin } from "./stdin/Stdin.js";
+import { TextProps } from "./index.js";
+import { MutableBaseProps } from "./utility/types.js";
+import { renderWindowToOutput } from "./window/renderWindowToOutput.js";
+import { renderLineToOutput } from "./lines/renderLineToOutput.js";
 
 // If parent container is `<Box>`, text nodes will be treated as separate nodes in
 // the tree and will have their own coordinates in the layout.
@@ -28,7 +28,7 @@ const applyPaddingToText = (node: DOMElement, text: string): string => {
 	if (yogaNode) {
 		const offsetX = yogaNode.getComputedLeft();
 		const offsetY = yogaNode.getComputedTop();
-		text = '\n'.repeat(offsetY) + indentString(text, offsetX);
+		text = "\n".repeat(offsetY) + indentString(text, offsetX);
 	}
 
 	return text;
@@ -49,16 +49,11 @@ const renderNodeToOutput = (
 		rootZIndex?: number;
 		parentStyles?: MutableBaseProps;
 	},
-	zIndexes: {index: number; cb: () => void}[] = [],
+	zIndexes: { index: number; cb: () => void }[] = [],
 ) => {
-	const {
-		offsetX = 0,
-		offsetY = 0,
-		transformers = [],
-		skipStaticElements,
-	} = options;
+	const { offsetX = 0, offsetY = 0, transformers = [], skipStaticElements } = options;
 
-	const {yogaNode} = node;
+	const { yogaNode } = node;
 
 	if (skipStaticElements && node.internal_static) return;
 	if (!yogaNode || yogaNode.getDisplay() === Yoga.DISPLAY_NONE) return;
@@ -70,7 +65,7 @@ const renderNodeToOutput = (
 	const x = offsetX + nextOffsetX;
 	const y = offsetY + nextOffsetY;
 
-	const InternalStyles = node.attributes['internalStyles'] as
+	const InternalStyles = node.attributes["internalStyles"] as
 		| (BaseProps & TextProps)
 		| undefined;
 
@@ -84,19 +79,19 @@ const renderNodeToOutput = (
 	// starts at 0
 	options.rootZIndex = options.rootZIndex ?? 0;
 
-	if (typeof node.internal_transform === 'function') {
+	if (typeof node.internal_transform === "function") {
 		newTransformers = [node.internal_transform, ...transformers];
 	}
 
-	if (node.nodeName === 'ink-text') {
+	if (node.nodeName === "ink-text") {
 		const parentBg = node.parentNode?.style.backgroundColor;
-		const hasParentBg = parentBg !== undefined && parentBg !== 'inherit';
+		const hasParentBg = parentBg !== undefined && parentBg !== "inherit";
 
 		const internalBackgroundColor = InternalStyles?.backgroundColor;
 		const internalInverse = InternalStyles?.inverse;
 		const internalColor = InternalStyles?.color;
 
-		if (internalBackgroundColor === 'inherit' && hasParentBg) {
+		if (internalBackgroundColor === "inherit" && hasParentBg) {
 			if (!internalInverse && !internalColor) {
 				node.style.color = parentBg;
 				node.style.inverse = true;
@@ -117,13 +112,13 @@ const renderNodeToOutput = (
 			const maxWidth = getMaxWidth(yogaNode);
 
 			if (currentWidth > maxWidth) {
-				const textWrap = node.style.textWrap ?? 'wrap';
+				const textWrap = node.style.textWrap ?? "wrap";
 				text = wrapText(text, maxWidth, textWrap);
 			}
 
 			text = applyPaddingToText(node, text);
 
-			output.write(x, y, text, {transformers: newTransformers});
+			output.write(x, y, text, { transformers: newTransformers });
 		}
 
 		return;
@@ -131,25 +126,25 @@ const renderNodeToOutput = (
 
 	let clipped = false;
 
-	if (node.style.zIndex === 'auto') {
+	if (node.style.zIndex === "auto") {
 		node.style.zIndex = 0;
 	}
 
 	// zIndexes less than 0 won't have any effect...make this explicitly clear
-	if (typeof node.style.zIndex === 'number' && node.style.zIndex < 0) {
-		throw new Error('zIndex property must be a positive number.');
+	if (typeof node.style.zIndex === "number" && node.style.zIndex < 0) {
+		throw new Error("zIndex property must be a positive number.");
 	}
 
 	// If zIndex root, that means this stack frame has already been queued and is
 	// now being executed, we don't need to stash it for later
 	const hasZIndex =
-		typeof node.style.zIndex === 'number' &&
+		typeof node.style.zIndex === "number" &&
 		node.style.zIndex > 0 &&
 		!options.isZIndexRoot;
 
 	// Save for rendering after the rest of the tree has finished
 	// This is a zIndex root node, save for later
-	if (node.nodeName === 'ink-box' && hasZIndex) {
+	if (node.nodeName === "ink-box" && hasZIndex) {
 		// prettier-ignore
 		const nodeZIndex = (node.style.zIndex as number) + (options.rootZIndex ?? 0);
 
@@ -168,14 +163,14 @@ const renderNodeToOutput = (
 			// recursive callbacks to other zIndexed nodes just like the root node
 		};
 
-		zIndexes.push({index: nodeZIndex, cb});
+		zIndexes.push({ index: nodeZIndex, cb });
 		zIndexes.sort((a, b) => (a.index > b.index ? 1 : -1));
-	} else if (node.nodeName === 'ink-box') {
+	} else if (node.nodeName === "ink-box") {
 		const internalBackgroundColor = InternalStyles?.backgroundColor;
 		const internalBorderColor = InternalStyles?.borderColor;
 		const internalBorderStyle = InternalStyles?.borderStyle;
 
-		if (internalBackgroundColor === 'inherit') {
+		if (internalBackgroundColor === "inherit") {
 			if (options.parentStyles?.backgroundColor) {
 				node.style.backgroundColor = options.parentStyles.backgroundColor;
 			} else {
@@ -183,7 +178,7 @@ const renderNodeToOutput = (
 			}
 		}
 
-		if (internalBorderStyle === 'inherit') {
+		if (internalBorderStyle === "inherit") {
 			if (options.parentStyles?.borderStyle) {
 				node.style.borderStyle = options.parentStyles.borderStyle;
 			} else {
@@ -191,7 +186,7 @@ const renderNodeToOutput = (
 			}
 		}
 
-		if (internalBorderColor === 'inherit') {
+		if (internalBorderColor === "inherit") {
 			if (options?.parentStyles?.borderColor) {
 				node.style.borderColor = options.parentStyles.borderColor;
 			} else {
@@ -206,9 +201,9 @@ const renderNodeToOutput = (
 		renderBorder(x, y, node, output, options.rootZIndex ?? 0);
 
 		const clipHorizontally =
-			node.style.overflowX === 'hidden' || node.style.overflow === 'hidden';
+			node.style.overflowX === "hidden" || node.style.overflow === "hidden";
 		const clipVertically =
-			node.style.overflowY === 'hidden' || node.style.overflow === 'hidden';
+			node.style.overflowY === "hidden" || node.style.overflow === "hidden";
 
 		if (clipHorizontally || clipVertically) {
 			const x1 = clipHorizontally
@@ -231,21 +226,21 @@ const renderNodeToOutput = (
 					yogaNode.getComputedBorder(Yoga.EDGE_BOTTOM)
 				: undefined;
 
-			output.clip({x1, x2, y1, y2});
+			output.clip({ x1, x2, y1, y2 });
 			clipped = true;
 		}
-	} else if (node.nodeName === 'ink-window') {
+	} else if (node.nodeName === "ink-window") {
 		renderWindowToOutput(x, y, node, output);
-	} else if (node.nodeName === 'ink-line') {
+	} else if (node.nodeName === "ink-line") {
 		renderLineToOutput(x, y, node, output);
 	}
 
 	if (
-		node.nodeName === 'ink-root' ||
-		node.nodeName === 'ink-window' ||
-		(node.nodeName === 'ink-box' && !hasZIndex)
+		node.nodeName === "ink-root" ||
+		node.nodeName === "ink-window" ||
+		(node.nodeName === "ink-box" && !hasZIndex)
 	) {
-		if (node.nodeName === 'ink-root') {
+		if (node.nodeName === "ink-root") {
 			DefaultStdin.Mouse.resetHandlers();
 		}
 
@@ -274,7 +269,7 @@ const renderNodeToOutput = (
 		}
 	}
 
-	if (node.nodeName === 'ink-root' || options.isZIndexRoot) {
+	if (node.nodeName === "ink-root" || options.isZIndexRoot) {
 		for (const level of zIndexes) {
 			level.cb();
 		}

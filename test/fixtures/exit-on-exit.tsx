@@ -1,9 +1,9 @@
-import React from 'react';
-import {render, Text, useApp} from '../../src/index.js';
+import React from "react";
+import { render, Text, useApp } from "../../src/index.js";
 
 class Exit extends React.Component<
-	{onExit: (error: Error) => void},
-	{counter: number}
+	{ onExit: (error: Error) => void },
+	{ counter: number }
 > {
 	timer?: NodeJS.Timeout;
 
@@ -19,7 +19,7 @@ class Exit extends React.Component<
 		setTimeout(this.props.onExit, 500);
 
 		this.timer = setInterval(() => {
-			this.setState(prevState => ({
+			this.setState((prevState) => ({
 				counter: prevState.counter + 1,
 			}));
 		}, 100);
@@ -31,11 +31,11 @@ class Exit extends React.Component<
 }
 
 function Test() {
-	const {exit} = useApp();
+	const { exit } = useApp();
 	return <Exit onExit={exit} />;
 }
 
 const app = render(<Test />);
 
 await app.waitUntilExit();
-console.log('exited');
+console.log("exited");

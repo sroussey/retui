@@ -1,12 +1,12 @@
-import {randomUUID} from 'crypto';
-import {EffectCallback, useEffect, useRef, useState} from 'react';
-import {NavController, NavControllerAPI} from './NavController.js';
-import assert from 'assert';
-import {KeyMap, useEvent, useKeymap} from '../index.js';
-import {ARROW_KEYMAP, ID_NAV_EVENTS, VI_KEYMAP} from './keymaps.js';
+import { randomUUID } from "crypto";
+import { EffectCallback, useEffect, useRef, useState } from "react";
+import { NavController, NavControllerAPI } from "./NavController.js";
+import assert from "assert";
+import { KeyMap, useEvent, useKeymap } from "../index.js";
+import { ARROW_KEYMAP, ID_NAV_EVENTS, VI_KEYMAP } from "./keymaps.js";
 
 type NodeMap<T extends string = string> = T[][];
-type Nodes<T extends string> = Exclude<T, ''>;
+type Nodes<T extends string> = Exclude<T, "">;
 
 export type NodesView<T extends string> = Readonly<{
 	_node: Nodes<T>;
@@ -19,7 +19,7 @@ export type FocusMap = {
 };
 
 export interface RegisterNode<T extends string = string> {
-	(nodeName: Nodes<T>): {name: Nodes<T>; nodesView: NodesView<T>};
+	(nodeName: Nodes<T>): { name: Nodes<T>; nodesView: NodesView<T> };
 }
 
 type Return<T extends string = string> = {
@@ -31,7 +31,7 @@ type Return<T extends string = string> = {
 
 type Opts<T extends string = string> = {
 	initialFocus?: T;
-	navigation?: 'vi' | 'arrow' | 'none';
+	navigation?: "vi" | "arrow" | "none";
 };
 
 export function useNodeMap<T extends string = string>(
@@ -76,7 +76,7 @@ export function useNodeMap<T extends string = string>(
 	if (opts.navigation === 'vi' || opts.navigation === undefined) {
 		keymap = VI_KEYMAP(ID);
 	}
-	if (opts.navigation === 'arrow') {
+	if (opts.navigation === "arrow") {
 		keymap = ARROW_KEYMAP(ID);
 	}
 
@@ -90,7 +90,7 @@ export function useNodeMap<T extends string = string>(
 	};
 
 	useKeymap(keymap, {
-		priority: opts.navigation === 'none' ? 'never' : 'default',
+		priority: opts.navigation === "none" ? "never" : "default",
 	});
 	useEvent(ID_NAV_EVENTS.up(ID), set(controller.up));
 	useEvent(ID_NAV_EVENTS.down(ID), set(controller.down));
@@ -119,11 +119,11 @@ export function useNodeMap<T extends string = string>(
 
 	function getFocusMap(): FocusMap {
 		const possibleNodes: string[] = nodeMap
-			.flatMap(i => i.map(j => (j ? j : null)))
-			.filter(i => i !== null);
+			.flatMap((i) => i.map((j) => (j ? j : null)))
+			.filter((i) => i !== null);
 
 		return Object.fromEntries(
-			possibleNodes.map(_node => {
+			possibleNodes.map((_node) => {
 				if (_node === node) {
 					return [_node, true];
 				} else {

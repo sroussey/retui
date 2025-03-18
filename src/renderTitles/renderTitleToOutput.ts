@@ -1,28 +1,28 @@
-import cliBoxes, {Boxes, BoxStyle} from 'cli-boxes';
-import chalk from 'chalk';
-import colorize from '../colorize.js';
-import {type DOMNode} from '../dom.js';
-import type Output from '../output.js';
-import {BoxProps, DOMElement} from '../index.js';
-import {BaseProps} from '../baseProps.js';
-import assert from 'assert';
-import {addTitleEventListeners} from '../stdin/AddTitleEventListeners.js';
-import {CornerPositions} from '../index.js';
-import {PickStartsWith, StylesConfig} from '../utility/types.js';
-import {styleText} from '../components/Text.js';
+import cliBoxes, { Boxes, BoxStyle } from "cli-boxes";
+import chalk from "chalk";
+import colorize from "../colorize.js";
+import { type DOMNode } from "../dom.js";
+import type Output from "../output.js";
+import { BoxProps, DOMElement } from "../index.js";
+import { BaseProps } from "../baseProps.js";
+import assert from "assert";
+import { addTitleEventListeners } from "../stdin/AddTitleEventListeners.js";
+import { CornerPositions } from "../index.js";
+import { PickStartsWith, StylesConfig } from "../utility/types.js";
+import { styleText } from "../components/Text.js";
 
-type MouseHandlers = PickStartsWith<BaseProps, 'on'>;
+type MouseHandlers = PickStartsWith<BaseProps, "on">;
 
-export type Title = StylesConfig['Title'] & MouseHandlers;
+export type Title = StylesConfig["Title"] & MouseHandlers;
 
-type MutableBoxStyle = {-readonly [P in keyof BoxStyle]: BoxStyle[P]};
+type MutableBoxStyle = { -readonly [P in keyof BoxStyle]: BoxStyle[P] };
 
 export function renderTitle(
 	x: number,
 	y: number,
 	node: DOMNode,
 	output: Output,
-	position: 'top' | 'bottom',
+	position: "top" | "bottom",
 	zIndexRoot: number,
 ) {
 	const width = node.yogaNode!.getComputedWidth();
@@ -35,10 +35,10 @@ export function renderTitle(
 	const hasRightBorder = hasBorder && node.style.borderRight !== false;
 
 	let box: MutableBoxStyle | undefined;
-	if (hasBorder && position === 'top') {
+	if (hasBorder && position === "top") {
 		box = getBox(node, true);
 	}
-	if (hasBorder && position === 'bottom') {
+	if (hasBorder && position === "bottom") {
 		box = getBox(node, true);
 	}
 
@@ -53,28 +53,25 @@ export function renderTitle(
 	let center = node.style.titleTopCenter;
 	let right = node.style.titleTopRight;
 
-	if (position === 'bottom') {
+	if (position === "bottom") {
 		left = node.style.titleBottomLeft;
 		center = node.style.titleBottomCenter;
 		right = node.style.titleBottomRight;
 	}
 
-	let leftText = left?.title ?? '';
-	let centerText = center?.title ?? '';
-	let rightText = right?.title ?? '';
+	let leftText = left?.title ?? "";
+	let centerText = center?.title ?? "";
+	let rightText = right?.title ?? "";
 
 	let leftStart = 0;
-	let centerStart = Math.max(
-		Math.floor((contentWidth - centerText.length) / 2),
-		0,
-	);
+	let centerStart = Math.max(Math.floor((contentWidth - centerText.length) / 2), 0);
 	let rightStart = Math.max(contentWidth - rightText.length, 0);
 
-	let fillChar = position === 'top' ? (box?.top ?? ' ') : (box?.bottom ?? ' ');
+	let fillChar = position === "top" ? (box?.top ?? " ") : (box?.bottom ?? " ");
 
 	const line = new Array(contentWidth).fill(
-		fillChar === ' '
-			? colorize(fillChar, node.style.backgroundColor, 'background')
+		fillChar === " "
+			? colorize(fillChar, node.style.backgroundColor, "background")
 			: fillChar,
 	);
 
@@ -117,53 +114,46 @@ export function renderTitle(
 	let rightGapSlice = line.slice(centerEnd, rightStart);
 	let rightSlice = line.slice(rightStart, rightEnd);
 
-	leftGapSlice = leftGapSlice.map(_ => fillChar);
-	rightGapSlice = rightGapSlice.map(_ => fillChar);
+	leftGapSlice = leftGapSlice.map((_) => fillChar);
+	rightGapSlice = rightGapSlice.map((_) => fillChar);
 
-	const leftTitle = styleTitle(leftSlice.join(''), left);
-	const leftGap = leftGapSlice.join('');
-	const centerTitle = styleTitle(centerSlice.join(''), center);
-	const rightGap = rightGapSlice.join('');
-	const rightTitle = styleTitle(rightSlice.join(''), right);
+	const leftTitle = styleTitle(leftSlice.join(""), left);
+	const leftGap = leftGapSlice.join("");
+	const centerTitle = styleTitle(centerSlice.join(""), center);
+	const rightGap = rightGapSlice.join("");
+	const rightTitle = styleTitle(rightSlice.join(""), right);
 
 	const leftCorner = hasLeftBorder
-		? position === 'top'
+		? position === "top"
 			? box!.topLeft
 			: box!.bottomLeft
-		: '';
+		: "";
 
 	const rightCorner = hasRightBorder
-		? position === 'top'
+		? position === "top"
 			? box!.topRight
 			: box!.bottomRight
-		: '';
+		: "";
 
-	let outputLine = '';
+	let outputLine = "";
 	outputLine += leftCorner;
-	outputLine += hasPadding ? fillChar : '';
+	outputLine += hasPadding ? fillChar : "";
 	outputLine += leftTitle;
 	outputLine += leftGap;
 	outputLine += centerTitle;
 	outputLine += rightGap;
 	outputLine += rightTitle;
-	outputLine += hasPadding ? fillChar : '';
+	outputLine += hasPadding ? fillChar : "";
 	outputLine += rightCorner;
 
-	if (position === 'top') {
-		output.write(x, y, outputLine, {transformers: []});
+	if (position === "top") {
+		output.write(x, y, outputLine, { transformers: [] });
 	} else {
-		output.write(x, y + height - 1, outputLine, {transformers: []});
+		output.write(x, y + height - 1, outputLine, { transformers: [] });
 	}
 
 	const textPosition = (start: number, end: number) => {
-		return getPosition(
-			x,
-			y,
-			start,
-			end,
-			position === 'top' ? 0 : height,
-			hasPadding,
-		);
+		return getPosition(x, y, start, end, position === "top" ? 0 : height, hasPadding);
 	};
 
 	if (leftText) {
@@ -173,7 +163,7 @@ export function renderTitle(
 			targetPosition: targetPosition,
 			titleType: `title-${position}-left`,
 			title:
-				position === 'top'
+				position === "top"
 					? node.style.titleTopLeft!
 					: node.style.titleBottomLeft!,
 			zIndexRoot: zIndexRoot,
@@ -187,7 +177,7 @@ export function renderTitle(
 			targetPosition: targetPosition,
 			titleType: `title-${position}-center`,
 			title:
-				position === 'top'
+				position === "top"
 					? node.style.titleTopCenter!
 					: node.style.titleBottomCenter!,
 			zIndexRoot: zIndexRoot,
@@ -201,7 +191,7 @@ export function renderTitle(
 			targetPosition: targetPosition,
 			titleType: `title-${position}-right`,
 			title:
-				position === 'top'
+				position === "top"
 					? node.style.titleTopRight!
 					: node.style.titleBottomRight!,
 			zIndexRoot: zIndexRoot,
@@ -240,15 +230,15 @@ function getPosition(
 
 function getBox(node: DOMNode, colorized?: boolean): MutableBoxStyle {
 	const immutableBox =
-		typeof node.style.borderStyle === 'string'
+		typeof node.style.borderStyle === "string"
 			? cliBoxes[node.style.borderStyle as keyof Boxes]
 			: node.style.borderStyle;
 
 	assert(immutableBox !== undefined);
 
-	if (!colorized) return {...immutableBox!};
+	if (!colorized) return { ...immutableBox! };
 
-	const box = {...immutableBox};
+	const box = { ...immutableBox };
 
 	const borderColor = node.style.borderColor;
 	const borderTopColor = node.style.borderTopColor ?? borderColor;
@@ -257,7 +247,7 @@ function getBox(node: DOMNode, colorized?: boolean): MutableBoxStyle {
 	const borderBottomColor = node.style.borderBottomColor ?? borderColor;
 
 	const colorFactory = (colorStr: string) => (str: string) => {
-		return colorize(str, colorStr, 'foreground');
+		return colorize(str, colorStr, "foreground");
 	};
 
 	if (borderTopColor) {

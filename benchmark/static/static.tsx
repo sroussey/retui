@@ -1,5 +1,5 @@
-import React from 'react';
-import {render, Box, Text, Static} from '../../src/index.js';
+import React from "react";
+import { render, Box, Text, Static } from "../../src/index.js";
 
 function App() {
 	const [items, setItems] = React.useState<
@@ -17,7 +17,7 @@ function App() {
 				return;
 			}
 
-			setItems(previousItems => [
+			setItems((previousItems) => [
 				...previousItems,
 				{
 					id: previousItems.length,
@@ -48,16 +48,16 @@ function App() {
 			<Box flexDirection="column" padding={1}>
 				<Text underline bold color="red">
 					{/* eslint-disable-next-line react/jsx-curly-brace-presence */}
-					{'Hello'} {'World'}
+					{"Hello"} {"World"}
 				</Text>
 
 				<Text>Rendered: {items.length}</Text>
 
 				<Box marginTop={1} width={60}>
 					<Text>
-						Cupcake ipsum dolor sit amet candy candy. Sesame snaps cookie I love
-						tootsie roll apple pie bonbon wafer. Caramels sesame snaps icing
-						cotton candy I love cookie sweet roll. I love bonbon sweet.
+						Cupcake ipsum dolor sit amet candy candy. Sesame snaps cookie I
+						love tootsie roll apple pie bonbon wafer. Caramels sesame snaps
+						icing cotton candy I love cookie sweet roll. I love bonbon sweet.
 					</Text>
 				</Box>
 

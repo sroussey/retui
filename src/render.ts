@@ -1,8 +1,8 @@
-import {Stream} from 'node:stream';
-import process from 'node:process';
-import type {ReactNode} from 'react';
-import Ink, {type Options as InkOptions} from './ink.js';
-import instances from './instances.js';
+import { Stream } from "node:stream";
+import process from "node:process";
+import type { ReactNode } from "react";
+import Ink, { type Options as InkOptions } from "./ink.js";
+import instances from "./instances.js";
 
 export type RenderOptions = {
 	/**
@@ -54,15 +54,15 @@ export type Instance = {
 	/**
 	 * Replace previous root node with a new one or update props of the current root node.
 	 */
-	rerender: Ink['render'];
+	rerender: Ink["render"];
 	/**
 	 * Manually unmount the whole Ink app.
 	 */
-	unmount: Ink['unmount'];
+	unmount: Ink["unmount"];
 	/**
 	 * Returns a promise, which resolves when app is unmounted.
 	 */
-	waitUntilExit: Ink['waitUntilExit'];
+	waitUntilExit: Ink["waitUntilExit"];
 	cleanup: () => void;
 
 	/**
@@ -88,10 +88,7 @@ const render = (
 		...getOptions(options),
 	};
 
-	const instance: Ink = getInstance(
-		inkOptions.stdout,
-		() => new Ink(inkOptions),
-	);
+	const instance: Ink = getInstance(inkOptions.stdout, () => new Ink(inkOptions));
 
 	instance.render(node);
 
@@ -121,10 +118,7 @@ const getOptions = (
 	return stdout;
 };
 
-const getInstance = (
-	stdout: NodeJS.WriteStream,
-	createInstance: () => Ink,
-): Ink => {
+const getInstance = (stdout: NodeJS.WriteStream, createInstance: () => Ink): Ink => {
 	let instance = instances.get(stdout);
 
 	if (!instance) {

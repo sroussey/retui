@@ -1,6 +1,6 @@
-import {EventEmitter} from 'node:events';
-import process from 'node:process';
-import {createContext} from 'react';
+import { EventEmitter } from "node:events";
+import process from "node:process";
+import { createContext } from "react";
 
 export type Props = {
 	/**
@@ -38,6 +38,6 @@ const StdinContext = createContext<Props>({
 	internal_exitOnCtrlC: true,
 });
 
-StdinContext.displayName = 'InternalStdinContext';
+StdinContext.displayName = "InternalStdinContext";
 
 export default StdinContext;

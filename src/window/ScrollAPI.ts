@@ -1,7 +1,7 @@
-import {produce} from 'immer';
-import assert from 'node:assert';
-import {PrevBounds, State} from './useScroll.js';
-import {Opts as UseScrollOpts} from './useScroll.js';
+import { produce } from "immer";
+import assert from "node:assert";
+import { PrevBounds, State } from "./useScroll.js";
+import { Opts as UseScrollOpts } from "./useScroll.js";
 
 export type Initializer = {
 	state: State;
@@ -15,30 +15,21 @@ export type Initializer = {
 // Public functions used as utility functions in components
 export type ScrollAPIPublicFns = Omit<
 	{
-		[P in keyof ScrollAPI]: ScrollAPI[P] extends Function
-			? ScrollAPI[P]
-			: never;
+		[P in keyof ScrollAPI]: ScrollAPI[P] extends Function ? ScrollAPI[P] : never;
 	},
-	'getAPI' | 'handle'
+	"getAPI" | "handle"
 >;
 
 export class ScrollAPI {
-	private readonly state: Initializer['state'];
-	private readonly setState: Initializer['setState'];
-	private readonly LENGTH: Initializer['LENGTH'];
-	private readonly WINDOW_SIZE: Initializer['WINDOW_SIZE'];
-	private readonly prevBounds?: Initializer['prevBounds'];
-	private readonly centerScroll: UseScrollOpts['centerScroll'];
-	private readonly fallthrough: UseScrollOpts['fallthrough'];
+	private readonly state: Initializer["state"];
+	private readonly setState: Initializer["setState"];
+	private readonly LENGTH: Initializer["LENGTH"];
+	private readonly WINDOW_SIZE: Initializer["WINDOW_SIZE"];
+	private readonly prevBounds?: Initializer["prevBounds"];
+	private readonly centerScroll: UseScrollOpts["centerScroll"];
+	private readonly fallthrough: UseScrollOpts["fallthrough"];
 
-	constructor({
-		state,
-		setState,
-		LENGTH,
-		WINDOW_SIZE,
-		opts,
-		prevBounds,
-	}: Initializer) {
+	constructor({ state, setState, LENGTH, WINDOW_SIZE, opts, prevBounds }: Initializer) {
 		this.state = state;
 		this.setState = (nextState: State) => {
 			try {
@@ -163,7 +154,7 @@ export class ScrollAPI {
 		const LENGTH = this.LENGTH;
 		const WINDOW_SIZE = this.WINDOW_SIZE;
 
-		return produce(this.state, draft => {
+		return produce(this.state, (draft) => {
 			// Handle window size is zero
 			if (LENGTH === 0) return;
 			if (draft.start === 0 && draft.end === 0) return;
@@ -174,10 +165,10 @@ export class ScrollAPI {
 				--draft.start;
 				--draft.end;
 				trueWindowSize = this.getTrueWindowSize(draft.start, draft.end);
-				this.rangeCheck(draft, '1');
+				this.rangeCheck(draft, "1");
 			}
 
-			this.constrainWindow({draft, LENGTH});
+			this.constrainWindow({ draft, LENGTH });
 			draft.idx = Math.min(nextIdx, LENGTH - 1);
 			draft.idx = Math.max(0, draft.idx);
 
@@ -185,7 +176,7 @@ export class ScrollAPI {
 			while (draft.idx >= draft.end && draft.end < LENGTH) {
 				++draft.end;
 				++draft.start;
-				this.rangeCheck(draft, '2');
+				this.rangeCheck(draft, "2");
 			}
 
 			//  next idx less than range (goToIndex)
@@ -194,14 +185,14 @@ export class ScrollAPI {
 			while (draft.idx < draft.start && draft.start >= 0) {
 				--draft.end;
 				--draft.start;
-				this.rangeCheck(draft, '3');
+				this.rangeCheck(draft, "3");
 			}
 
 			// next idx 'bumps' into end position, forcing new window
 			if (draft.idx === draft.end && draft.end < LENGTH) {
 				++draft.start;
 				++draft.end;
-				this.rangeCheck(draft, '4');
+				this.rangeCheck(draft, "4");
 				return;
 			}
 
@@ -209,22 +200,20 @@ export class ScrollAPI {
 			if (draft.idx === draft.start - 1 && draft.start > 0) {
 				--draft.start;
 				--draft.end;
-				this.rangeCheck(draft, '5');
+				this.rangeCheck(draft, "5");
 				return;
 			}
 		});
 	};
 
-	private getCenterScrollChanges = (
-		nextIdx: number = this.state.idx,
-	): State => {
+	private getCenterScrollChanges = (nextIdx: number = this.state.idx): State => {
 		nextIdx = Math.floor(nextIdx);
 
 		const LENGTH = this.LENGTH;
 		const WINDOW_SIZE = this.WINDOW_SIZE;
 		const noIdxChange = nextIdx === this.state.idx;
 
-		return produce(this.state, draft => {
+		return produce(this.state, (draft) => {
 			if (LENGTH === 0) return;
 			if (draft.start === 0 && draft.end === 0) return;
 			if (draft.start === draft.end) return;
@@ -234,10 +223,10 @@ export class ScrollAPI {
 				--draft.start;
 				--draft.end;
 				trueWindowSize = this.getTrueWindowSize(draft.start, draft.end);
-				this.rangeCheck(draft, '1');
+				this.rangeCheck(draft, "1");
 			}
 
-			this.constrainWindow({draft, LENGTH});
+			this.constrainWindow({ draft, LENGTH });
 			draft.idx = Math.min(nextIdx, LENGTH - 1);
 			draft.idx = Math.max(0, draft.idx);
 
@@ -246,17 +235,17 @@ export class ScrollAPI {
 			while (draft.idx >= draft.end && draft.end < LENGTH) {
 				++draft.end;
 				++draft.start;
-				this.rangeCheck(draft, '2');
+				this.rangeCheck(draft, "2");
 			}
 
 			while (draft.idx < draft.start && draft.start >= 0) {
 				--draft.end;
 				--draft.start;
-				this.rangeCheck(draft, '3');
+				this.rangeCheck(draft, "3");
 			}
 
 			// If possible, center idx in viewing window
-			this.centerIdx({draft, LENGTH});
+			this.centerIdx({ draft, LENGTH });
 
 			const mid = Math.floor((draft.start + draft.end) / 2);
 			if (draft.idx > mid && draft.end !== LENGTH) {
@@ -270,23 +259,17 @@ export class ScrollAPI {
 		});
 	};
 
-	private centerIdx = ({
-		draft,
-		LENGTH,
-	}: {
-		draft: State;
-		LENGTH: number;
-	}): void => {
+	private centerIdx = ({ draft, LENGTH }: { draft: State; LENGTH: number }): void => {
 		const getMid = (s: number, e: number) => Math.floor((s + e) / 2);
 		while (draft.idx > getMid(draft.start, draft.end) && draft.end < LENGTH) {
 			++draft.start;
 			++draft.end;
-			this.rangeCheck(draft, 'centerIdx');
+			this.rangeCheck(draft, "centerIdx");
 		}
 		while (draft.idx < getMid(draft.start, draft.end) && draft.start > 0) {
 			--draft.start;
 			--draft.end;
-			this.rangeCheck(draft, 'centerIdx');
+			this.rangeCheck(draft, "centerIdx");
 		}
 	};
 
@@ -312,7 +295,7 @@ export class ScrollAPI {
 	};
 
 	private normalizeWindow = (): void => {
-		const normalized = produce(this.state, draft => {
+		const normalized = produce(this.state, (draft) => {
 			while (draft.end > this.LENGTH) {
 				draft.start = Math.max(0, draft.start - 1);
 				draft.end = Math.max(0, draft.end - 1);
@@ -343,7 +326,7 @@ export class ScrollAPI {
 			});
 		}
 
-		const nextState = produce(this.state, draft => {
+		const nextState = produce(this.state, (draft) => {
 			nextSize = Math.abs(nextSize);
 			nextSize = Math.min(nextSize, LENGTH);
 
@@ -368,7 +351,7 @@ export class ScrollAPI {
 					} else if (draft.start > 0) {
 						--draft.start;
 					} else {
-						throw new Error('modifyWinSize (inc win size)');
+						throw new Error("modifyWinSize (inc win size)");
 					}
 
 					--target;
@@ -380,7 +363,7 @@ export class ScrollAPI {
 					} else if (draft.idx === draft.end - 1) {
 						++draft.start;
 					} else {
-						throw new Error('modifyWinSize (dec win size)');
+						throw new Error("modifyWinSize (dec win size)");
 					}
 
 					++target;
@@ -400,7 +383,7 @@ export class ScrollAPI {
 			}
 
 			if (this.centerScroll) {
-				this.centerIdx({draft, LENGTH});
+				this.centerIdx({ draft, LENGTH });
 			}
 
 			if (nextSize !== 0 && this.prevBounds) {
@@ -422,12 +405,8 @@ export class ScrollAPI {
 		this.setState(nextState);
 	};
 
-	private rangeCheck = (draft: State, msg: string = ''): void => {
-		if (
-			draft.start >= 0 &&
-			draft.start <= draft.end &&
-			draft.end <= this.LENGTH
-		) {
+	private rangeCheck = (draft: State, msg: string = ""): void => {
+		if (draft.start >= 0 && draft.start <= draft.end && draft.end <= this.LENGTH) {
 			return;
 		}
 

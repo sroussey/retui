@@ -1,5 +1,5 @@
-import process from 'node:process';
-import {createContext} from 'react';
+import process from "node:process";
+import { createContext } from "react";
 
 export type Props = {
 	/**
@@ -24,6 +24,6 @@ const StdoutContext = createContext<Props>({
 	write() {},
 });
 
-StdoutContext.displayName = 'InternalStdoutContext';
+StdoutContext.displayName = "InternalStdoutContext";
 
 export default StdoutContext;

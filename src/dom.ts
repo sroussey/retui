@@ -1,16 +1,13 @@
-import Yoga, {type Node as YogaNode} from 'yoga-wasm-web/auto';
-import measureText from './measure-text.js';
-import {type BaseProps} from './baseProps.js';
-import wrapText from './wrap-text.js';
-import squashTextNodes from './squash-text-nodes.js';
-import {type OutputTransformer} from './render-node-to-output.js';
-import {TextProps} from './index.js';
-import {MutableBaseProps, MutableTextProps} from './utility/types.js';
-import {
-	IntrinsicWindowAttributes,
-	IntrinsicWindowBaseProps,
-} from './window/Window.js';
-import {IntrinsicLineProps} from './lines/Line.js';
+import Yoga, { type Node as YogaNode } from "yoga-wasm-web/auto";
+import measureText from "./measure-text.js";
+import { type BaseProps } from "./baseProps.js";
+import wrapText from "./wrap-text.js";
+import squashTextNodes from "./squash-text-nodes.js";
+import { type OutputTransformer } from "./render-node-to-output.js";
+import { TextProps } from "./index.js";
+import { MutableBaseProps, MutableTextProps } from "./utility/types.js";
+import { IntrinsicWindowAttributes, IntrinsicWindowBaseProps } from "./window/Window.js";
+import { IntrinsicLineProps } from "./lines/Line.js";
 
 type InkNode = {
 	parentNode: DOMElement | undefined;
@@ -23,14 +20,14 @@ type InkNode = {
 		Partial<IntrinsicLineProps>;
 };
 
-export type TextName = '#text';
+export type TextName = "#text";
 export type ElementNames =
-	| 'ink-root'
-	| 'ink-box'
-	| 'ink-text'
-	| 'ink-virtual-text'
-	| 'ink-window'
-	| 'ink-line';
+	| "ink-root"
+	| "ink-box"
+	| "ink-text"
+	| "ink-virtual-text"
+	| "ink-window"
+	| "ink-line";
 
 export type NodeNames = ElementNames | TextName;
 
@@ -56,10 +53,10 @@ export type TextNode = {
 } & InkNode;
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-export type DOMNode<T = {nodeName: NodeNames}> = T extends {
+export type DOMNode<T = { nodeName: NodeNames }> = T extends {
 	nodeName: infer U;
 }
-	? U extends '#text'
+	? U extends "#text"
 		? TextNode
 		: DOMElement
 	: never;
@@ -72,7 +69,7 @@ export type DOMNodeAttribute =
 	| Function
 	| BaseProps
 	| (BaseProps & TextProps)
-	| IntrinsicWindowAttributes['viewState'];
+	| IntrinsicWindowAttributes["viewState"];
 
 export const createNode = (nodeName: ElementNames): DOMElement => {
 	const node: DOMElement = {
@@ -81,20 +78,17 @@ export const createNode = (nodeName: ElementNames): DOMElement => {
 		attributes: {},
 		childNodes: [],
 		parentNode: undefined,
-		yogaNode: nodeName === 'ink-virtual-text' ? undefined : Yoga.Node.create(),
+		yogaNode: nodeName === "ink-virtual-text" ? undefined : Yoga.Node.create(),
 	};
 
-	if (nodeName === 'ink-text') {
+	if (nodeName === "ink-text") {
 		node.yogaNode?.setMeasureFunc(measureTextNode.bind(null, node));
 	}
 
 	return node;
 };
 
-export const appendChildNode = (
-	node: DOMElement,
-	childNode: DOMElement,
-): void => {
+export const appendChildNode = (node: DOMElement, childNode: DOMElement): void => {
 	if (childNode.parentNode) {
 		removeChildNode(childNode.parentNode, childNode);
 	}
@@ -103,13 +97,10 @@ export const appendChildNode = (
 	node.childNodes.push(childNode);
 
 	if (childNode.yogaNode) {
-		node.yogaNode?.insertChild(
-			childNode.yogaNode,
-			node.yogaNode.getChildCount(),
-		);
+		node.yogaNode?.insertChild(childNode.yogaNode, node.yogaNode.getChildCount());
 	}
 
-	if (node.nodeName === 'ink-text' || node.nodeName === 'ink-virtual-text') {
+	if (node.nodeName === "ink-text" || node.nodeName === "ink-virtual-text") {
 		markNodeAsDirty(node);
 	}
 };
@@ -138,21 +129,15 @@ export const insertBeforeNode = (
 	node.childNodes.push(newChildNode);
 
 	if (newChildNode.yogaNode) {
-		node.yogaNode?.insertChild(
-			newChildNode.yogaNode,
-			node.yogaNode.getChildCount(),
-		);
+		node.yogaNode?.insertChild(newChildNode.yogaNode, node.yogaNode.getChildCount());
 	}
 
-	if (node.nodeName === 'ink-text' || node.nodeName === 'ink-virtual-text') {
+	if (node.nodeName === "ink-text" || node.nodeName === "ink-virtual-text") {
 		markNodeAsDirty(node);
 	}
 };
 
-export const removeChildNode = (
-	node: DOMElement,
-	removeNode: DOMNode,
-): void => {
+export const removeChildNode = (node: DOMElement, removeNode: DOMNode): void => {
 	if (removeNode.yogaNode) {
 		removeNode.parentNode?.yogaNode?.removeChild(removeNode.yogaNode);
 	}
@@ -164,7 +149,7 @@ export const removeChildNode = (
 		node.childNodes.splice(index, 1);
 	}
 
-	if (node.nodeName === 'ink-text' || node.nodeName === 'ink-virtual-text') {
+	if (node.nodeName === "ink-text" || node.nodeName === "ink-virtual-text") {
 		markNodeAsDirty(node);
 	}
 };
@@ -183,7 +168,7 @@ export const setStyle = (node: DOMNode, style: BaseProps): void => {
 
 export const createTextNode = (text: string): TextNode => {
 	const node: TextNode = {
-		nodeName: '#text',
+		nodeName: "#text",
 		nodeValue: text,
 		yogaNode: undefined,
 		parentNode: undefined,
@@ -198,9 +183,8 @@ export const createTextNode = (text: string): TextNode => {
 const measureTextNode = function (
 	node: DOMNode,
 	width: number,
-): {width: number; height: number} {
-	const text =
-		node.nodeName === '#text' ? node.nodeValue : squashTextNodes(node);
+): { width: number; height: number } {
+	const text = node.nodeName === "#text" ? node.nodeValue : squashTextNodes(node);
 
 	const dimensions = measureText(text);
 
@@ -215,7 +199,7 @@ const measureTextNode = function (
 		return dimensions;
 	}
 
-	const textWrap = node.style?.textWrap ?? 'wrap';
+	const textWrap = node.style?.textWrap ?? "wrap";
 	const wrappedText = wrapText(text, width, textWrap);
 
 	return measureText(wrappedText);
@@ -236,7 +220,7 @@ const markNodeAsDirty = (node?: DOMNode): void => {
 };
 
 export const setTextNodeValue = (node: TextNode, text: string): void => {
-	if (typeof text !== 'string') {
+	if (typeof text !== "string") {
 		text = String(text);
 	}
 

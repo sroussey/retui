@@ -1,25 +1,19 @@
-import {DOMElement} from '../dom.js';
-import ElementPosition from './ElementPosition.js';
-import {DefaultStdin} from './Stdin.js';
+import { DOMElement } from "../dom.js";
+import ElementPosition from "./ElementPosition.js";
+import { DefaultStdin } from "./Stdin.js";
 
 export function addMouseEventListeners(
 	node: DOMElement,
 	// The current 'level' in the zIndex stack this node is on, not its zIndex property
 	zIndexRoot: number,
 ): void {
-	const trackLeftActive =
-		!!node.style.styles?.leftActive || !!node.style.leftActive;
-	const trackRightActive =
-		!!node.style.styles?.rightActive || !!node.style.rightActive;
+	const trackLeftActive = !!node.style.styles?.leftActive || !!node.style.leftActive;
+	const trackRightActive = !!node.style.styles?.rightActive || !!node.style.rightActive;
 
-	const ID = node.attributes['ID'] as string;
-	const isPageFocus = node.attributes['isPageFocus'] as boolean;
-	const setLeftActive = node.attributes['setLeftActive'] as (
-		b: boolean,
-	) => void;
-	const setRightActive = node.attributes['setRightActive'] as (
-		b: boolean,
-	) => void;
+	const ID = node.attributes["ID"] as string;
+	const isPageFocus = node.attributes["isPageFocus"] as boolean;
+	const setLeftActive = node.attributes["setLeftActive"] as (b: boolean) => void;
+	const setRightActive = node.attributes["setRightActive"] as (b: boolean) => void;
 
 	const shouldSubscribe =
 		trackLeftActive ||

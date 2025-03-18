@@ -1,24 +1,24 @@
-import process from 'node:process';
-import React, {type ReactNode} from 'react';
-import {throttle} from 'es-toolkit/compat';
-import ansiEscapes from 'ansi-escapes';
-import isInCi from 'is-in-ci';
-import autoBind from 'auto-bind';
-import signalExit from 'signal-exit';
-import patchConsole from 'patch-console';
-import {type FiberRoot} from 'react-reconciler';
-import Yoga from 'yoga-wasm-web/auto';
-import reconciler from './reconciler.js';
-import render from './renderer.js';
-import * as dom from './dom.js';
-import logUpdate, {type LogUpdate} from './log-update.js';
-import instances from './instances.js';
-import App from './components/App.js';
-import {AltStdin, DefaultStdin} from './stdin/Stdin.js';
-import PreserveScreen from './preserveScreen/PreserveScreen.js';
+import process from "node:process";
+import React, { type ReactNode } from "react";
+import { throttle } from "es-toolkit/compat";
+import ansiEscapes from "ansi-escapes";
+import isInCi from "is-in-ci";
+import autoBind from "auto-bind";
+import signalExit from "signal-exit";
+import patchConsole from "patch-console";
+import { type FiberRoot } from "react-reconciler";
+import Yoga from "yoga-wasm-web/auto";
+import reconciler from "./reconciler.js";
+import render from "./renderer.js";
+import * as dom from "./dom.js";
+import logUpdate, { type LogUpdate } from "./log-update.js";
+import instances from "./instances.js";
+import App from "./components/App.js";
+import { AltStdin, DefaultStdin } from "./stdin/Stdin.js";
+import PreserveScreen from "./preserveScreen/PreserveScreen.js";
 // @ts-ignore
-import {Console} from './logger/Console.js';
-import {logger} from './logger/Logger.js';
+import { Console } from "./logger/Console.js";
+import { logger } from "./logger/Logger.js";
 
 const noop = () => {};
 
@@ -53,7 +53,7 @@ export default class Ink {
 		autoBind(this);
 
 		this.options = options;
-		this.rootNode = dom.createNode('ink-root');
+		this.rootNode = dom.createNode("ink-root");
 		this.rootNode.onComputeLayout = this.calculateLayout;
 
 		this.rootNode.onRender = options.debug
@@ -76,11 +76,11 @@ export default class Ink {
 		this.isUnmounted = false;
 
 		// Store last output to only rerender when needed
-		this.lastOutput = '';
+		this.lastOutput = "";
 
 		// This variable is used only in debug mode to store full static output
 		// so that it's rerendered every time, not just new static parts, like in non-debug mode
-		this.fullStaticOutput = '';
+		this.fullStaticOutput = "";
 
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 		this.container = reconciler.createContainer(
@@ -90,21 +90,21 @@ export default class Ink {
 			null,
 			false,
 			null,
-			'id',
+			"id",
 			() => {},
 			null,
 		);
 
 		// Unmount when process exits
-		this.unsubscribeExit = signalExit(this.unmount, {alwaysLast: false});
+		this.unsubscribeExit = signalExit(this.unmount, { alwaysLast: false });
 
-		if (process.env['DEV'] === 'true') {
+		if (process.env["DEV"] === "true") {
 			reconciler.injectIntoDevTools({
 				bundleType: 0,
 				// Reporting React DOM's version, not Ink's
 				// See https://github.com/facebook/react/issues/16666#issuecomment-532639905
-				version: '16.13.1',
-				rendererPackageName: 'ink',
+				version: "16.13.1",
+				rendererPackageName: "ink",
 			});
 		}
 
@@ -113,10 +113,10 @@ export default class Ink {
 		}
 
 		if (!isInCi) {
-			options.stdout.on('resize', this.resized);
+			options.stdout.on("resize", this.resized);
 
 			this.unsubscribeResize = () => {
-				options.stdout.off('resize', this.resized);
+				options.stdout.off("resize", this.resized);
 			};
 		}
 	}
@@ -137,11 +137,7 @@ export default class Ink {
 
 		this.rootNode.yogaNode!.setWidth(terminalWidth);
 
-		this.rootNode.yogaNode!.calculateLayout(
-			undefined,
-			undefined,
-			Yoga.DIRECTION_LTR,
-		);
+		this.rootNode.yogaNode!.calculateLayout(undefined, undefined, Yoga.DIRECTION_LTR);
 	};
 
 	// Allows app to exit by clearing up excess listeners
@@ -154,7 +150,7 @@ export default class Ink {
 
 			// process.exit for right now because I can't figure out what is
 			// causing the hang up which occurs after executing shell commands
-			if (!process.env?.['TEST_ENV']) {
+			if (!process.env?.["TEST_ENV"]) {
 				process.exit();
 			}
 		});
@@ -165,16 +161,16 @@ export default class Ink {
 			return;
 		}
 
-		const {output, outputHeight, staticOutput} = render(this.rootNode);
+		const { output, outputHeight, staticOutput } = render(this.rootNode);
 
 		if (this.lastOutput === output && !staticOutput) return;
 		if (AltStdin.isListening()) {
-			this.lastOutput = '';
+			this.lastOutput = "";
 			return;
 		}
 
 		// If <Static> output isn't empty, it means new children have been added to it
-		const hasStaticOutput = staticOutput && staticOutput !== '\n';
+		const hasStaticOutput = staticOutput && staticOutput !== "\n";
 
 		if (this.options.debug) {
 			if (hasStaticOutput) {
@@ -293,18 +289,18 @@ export default class Ink {
 			this.unsubscribeExit();
 		}
 
-		if (typeof this.restoreConsole === 'function') {
+		if (typeof this.restoreConsole === "function") {
 			this.restoreConsole();
 		}
 
-		if (typeof this.unsubscribeResize === 'function') {
+		if (typeof this.unsubscribeResize === "function") {
 			this.unsubscribeResize();
 		}
 
 		// CIs don't handle erasing ansi escapes well, so it's better to
 		// only render last frame of non-static output
 		if (isInCi) {
-			this.options.stdout.write(this.lastOutput + '\n');
+			this.options.stdout.write(this.lastOutput + "\n");
 		} else if (!this.options.debug) {
 			this.log.done();
 		}
@@ -343,17 +339,17 @@ export default class Ink {
 
 		this.restoreConsole = patchConsole((stream, data) => {
 			// Direct stdout to a specified file that can be set with setConsole
-			const {enabled, path} = Console;
+			const { enabled, path } = Console;
 			if (enabled && path) {
 				return logger.file(path).write(data.trimEnd());
 			}
 
-			if (stream === 'stdout') {
+			if (stream === "stdout") {
 				this.writeToStdout(data);
 			}
 
-			if (stream === 'stderr') {
-				const isReactMessage = data.startsWith('The above error occurred');
+			if (stream === "stderr") {
+				const isReactMessage = data.startsWith("The above error occurred");
 
 				if (!isReactMessage) {
 					this.writeToStderr(data);

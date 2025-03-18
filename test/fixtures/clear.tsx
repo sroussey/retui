@@ -1,5 +1,5 @@
-import React from 'react';
-import {Box, Text, render} from '../../src/index.js';
+import React from "react";
+import { Box, Text, render } from "../../src/index.js";
 
 function Clear() {
 	return (
@@ -11,5 +11,5 @@ function Clear() {
 	);
 }
 
-const {clear} = render(<Clear />);
+const { clear } = render(<Clear />);
 clear();

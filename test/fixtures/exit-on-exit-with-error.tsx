@@ -1,9 +1,9 @@
-import React from 'react';
-import {render, Text, useApp} from '../../src/index.js';
+import React from "react";
+import { render, Text, useApp } from "../../src/index.js";
 
 class Exit extends React.Component<
-	{onExit: (error: Error) => void},
-	{counter: number}
+	{ onExit: (error: Error) => void },
+	{ counter: number }
 > {
 	timer?: NodeJS.Timeout;
 
@@ -17,11 +17,11 @@ class Exit extends React.Component<
 
 	override componentDidMount() {
 		setTimeout(() => {
-			this.props.onExit(new Error('errored'));
+			this.props.onExit(new Error("errored"));
 		}, 500);
 
 		this.timer = setInterval(() => {
-			this.setState(prevState => ({
+			this.setState((prevState) => ({
 				counter: prevState.counter + 1,
 			}));
 		}, 100);
@@ -33,7 +33,7 @@ class Exit extends React.Component<
 }
 
 function Test() {
-	const {exit} = useApp();
+	const { exit } = useApp();
 	return <Exit onExit={exit} />;
 }
 

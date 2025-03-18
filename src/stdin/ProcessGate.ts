@@ -1,5 +1,5 @@
-import assert from 'assert';
-import {Opts as UseKeymapOpts} from './hooks/useKeymap.js';
+import assert from "assert";
+import { Opts as UseKeymapOpts } from "./hooks/useKeymap.js";
 
 /*
  * Sets priority levels for useKeymaps hooks so that control can be passed
@@ -13,8 +13,8 @@ import {Opts as UseKeymapOpts} from './hooks/useKeymap.js';
  * 'textinput' overrides everything including 'always'
  * */
 
-type Priority = UseKeymapOpts['priority'];
-type Gate = {[HOOK_ID: string]: Priority};
+type Priority = UseKeymapOpts["priority"];
+type Gate = { [HOOK_ID: string]: Priority };
 
 const gate: Gate = {};
 
@@ -24,9 +24,9 @@ function canProcess(hookId: string, hookPriority?: Priority): boolean {
 		assert(hookPriority);
 	}
 
-	if (hookPriority === 'always') {
+	if (hookPriority === "always") {
 		for (const key in gate) {
-			if (gate[key] === 'textinput') {
+			if (gate[key] === "textinput") {
 				return false;
 			}
 		}
@@ -34,11 +34,11 @@ function canProcess(hookId: string, hookPriority?: Priority): boolean {
 		return true;
 	}
 
-	if (hookPriority === 'never') {
+	if (hookPriority === "never") {
 		return false;
 	}
 
-	const map: Record<Exclude<Priority, 'never' | 'always'>, number> = {
+	const map: Record<Exclude<Priority, "never" | "always">, number> = {
 		default: 0,
 		override: 1,
 		textinput: 2,
@@ -47,8 +47,8 @@ function canProcess(hookId: string, hookPriority?: Priority): boolean {
 	for (const key in gate) {
 		if (key === hookId) continue;
 
-		if (gate[key] === 'always') continue;
-		if (gate[key] === 'never') continue;
+		if (gate[key] === "always") continue;
+		if (gate[key] === "never") continue;
 
 		const priority = gate[key];
 

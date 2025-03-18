@@ -1,4 +1,4 @@
-import {createContext, useContext} from 'react';
+import { createContext, useContext } from "react";
 
 type ModalContext = {
 	ID: string;
@@ -36,7 +36,7 @@ export function useModalContext(): ModalContext {
 		return {
 			level: 0,
 			visible: true,
-			ID: '',
+			ID: "",
 			hide: () => {},
 		};
 	}

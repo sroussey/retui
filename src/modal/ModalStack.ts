@@ -1,4 +1,4 @@
-type Levels = {[level: number]: Set<string>};
+type Levels = { [level: number]: Set<string> };
 
 const levels: Levels = {};
 

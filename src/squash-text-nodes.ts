@@ -1,4 +1,4 @@
-import {type DOMElement} from './dom.js';
+import { type DOMElement } from "./dom.js";
 
 // Squashing text nodes allows to combine multiple text nodes into one and write
 // to `Output` instance only once. For example, <Text>hello{' '}world</Text>
@@ -7,7 +7,7 @@ import {type DOMElement} from './dom.js';
 // Also, this is necessary for libraries like ink-link (https://github.com/sindresorhus/ink-link),
 // which need to wrap all children at once, instead of wrapping 3 text nodes separately.
 const squashTextNodes = (node: DOMElement): string => {
-	let text = '';
+	let text = "";
 
 	for (let index = 0; index < node.childNodes.length; index++) {
 		const childNode = node.childNodes[index];
@@ -16,14 +16,14 @@ const squashTextNodes = (node: DOMElement): string => {
 			continue;
 		}
 
-		let nodeText = '';
+		let nodeText = "";
 
-		if (childNode.nodeName === '#text') {
+		if (childNode.nodeName === "#text") {
 			nodeText = childNode.nodeValue;
 		} else {
 			if (
-				childNode.nodeName === 'ink-text' ||
-				childNode.nodeName === 'ink-virtual-text'
+				childNode.nodeName === "ink-text" ||
+				childNode.nodeName === "ink-virtual-text"
 			) {
 				nodeText = squashTextNodes(childNode);
 			}
@@ -32,7 +32,7 @@ const squashTextNodes = (node: DOMElement): string => {
 			// apply children transform, so we have to do it manually here for each text node
 			if (
 				nodeText.length > 0 &&
-				typeof childNode.internal_transform === 'function'
+				typeof childNode.internal_transform === "function"
 			) {
 				nodeText = childNode.internal_transform(nodeText, index);
 			}

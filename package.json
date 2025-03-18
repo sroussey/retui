@@ -70,7 +70,6 @@
 		"widest-line": "^5.0.0",
 		"wrap-ansi": "^9.0.0",
 		"ws": "^8.15.0",
-		"xxhashjs": "^0.2.2",
 		"yoga-wasm-web": "^0.3.3"
 	},
 	"devDependencies": {
@@ -87,7 +86,6 @@
 		"@types/sinon": "^17.0.3",
 		"@types/stack-utils": "^2.0.2",
 		"@types/ws": "^8.5.10",
-		"@vdemedes/prettier-config": "^2.0.1",
 		"ava": "^5.1.1",
 		"boxen": "^7.0.1",
 		"delay": "^6.0.0",
@@ -106,7 +104,7 @@
 		"strip-ansi": "^7.1.0",
 		"ts-node": "^10.9.2",
 		"typescript": "^5.3.3",
-		"vitest": "^2.1.8",
+		"vitest": "^3.0.9",
 		"xo": "^0.58.0"
 	},
 	"peerDependencies": {
@@ -200,6 +198,5 @@
 				}
 			}
 		]
-	},
-	"prettier": "@vdemedes/prettier-config"
+	}
 }

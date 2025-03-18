@@ -1,14 +1,14 @@
-import React, {useEffect, useRef} from 'react';
-import Box from '../components/Box.js';
-import {WindowProps} from './Window.js';
-import {DefaultStdin} from '../stdin/Stdin.js';
-import {Listener, ViewState} from './types.js';
-import {ListItemContext, PageContext} from '../focus/FocusContext.js';
+import React, { useEffect, useRef } from "react";
+import Box from "../components/Box.js";
+import { WindowProps } from "./Window.js";
+import { DefaultStdin } from "../stdin/Stdin.js";
+import { Listener, ViewState } from "./types.js";
+import { ListItemContext, PageContext } from "../focus/FocusContext.js";
 
 type Props = {
 	// What kind of context is passed to the Unit?  (PageContext or ItemContext)
 	// What kind of default styles are added to the wrapper?
-	type: WindowProps['type'];
+	type: WindowProps["type"];
 
 	// The component that will be wrapped in the Unit component
 	node: React.ReactElement;
@@ -34,8 +34,8 @@ type Props = {
 	// Context data that will added to both ItemContext and PageContext
 	index: number;
 	items: any[];
-	control: ViewState['_control'];
-	setItems: ViewState['_setItems'];
+	control: ViewState["_control"];
+	setItems: ViewState["_setItems"];
 };
 
 export function Unit({
@@ -53,8 +53,8 @@ export function Unit({
 }: Props) {
 	useMultipleEventsWithoutContextChecks(listeners);
 
-	const display = isHidden ? 'none' : 'flex';
-	const dimension = type === 'PAGES' || stretch ? '100' : undefined;
+	const display = isHidden ? "none" : "flex";
+	const dimension = type === "PAGES" || stretch ? "100" : undefined;
 	const flexShrink = dimension ? 1 : 0;
 
 	const unit = (
@@ -69,7 +69,7 @@ export function Unit({
 		</Box>
 	);
 
-	if (type === 'PAGES') {
+	if (type === "PAGES") {
 		return (
 			<Page
 				key={node.key}
@@ -83,7 +83,7 @@ export function Unit({
 		);
 	}
 
-	if (type === 'ITEMS') {
+	if (type === "ITEMS") {
 		return (
 			<ListItem
 				key={node.key}
@@ -99,16 +99,16 @@ export function Unit({
 		);
 	}
 
-	throw new Error('Unhandled Window Unit type');
+	throw new Error("Unhandled Window Unit type");
 }
 
 type ListItemProps = {
-	isFocus: Props['isDeepFocus'];
-	isShallowFocus: Props['isShallowFocus'];
-	index: Props['index'];
-	items: Props['items'];
-	setItems: Props['setItems'];
-	control: Props['control'];
+	isFocus: Props["isDeepFocus"];
+	isShallowFocus: Props["isShallowFocus"];
+	index: Props["index"];
+	items: Props["items"];
+	setItems: Props["setItems"];
+	control: Props["control"];
 } & React.PropsWithChildren;
 
 function ListItem(props: ListItemProps): React.ReactNode {
@@ -124,8 +124,8 @@ function ListItem(props: ListItemProps): React.ReactNode {
 				items: props.items,
 				setItems: props.setItems,
 				control: props.control,
-				onFocus: onFocusChangeGenerator('onFocus'),
-				onBlur: onFocusChangeGenerator('onBlur'),
+				onFocus: onFocusChangeGenerator("onFocus"),
+				onBlur: onFocusChangeGenerator("onBlur"),
 			}}
 		>
 			{props.children}
@@ -133,10 +133,7 @@ function ListItem(props: ListItemProps): React.ReactNode {
 	);
 }
 
-type PageProps = Pick<
-	ListItemProps,
-	'isFocus' | 'isShallowFocus' | 'index' | 'control'
-> &
+type PageProps = Pick<ListItemProps, "isFocus" | "isShallowFocus" | "index" | "control"> &
 	React.PropsWithChildren;
 
 function Page(props: PageProps): React.ReactNode {
@@ -149,8 +146,8 @@ function Page(props: PageProps): React.ReactNode {
 				isShallowFocus: props.isShallowFocus,
 				index: props.index,
 				control: props.control,
-				onPageFocus: onFocusChangeGenerator('onFocus'),
-				onPageBlur: onFocusChangeGenerator('onBlur'),
+				onPageFocus: onFocusChangeGenerator("onFocus"),
+				onPageBlur: onFocusChangeGenerator("onBlur"),
 			}}
 		>
 			{props.children}
@@ -166,11 +163,11 @@ function useFocusChangeGenerators(isFocus: boolean) {
 	const cache: {
 		onFocus: (() => any)[];
 		onLeaveFocus: (() => any)[];
-	} = {onFocus: [], onLeaveFocus: []};
+	} = { onFocus: [], onLeaveFocus: [] };
 
-	const onFocusChangeGenerator = (type: 'onFocus' | 'onBlur') => {
+	const onFocusChangeGenerator = (type: "onFocus" | "onBlur") => {
 		return (cb: () => any) => {
-			if (type === 'onFocus') {
+			if (type === "onFocus") {
 				cache.onFocus.push(cb);
 			} else {
 				cache.onLeaveFocus.push(cb);
@@ -182,11 +179,11 @@ function useFocusChangeGenerators(isFocus: boolean) {
 
 	useEffect(() => {
 		if (isFocus) {
-			cache.onFocus.forEach(cb => cb());
+			cache.onFocus.forEach((cb) => cb());
 			hasBeenFocused.current = true;
 		} else {
 			if (hasBeenFocused.current) {
-				cache.onLeaveFocus.forEach(cb => cb());
+				cache.onLeaveFocus.forEach((cb) => cb());
 			}
 		}
 	}, [isFocus]);
@@ -204,12 +201,12 @@ function useMultipleEventsWithoutContextChecks(nextListeners: Listener[]) {
 
 	useEffect(() => {
 		oldListeners.current = nextListeners;
-		nextListeners.forEach(listener => {
+		nextListeners.forEach((listener) => {
 			DefaultStdin.Keyboard.addEventListener(listener.event, listener.handler);
 		});
 
 		return () => {
-			oldListeners.current.forEach(listener => {
+			oldListeners.current.forEach((listener) => {
 				DefaultStdin.Keyboard.removeEventListener(
 					listener.event,
 					listener.handler,

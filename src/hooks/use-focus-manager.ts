@@ -1,36 +1,36 @@
-import {useContext} from 'react';
-import FocusContext, {type Props} from '../components/FocusContext.js';
+import { useContext } from "react";
+import FocusContext, { type Props } from "../components/FocusContext.js";
 
 type Output = {
 	/**
 	 * Enable focus management for all components.
 	 */
-	enableFocus: Props['enableFocus'];
+	enableFocus: Props["enableFocus"];
 
 	/**
 	 * Disable focus management for all components. Currently active component (if there's one) will lose its focus.
 	 */
-	disableFocus: Props['disableFocus'];
+	disableFocus: Props["disableFocus"];
 
 	/**
 	 * Switch focus to the next focusable component.
 	 * If there's no active component right now, focus will be given to the first focusable component.
 	 * If active component is the last in the list of focusable components, focus will be switched to the first component.
 	 */
-	focusNext: Props['focusNext'];
+	focusNext: Props["focusNext"];
 
 	/**
 	 * Switch focus to the previous focusable component.
 	 * If there's no active component right now, focus will be given to the first focusable component.
 	 * If active component is the first in the list of focusable components, focus will be switched to the last component.
 	 */
-	focusPrevious: Props['focusPrevious'];
+	focusPrevious: Props["focusPrevious"];
 
 	/**
 	 * Switch focus to the element with provided `id`.
 	 * If there's no element with that `id`, focus will be given to the first focusable component.
 	 */
-	focus: Props['focus'];
+	focus: Props["focus"];
 };
 
 /**

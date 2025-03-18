@@ -1,16 +1,16 @@
-import React from 'react';
-import {Except} from 'type-fest';
-import {CliProps, AbstractCli} from './AbstractCli.js';
-import {Props as ModalProps, Modal} from '../modal/Modal.js';
-import {useModal} from '../modal/useModal.js';
+import React from "react";
+import { Except } from "type-fest";
+import { CliProps, AbstractCli } from "./AbstractCli.js";
+import { Props as ModalProps, Modal } from "../modal/Modal.js";
+import { useModal } from "../modal/useModal.js";
 
-type CliModalProps = Except<CliProps, 'actionPrompt' | 'message'> &
-	Except<ModalProps, 'modal'>;
+type CliModalProps = Except<CliProps, "actionPrompt" | "message"> &
+	Except<ModalProps, "modal">;
 export function CliModal(props: CliModalProps): React.ReactNode {
 	const {
 		commands,
-		enterKeymap = [{input: ':'}],
-		exitKeymap = [{key: 'return'}, {key: 'esc'}],
+		enterKeymap = [{ input: ":" }],
+		exitKeymap = [{ key: "return" }, { key: "esc" }],
 		prompt,
 		inputStyles,
 		resolveStyles,
@@ -19,7 +19,7 @@ export function CliModal(props: CliModalProps): React.ReactNode {
 		...modalProps
 	} = props;
 
-	const {modal, hideModal, showModal} = useModal({
+	const { modal, hideModal, showModal } = useModal({
 		show: enterKeymap,
 		hide: null,
 	});

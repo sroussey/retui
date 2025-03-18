@@ -1,24 +1,24 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
-import {type Boxes, type BoxStyle} from 'cli-boxes';
-import Yoga, {type Node as YogaNode} from 'yoga-wasm-web/auto';
-import {Title} from './renderTitles/renderTitleToOutput.js';
-import {Color} from './utility/types.js';
-import {MouseEventHandler} from './index.js';
-import {StylesConfig} from './utility/types.js';
-import {IntrinsicWindowBaseProps} from './window/Window.js';
+import { type Boxes, type BoxStyle } from "cli-boxes";
+import Yoga, { type Node as YogaNode } from "yoga-wasm-web/auto";
+import { Title } from "./renderTitles/renderTitleToOutput.js";
+import { Color } from "./utility/types.js";
+import { MouseEventHandler } from "./index.js";
+import { StylesConfig } from "./utility/types.js";
+import { IntrinsicWindowBaseProps } from "./window/Window.js";
 
 export type BaseProps = {
 	readonly textWrap?:
-		| 'wrap'
-		| 'end'
-		| 'middle'
-		| 'truncate-end'
-		| 'truncate'
-		| 'truncate-middle'
-		| 'truncate-start'
-		| 'overflow';
+		| "wrap"
+		| "end"
+		| "middle"
+		| "truncate-end"
+		| "truncate"
+		| "truncate-middle"
+		| "truncate-start"
+		| "overflow";
 
-	readonly position?: 'absolute' | 'relative';
+	readonly position?: "absolute" | "relative";
 
 	readonly titleTopLeft?: Title;
 	readonly titleTopCenter?: Title;
@@ -32,10 +32,10 @@ export type BaseProps = {
 	 * in styles found in the styles prop and normal props will overwrite in favor
 	 * of the normal props.
 	 */
-	readonly styles?: StylesConfig['Box'];
+	readonly styles?: StylesConfig["Box"];
 
-	readonly leftActive?: StylesConfig['Box'];
-	readonly rightActive?: StylesConfig['Box'];
+	readonly leftActive?: StylesConfig["Box"];
+	readonly rightActive?: StylesConfig["Box"];
 
 	/**
 	 * Alters the render order for a component which allows components to appear
@@ -44,7 +44,7 @@ export type BaseProps = {
 	 *
 	 * @default 'auto' (same as 0)
 	 * */
-	readonly zIndex?: number | 'auto';
+	readonly zIndex?: number | "auto";
 
 	/**
 	 * Handle click events on Box components.  Click events will only be read when
@@ -163,7 +163,7 @@ export type BaseProps = {
 	 * It establishes the main-axis, thus defining the direction flex items are placed in the flex container.
 	 * See [flex-direction](https://css-tricks.com/almanac/properties/f/flex-direction/).
 	 */
-	readonly flexDirection?: 'row' | 'column' | 'row-reverse' | 'column-reverse';
+	readonly flexDirection?: "row" | "column" | "row-reverse" | "column-reverse";
 
 	/**
 	 * It specifies the initial size of the flex item, before any available space is distributed according to the flex factors.
@@ -175,30 +175,30 @@ export type BaseProps = {
 	 * It defines whether the flex items are forced in a single line or can be flowed into multiple lines. If set to multiple lines, it also defines the cross-axis which determines the direction new lines are stacked in.
 	 * See [flex-wrap](https://css-tricks.com/almanac/properties/f/flex-wrap/).
 	 */
-	readonly flexWrap?: 'nowrap' | 'wrap' | 'wrap-reverse';
+	readonly flexWrap?: "nowrap" | "wrap" | "wrap-reverse";
 
 	/**
 	 * The align-items property defines the default behavior for how items are laid out along the cross axis (perpendicular to the main axis).
 	 * See [align-items](https://css-tricks.com/almanac/properties/a/align-items/).
 	 */
-	readonly alignItems?: 'flex-start' | 'center' | 'flex-end' | 'stretch';
+	readonly alignItems?: "flex-start" | "center" | "flex-end" | "stretch";
 
 	/**
 	 * It makes possible to override the align-items value for specific flex items.
 	 * See [align-self](https://css-tricks.com/almanac/properties/a/align-self/).
 	 */
-	readonly alignSelf?: 'flex-start' | 'center' | 'flex-end' | 'auto';
+	readonly alignSelf?: "flex-start" | "center" | "flex-end" | "auto";
 
 	/**
 	 * It defines the alignment along the main axis.
 	 * See [justify-content](https://css-tricks.com/almanac/properties/j/justify-content/).
 	 */
 	readonly justifyContent?:
-		| 'flex-start'
-		| 'flex-end'
-		| 'space-between'
-		| 'space-around'
-		| 'center';
+		| "flex-start"
+		| "flex-end"
+		| "space-between"
+		| "space-around"
+		| "center";
 
 	/**
 	 * Width of the element in spaces.
@@ -225,13 +225,13 @@ export type BaseProps = {
 	/**
 	 * Set this property to `none` to hide the element.
 	 */
-	readonly display?: 'flex' | 'none';
+	readonly display?: "flex" | "none";
 
 	/**
 	 * Color the background of the element.  Value set to 'inherit' sets the
 	 * background to the background of the parent Box.
 	 */
-	readonly backgroundColor?: Color | 'inherit';
+	readonly backgroundColor?: Color | "inherit";
 
 	/**
 	 * Wipe the background of the element.  Defaults to false because wiping the
@@ -248,7 +248,7 @@ export type BaseProps = {
 	 * Add a border with a specified style.
 	 * If `borderStyle` is `undefined` (which it is by default), no border will be added.
 	 */
-	readonly borderStyle?: keyof Boxes | BoxStyle | 'inherit';
+	readonly borderStyle?: keyof Boxes | BoxStyle | "inherit";
 
 	/**
 	 * Determines whether top border is visible.
@@ -282,7 +282,7 @@ export type BaseProps = {
 	 * Change border color.
 	 * Shorthand for setting `borderTopColor`, `borderRightColor`, `borderBottomColor` and `borderLeftColor`.
 	 */
-	readonly borderColor?: Color | 'inherit';
+	readonly borderColor?: Color | "inherit";
 
 	/**
 	 * Change top border color.
@@ -349,27 +349,27 @@ export type BaseProps = {
 	 *
 	 * @default 'visible'
 	 */
-	readonly overflow?: 'visible' | 'hidden';
+	readonly overflow?: "visible" | "hidden";
 
 	/**
 	 * Behavior for an element's overflow in horizontal direction.
 	 *
 	 * @default 'visible'
 	 */
-	readonly overflowX?: 'visible' | 'hidden';
+	readonly overflowX?: "visible" | "hidden";
 
 	/**
 	 * Behavior for an element's overflow in vertical direction.
 	 *
 	 * @default 'visible'
 	 */
-	readonly overflowY?: 'visible' | 'hidden';
+	readonly overflowY?: "visible" | "hidden";
 };
 
 const applyPositionStyles = (node: YogaNode, style: BaseProps): void => {
-	if ('position' in style) {
+	if ("position" in style) {
 		node.setPositionType(
-			style.position === 'absolute'
+			style.position === "absolute"
 				? Yoga.POSITION_TYPE_ABSOLUTE
 				: Yoga.POSITION_TYPE_RELATIVE,
 		);
@@ -377,112 +377,110 @@ const applyPositionStyles = (node: YogaNode, style: BaseProps): void => {
 };
 
 const applyMarginStyles = (node: YogaNode, style: BaseProps): void => {
-	if ('margin' in style) {
+	if ("margin" in style) {
 		node.setMargin(Yoga.EDGE_ALL, style.margin ?? 0);
 	}
 
-	if ('marginX' in style) {
+	if ("marginX" in style) {
 		node.setMargin(Yoga.EDGE_HORIZONTAL, style.marginX ?? 0);
 	}
 
-	if ('marginY' in style) {
+	if ("marginY" in style) {
 		node.setMargin(Yoga.EDGE_VERTICAL, style.marginY ?? 0);
 	}
 
-	if ('marginLeft' in style) {
+	if ("marginLeft" in style) {
 		node.setMargin(Yoga.EDGE_START, style.marginLeft || 0);
 	}
 
-	if ('marginRight' in style) {
+	if ("marginRight" in style) {
 		node.setMargin(Yoga.EDGE_END, style.marginRight || 0);
 	}
 
-	if ('marginTop' in style) {
+	if ("marginTop" in style) {
 		node.setMargin(Yoga.EDGE_TOP, style.marginTop || 0);
 	}
 
-	if ('marginBottom' in style) {
+	if ("marginBottom" in style) {
 		node.setMargin(Yoga.EDGE_BOTTOM, style.marginBottom || 0);
 	}
 };
 
 const applyPaddingStyles = (node: YogaNode, style: BaseProps): void => {
-	if ('padding' in style) {
+	if ("padding" in style) {
 		node.setPadding(Yoga.EDGE_ALL, style.padding ?? 0);
 	}
 
-	if ('paddingX' in style) {
+	if ("paddingX" in style) {
 		node.setPadding(Yoga.EDGE_HORIZONTAL, style.paddingX ?? 0);
 	}
 
-	if ('paddingY' in style) {
+	if ("paddingY" in style) {
 		node.setPadding(Yoga.EDGE_VERTICAL, style.paddingY ?? 0);
 	}
 
-	if ('paddingLeft' in style) {
+	if ("paddingLeft" in style) {
 		node.setPadding(Yoga.EDGE_LEFT, style.paddingLeft || 0);
 	}
 
-	if ('paddingRight' in style) {
+	if ("paddingRight" in style) {
 		node.setPadding(Yoga.EDGE_RIGHT, style.paddingRight || 0);
 	}
 
-	if ('paddingTop' in style) {
+	if ("paddingTop" in style) {
 		node.setPadding(Yoga.EDGE_TOP, style.paddingTop || 0);
 	}
 
-	if ('paddingBottom' in style) {
+	if ("paddingBottom" in style) {
 		node.setPadding(Yoga.EDGE_BOTTOM, style.paddingBottom || 0);
 	}
 };
 
 const applyFlexStyles = (node: YogaNode, style: BaseProps): void => {
-	if ('flexGrow' in style) {
+	if ("flexGrow" in style) {
 		node.setFlexGrow(style.flexGrow ?? 0);
 	}
 
-	if ('flexShrink' in style) {
-		node.setFlexShrink(
-			typeof style.flexShrink === 'number' ? style.flexShrink : 1,
-		);
+	if ("flexShrink" in style) {
+		node.setFlexShrink(typeof style.flexShrink === "number" ? style.flexShrink : 1);
 	}
 
-	if ('flexWrap' in style) {
-		if (style.flexWrap === 'nowrap') {
+	if ("flexWrap" in style) {
+		if (style.flexWrap === "nowrap") {
 			node.setFlexWrap(Yoga.WRAP_NO_WRAP);
 		}
 
-		if (style.flexWrap === 'wrap') {
+		if (style.flexWrap === "wrap") {
 			node.setFlexWrap(Yoga.WRAP_WRAP);
 		}
 
-		if (style.flexWrap === 'wrap-reverse') {
+		if (style.flexWrap === "wrap-reverse") {
 			node.setFlexWrap(Yoga.WRAP_WRAP_REVERSE);
 		}
 	}
 
-	if ('flexDirection' in style) {
-		if (style.flexDirection === 'row') {
+	if ("flexDirection" in style) {
+		if (style.flexDirection === "row") {
 			node.setFlexDirection(Yoga.FLEX_DIRECTION_ROW);
 		}
 
-		if (style.flexDirection === 'row-reverse') {
+		if (style.flexDirection === "row-reverse") {
 			node.setFlexDirection(Yoga.FLEX_DIRECTION_ROW_REVERSE);
 		}
 
-		if (style.flexDirection === 'column') {
+		if (style.flexDirection === "column") {
 			node.setFlexDirection(Yoga.FLEX_DIRECTION_COLUMN);
 		}
 
-		if (style.flexDirection === 'column-reverse') {
+		if (style.flexDirection === "column-reverse") {
 			node.setFlexDirection(Yoga.FLEX_DIRECTION_COLUMN_REVERSE);
 		}
 	}
 
-	if ('flexBasis' in style) {
-		if (typeof style.flexBasis === 'number') {
+	if ("flexBasis" in style) {
+		if (typeof style.flexBasis === "number") {
 			node.setFlexBasis(style.flexBasis);
-		} else if (typeof style.flexBasis === 'string') {
+		} else if (typeof style.flexBasis === "string") {
 			node.setFlexBasisPercent(Number.parseInt(style.flexBasis, 10));
 		} else {
 			// This should be replaced with node.setFlexBasisAuto() when new Yoga release is out
@@ -490,96 +488,96 @@ const applyFlexStyles = (node: YogaNode, style: BaseProps): void => {
 		}
 	}
 
-	if ('alignItems' in style) {
-		if (style.alignItems === 'stretch' || !style.alignItems) {
+	if ("alignItems" in style) {
+		if (style.alignItems === "stretch" || !style.alignItems) {
 			node.setAlignItems(Yoga.ALIGN_STRETCH);
 		}
 
-		if (style.alignItems === 'flex-start') {
+		if (style.alignItems === "flex-start") {
 			node.setAlignItems(Yoga.ALIGN_FLEX_START);
 		}
 
-		if (style.alignItems === 'center') {
+		if (style.alignItems === "center") {
 			node.setAlignItems(Yoga.ALIGN_CENTER);
 		}
 
-		if (style.alignItems === 'flex-end') {
+		if (style.alignItems === "flex-end") {
 			node.setAlignItems(Yoga.ALIGN_FLEX_END);
 		}
 	}
 
-	if ('alignSelf' in style) {
-		if (style.alignSelf === 'auto' || !style.alignSelf) {
+	if ("alignSelf" in style) {
+		if (style.alignSelf === "auto" || !style.alignSelf) {
 			node.setAlignSelf(Yoga.ALIGN_AUTO);
 		}
 
-		if (style.alignSelf === 'flex-start') {
+		if (style.alignSelf === "flex-start") {
 			node.setAlignSelf(Yoga.ALIGN_FLEX_START);
 		}
 
-		if (style.alignSelf === 'center') {
+		if (style.alignSelf === "center") {
 			node.setAlignSelf(Yoga.ALIGN_CENTER);
 		}
 
-		if (style.alignSelf === 'flex-end') {
+		if (style.alignSelf === "flex-end") {
 			node.setAlignSelf(Yoga.ALIGN_FLEX_END);
 		}
 	}
 
-	if ('justifyContent' in style) {
-		if (style.justifyContent === 'flex-start' || !style.justifyContent) {
+	if ("justifyContent" in style) {
+		if (style.justifyContent === "flex-start" || !style.justifyContent) {
 			node.setJustifyContent(Yoga.JUSTIFY_FLEX_START);
 		}
 
-		if (style.justifyContent === 'center') {
+		if (style.justifyContent === "center") {
 			node.setJustifyContent(Yoga.JUSTIFY_CENTER);
 		}
 
-		if (style.justifyContent === 'flex-end') {
+		if (style.justifyContent === "flex-end") {
 			node.setJustifyContent(Yoga.JUSTIFY_FLEX_END);
 		}
 
-		if (style.justifyContent === 'space-between') {
+		if (style.justifyContent === "space-between") {
 			node.setJustifyContent(Yoga.JUSTIFY_SPACE_BETWEEN);
 		}
 
-		if (style.justifyContent === 'space-around') {
+		if (style.justifyContent === "space-around") {
 			node.setJustifyContent(Yoga.JUSTIFY_SPACE_AROUND);
 		}
 	}
 };
 
 const applyDimensionStyles = (node: YogaNode, style: BaseProps): void => {
-	if ('width' in style) {
-		if (typeof style.width === 'number') {
+	if ("width" in style) {
+		if (typeof style.width === "number") {
 			node.setWidth(style.width);
-		} else if (typeof style.width === 'string') {
+		} else if (typeof style.width === "string") {
 			node.setWidthPercent(Number.parseInt(style.width, 10));
 		} else {
 			node.setWidthAuto();
 		}
 	}
 
-	if ('height' in style) {
-		if (typeof style.height === 'number') {
+	if ("height" in style) {
+		if (typeof style.height === "number") {
 			node.setHeight(style.height);
-		} else if (typeof style.height === 'string') {
+		} else if (typeof style.height === "string") {
 			node.setHeightPercent(Number.parseInt(style.height, 10));
 		} else {
 			node.setHeightAuto();
 		}
 	}
 
-	if ('minWidth' in style) {
-		if (typeof style.minWidth === 'string') {
+	if ("minWidth" in style) {
+		if (typeof style.minWidth === "string") {
 			node.setMinWidthPercent(Number.parseInt(style.minWidth, 10));
 		} else {
 			node.setMinWidth(style.minWidth ?? 0);
 		}
 	}
 
-	if ('minHeight' in style) {
-		if (typeof style.minHeight === 'string') {
+	if ("minHeight" in style) {
+		if (typeof style.minHeight === "string") {
 			node.setMinHeightPercent(Number.parseInt(style.minHeight, 10));
 		} else {
 			node.setMinHeight(style.minHeight ?? 0);
@@ -588,10 +586,8 @@ const applyDimensionStyles = (node: YogaNode, style: BaseProps): void => {
 };
 
 const applyDisplayStyles = (node: YogaNode, style: BaseProps): void => {
-	if ('display' in style) {
-		node.setDisplay(
-			style.display === 'flex' ? Yoga.DISPLAY_FLEX : Yoga.DISPLAY_NONE,
-		);
+	if ("display" in style) {
+		node.setDisplay(style.display === "flex" ? Yoga.DISPLAY_FLEX : Yoga.DISPLAY_NONE);
 	}
 };
 
@@ -605,7 +601,7 @@ const applyBorderStyles = (
 	node: YogaNode,
 	style: BaseProps & Partial<IntrinsicWindowBaseProps>,
 ): void => {
-	if ('borderStyle' in style) {
+	if ("borderStyle" in style) {
 		const borderWidth = style.borderStyle ? 1 : 0;
 
 		const hasTopTitle =
@@ -648,15 +644,15 @@ const applyBorderStyles = (
 	if (!scrollbar || scrollbar.hide) {
 		return;
 	}
-	if (style.flexDirection === 'column') {
-		if (scrollbar.align === 'start') {
+	if (style.flexDirection === "column") {
+		if (scrollbar.align === "start") {
 			node.setBorder(Yoga.EDGE_LEFT, 1);
 		} else {
 			node.setBorder(Yoga.EDGE_RIGHT, 1);
 		}
 	}
-	if (style.flexDirection === 'row') {
-		if (scrollbar.align === 'start') {
+	if (style.flexDirection === "row") {
+		if (scrollbar.align === "start") {
 			node.setBorder(Yoga.EDGE_TOP, 1);
 		} else {
 			node.setBorder(Yoga.EDGE_BOTTOM, 1);
@@ -665,15 +661,15 @@ const applyBorderStyles = (
 };
 
 const applyGapStyles = (node: YogaNode, style: BaseProps): void => {
-	if ('gap' in style) {
+	if ("gap" in style) {
 		node.setGap(Yoga.GUTTER_ALL, style.gap ?? 0);
 	}
 
-	if ('columnGap' in style) {
+	if ("columnGap" in style) {
 		node.setGap(Yoga.GUTTER_COLUMN, style.columnGap ?? 0);
 	}
 
-	if ('rowGap' in style) {
+	if ("rowGap" in style) {
 		node.setGap(Yoga.GUTTER_ROW, style.rowGap ?? 0);
 	}
 };

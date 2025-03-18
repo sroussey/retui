@@ -1,21 +1,21 @@
-import React from 'react';
-import {render, act} from '@testing-library/react';
-import {describe, expect, test} from 'vitest';
-import assert from 'assert';
-import {Controls, View, newArr} from './View.js';
+import React from "react";
+import { render, act } from "@testing-library/react";
+import { describe, expect, test } from "vitest";
+import assert from "assert";
+import { Controls, View, newArr } from "./View.js";
 
-describe('Does not go out of bounds', () => {
-	const ctl: {current: Controls} = {} as {current: Controls};
+describe("Does not go out of bounds", () => {
+	const ctl: { current: Controls } = {} as { current: Controls };
 
 	render(<View ctl={ctl} startHeight={3} startItems={newArr(5)} />);
 
-	test('Assigns to ctl', () => {
+	test("Assigns to ctl", () => {
 		expect(() => {
 			assert(ctl.current);
 		}).not.toThrow();
 	});
 
-	test('nextItem', () => {
+	test("nextItem", () => {
 		expect(ctl.current.list.control.currentIndex).toBe(0);
 		act(ctl.current.list.control.nextItem);
 		expect(ctl.current.list.control.currentIndex).toBe(1);
@@ -27,13 +27,13 @@ describe('Does not go out of bounds', () => {
 		expect(ctl.current.list.control.currentIndex).toBe(4);
 	});
 
-	test('nextItem at end', () => {
+	test("nextItem at end", () => {
 		act(ctl.current.list.control.nextItem);
 		act(ctl.current.list.control.nextItem);
 		expect(ctl.current.list.control.currentIndex).toBe(4);
 	});
 
-	test('prevItem', () => {
+	test("prevItem", () => {
 		act(ctl.current.list.control.prevItem);
 		expect(ctl.current.list.control.currentIndex).toBe(3);
 		act(ctl.current.list.control.prevItem);
@@ -44,20 +44,20 @@ describe('Does not go out of bounds', () => {
 		expect(ctl.current.list.control.currentIndex).toBe(0);
 	});
 
-	test('prevItem at start', () => {
+	test("prevItem at start", () => {
 		act(ctl.current.list.control.prevItem);
 		act(ctl.current.list.control.prevItem);
 		expect(ctl.current.list.control.currentIndex).toBe(0);
 	});
 
-	test('goToIndex', () => {
+	test("goToIndex", () => {
 		act(() => ctl.current.list.control.goToIndex(4));
 		expect(ctl.current.list.control.currentIndex).toBe(4);
 		act(() => ctl.current.list.control.goToIndex(1));
 		expect(ctl.current.list.control.currentIndex).toBe(1);
 	});
 
-	test('goToIndex out of range', () => {
+	test("goToIndex out of range", () => {
 		act(() => ctl.current.list.control.goToIndex(-5));
 		expect(ctl.current.list.control.currentIndex).toBe(1);
 		act(() => ctl.current.list.control.goToIndex(10));
@@ -71,7 +71,7 @@ describe('Does not go out of bounds', () => {
 		expect(ctl.current.list.control.currentIndex).toBe(19);
 	};
 
-	test('delete at current idx', () => {
+	test("delete at current idx", () => {
 		setItems();
 
 		expect(() => {
@@ -81,7 +81,7 @@ describe('Does not go out of bounds', () => {
 		}).not.toThrow();
 	});
 
-	test('delete at end', () => {
+	test("delete at end", () => {
 		setItems();
 
 		expect(() => {
@@ -91,7 +91,7 @@ describe('Does not go out of bounds', () => {
 		}).not.toThrow();
 	});
 
-	test('delete at start', () => {
+	test("delete at start", () => {
 		expect(ctl.current.list.items.length).toBe(0);
 		setItems();
 
@@ -102,7 +102,7 @@ describe('Does not go out of bounds', () => {
 		}).not.toThrow();
 	});
 
-	test('add at current idx', () => {
+	test("add at current idx", () => {
 		setItems();
 
 		expect(() => {
@@ -112,7 +112,7 @@ describe('Does not go out of bounds', () => {
 		}).not.toThrow();
 	});
 
-	test('add at start', () => {
+	test("add at start", () => {
 		setItems();
 
 		expect(() => {
@@ -122,7 +122,7 @@ describe('Does not go out of bounds', () => {
 		}).not.toThrow();
 	});
 
-	test('add at end', () => {
+	test("add at end", () => {
 		setItems();
 
 		expect(() => {
@@ -132,7 +132,7 @@ describe('Does not go out of bounds', () => {
 		}).not.toThrow();
 	});
 
-	test('Does not throw on certain deletions/resizes', () => {
+	test("Does not throw on certain deletions/resizes", () => {
 		setItems();
 
 		expect(() => {
@@ -142,7 +142,7 @@ describe('Does not go out of bounds', () => {
 		}).not.toThrow();
 	});
 
-	test('Does not throw on certain deletions/resizes', () => {
+	test("Does not throw on certain deletions/resizes", () => {
 		setItems();
 
 		expect(() => {
@@ -151,7 +151,7 @@ describe('Does not go out of bounds', () => {
 		}).not.toThrow();
 	});
 
-	test('Resets index back to zero on 0 to > 0 window size changes', () => {
+	test("Resets index back to zero on 0 to > 0 window size changes", () => {
 		setItems();
 		act(() => ctl.current.list.setItems(newArr(0)));
 		expect(ctl.current.list.control.currentIndex).toBe(0);
@@ -162,7 +162,7 @@ describe('Does not go out of bounds', () => {
 	// This *should* work.  windowSize is modified based on computed dim during
 	// rendering, and it doesn't look like the test environment is consistently
 	// running the rendering function
-	test.todo('Resets index back to zero when minimizing', () => {
+	test.todo("Resets index back to zero when minimizing", () => {
 		setItems(); // we are at a list of 20, at the last index
 		act(() => ctl.current.setHeight(0));
 		expect(ctl.current.list.control.currentIndex).toBe(0);

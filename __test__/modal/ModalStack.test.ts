@@ -1,40 +1,40 @@
-import {describe, it, expect} from 'vitest';
-import ModalStack from '../../src/modal/ModalStack.js';
+import { describe, it, expect } from "vitest";
+import ModalStack from "../../src/modal/ModalStack.js";
 
-const child1 = 'child1';
-const child2 = 'child2';
-const child3 = 'child3';
+const child1 = "child1";
+const child2 = "child2";
+const child3 = "child3";
 
-describe('ModalStack.add', () => {
-	it('None visible', () => {
+describe("ModalStack.add", () => {
+	it("None visible", () => {
 		ModalStack.add(child3, false, 3);
 		ModalStack.add(child2, false, 2);
 		ModalStack.add(child1, false, 1);
 		expect(ModalStack.top()).toBe(0);
 	});
 
-	it('first visible', () => {
+	it("first visible", () => {
 		ModalStack.add(child3, false, 3);
 		ModalStack.add(child2, false, 2);
 		ModalStack.add(child1, true, 1);
 		expect(ModalStack.top()).toBe(1);
 	});
 
-	it('first and second visible', () => {
+	it("first and second visible", () => {
 		ModalStack.add(child3, false, 3);
 		ModalStack.add(child2, true, 2);
 		ModalStack.add(child1, true, 1);
 		expect(ModalStack.top()).toBe(2);
 	});
 
-	it('all visible', () => {
+	it("all visible", () => {
 		ModalStack.add(child3, true, 3);
 		ModalStack.add(child2, true, 2);
 		ModalStack.add(child1, true, 1);
 		expect(ModalStack.top()).toBe(3);
 	});
 
-	it('does not cause errors when adding twice', () => {
+	it("does not cause errors when adding twice", () => {
 		ModalStack.add(child3, true, 3);
 		ModalStack.add(child2, true, 2);
 		ModalStack.add(child1, true, 1);
@@ -47,8 +47,8 @@ describe('ModalStack.add', () => {
 	});
 });
 
-describe('ModalStack.remove', () => {
-	it('remove 3', () => {
+describe("ModalStack.remove", () => {
+	it("remove 3", () => {
 		ModalStack.add(child3, true, 3);
 		ModalStack.add(child2, true, 2);
 		ModalStack.add(child1, true, 1);
@@ -64,7 +64,7 @@ describe('ModalStack.remove', () => {
 	// Impossible to do in the react ecosystem in a way that isn't transient,
 	// but it shouldn't throw errors.  Since parents are unmounted first, there will
 	// be transient cases where child components are still registered in the ModalStack
-	it('remove parents before children is predictable and does not throw', () => {
+	it("remove parents before children is predictable and does not throw", () => {
 		expect(() => {
 			ModalStack.remove(child1);
 			expect(ModalStack.top()).toBe(3);

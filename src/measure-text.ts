@@ -1,4 +1,4 @@
-import widestLine from 'widest-line';
+import widestLine from "widest-line";
 
 const cache: Record<string, Output> = {};
 
@@ -22,10 +22,10 @@ const measureText = (text: string): Output => {
 	}
 
 	const width = widestLine(text);
-	const height = text.split('\n').length;
-	cache[text] = {width, height};
+	const height = text.split("\n").length;
+	cache[text] = { width, height };
 
-	return {width, height};
+	return { width, height };
 };
 
 export default measureText;

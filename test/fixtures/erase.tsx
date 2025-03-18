@@ -1,6 +1,6 @@
-import process from 'node:process';
-import React from 'react';
-import {Box, Text, render} from '../../src/index.js';
+import process from "node:process";
+import React from "react";
+import { Box, Text, render } from "../../src/index.js";
 
 function Erase() {
 	return (

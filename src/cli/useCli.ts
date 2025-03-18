@@ -1,15 +1,11 @@
-import {useState} from 'react';
-import {useTextInput} from '../textInput/useTextInput.js';
-import {Except} from 'type-fest';
-import {TextProps} from '../index.js';
+import { useState } from "react";
+import { useTextInput } from "../textInput/useTextInput.js";
+import { Except } from "type-fest";
+import { TextProps } from "../index.js";
 
-export type StyleType = 'INPUT' | 'RESOLVE' | 'REJECT';
-export type SetValue = (
-	style: StyleType,
-	value: string,
-	insert?: boolean,
-) => void;
-export type TextStyles = Except<TextProps, 'wrap' | 'children'>;
+export type StyleType = "INPUT" | "RESOLVE" | "REJECT";
+export type SetValue = (style: StyleType, value: string, insert?: boolean) => void;
+export type TextStyles = Except<TextProps, "wrap" | "children">;
 
 /*
  * Wraps the setValue function from useTextInput in a function that updates the state
@@ -25,8 +21,8 @@ export function useCli({
 	rejectStyles?: TextStyles;
 	resolveStyles?: TextStyles;
 }) {
-	const {onChange, setValue, insert, enterInsert, value} = useTextInput();
-	const [textStyleType, setTextStyleType] = useState<StyleType>('INPUT');
+	const { onChange, setValue, insert, enterInsert, value } = useTextInput();
+	const [textStyleType, setTextStyleType] = useState<StyleType>("INPUT");
 	const hasStyles = inputStyles || rejectStyles || resolveStyles;
 
 	const internalSetValue: SetValue = (
@@ -42,13 +38,13 @@ export function useCli({
 
 	let textStyle: TextStyles = {};
 	if (hasStyles) {
-		if (textStyleType === 'INPUT' && inputStyles) {
+		if (textStyleType === "INPUT" && inputStyles) {
 			textStyle = inputStyles;
 		}
-		if (textStyleType === 'REJECT' && rejectStyles) {
+		if (textStyleType === "REJECT" && rejectStyles) {
 			textStyle = rejectStyles;
 		}
-		if (textStyleType === 'RESOLVE' && resolveStyles) {
+		if (textStyleType === "RESOLVE" && resolveStyles) {
 			textStyle = resolveStyles;
 		}
 	}

@@ -1,5 +1,5 @@
-import React, {useMemo, useState, useLayoutEffect, type ReactNode} from 'react';
-import {type BaseProps} from '../baseProps.js';
+import React, { useMemo, useState, useLayoutEffect, type ReactNode } from "react";
+import { type BaseProps } from "../baseProps.js";
 
 export type Props<T> = {
 	/**
@@ -33,7 +33,7 @@ export type Props<T> = {
  * to display a list of generated pages, while still displaying a live progress bar.
  */
 export default function Static<T>(props: Props<T>) {
-	const {items, children: render, style: customStyle} = props;
+	const { items, children: render, style: customStyle } = props;
 	const [index, setIndex] = useState(0);
 
 	const itemsToRender: T[] = useMemo(() => {
@@ -50,8 +50,8 @@ export default function Static<T>(props: Props<T>) {
 
 	const style: BaseProps = useMemo(
 		() => ({
-			position: 'absolute',
-			flexDirection: 'column',
+			position: "absolute",
+			flexDirection: "column",
 			...customStyle,
 		}),
 		[customStyle],

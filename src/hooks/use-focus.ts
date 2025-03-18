@@ -1,6 +1,6 @@
-import {useEffect, useContext, useMemo} from 'react';
-import FocusContext from '../components/FocusContext.js';
-import useStdin from './use-stdin.js';
+import { useEffect, useContext, useMemo } from "react";
+import FocusContext from "../components/FocusContext.js";
+import useStdin from "./use-stdin.js";
 
 type Input = {
 	/**
@@ -44,8 +44,8 @@ const useFocus = ({
 	autoFocus = false,
 	id: customId,
 }: Input = {}): Output => {
-	const {isRawModeSupported, setRawMode} = useStdin();
-	const {activeId, add, remove, activate, deactivate, focus} =
+	const { isRawModeSupported, setRawMode } = useStdin();
+	const { activeId, add, remove, activate, deactivate, focus } =
 		useContext(FocusContext);
 
 	const id = useMemo(() => {
@@ -53,7 +53,7 @@ const useFocus = ({
 	}, [customId]);
 
 	useEffect(() => {
-		add(id, {autoFocus});
+		add(id, { autoFocus });
 
 		return () => {
 			remove(id);

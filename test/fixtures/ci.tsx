@@ -1,5 +1,5 @@
-import React from 'react';
-import {render, Static, Text} from '../../src/index.js';
+import React from "react";
+import { render, Static, Text } from "../../src/index.js";
 
 type TestState = {
 	counter: number;
@@ -18,7 +18,7 @@ class Test extends React.Component<Record<string, unknown>, TestState> {
 		return (
 			<>
 				<Static items={this.state.items}>
-					{item => <Text key={item}>{item}</Text>}
+					{(item) => <Text key={item}>{item}</Text>}
 				</Static>
 
 				<Text>Counter: {this.state.counter}</Text>
@@ -32,7 +32,7 @@ class Test extends React.Component<Record<string, unknown>, TestState> {
 				return;
 			}
 
-			this.setState(prevState => ({
+			this.setState((prevState) => ({
 				counter: prevState.counter + 1,
 				items: [...prevState.items, `#${prevState.counter + 1}`],
 			}));

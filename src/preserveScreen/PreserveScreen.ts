@@ -1,15 +1,15 @@
-import {spawnSync} from 'child_process';
+import { spawnSync } from "child_process";
 
 const State = {
 	ShouldPreserveScreen: false,
 };
 
 export function saveScreenState(): void {
-	spawnSync('tput', ['smcup'], {stdio: 'inherit'});
+	spawnSync("tput", ["smcup"], { stdio: "inherit" });
 }
 
 export function restoreScreenState(): void {
-	spawnSync('tput', ['rmcup'], {stdio: 'inherit'});
+	spawnSync("tput", ["rmcup"], { stdio: "inherit" });
 }
 
 export function preserveScreen(): void {
@@ -21,7 +21,7 @@ export function preserveScreen(): void {
 	};
 
 	saveScreenState();
-	process.on('exit', onExit);
+	process.on("exit", onExit);
 }
 
 export default {

@@ -1,30 +1,23 @@
-import React, {useEffect, useRef, useState} from 'react';
-import Text from '../components/Text.js';
+import React, { useEffect, useRef, useState } from "react";
+import Text from "../components/Text.js";
 import {
 	State as UseTextInputState,
 	Return as UseTextInputReturn,
-} from './useTextInput.js';
-import {randomUUID} from 'crypto';
-import {
-	Box,
-	BoxProps,
-	TextProps,
-	KeyInput,
-	useIsFocus,
-	useKeymap,
-} from '../index.js';
-import ControlKeymap from './ControlKeymap.js';
-import chalk from 'chalk';
-import colorize from '../colorize.js';
-import {Except} from 'type-fest';
-import {useAdjustWindowSize} from './useAdjustWindowSize.js';
-import {DefaultStdin} from '../stdin/Stdin.js';
+} from "./useTextInput.js";
+import { randomUUID } from "crypto";
+import { Box, BoxProps, TextProps, KeyInput, useIsFocus, useKeymap } from "../index.js";
+import ControlKeymap from "./ControlKeymap.js";
+import chalk from "chalk";
+import colorize from "../colorize.js";
+import { Except } from "type-fest";
+import { useAdjustWindowSize } from "./useAdjustWindowSize.js";
+import { DefaultStdin } from "../stdin/Stdin.js";
 
-type Color = Exclude<BoxProps['borderColor'], 'inherit'>;
+type Color = Exclude<BoxProps["borderColor"], "inherit">;
 
 type Props = {
-	onChange: UseTextInputReturn['onChange'];
-	inputStyle?: 'line' | 'area';
+	onChange: UseTextInputReturn["onChange"];
+	inputStyle?: "line" | "area";
 	onExit?: (value: string, stdin: string) => unknown;
 	onEnter?: (value: string, stdin: string) => unknown;
 	onDownArrow?: () => unknown;
@@ -33,7 +26,7 @@ type Props = {
 	enterKeymap?: KeyInput;
 	exitKeymap?: KeyInput;
 	cursorColor?: Color;
-	textStyle?: Except<TextProps, 'children' | 'wrap'>;
+	textStyle?: Except<TextProps, "children" | "wrap">;
 	autoEnter?: boolean;
 };
 
@@ -46,21 +39,21 @@ export function TextInput({
 	onDownArrow,
 	enterKeymap = ControlKeymap.defaultEnter,
 	exitKeymap = ControlKeymap.defaultExit,
-	cursorColor = 'white',
+	cursorColor = "white",
 	textStyle,
 	autoEnter,
-	inputStyle = 'line',
+	inputStyle = "line",
 }: Props): React.ReactNode {
-	const {state, update} = onChange();
-	const {availableWidth, ref} = useAdjustWindowSize(state, update);
+	const { state, update } = onChange();
+	const { availableWidth, ref } = useAdjustWindowSize(state, update);
 
 	const calculateNextWindow = (
 		nextState: UseTextInputState,
-		dir: 'left' | 'right',
+		dir: "left" | "right",
 	): UseTextInputState => {
-		const copy = {...nextState};
+		const copy = { ...nextState };
 
-		if (dir === 'right') {
+		if (dir === "right") {
 			copy.idx = copy.idx + 1 <= copy.value.length ? copy.idx + 1 : copy.idx;
 
 			if (copy.idx > copy.window.end) {
@@ -73,7 +66,7 @@ export function TextInput({
 			}
 		}
 
-		if (dir === 'left') {
+		if (dir === "left") {
 			copy.idx = copy.idx - 1 >= 0 ? copy.idx - 1 : copy.idx;
 
 			if (copy.window.end - 1 === copy.idx) {
@@ -90,21 +83,21 @@ export function TextInput({
 	const [ID] = useState(randomUUID());
 	const ScopedEvents = ControlKeymap.getScopedEvents(ID);
 	const [InsertKeymap, Exit] = ControlKeymap.getInsertKeymap(ID, exitKeymap, {
-		allowBreaking: inputStyle === 'area',
+		allowBreaking: inputStyle === "area",
 	});
 	const [NormalKeymap, Enter] = ControlKeymap.getNormalKeymap(ID, enterKeymap);
 
 	const isFocus = useIsFocus();
 	const KeyMap = state.insert ? InsertKeymap : NormalKeymap;
 	const priority =
-		state.insert && isFocus ? 'textinput' : isFocus ? 'default' : 'never';
-	const {useEvent} = useKeymap(KeyMap, {
+		state.insert && isFocus ? "textinput" : isFocus ? "default" : "never";
+	const { useEvent } = useKeymap(KeyMap, {
 		priority,
 	});
 
 	const handleExit = () => {
 		DefaultStdin.Keyboard.setTextInputMode(false);
-		update({...state, insert: false});
+		update({ ...state, insert: false });
 
 		// This is a bad idea.  onExit should be explicit
 		// onExit?.(state.value, stdin);
@@ -126,7 +119,7 @@ export function TextInput({
 			value: state.value,
 			insert: true,
 			idx: state.value.length,
-			window: {...state.window, start: nextStart, end: nextEnd},
+			window: { ...state.window, start: nextStart, end: nextEnd },
 		});
 		onEnter?.(state.value, stdin);
 	};
@@ -140,14 +133,14 @@ export function TextInput({
 		}
 		if (autoEnter && isFocus) {
 			firstEnter.current = false;
-			handleEnter('');
+			handleEnter("");
 		}
 	}, [availableWidth, isFocus]);
 
 	useEffect(() => {
 		// If autoenter make sure insert is toggled to true
 		if (autoEnter && isFocus) {
-			handleEnter('');
+			handleEnter("");
 		}
 
 		// Make sure unfocusing also sets insert to false and executes exit handler
@@ -158,7 +151,7 @@ export function TextInput({
 
 	useEffect(() => {
 		if (state.insert) {
-			onEnter?.(state.value, '');
+			onEnter?.(state.value, "");
 		}
 	}, [state.insert]);
 
@@ -169,9 +162,9 @@ export function TextInput({
 	});
 
 	useEvent(ScopedEvents.keypress, (char: string) => {
-		char = pruneNonPrintables(char, {allowBreaking: inputStyle === 'area'});
+		char = pruneNonPrintables(char, { allowBreaking: inputStyle === "area" });
 		onKeypress?.(char);
-		if (char === '') return;
+		if (char === "") return;
 
 		const leftSlice = state.value.slice(0, state.idx);
 		const rightSlice = state.value.slice(state.idx);
@@ -179,12 +172,12 @@ export function TextInput({
 
 		if (char.length === 1) {
 			const nextState = calculateNextWindow(
-				{...state, value: nextValue, stdin: char},
-				'right',
+				{ ...state, value: nextValue, stdin: char },
+				"right",
 			);
 			update(nextState);
 		} else {
-			const copy = {...state, value: nextValue, stdin: char};
+			const copy = { ...state, value: nextValue, stdin: char };
 			copy.idx += char.length;
 
 			if (copy.idx > copy.window.end) {
@@ -201,12 +194,12 @@ export function TextInput({
 	});
 
 	useEvent(ScopedEvents.left, () => {
-		const nextState = calculateNextWindow(state, 'left');
+		const nextState = calculateNextWindow(state, "left");
 		update(nextState);
 	});
 
 	useEvent(ScopedEvents.right, () => {
-		const nextState = calculateNextWindow(state, 'right');
+		const nextState = calculateNextWindow(state, "right");
 		update(nextState);
 	});
 
@@ -216,29 +209,29 @@ export function TextInput({
 		const rightSlice = state.value.slice(state.idx);
 		const nextValue = leftSlice + rightSlice;
 
-		const nextState = calculateNextWindow({...state, value: nextValue}, 'left');
+		const nextState = calculateNextWindow({ ...state, value: nextValue }, "left");
 		update(nextState);
 	});
 
 	useEvent(ScopedEvents.return, () => {
 		// Reminder that this event (or any of these events) will be pruned if
 		// they are assigned to the exit binding
-		if (inputStyle !== 'area') return;
+		if (inputStyle !== "area") return;
 
 		const nextValue =
-			state.value.slice(0, state.idx) + '\n' + state.value.slice(state.idx);
+			state.value.slice(0, state.idx) + "\n" + state.value.slice(state.idx);
 		const nextIdx = state.idx + 1;
-		update({...state, idx: nextIdx, value: nextValue});
+		update({ ...state, idx: nextIdx, value: nextValue });
 	});
 
 	useEvent(ScopedEvents.tab, () => {
 		// Handle differently if FormFocus
-		if (inputStyle !== 'area') return;
+		if (inputStyle !== "area") return;
 
 		const nextValue =
-			state.value.slice(0, state.idx) + '    ' + state.value.slice(state.idx);
+			state.value.slice(0, state.idx) + "    " + state.value.slice(state.idx);
 
-		update({...state, idx: state.idx + 4, value: nextValue});
+		update({ ...state, idx: state.idx + 4, value: nextValue });
 	});
 
 	useEvent(ScopedEvents.up, () => {
@@ -272,8 +265,8 @@ type DisplayTextProps = {
 	state: UseTextInputState;
 	availableWidth: number;
 	cursorColor: Color;
-	textStyle: Props['textStyle'];
-	inputStyle: 'line' | 'area';
+	textStyle: Props["textStyle"];
+	inputStyle: "line" | "area";
 };
 
 function DisplayText(props: DisplayTextProps): React.ReactNode {
@@ -281,32 +274,32 @@ function DisplayText(props: DisplayTextProps): React.ReactNode {
 		value,
 		idx,
 		insert,
-		window: {start, end},
+		window: { start, end },
 	} = props.state;
 
 	const styles = props.textStyle ?? {};
 	const cursorColor = props.cursorColor;
 
 	if (!insert) {
-		if (props.inputStyle === 'line') {
+		if (props.inputStyle === "line") {
 			return (
 				<Text wrap="truncate-end" {...styles}>
-					{value.length ? value : ' '}
+					{value.length ? value : " "}
 				</Text>
 			);
 		} else {
 			return (
 				<Text wrap="wrap" {...styles}>
-					{value.length ? value : ' '}
+					{value.length ? value : " "}
 				</Text>
 			);
 		}
 	}
 
 	let leftValue = value.slice(start, idx);
-	let cursorValue = value[idx] ?? '\u00A0'; // non-breaking space
-	if (cursorValue === '\n') {
-		cursorValue = '\u00A0' + '\n';
+	let cursorValue = value[idx] ?? "\u00A0"; // non-breaking space
+	if (cursorValue === "\n") {
+		cursorValue = "\u00A0" + "\n";
 	}
 
 	let rightStop = end;
@@ -314,10 +307,10 @@ function DisplayText(props: DisplayTextProps): React.ReactNode {
 
 	let rightValue = value.slice(idx + 1, rightStop);
 
-	cursorValue = colorize(cursorValue, cursorColor, 'foreground');
+	cursorValue = colorize(cursorValue, cursorColor, "foreground");
 	cursorValue = chalk.inverse(cursorValue);
 
-	if (props.inputStyle === 'line') {
+	if (props.inputStyle === "line") {
 		return (
 			<Box backgroundColor="inherit">
 				<Text wrap="overflow" {...styles}>
@@ -341,10 +334,10 @@ function DisplayText(props: DisplayTextProps): React.ReactNode {
 	}
 }
 
-function pruneNonPrintables(c: string, opts: {allowBreaking: boolean}) {
+function pruneNonPrintables(c: string, opts: { allowBreaking: boolean }) {
 	// Trim escape codes that somehow made their way through.  left/right arrow
 	// keys were slipping through.
-	const prePrune = c.replace(/\x1b\[[0-9;]*[A-Za-z]/g, '');
+	const prePrune = c.replace(/\x1b\[[0-9;]*[A-Za-z]/g, "");
 
 	if (opts.allowBreaking) {
 		return pruneTextAreaInput(prePrune);
@@ -356,8 +349,8 @@ function pruneNonPrintables(c: string, opts: {allowBreaking: boolean}) {
 function pruneSingleLineInput(c: string): string {
 	const charCode = c.charCodeAt(0);
 
-	if (charCode <= 31) return '';
-	if (charCode === 127) return '';
+	if (charCode <= 31) return "";
+	if (charCode === 127) return "";
 
 	if (c.length > 1) {
 		let word = c.slice(1);
@@ -365,9 +358,9 @@ function pruneSingleLineInput(c: string): string {
 			const charCode = word[i]?.charCodeAt(0);
 			if (
 				charCode !== undefined &&
-				(charCode <= 31 || word[i] === '\n' || word[i] === '\t')
+				(charCode <= 31 || word[i] === "\n" || word[i] === "\t")
 			) {
-				word = word.slice(0, i) + ' ' + word.slice(i + 1, word.length);
+				word = word.slice(0, i) + " " + word.slice(i + 1, word.length);
 			}
 		}
 		return word;
@@ -377,18 +370,18 @@ function pruneSingleLineInput(c: string): string {
 }
 
 function pruneTextAreaInput(c: string): string {
-	let word = '';
+	let word = "";
 	for (let i = 0; i < c.length; ++i) {
 		const char = c[i];
 		if (char) {
-			if (char !== '\n' && char !== '\t') {
+			if (char !== "\n" && char !== "\t") {
 				const charCode = char.charCodeAt(0);
 				if (charCode <= 31 || charCode === 127) {
 					continue;
 				}
 			}
-			if (char === '\t') {
-				word += '    ';
+			if (char === "\t") {
+				word += "    ";
 			}
 			word += char;
 		}

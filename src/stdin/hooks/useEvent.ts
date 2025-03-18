@@ -1,11 +1,11 @@
-import {useEffect} from 'react';
-import {DefaultStdin} from '../Stdin.js';
-import {useIsFocus} from '../../focus/FocusContext.js';
-import {KeyOf} from '../../utility/types.js';
-import {useModalLevel} from '../../modal/ModalContext.js';
-import ModalStack from '../../modal/ModalStack.js';
-import {KeyMap} from '../Keyboard.js';
-import {KeyInput} from '../../index.js';
+import { useEffect } from "react";
+import { DefaultStdin } from "../Stdin.js";
+import { useIsFocus } from "../../focus/FocusContext.js";
+import { KeyOf } from "../../utility/types.js";
+import { useModalLevel } from "../../modal/ModalContext.js";
+import ModalStack from "../../modal/ModalStack.js";
+import { KeyMap } from "../Keyboard.js";
+import { KeyInput } from "../../index.js";
 
 export namespace T {
 	export interface UseEvent<T extends KeyMap = any> {
@@ -25,7 +25,7 @@ export namespace T {
 	}[];
 }
 
-export type {T as UseEventTypes};
+export type { T as UseEventTypes };
 
 export function useEvent<T extends KeyMap = any>(
 	event: KeyOf<T>,
@@ -57,5 +57,5 @@ export function useEvent<T extends KeyMap = any>(
 export function useTypedEvent<T extends KeyMap>(): {
 	useEvent: T.UseEvent<T>;
 } {
-	return {useEvent: useEvent as T.UseEvent<T>};
+	return { useEvent: useEvent as T.UseEvent<T> };
 }

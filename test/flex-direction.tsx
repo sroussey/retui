@@ -1,9 +1,9 @@
-import React from 'react';
-import test from 'ava';
-import {Box, Text} from '../src/index.js';
-import {renderToString} from './helpers/render-to-string.js';
+import React from "react";
+import test from "ava";
+import { Box, Text } from "../src/index.js";
+import { renderToString } from "./helpers/render-to-string.js";
 
-test('direction row', t => {
+test("direction row", (t) => {
 	const output = renderToString(
 		<Box flexDirection="row">
 			<Text>A</Text>
@@ -11,10 +11,10 @@ test('direction row', t => {
 		</Box>,
 	);
 
-	t.is(output, 'AB');
+	t.is(output, "AB");
 });
 
-test('direction row reverse', t => {
+test("direction row reverse", (t) => {
 	const output = renderToString(
 		<Box flexDirection="row-reverse" width={4}>
 			<Text>A</Text>
@@ -22,10 +22,10 @@ test('direction row reverse', t => {
 		</Box>,
 	);
 
-	t.is(output, '  BA');
+	t.is(output, "  BA");
 });
 
-test('direction column', t => {
+test("direction column", (t) => {
 	const output = renderToString(
 		<Box flexDirection="column">
 			<Text>A</Text>
@@ -33,10 +33,10 @@ test('direction column', t => {
 		</Box>,
 	);
 
-	t.is(output, 'A\nB');
+	t.is(output, "A\nB");
 });
 
-test('direction column reverse', t => {
+test("direction column reverse", (t) => {
 	const output = renderToString(
 		<Box flexDirection="column-reverse" height={4}>
 			<Text>A</Text>
@@ -44,10 +44,10 @@ test('direction column reverse', t => {
 		</Box>,
 	);
 
-	t.is(output, '\n\nB\nA');
+	t.is(output, "\n\nB\nA");
 });
 
-test('don’t squash text nodes when column direction is applied', t => {
+test("don’t squash text nodes when column direction is applied", (t) => {
 	const output = renderToString(
 		<Box flexDirection="column">
 			<Text>A</Text>
@@ -55,5 +55,5 @@ test('don’t squash text nodes when column direction is applied', t => {
 		</Box>,
 	);
 
-	t.is(output, 'A\nB');
+	t.is(output, "A\nB");
 });

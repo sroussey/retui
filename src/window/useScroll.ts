@@ -1,12 +1,12 @@
-import {useRef, useState} from 'react';
-import assert from 'assert';
-import {ScrollAPI, ScrollAPIPublicFns} from './ScrollAPI.js';
-import {Opts as UseWindowOpts} from './useWindow.js';
+import { useRef, useState } from "react";
+import assert from "assert";
+import { ScrollAPI, ScrollAPIPublicFns } from "./ScrollAPI.js";
+import { Opts as UseWindowOpts } from "./useWindow.js";
 
 export type Opts = Pick<
 	UseWindowOpts,
-	'fallthrough' | 'centerScroll' | 'windowSize' | 'startIndex'
-> & {fixedWindowSize?: number};
+	"fallthrough" | "centerScroll" | "windowSize" | "startIndex"
+> & { fixedWindowSize?: number };
 
 export type State = {
 	idx: number;
@@ -23,10 +23,10 @@ export type Return = {
 	WINDOW_SIZE: number;
 };
 
-export type PrevBounds = {start: number; end: number};
+export type PrevBounds = { start: number; end: number };
 
 export function useScroll(itemsLength: number, opts: Opts): Return {
-	assert(opts.windowSize !== 'fit' && opts.windowSize !== undefined);
+	assert(opts.windowSize !== "fit" && opts.windowSize !== undefined);
 
 	const [state, setState] = useState<State>({
 		idx: 0,
@@ -76,7 +76,7 @@ export function useScroll(itemsLength: number, opts: Opts): Return {
 	}
 
 	if (state._winSize > 0) {
-		prevBounds.current = {start: state.start, end: state.end};
+		prevBounds.current = { start: state.start, end: state.end };
 	}
 
 	const scrollState = state;

@@ -1,5 +1,5 @@
-import React from 'react';
-import {render, useInput, useApp} from '../../src/index.js';
+import React from "react";
+import { render, useInput, useApp } from "../../src/index.js";
 
 // function UserInput() {
 // 	const {exit} = useApp();

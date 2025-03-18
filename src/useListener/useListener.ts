@@ -1,5 +1,5 @@
-import EventEmitter from 'events';
-import {useEffect} from 'react';
+import EventEmitter from "events";
+import { useEffect } from "react";
 
 /*
  * Subscribes and unsubscribes to a listener on every render, or every dependency change

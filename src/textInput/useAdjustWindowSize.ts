@@ -1,10 +1,10 @@
-import {useEffect, useRef} from 'react';
-import {useResponsiveDimensions} from '../useResponsiveDimensions/useResponsiveDimensions.js';
-import {Return as UseTextInputReturn} from './useTextInput.js';
+import { useEffect, useRef } from "react";
+import { useResponsiveDimensions } from "../useResponsiveDimensions/useResponsiveDimensions.js";
+import { Return as UseTextInputReturn } from "./useTextInput.js";
 
-type State = ReturnType<UseTextInputReturn['onChange']>['state'];
-type Update = ReturnType<UseTextInputReturn['onChange']>['update'];
-type Return = {ref: any; availableWidth: number};
+type State = ReturnType<UseTextInputReturn["onChange"]>["state"];
+type Update = ReturnType<UseTextInputReturn["onChange"]>["update"];
+type Return = { ref: any; availableWidth: number };
 
 export function useAdjustWindowSize(state: State, update: Update): Return {
 	const responsiveDimensions = useResponsiveDimensions();
@@ -12,15 +12,12 @@ export function useAdjustWindowSize(state: State, update: Update): Return {
 	const previousWidth = useRef(availableWidth);
 
 	useEffect(() => {
-		const copy = {...state, window: {...state.window}};
+		const copy = { ...state, window: { ...state.window } };
 
 		const currWindowSize = copy.window.end - copy.window.start + 1;
 
 		// Decrease in window size
-		if (
-			currWindowSize > availableWidth &&
-			previousWidth.current > availableWidth
-		) {
+		if (currWindowSize > availableWidth && previousWidth.current > availableWidth) {
 			// we are at the end
 			if (copy.window.end === copy.idx) {
 				let i = previousWidth.current - availableWidth;

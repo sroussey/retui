@@ -1,6 +1,6 @@
-import colorize from './colorize.js';
-import {DOMNode} from './dom.js';
-import Output from './output.js';
+import colorize from "./colorize.js";
+import { DOMNode } from "./dom.js";
+import Output from "./output.js";
 
 const renderBackgroundColor = (
 	x: number,
@@ -9,12 +9,10 @@ const renderBackgroundColor = (
 	output: Output,
 	parentHasBg: boolean,
 ): void => {
-	const {backgroundColor, zIndex, wipeBackground, borderStyle} = node.style;
+	const { backgroundColor, zIndex, wipeBackground, borderStyle } = node.style;
 
-	const hasBorder =
-		typeof borderStyle === 'string' || typeof borderStyle === 'object';
-	const hasBackgroundColor =
-		backgroundColor && typeof backgroundColor === 'string';
+	const hasBorder = typeof borderStyle === "string" || typeof borderStyle === "object";
+	const hasBackgroundColor = backgroundColor && typeof backgroundColor === "string";
 
 	// If no backgroundColor property set, respect the explicit setting of false to wipeBackground
 	if (wipeBackground === false && !hasBackgroundColor) return;
@@ -26,7 +24,7 @@ const renderBackgroundColor = (
 			wipe = true;
 		}
 		// Make sure zIndex'd elements actually appear 'above' other elements
-		if (typeof zIndex === 'number' && zIndex > 0) {
+		if (typeof zIndex === "number" && zIndex > 0) {
 			wipe = true;
 		}
 		// If there is a background color set, then the background is wiped as part of the process
@@ -61,10 +59,10 @@ const renderBackgroundColor = (
 		node.style.borderTop === false && --offsetY;
 	}
 
-	let content = '';
+	let content = "";
 	for (let i = 0; i < height; ++i) {
-		const line = ' '.repeat(width);
-		const colorizedLine = colorize(line, backgroundColor, 'background');
+		const line = " ".repeat(width);
+		const colorizedLine = colorize(line, backgroundColor, "background");
 		if (hasBackgroundColor) {
 			content += `${colorizedLine}\n`;
 		} else {
@@ -72,7 +70,7 @@ const renderBackgroundColor = (
 		}
 	}
 
-	output.write(x + offsetX, y + offsetY, content, {transformers: []});
+	output.write(x + offsetX, y + offsetY, content, { transformers: [] });
 };
 
 export default renderBackgroundColor;

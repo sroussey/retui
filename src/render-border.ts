@@ -1,9 +1,9 @@
-import cliBoxes, {Boxes} from 'cli-boxes';
-import chalk from 'chalk';
-import colorize from './colorize.js';
-import {type DOMNode} from './dom.js';
-import type Output from './output.js';
-import {renderTitle} from './renderTitles/renderTitleToOutput.js';
+import cliBoxes, { Boxes } from "cli-boxes";
+import chalk from "chalk";
+import colorize from "./colorize.js";
+import { type DOMNode } from "./dom.js";
+import type Output from "./output.js";
+import { renderTitle } from "./renderTitles/renderTitleToOutput.js";
 
 const renderBorder = (
 	x: number,
@@ -13,9 +13,7 @@ const renderBorder = (
 	zIndexRoot: number,
 ): void => {
 	const hasTopTitle =
-		node.style.titleTopLeft ||
-		node.style.titleTopCenter ||
-		node.style.titleTopRight;
+		node.style.titleTopLeft || node.style.titleTopCenter || node.style.titleTopRight;
 
 	const hasBottomTitle =
 		node.style.titleBottomLeft ||
@@ -26,8 +24,8 @@ const renderBorder = (
 	// and bottom titles.  If there is no borderStyle, just render the titles
 	// and skip rendering the borders.
 	if (!node.style.borderStyle) {
-		hasTopTitle && renderTitle(x, y, node, output, 'top', zIndexRoot);
-		hasBottomTitle && renderTitle(x, y, node, output, 'bottom', zIndexRoot);
+		hasTopTitle && renderTitle(x, y, node, output, "top", zIndexRoot);
+		hasBottomTitle && renderTitle(x, y, node, output, "bottom", zIndexRoot);
 		return;
 	}
 
@@ -36,25 +34,21 @@ const renderBorder = (
 
 	// 'inherit' borderStyle prop will always be reset before rendering border
 	const box =
-		typeof node.style.borderStyle === 'string'
+		typeof node.style.borderStyle === "string"
 			? cliBoxes[node.style.borderStyle as keyof Boxes]
 			: node.style.borderStyle;
 
 	const topBorderColor = node.style.borderTopColor ?? node.style.borderColor;
-	const bottomBorderColor =
-		node.style.borderBottomColor ?? node.style.borderColor;
+	const bottomBorderColor = node.style.borderBottomColor ?? node.style.borderColor;
 	const leftBorderColor = node.style.borderLeftColor ?? node.style.borderColor;
-	const rightBorderColor =
-		node.style.borderRightColor ?? node.style.borderColor;
+	const rightBorderColor = node.style.borderRightColor ?? node.style.borderColor;
 
-	const dimTopBorderColor =
-		node.style.borderTopDimColor ?? node.style.borderDimColor;
+	const dimTopBorderColor = node.style.borderTopDimColor ?? node.style.borderDimColor;
 
 	const dimBottomBorderColor =
 		node.style.borderBottomDimColor ?? node.style.borderDimColor;
 
-	const dimLeftBorderColor =
-		node.style.borderLeftDimColor ?? node.style.borderDimColor;
+	const dimLeftBorderColor = node.style.borderLeftDimColor ?? node.style.borderDimColor;
 
 	const dimRightBorderColor =
 		node.style.borderRightDimColor ?? node.style.borderDimColor;
@@ -64,16 +58,15 @@ const renderBorder = (
 	const showLeftBorder = node.style.borderLeft !== false;
 	const showRightBorder = node.style.borderRight !== false;
 
-	const contentWidth =
-		width - (showLeftBorder ? 1 : 0) - (showRightBorder ? 1 : 0);
+	const contentWidth = width - (showLeftBorder ? 1 : 0) - (showRightBorder ? 1 : 0);
 
 	let topBorder = showTopBorder
 		? colorize(
-				(showLeftBorder ? box.topLeft : '') +
+				(showLeftBorder ? box.topLeft : "") +
 					box.top.repeat(contentWidth) +
-					(showRightBorder ? box.topRight : ''),
+					(showRightBorder ? box.topRight : ""),
 				topBorderColor,
-				'foreground',
+				"foreground",
 			)
 		: undefined;
 
@@ -91,17 +84,17 @@ const renderBorder = (
 		verticalBorderHeight -= 1;
 	}
 
-	let leftBorder = (
-		colorize(box.left, leftBorderColor, 'foreground') + '\n'
-	).repeat(verticalBorderHeight);
+	let leftBorder = (colorize(box.left, leftBorderColor, "foreground") + "\n").repeat(
+		verticalBorderHeight,
+	);
 
 	if (dimLeftBorderColor) {
 		leftBorder = chalk.dim(leftBorder);
 	}
 
-	let rightBorder = (
-		colorize(box.right, rightBorderColor, 'foreground') + '\n'
-	).repeat(verticalBorderHeight);
+	let rightBorder = (colorize(box.right, rightBorderColor, "foreground") + "\n").repeat(
+		verticalBorderHeight,
+	);
 
 	if (dimRightBorderColor) {
 		rightBorder = chalk.dim(rightBorder);
@@ -109,11 +102,11 @@ const renderBorder = (
 
 	let bottomBorder = showBottomBorder
 		? colorize(
-				(showLeftBorder ? box.bottomLeft : '') +
+				(showLeftBorder ? box.bottomLeft : "") +
 					box.bottom.repeat(contentWidth) +
-					(showRightBorder ? box.bottomRight : ''),
+					(showRightBorder ? box.bottomRight : ""),
 				bottomBorderColor,
-				'foreground',
+				"foreground",
 			)
 		: undefined;
 
@@ -125,14 +118,14 @@ const renderBorder = (
 
 	if (topBorder) {
 		if (hasTopTitle) {
-			renderTitle(x, y, node, output, 'top', zIndexRoot);
+			renderTitle(x, y, node, output, "top", zIndexRoot);
 		} else {
-			output.write(x, y, topBorder, {transformers: []});
+			output.write(x, y, topBorder, { transformers: [] });
 		}
 	}
 
 	if (showLeftBorder) {
-		output.write(x, y + offsetY, leftBorder, {transformers: []});
+		output.write(x, y + offsetY, leftBorder, { transformers: [] });
 	}
 
 	if (showRightBorder) {
@@ -143,9 +136,9 @@ const renderBorder = (
 
 	if (bottomBorder) {
 		if (hasBottomTitle) {
-			renderTitle(x, y, node, output, 'bottom', zIndexRoot);
+			renderTitle(x, y, node, output, "bottom", zIndexRoot);
 		} else {
-			output.write(x, y + height - 1, bottomBorder, {transformers: []});
+			output.write(x, y + height - 1, bottomBorder, { transformers: [] });
 		}
 	}
 };

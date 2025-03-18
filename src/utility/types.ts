@@ -1,10 +1,10 @@
-import {Except, LiteralUnion} from 'type-fest';
-import {ForegroundColorName} from 'chalk';
-import {BaseProps} from '../baseProps.js';
-import {Props as TextProps} from '../components/Text.js';
-import {KeyInput} from '../stdin/Keyboard.js';
-import {SpecialKeys} from '../stdin/AsciiMap.js';
-import React from 'react';
+import { Except, LiteralUnion } from "type-fest";
+import { ForegroundColorName } from "chalk";
+import { BaseProps } from "../baseProps.js";
+import { Props as TextProps } from "../components/Text.js";
+import { KeyInput } from "../stdin/Keyboard.js";
+import { SpecialKeys } from "../stdin/AsciiMap.js";
+import React from "react";
 
 // Remove symbol keyof an object and converts numbers to strings
 export type KeyOf<T extends object> = T extends object
@@ -35,20 +35,20 @@ export type SetState<T = any> = React.Dispatch<React.SetStateAction<T>>;
 
 export type Color = LiteralUnion<ForegroundColorName, string>;
 
-export type Styles = OmitStartsWith<BaseProps, 'on'>;
+export type Styles = OmitStartsWith<BaseProps, "on">;
 
 // For the styles prop
 export type StylesConfig = {
-	Box: DropReadonly<Except<Styles, 'styles' | 'textWrap'>>;
-	Text: DropReadonly<Except<TextProps, 'styles' | 'children'>>;
-	Title: DropReadonly<Except<TextProps, 'styles' | 'children' | 'wrap'>> & {
+	Box: DropReadonly<Except<Styles, "styles" | "textWrap">>;
+	Text: DropReadonly<Except<TextProps, "styles" | "children">>;
+	Title: DropReadonly<Except<TextProps, "styles" | "children" | "wrap">> & {
 		title: string;
 	};
 	Scrollbar: {
 		hide?: boolean;
-		align?: 'start' | 'end';
-		style?: 'single' | 'bold' | {char: string};
-	} & DropReadonly<Pick<TextProps, 'color' | 'dimColor'>>;
+		align?: "start" | "end";
+		style?: "single" | "bold" | { char: string };
+	} & DropReadonly<Pick<TextProps, "color" | "dimColor">>;
 };
 
 export type Key = keyof SpecialKeys;

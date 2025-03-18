@@ -1,12 +1,12 @@
-import React, {Suspense} from 'react';
-import test from 'ava';
-import chalk from 'chalk';
-import {Box, Text, render} from '../src/index.js';
-import createStdout from './helpers/create-stdout.js';
+import React, { Suspense } from "react";
+import test from "ava";
+import chalk from "chalk";
+import { Box, Text, render } from "../src/index.js";
+import createStdout from "./helpers/create-stdout.js";
 
-test('update child', t => {
-	function Test({update}: {readonly update?: boolean}) {
-		return <Text>{update ? 'B' : 'A'}</Text>;
+test("update child", (t) => {
+	function Test({ update }: { readonly update?: boolean }) {
+		return <Text>{update ? "B" : "A"}</Text>;
 	}
 
 	const stdoutActual = createStdout();
@@ -36,12 +36,12 @@ test('update child', t => {
 	);
 });
 
-test('update text node', t => {
-	function Test({update}: {readonly update?: boolean}) {
+test("update text node", (t) => {
+	function Test({ update }: { readonly update?: boolean }) {
 		return (
 			<Box>
 				<Text>Hello </Text>
-				<Text>{update ? 'B' : 'A'}</Text>
+				<Text>{update ? "B" : "A"}</Text>
 			</Box>
 		);
 	}
@@ -73,8 +73,8 @@ test('update text node', t => {
 	);
 });
 
-test('append child', t => {
-	function Test({append}: {readonly append?: boolean}) {
+test("append child", (t) => {
+	function Test({ append }: { readonly append?: boolean }) {
 		if (append) {
 			return (
 				<Box flexDirection="column">
@@ -129,8 +129,8 @@ test('append child', t => {
 	);
 });
 
-test('insert child between other children', t => {
-	function Test({insert}: {readonly insert?: boolean}) {
+test("insert child between other children", (t) => {
+	function Test({ insert }: { readonly insert?: boolean }) {
 		if (insert) {
 			return (
 				<Box flexDirection="column">
@@ -189,8 +189,8 @@ test('insert child between other children', t => {
 	);
 });
 
-test('remove child', t => {
-	function Test({remove}: {readonly remove?: boolean}) {
+test("remove child", (t) => {
+	function Test({ remove }: { readonly remove?: boolean }) {
 		if (remove) {
 			return (
 				<Box flexDirection="column">
@@ -245,8 +245,8 @@ test('remove child', t => {
 	);
 });
 
-test('reorder children', t => {
-	function Test({reorder}: {readonly reorder?: boolean}) {
+test("reorder children", (t) => {
+	function Test({ reorder }: { readonly reorder?: boolean }) {
 		if (reorder) {
 			return (
 				<Box flexDirection="column">
@@ -303,46 +303,46 @@ test('reorder children', t => {
 	);
 });
 
-test('replace child node with text', t => {
+test("replace child node with text", (t) => {
 	const stdout = createStdout();
 
-	function Dynamic({replace}: {readonly replace?: boolean}) {
-		return <Text>{replace ? 'x' : <Text color="green">test</Text>}</Text>;
+	function Dynamic({ replace }: { readonly replace?: boolean }) {
+		return <Text>{replace ? "x" : <Text color="green">test</Text>}</Text>;
 	}
 
-	const {rerender} = render(<Dynamic />, {
+	const { rerender } = render(<Dynamic />, {
 		stdout,
 		debug: true,
 	});
 
-	t.is((stdout.write as any).lastCall.args[0], chalk.green('test'));
+	t.is((stdout.write as any).lastCall.args[0], chalk.green("test"));
 
 	rerender(<Dynamic replace />);
-	t.is((stdout.write as any).lastCall.args[0], 'x');
+	t.is((stdout.write as any).lastCall.args[0], "x");
 });
 
-test('support suspense', async t => {
+test("support suspense", async (t) => {
 	const stdout = createStdout();
 
 	let promise: Promise<void> | undefined;
-	let state: 'pending' | 'done' | undefined;
+	let state: "pending" | "done" | undefined;
 	let value: string | undefined;
 
 	const read = () => {
 		if (!promise) {
-			promise = new Promise(resolve => {
+			promise = new Promise((resolve) => {
 				setTimeout(resolve, 500);
 			});
 
-			state = 'pending';
+			state = "pending";
 
 			void promise.then(() => {
-				state = 'done';
-				value = 'Hello World';
+				state = "done";
+				value = "Hello World";
 			});
 		}
 
-		if (state === 'done') {
+		if (state === "done") {
 			return value;
 		}
 
@@ -367,10 +367,10 @@ test('support suspense', async t => {
 		debug: true,
 	});
 
-	t.is((stdout.write as any).lastCall.args[0], 'Loading');
+	t.is((stdout.write as any).lastCall.args[0], "Loading");
 
 	await promise;
 	out.rerender(<Test />);
 
-	t.is((stdout.write as any).lastCall.args[0], 'Hello World');
+	t.is((stdout.write as any).lastCall.args[0], "Hello World");
 });

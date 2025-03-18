@@ -1,13 +1,13 @@
-import sliceAnsi from 'slice-ansi';
-import stringWidth from 'string-width';
-import widestLine from 'widest-line';
+import sliceAnsi from "slice-ansi";
+import stringWidth from "string-width";
+import widestLine from "widest-line";
 import {
 	type StyledChar,
 	styledCharsFromTokens,
 	styledCharsToString,
 	tokenize,
-} from '@alcalzone/ansi-tokenize';
-import {type OutputTransformer} from './render-node-to-output.js';
+} from "@alcalzone/ansi-tokenize";
+import { type OutputTransformer } from "./render-node-to-output.js";
 
 /**
  * "Virtual" output class
@@ -26,7 +26,7 @@ type Options = {
 type Operation = WriteOperation | ClipOperation | UnclipOperation;
 
 type WriteOperation = {
-	type: 'write';
+	type: "write";
 	x: number;
 	y: number;
 	text: string;
@@ -34,7 +34,7 @@ type WriteOperation = {
 };
 
 type ClipOperation = {
-	type: 'clip';
+	type: "clip";
 	clip: Clip;
 };
 
@@ -46,7 +46,7 @@ type Clip = {
 };
 
 type UnclipOperation = {
-	type: 'unclip';
+	type: "unclip";
 };
 
 export default class Output {
@@ -56,7 +56,7 @@ export default class Output {
 	private readonly operations: Operation[] = [];
 
 	constructor(options: Options) {
-		const {width, height} = options;
+		const { width, height } = options;
 
 		this.width = width;
 		this.height = height;
@@ -66,16 +66,16 @@ export default class Output {
 		x: number,
 		y: number,
 		text: string,
-		options: {transformers: OutputTransformer[]},
+		options: { transformers: OutputTransformer[] },
 	): void {
-		const {transformers} = options;
+		const { transformers } = options;
 
 		if (!text) {
 			return;
 		}
 
 		this.operations.push({
-			type: 'write',
+			type: "write",
 			x,
 			y,
 			text,
@@ -85,18 +85,18 @@ export default class Output {
 
 	clip(clip: Clip) {
 		this.operations.push({
-			type: 'clip',
+			type: "clip",
 			clip,
 		});
 	}
 
 	unclip() {
 		this.operations.push({
-			type: 'unclip',
+			type: "unclip",
 		});
 	}
 
-	get(): {output: string; height: number} {
+	get(): { output: string; height: number } {
 		// Initialize output array with a specific set of rows, so that margin/padding at the bottom is preserved
 		const output: StyledChar[][] = [];
 
@@ -105,8 +105,8 @@ export default class Output {
 
 			for (let x = 0; x < this.width; x++) {
 				row.push({
-					type: 'char',
-					value: ' ',
+					type: "char",
+					value: " ",
 					fullWidth: false,
 					styles: [],
 				});
@@ -118,27 +118,27 @@ export default class Output {
 		const clips: Clip[] = [];
 
 		for (const operation of this.operations) {
-			if (operation.type === 'clip') {
+			if (operation.type === "clip") {
 				clips.push(operation.clip);
 			}
 
-			if (operation.type === 'unclip') {
+			if (operation.type === "unclip") {
 				clips.pop();
 			}
 
-			if (operation.type === 'write') {
-				const {text, transformers} = operation;
-				let {x, y} = operation;
-				let lines = text.split('\n');
+			if (operation.type === "write") {
+				const { text, transformers } = operation;
+				let { x, y } = operation;
+				let lines = text.split("\n");
 
 				const clip = clips.at(-1);
 
 				if (clip) {
 					const clipHorizontally =
-						typeof clip?.x1 === 'number' && typeof clip?.x2 === 'number';
+						typeof clip?.x1 === "number" && typeof clip?.x2 === "number";
 
 					const clipVertically =
-						typeof clip?.y1 === 'number' && typeof clip?.y2 === 'number';
+						typeof clip?.y1 === "number" && typeof clip?.y2 === "number";
 
 					// If text is positioned outside of clipping area altogether,
 					// skip to the next operation to avoid unnecessary calculations
@@ -159,7 +159,7 @@ export default class Output {
 					}
 
 					if (clipHorizontally) {
-						lines = lines.map(line => {
+						lines = lines.map((line) => {
 							const from = x < clip.x1! ? clip.x1! - x : 0;
 							const width = stringWidth(line);
 							const to = x + width > clip.x2! ? clip.x2! - x : width;
@@ -212,8 +212,8 @@ export default class Output {
 
 						if (isWideCharacter) {
 							currentLine[offsetX + 1] = {
-								type: 'char',
-								value: '',
+								type: "char",
+								value: "",
 								fullWidth: false,
 								styles: character.styles,
 							};
@@ -228,13 +228,13 @@ export default class Output {
 		}
 
 		const generatedOutput = output
-			.map(line => {
+			.map((line) => {
 				// See https://github.com/vadimdemedes/ink/pull/564#issuecomment-1637022742
-				const lineWithoutEmptyItems = line.filter(item => item !== undefined);
+				const lineWithoutEmptyItems = line.filter((item) => item !== undefined);
 
 				return styledCharsToString(lineWithoutEmptyItems).trimEnd();
 			})
-			.join('\n');
+			.join("\n");
 
 		return {
 			output: generatedOutput,

@@ -1,5 +1,5 @@
-import Mouse from './Mouse.js';
-import Keyboard from './Keyboard.js';
+import Mouse from "./Mouse.js";
+import Keyboard from "./Keyboard.js";
 
 /*
  * Stdin.handleStdin parses input from the keyboard and mouse.
@@ -18,8 +18,8 @@ import Keyboard from './Keyboard.js';
  * */
 
 export const EVENT = {
-	keypress: 'KEYPRESS',
-	data: 'data',
+	keypress: "KEYPRESS",
+	data: "data",
 } as const;
 
 class Stdin {
@@ -48,14 +48,14 @@ class Stdin {
 		if (process.stdin.isTTY) {
 			process.stdin.setRawMode(true);
 		} else {
-			if (!process.env?.['TEST_ENV']) {
-				console.warn('Raw mode not supported.  Stdin not supported');
+			if (!process.env?.["TEST_ENV"]) {
+				console.warn("Raw mode not supported.  Stdin not supported");
 			}
 			return;
 		}
 
 		process.stdin.resume();
-		process.stdin.setEncoding('hex');
+		process.stdin.setEncoding("hex");
 		process.stdin.on(EVENT.data, this.handleStdin);
 		this.mouseEnabled && this.Mouse.listen();
 		// Keyboard listeners are added/removed in through hooks in the app
@@ -84,11 +84,11 @@ class Stdin {
 
 	public handleStdin = (stdin: string): void => {
 		// Handle SIGINT
-		if (stdin === '03') {
+		if (stdin === "03") {
 			process.exit();
 		}
 
-		const buffer = Buffer.from(stdin, 'hex');
+		const buffer = Buffer.from(stdin, "hex");
 
 		if (this.mouseEnabled && this.Mouse.isMouseEvent(buffer)) {
 			this.Mouse.handleStdin(buffer);

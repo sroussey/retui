@@ -1,32 +1,29 @@
-import {useWindow} from '../useWindow.js';
-import {Opts as UseWindowOpts} from '../useWindow.js';
-import {Return as UseWindowReturn} from '../useWindow.js';
+import { useWindow } from "../useWindow.js";
+import { Opts as UseWindowOpts } from "../useWindow.js";
+import { Return as UseWindowReturn } from "../useWindow.js";
 
-export type PageView = UseWindowReturn['viewState'] & {
+export type PageView = UseWindowReturn["viewState"] & {
 	_numPages: number;
 };
 
 export type PagesControl = {
-	currentPage: UseWindowReturn['control']['currentIndex'];
-	goToPage: UseWindowReturn['control']['goToIndex'];
-	nextPage: UseWindowReturn['control']['nextItem'];
-	prevPage: UseWindowReturn['control']['prevItem'];
+	currentPage: UseWindowReturn["control"]["currentIndex"];
+	goToPage: UseWindowReturn["control"]["goToIndex"];
+	nextPage: UseWindowReturn["control"]["nextItem"];
+	prevPage: UseWindowReturn["control"]["prevItem"];
 };
 
 type Return = {
 	pageView: PageView;
 	control: PagesControl;
 };
-type Opts = Pick<UseWindowOpts, 'fallthrough'>;
+type Opts = Pick<UseWindowOpts, "fallthrough">;
 
-export function usePages(
-	numPages: number,
-	opts: Opts = {fallthrough: false},
-): Return {
+export function usePages(numPages: number, opts: Opts = { fallthrough: false }): Return {
 	const windowOpts: UseWindowOpts = {
 		windowSize: 1,
 		centerScroll: false,
-		navigation: 'none',
+		navigation: "none",
 		fallthrough: opts.fallthrough,
 	};
 

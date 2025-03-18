@@ -1,6 +1,6 @@
-import {type Writable} from 'node:stream';
-import ansiEscapes from 'ansi-escapes';
-import cliCursor from 'cli-cursor';
+import { type Writable } from "node:stream";
+import ansiEscapes from "ansi-escapes";
+import cliCursor from "cli-cursor";
 
 export type LogUpdate = {
 	clear: () => void;
@@ -8,9 +8,9 @@ export type LogUpdate = {
 	(str: string): void;
 };
 
-const create = (stream: Writable, {showCursor = false} = {}): LogUpdate => {
+const create = (stream: Writable, { showCursor = false } = {}): LogUpdate => {
 	let previousLineCount = 0;
-	let previousOutput = '';
+	let previousOutput = "";
 	let hasHiddenCursor = false;
 
 	const render = (str: string) => {
@@ -19,24 +19,24 @@ const create = (stream: Writable, {showCursor = false} = {}): LogUpdate => {
 			hasHiddenCursor = true;
 		}
 
-		const output = str + '\n';
+		const output = str + "\n";
 		if (output === previousOutput) {
 			return;
 		}
 
 		previousOutput = output;
 		stream.write(ansiEscapes.eraseLines(previousLineCount) + output);
-		previousLineCount = output.split('\n').length;
+		previousLineCount = output.split("\n").length;
 	};
 
 	render.clear = () => {
 		stream.write(ansiEscapes.eraseLines(previousLineCount));
-		previousOutput = '';
+		previousOutput = "";
 		previousLineCount = 0;
 	};
 
 	render.done = () => {
-		previousOutput = '';
+		previousOutput = "";
 		previousLineCount = 0;
 
 		if (!showCursor) {
@@ -48,5 +48,5 @@ const create = (stream: Writable, {showCursor = false} = {}): LogUpdate => {
 	return render;
 };
 
-const logUpdate = {create};
+const logUpdate = { create };
 export default logUpdate;

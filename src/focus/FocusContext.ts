@@ -1,12 +1,12 @@
-import {createContext, useContext} from 'react';
-import {NodesView} from '../nodeMap/useNodeMap.js';
-import {ViewState} from '../window/types.js';
-import {SetState} from '../utility/types.js';
+import { createContext, useContext } from "react";
+import { NodesView } from "../nodeMap/useNodeMap.js";
+import { ViewState } from "../window/types.js";
+import { SetState } from "../utility/types.js";
 
 export type ListItemContext<T extends any[] | readonly any[] = any> = {
 	items: T;
 	setItems: SetState<T>;
-	control: ViewState['_control'];
+	control: ViewState["_control"];
 	// Focus extends up the focus tree to the root node
 	isFocus: boolean;
 	// Focus based only on whatever focus given by the List component containing this list item
@@ -22,7 +22,7 @@ export type ListItemContext<T extends any[] | readonly any[] = any> = {
 };
 
 export type PageContext = {
-	control: ViewState['_control'];
+	control: ViewState["_control"];
 	// Focus extends up the focus tree to the root node
 	isFocus: boolean;
 	// Focus based only on whatever focus given by the Pages component containing this page
@@ -40,7 +40,7 @@ export type NodeContext<T extends string = string> = {
 	name: T;
 	isFocus: boolean;
 	isShallowFocus: boolean;
-	control: NodesView<T>['_control'];
+	control: NodesView<T>["_control"];
 };
 
 export const ListItemContext = createContext<ListItemContext | null>(null);
@@ -90,7 +90,7 @@ export function useListItem<
 	const listItemContext = useContext(ListItemContext);
 
 	if (listItemContext === null) {
-		throw new Error(errMsg('useListItem', 'List'));
+		throw new Error(errMsg("useListItem", "List"));
 	}
 
 	const items = listItemContext.items;
@@ -122,7 +122,7 @@ export function usePage(): PageContext {
 	const pageContext = useContext(PageContext);
 
 	if (pageContext === null) {
-		throw new Error(errMsg('usePage', 'Pages'));
+		throw new Error(errMsg("usePage", "Pages"));
 	}
 
 	return pageContext;
@@ -131,7 +131,7 @@ export function usePage(): PageContext {
 export function useNode<T extends string = string>(): NodeContext<T> {
 	const nodeContext = useContext(NodeContext);
 	if (nodeContext === null) {
-		throw new Error(errMsg('useNavNode', 'Nav.Node'));
+		throw new Error(errMsg("useNavNode", "Nav.Node"));
 	}
 	return nodeContext as NodeContext<T>;
 }

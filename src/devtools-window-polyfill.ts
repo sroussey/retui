@@ -1,5 +1,5 @@
 // Ignoring missing types error to avoid adding another dependency for this hack to work
-import ws from 'ws';
+import ws from "ws";
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const customGlobal = global as any;
@@ -26,42 +26,42 @@ customGlobal.window.__REACT_DEVTOOLS_COMPONENT_FILTERS__ = [
 	{
 		// ComponentFilterDisplayName
 		type: 2,
-		value: 'InternalApp',
+		value: "InternalApp",
 		isEnabled: true,
 		isValid: true,
 	},
 	{
 		// ComponentFilterDisplayName
 		type: 2,
-		value: 'InternalAppContext',
+		value: "InternalAppContext",
 		isEnabled: true,
 		isValid: true,
 	},
 	{
 		// ComponentFilterDisplayName
 		type: 2,
-		value: 'InternalStdoutContext',
+		value: "InternalStdoutContext",
 		isEnabled: true,
 		isValid: true,
 	},
 	{
 		// ComponentFilterDisplayName
 		type: 2,
-		value: 'InternalStderrContext',
+		value: "InternalStderrContext",
 		isEnabled: true,
 		isValid: true,
 	},
 	{
 		// ComponentFilterDisplayName
 		type: 2,
-		value: 'InternalStdinContext',
+		value: "InternalStdinContext",
 		isEnabled: true,
 		isValid: true,
 	},
 	{
 		// ComponentFilterDisplayName
 		type: 2,
-		value: 'InternalFocusContext',
+		value: "InternalFocusContext",
 		isEnabled: true,
 		isValid: true,
 	},

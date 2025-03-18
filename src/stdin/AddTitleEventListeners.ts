@@ -1,8 +1,8 @@
-import {DOMElement} from '../dom.js';
-import {Title} from '../renderTitles/renderTitleToOutput.js';
-import ElementPosition from './ElementPosition.js';
-import {DefaultStdin} from './Stdin.js';
-import {CornerPositions} from './ElementPosition.js';
+import { DOMElement } from "../dom.js";
+import { Title } from "../renderTitles/renderTitleToOutput.js";
+import ElementPosition from "./ElementPosition.js";
+import { DefaultStdin } from "./Stdin.js";
+import { CornerPositions } from "./ElementPosition.js";
 
 export function addTitleEventListeners({
 	node,
@@ -18,8 +18,8 @@ export function addTitleEventListeners({
 	titleType: string;
 	targetPosition: CornerPositions;
 }): void {
-	const ID = node.attributes['ID'] as string;
-	const isPageFocus = node.attributes['isPageFocus'] as boolean;
+	const ID = node.attributes["ID"] as string;
+	const isPageFocus = node.attributes["isPageFocus"] as boolean;
 	const shouldSubscribe =
 		title.onClick ||
 		title.onRightClick ||

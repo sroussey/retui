@@ -1,36 +1,36 @@
-import {Node as YogaNode} from 'yoga-wasm-web';
-import EventEmitter = require('events');
-import ElementPosition, {CornerPositions} from './ElementPosition.js';
-import {spawnSync} from 'child_process';
-import {Title} from '../renderTitles/renderTitleToOutput.js';
+import { Node as YogaNode } from "yoga-wasm-web";
+import EventEmitter = require("events");
+import ElementPosition, { CornerPositions } from "./ElementPosition.js";
+import { spawnSync } from "child_process";
+import { Title } from "../renderTitles/renderTitleToOutput.js";
 
 // Events emitted from Mouse.Emitter
 export type Events =
-	| 'CLICK'
-	| 'DOUBLE_CLICK'
-	| 'MOUSE_DOWN'
-	| 'MOUSE_UP'
-	| 'RIGHT_CLICK'
-	| 'RIGHT_DOUBLE_CLICK'
-	| 'RIGHT_MOUSE_DOWN'
-	| 'RIGHT_MOUSE_UP'
-	| 'SCROLL_UP'
-	| 'SCROLL_DOWN'
-	| 'SCROLL_CLICK';
+	| "CLICK"
+	| "DOUBLE_CLICK"
+	| "MOUSE_DOWN"
+	| "MOUSE_UP"
+	| "RIGHT_CLICK"
+	| "RIGHT_DOUBLE_CLICK"
+	| "RIGHT_MOUSE_DOWN"
+	| "RIGHT_MOUSE_UP"
+	| "SCROLL_UP"
+	| "SCROLL_DOWN"
+	| "SCROLL_CLICK";
 
 // Handlers that may be passed to Box components
 export type HandlerProps =
-	| 'onClick'
-	| 'onDoubleClick'
-	| 'onMouseDown'
-	| 'onMouseUp'
-	| 'onRightClick'
-	| 'onRightDoubleClick'
-	| 'onRightMouseDown'
-	| 'onRightMouseUp'
-	| 'onScrollUp'
-	| 'onScrollDown'
-	| 'onScrollClick';
+	| "onClick"
+	| "onDoubleClick"
+	| "onMouseDown"
+	| "onMouseUp"
+	| "onRightClick"
+	| "onRightDoubleClick"
+	| "onRightMouseDown"
+	| "onRightMouseUp"
+	| "onScrollUp"
+	| "onScrollDown"
+	| "onScrollClick";
 
 export type MouseEvent = {
 	clientX: number; // x coordinate within the entire screen where the mouse event occurred
@@ -41,7 +41,7 @@ export type MouseEvent = {
 
 // The data emitted from Mouse.Emitter when reading from stdin, which will
 // eventually be used to create the MouseEvent object
-export type StdinData = Omit<MouseEvent, 'target' | 'targetPosition'>;
+export type StdinData = Omit<MouseEvent, "target" | "targetPosition">;
 
 export type Handler = (e: MouseEvent) => unknown;
 
@@ -74,16 +74,16 @@ export type HandlerRegistry = {
 };
 
 export type Buttons =
-	| 'LEFT_BTN_DOWN'
-	| 'SCROLL_BTN_DOWN'
-	| 'RIGHT_BTN_DOWN'
-	| 'RELEASE_BTN'
-	| 'SCROLL_UP'
-	| 'SCROLL_DOWN';
+	| "LEFT_BTN_DOWN"
+	| "SCROLL_BTN_DOWN"
+	| "RIGHT_BTN_DOWN"
+	| "RELEASE_BTN"
+	| "SCROLL_UP"
+	| "SCROLL_DOWN";
 
 export const MOUSE_ESCAPE_CODES = {
-	ON: '\x1b[?1000h',
-	OFF: '\x1b[?1000l',
+	ON: "\x1b[?1000h",
+	OFF: "\x1b[?1000l",
 } as const;
 
 export default class Mouse {
@@ -108,17 +108,17 @@ export default class Mouse {
 		this.Emitter = new EventEmitter();
 		this.Emitter.setMaxListeners(Infinity);
 		this.PropsToEvents = {
-			onClick: 'CLICK',
-			onDoubleClick: 'DOUBLE_CLICK',
-			onMouseDown: 'MOUSE_DOWN',
-			onMouseUp: 'MOUSE_UP',
-			onRightClick: 'RIGHT_CLICK',
-			onRightDoubleClick: 'RIGHT_DOUBLE_CLICK',
-			onRightMouseDown: 'RIGHT_MOUSE_DOWN',
-			onRightMouseUp: 'RIGHT_MOUSE_UP',
-			onScrollUp: 'SCROLL_UP',
-			onScrollDown: 'SCROLL_DOWN',
-			onScrollClick: 'SCROLL_CLICK',
+			onClick: "CLICK",
+			onDoubleClick: "DOUBLE_CLICK",
+			onMouseDown: "MOUSE_DOWN",
+			onMouseUp: "MOUSE_UP",
+			onRightClick: "RIGHT_CLICK",
+			onRightDoubleClick: "RIGHT_DOUBLE_CLICK",
+			onRightMouseDown: "RIGHT_MOUSE_DOWN",
+			onRightMouseUp: "RIGHT_MOUSE_UP",
+			onScrollUp: "SCROLL_UP",
+			onScrollDown: "SCROLL_DOWN",
+			onScrollClick: "SCROLL_CLICK",
 		};
 		this.Handlers = {};
 		this.unsubscribers = [];
@@ -159,15 +159,15 @@ export default class Mouse {
 		const escapeSequence = on ? MOUSE_ESCAPE_CODES.ON : MOUSE_ESCAPE_CODES.OFF;
 
 		const set = (escapeSequence: string) => {
-			spawnSync('echo', ['-e', escapeSequence], {
-				stdio: ['inherit', 'inherit', 'inherit'],
+			spawnSync("echo", ["-e", escapeSequence], {
+				stdio: ["inherit", "inherit", "inherit"],
 			});
 		};
 
 		set(escapeSequence);
 
 		if (!this.hasSetExitHandler) {
-			process.on('exit', () => {
+			process.on("exit", () => {
 				set(MOUSE_ESCAPE_CODES.OFF);
 			});
 			this.hasSetExitHandler = true;
@@ -177,17 +177,15 @@ export default class Mouse {
 	// Parse the this.Handler[prop] object which contains a store IDs from Box
 	// components and determine if their click event handlers should be executed
 	public handleEvent = (prop: HandlerProps) => (event: StdinData) => {
-		const {clientX, clientY} = event;
+		const { clientX, clientY } = event;
 
 		// Sort zIndex highest to lowest to highest
 		// If an event is clicked inside one of the components on one level, the
 		// lower levels will not be checked.
 		const zIndexes: number[] = [];
-		const zIndexListeners: (ZIndexRegistry | undefined)[] = Object.keys(
-			this.Handlers,
-		)
+		const zIndexListeners: (ZIndexRegistry | undefined)[] = Object.keys(this.Handlers)
 			.sort((a, b) => Number(b) - Number(a))
-			.map(zIndex => {
+			.map((zIndex) => {
 				zIndexes.push(Number(zIndex));
 				return this.Handlers[Number(zIndex) as number];
 			});
@@ -221,7 +219,7 @@ export default class Mouse {
 					target: componentNode,
 				};
 
-				if ('isTitle' in propData[ID]!) {
+				if ("isTitle" in propData[ID]!) {
 					const titleHandler = (propData as TitleData)[ID]?.titleHandler;
 					if (titleHandler) {
 						batchedHandlers.push(() => {
@@ -260,7 +258,7 @@ export default class Mouse {
 			}
 		}
 
-		batchedHandlers.forEach(batchedHandler => {
+		batchedHandlers.forEach((batchedHandler) => {
 			batchedHandler();
 		});
 	};
@@ -316,7 +314,7 @@ export default class Mouse {
 	}
 
 	// Update this.Handlers object from within a Box component
-	public subscribeComponent = <T extends {[P in HandlerProps]?: any}>({
+	public subscribeComponent = <T extends { [P in HandlerProps]?: any }>({
 		props,
 		ID,
 		target,
@@ -372,17 +370,17 @@ export default class Mouse {
 	private getButtonType = (n: number): Buttons | null => {
 		switch (n) {
 			case 0:
-				return 'LEFT_BTN_DOWN';
+				return "LEFT_BTN_DOWN";
 			case 1:
-				return 'SCROLL_BTN_DOWN';
+				return "SCROLL_BTN_DOWN";
 			case 2:
-				return 'RIGHT_BTN_DOWN';
+				return "RIGHT_BTN_DOWN";
 			case 3:
-				return 'RELEASE_BTN';
+				return "RELEASE_BTN";
 			case 64:
-				return 'SCROLL_UP';
+				return "SCROLL_UP";
 			case 65:
-				return 'SCROLL_DOWN';
+				return "SCROLL_DOWN";
 			default:
 				return null;
 		}
@@ -403,7 +401,7 @@ export default class Mouse {
 			codes.push(`${buffer[i]?.toString(16)}`);
 		}
 
-		if (codes[0] === '1b' && codes[1] === '5b' && codes[2] === '4d') {
+		if (codes[0] === "1b" && codes[1] === "5b" && codes[2] === "4d") {
 			return true;
 		} else {
 			return false;
@@ -411,37 +409,38 @@ export default class Mouse {
 	};
 
 	public handleStdin = (buffer: Buffer): void => {
-		// xterm offsets the codes by 0x20 (32) so that chars like \n aren't sent
-		const buttonCode = buffer[3]! - 0x20;
-		let x = buffer[4]! - 0x20 - 1;
-		let y = buffer[5]! - 0x20 - 1;
+		// xterm offsets the codes by 32 so that control chars like \n aren't sent
+		// - 1 on x and y because xterm does not send 0 based coordinates
+		const buttonCode = buffer[3]! - 32;
+		let x = buffer[4]! - 32 - 1;
+		let y = buffer[5]! - 32 - 1;
 
-		const event: StdinData = {clientX: x, clientY: y};
+		const event: StdinData = { clientX: x, clientY: y };
 		const button = this.getButtonType(buttonCode);
 
-		if (button === 'LEFT_BTN_DOWN') {
+		if (button === "LEFT_BTN_DOWN") {
 			this.btnDownState.left = true;
 			this.Emitter.emit(this.PropsToEvents.onMouseDown, event);
 		}
 
-		if (button === 'RIGHT_BTN_DOWN') {
+		if (button === "RIGHT_BTN_DOWN") {
 			this.btnDownState.right = true;
 			this.Emitter.emit(this.PropsToEvents.onRightMouseDown, event);
 		}
 
-		if (button === 'SCROLL_BTN_DOWN') {
+		if (button === "SCROLL_BTN_DOWN") {
 			this.btnDownState.scroll = true;
 		}
 
-		if (button === 'SCROLL_UP') {
+		if (button === "SCROLL_UP") {
 			this.Emitter.emit(this.PropsToEvents.onScrollUp, event);
 		}
 
-		if (button === 'SCROLL_DOWN') {
+		if (button === "SCROLL_DOWN") {
 			this.Emitter.emit(this.PropsToEvents.onScrollDown, event);
 		}
 
-		if (button !== 'RELEASE_BTN') return;
+		if (button !== "RELEASE_BTN") return;
 
 		if (this.btnDownState.left) {
 			this.Emitter.emit(this.PropsToEvents.onClick, event);
@@ -449,7 +448,7 @@ export default class Mouse {
 			if (this.dblClickState.left) {
 				this.Emitter.emit(this.PropsToEvents.onDoubleClick, event);
 			} else {
-				this.beginDoubleClickTimer('LEFT');
+				this.beginDoubleClickTimer("LEFT");
 			}
 		}
 
@@ -459,7 +458,7 @@ export default class Mouse {
 			if (this.dblClickState.right) {
 				this.Emitter.emit(this.PropsToEvents.onRightDoubleClick, event);
 			} else {
-				this.beginDoubleClickTimer('RIGHT');
+				this.beginDoubleClickTimer("RIGHT");
 			}
 		}
 
@@ -467,26 +466,26 @@ export default class Mouse {
 			this.Emitter.emit(this.PropsToEvents.onScrollClick, event);
 		}
 
-		this.btnDownState = {left: false, scroll: false, right: false};
+		this.btnDownState = { left: false, scroll: false, right: false };
 	};
 
-	private beginDoubleClickTimer = (btn: 'RIGHT' | 'LEFT'): void => {
+	private beginDoubleClickTimer = (btn: "RIGHT" | "LEFT"): void => {
 		const CLICK_INTERVAL = 500;
 
 		setTimeout(() => {
-			if (btn === 'LEFT') {
+			if (btn === "LEFT") {
 				this.dblClickState.left = false;
 			}
 
-			if (btn === 'RIGHT') {
+			if (btn === "RIGHT") {
 				this.dblClickState.right = false;
 			}
 		}, CLICK_INTERVAL);
 
-		if (btn === 'LEFT' && !this.dblClickState.left) {
+		if (btn === "LEFT" && !this.dblClickState.left) {
 			this.dblClickState.left = true;
 		}
-		if (btn === 'RIGHT' && !this.dblClickState.right) {
+		if (btn === "RIGHT" && !this.dblClickState.right) {
 			this.dblClickState.right = true;
 		}
 	};

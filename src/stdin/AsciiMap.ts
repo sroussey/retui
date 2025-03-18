@@ -1,27 +1,27 @@
 export const ASCII = {
-	backspace: '\x7F',
-	delete: '\x1B[3~',
-	esc: '\x1B',
-	insert: '\x1B[2~',
-	return: '\r',
-	sigint: '\u0003',
-	tab: '\t',
-	up: '\x1B[A',
-	down: '\x1B[B',
-	right: '\x1B[C',
-	left: '\x1B[D',
-	f1: '\x1BOP',
-	f2: '\x1BOQ',
-	f3: '\x1BOR',
-	f4: '\x1BOS',
-	f5: '\x1B[15~',
-	f6: '\x1B[17~',
-	f7: '\x1B[18~',
-	f8: '\x1B[19~',
-	f9: '\x1B[20~',
-	f10: '\x1B[21~',
-	f11: '\x1B[23~',
-	f12: '\x1B[24~',
+	backspace: "\x7F",
+	delete: "\x1B[3~",
+	esc: "\x1B",
+	insert: "\x1B[2~",
+	return: "\r",
+	sigint: "\u0003",
+	tab: "\t",
+	up: "\x1B[A",
+	down: "\x1B[B",
+	right: "\x1B[C",
+	left: "\x1B[D",
+	f1: "\x1BOP",
+	f2: "\x1BOQ",
+	f3: "\x1BOR",
+	f4: "\x1BOS",
+	f5: "\x1B[15~",
+	f6: "\x1B[17~",
+	f7: "\x1B[18~",
+	f8: "\x1B[19~",
+	f9: "\x1B[20~",
+	f10: "\x1B[21~",
+	f11: "\x1B[23~",
+	f12: "\x1B[24~",
 };
 
 export function newSpecialKeyRegister(): SpecialKeys {
@@ -38,8 +38,8 @@ export type SpecialKeys = Omit<
 	{
 		[P in keyof typeof ASCII]: boolean;
 	},
-	'sigint'
-> & {ctrl: boolean};
+	"sigint"
+> & { ctrl: boolean };
 
 // const s1 = "[";
 // const s2 = "\\";

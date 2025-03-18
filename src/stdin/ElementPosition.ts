@@ -1,5 +1,5 @@
-import {Node as YogaNode} from 'yoga-wasm-web';
-import {DOMElement} from '../dom.js';
+import { Node as YogaNode } from "yoga-wasm-web";
+import { DOMElement } from "../dom.js";
 
 /*
  * Determines the position of a component on the screen in order to properly trigger
@@ -54,7 +54,7 @@ export default class ElementPosition {
 		const topRight = [sx + dx, sy];
 		const bottomLeft = [sx, sy + dy];
 		const bottomRight = [sx + dx, sy + dy];
-		return {topLeft, topRight, bottomLeft, bottomRight} as CornerPositions;
+		return { topLeft, topRight, bottomLeft, bottomRight } as CornerPositions;
 	}
 
 	private static applyParentOffset(
@@ -84,11 +84,7 @@ export default class ElementPosition {
 		return childPos;
 	}
 
-	public static containsPoint(
-		x: number,
-		y: number,
-		pos: CornerPositions,
-	): boolean {
+	public static containsPoint(x: number, y: number, pos: CornerPositions): boolean {
 		if (x < pos.topLeft[0]) return false;
 		if (x >= pos.topRight[0]) return false;
 		if (y < pos.topLeft[1]) return false;

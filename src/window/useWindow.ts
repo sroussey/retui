@@ -1,30 +1,30 @@
-import {randomUUID} from 'crypto';
-import {useEvent} from '../stdin/hooks/useEvent.js';
-import {ListKeymaps, LIST_CMDS} from './ListKeymaps.js';
-import {ViewState, WindowControl, PublicWindowControl} from './types.js';
-import {useScroll} from './useScroll.js';
-import {useState} from 'react';
-import {useKeymap} from '../stdin/hooks/useKeymap.js';
-import {Except} from 'type-fest';
-import {SetState} from '../utility/types.js';
+import { randomUUID } from "crypto";
+import { useEvent } from "../stdin/hooks/useEvent.js";
+import { ListKeymaps, LIST_CMDS } from "./ListKeymaps.js";
+import { ViewState, WindowControl, PublicWindowControl } from "./types.js";
+import { useScroll } from "./useScroll.js";
+import { useState } from "react";
+import { useKeymap } from "../stdin/hooks/useKeymap.js";
+import { Except } from "type-fest";
+import { SetState } from "../utility/types.js";
 
 export type Opts = {
-	windowSize?: number | 'fit';
-	unitSize?: number | 'stretch' | 'fit-unit';
+	windowSize?: number | "fit";
+	unitSize?: number | "stretch" | "fit-unit";
 	centerScroll?: boolean;
 	fallthrough?: boolean;
 	startIndex?: number;
 	navigation?:
-		| 'none'
-		| 'vi-vertical'
-		| 'vi-horizontal'
-		| 'arrow-vertical'
-		| 'arrow-horizontal';
+		| "none"
+		| "vi-vertical"
+		| "vi-horizontal"
+		| "arrow-vertical"
+		| "arrow-horizontal";
 };
 
 type ReturnObject<T> = {
 	viewState: ViewState;
-	control: Except<WindowControl, 'modifyWinSize'>;
+	control: Except<WindowControl, "modifyWinSize">;
 	items: T;
 	setItems: SetState<T>;
 };
@@ -41,28 +41,27 @@ export function useWindow<T extends readonly any[] | any[] | number>(
 	opts: Opts = {},
 ): Return<T> {
 	opts.centerScroll = opts.centerScroll ?? false;
-	opts.navigation = opts.navigation ?? 'vi-vertical';
+	opts.navigation = opts.navigation ?? "vi-vertical";
 	opts.fallthrough = opts.fallthrough ?? false;
-	opts.windowSize = opts.windowSize ?? 'fit';
-	opts.unitSize = opts.unitSize ?? (opts.windowSize === 'fit' ? 1 : 'stretch');
+	opts.windowSize = opts.windowSize ?? "fit";
+	opts.unitSize = opts.unitSize ?? (opts.windowSize === "fit" ? 1 : "stretch");
 
 	const [items, setItems] = useState<readonly any[] | null[]>(
-		typeof itemsOrLength === 'number'
+		typeof itemsOrLength === "number"
 			? new Array(itemsOrLength).fill(null)
 			: itemsOrLength,
 	);
 
-	let nextLength =
-		typeof itemsOrLength === 'number' ? itemsOrLength : items.length;
+	let nextLength = typeof itemsOrLength === "number" ? itemsOrLength : items.length;
 	let explicitWindowSize: number | undefined = undefined;
 
-	if (typeof opts.windowSize === 'number') {
+	if (typeof opts.windowSize === "number") {
 		explicitWindowSize = opts.windowSize;
 	} else {
 		opts.windowSize = nextLength;
 	}
 
-	const {scrollState, scrollAPI, LENGTH, WINDOW_SIZE} = useScroll(nextLength, {
+	const { scrollState, scrollAPI, LENGTH, WINDOW_SIZE } = useScroll(nextLength, {
 		centerScroll: opts.centerScroll,
 		fallthrough: opts.fallthrough,
 		windowSize: opts.windowSize,
@@ -86,7 +85,7 @@ export function useWindow<T extends readonly any[] | any[] | number>(
 	const keymap = getKeymap();
 
 	useKeymap(keymap, {
-		priority: opts.navigation !== 'none' ? 'default' : 'never',
+		priority: opts.navigation !== "none" ? "default" : "never",
 	});
 	useEvent(LIST_CMDS.increment(ID), () => {
 		scrollAPI.nextItem();

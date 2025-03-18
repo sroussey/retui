@@ -1,18 +1,18 @@
-import {EventEmitter} from 'node:events';
-import process from 'node:process';
-import React, {PureComponent, type ReactNode} from 'react';
-import cliCursor from 'cli-cursor';
-import AppContext from './AppContext.js';
-import StdinContext from './StdinContext.js';
-import StdoutContext from './StdoutContext.js';
-import StderrContext from './StderrContext.js';
-import FocusContext from './FocusContext.js';
-import ErrorOverview from './ErrorOverview.js';
-import {ShellCommmandProvider} from '../preserveScreen/ShellCommandContext.js';
+import { EventEmitter } from "node:events";
+import process from "node:process";
+import React, { PureComponent, type ReactNode } from "react";
+import cliCursor from "cli-cursor";
+import AppContext from "./AppContext.js";
+import StdinContext from "./StdinContext.js";
+import StdoutContext from "./StdoutContext.js";
+import StderrContext from "./StderrContext.js";
+import FocusContext from "./FocusContext.js";
+import ErrorOverview from "./ErrorOverview.js";
+import { ShellCommmandProvider } from "../preserveScreen/ShellCommandContext.js";
 
-const tab = '\t';
-const shiftTab = '\u001B[Z';
-const escape = '\u001B';
+const tab = "\t";
+const shiftTab = "\u001B[Z";
+const escape = "\u001B";
 
 type Props = {
 	readonly children: ReactNode;
@@ -41,10 +41,10 @@ type Focusable = {
 // It renders stdin and stdout contexts, so that children can access them if needed
 // It also handles Ctrl+C exiting and cursor visibility
 export default class App extends PureComponent<Props, State> {
-	static displayName = 'InternalApp';
+	static displayName = "InternalApp";
 
 	static getDerivedStateFromError(error: Error) {
-		return {error};
+		return { error };
 	}
 
 	override state = {
@@ -116,7 +116,9 @@ export default class App extends PureComponent<Props, State> {
 							>
 								<ShellCommmandProvider>
 									{this.state.error ? (
-										<ErrorOverview error={this.state.error as Error} />
+										<ErrorOverview
+											error={this.state.error as Error}
+										/>
 									) : (
 										this.props.children
 									)}
@@ -147,28 +149,28 @@ export default class App extends PureComponent<Props, State> {
 	}
 
 	handleSetRawMode = (isEnabled: boolean): void => {
-		const {stdin} = this.props;
+		const { stdin } = this.props;
 
 		if (!this.isRawModeSupported()) {
 			if (stdin === process.stdin) {
 				throw new Error(
-					'Raw mode is not supported on the current process.stdin, which Ink uses as input stream by default.\nRead about how to prevent this error on https://github.com/vadimdemedes/ink/#israwmodesupported',
+					"Raw mode is not supported on the current process.stdin, which Ink uses as input stream by default.\nRead about how to prevent this error on https://github.com/vadimdemedes/ink/#israwmodesupported",
 				);
 			} else {
 				throw new Error(
-					'Raw mode is not supported on the stdin provided to Ink.\nRead about how to prevent this error on https://github.com/vadimdemedes/ink/#israwmodesupported',
+					"Raw mode is not supported on the stdin provided to Ink.\nRead about how to prevent this error on https://github.com/vadimdemedes/ink/#israwmodesupported",
 				);
 			}
 		}
 
-		stdin.setEncoding('utf8');
+		stdin.setEncoding("utf8");
 
 		if (isEnabled) {
 			// Ensure raw mode is enabled only once
 			if (this.rawModeEnabledCount === 0) {
 				stdin.ref();
 				stdin.setRawMode(true);
-				stdin.addListener('readable', this.handleReadable);
+				stdin.addListener("readable", this.handleReadable);
 			}
 
 			this.rawModeEnabledCount++;
@@ -178,7 +180,7 @@ export default class App extends PureComponent<Props, State> {
 		// Disable raw mode only when no components left that are using it
 		if (--this.rawModeEnabledCount === 0) {
 			stdin.setRawMode(false);
-			stdin.removeListener('readable', this.handleReadable);
+			stdin.removeListener("readable", this.handleReadable);
 			stdin.unref();
 		}
 	};
@@ -188,14 +190,14 @@ export default class App extends PureComponent<Props, State> {
 		// eslint-disable-next-line @typescript-eslint/ban-types
 		while ((chunk = this.props.stdin.read() as string | null) !== null) {
 			this.handleInput(chunk);
-			this.internal_eventEmitter.emit('input', chunk);
+			this.internal_eventEmitter.emit("input", chunk);
 		}
 	};
 
 	handleInput = (input: string): void => {
 		// Exit on Ctrl+C
 		// eslint-disable-next-line unicorn/no-hex-escape
-		if (input === '\x03' && this.props.exitOnCtrlC) {
+		if (input === "\x03" && this.props.exitOnCtrlC) {
 			this.handleExit();
 		}
 
@@ -219,7 +221,7 @@ export default class App extends PureComponent<Props, State> {
 
 	handleExit = (error?: Error): void => {
 		if (error) {
-			if (process.env?.['TEST_ENV']) {
+			if (process.env?.["TEST_ENV"]) {
 				process.exitCode = 200;
 			} else {
 				process.exitCode = 1;
@@ -246,23 +248,23 @@ export default class App extends PureComponent<Props, State> {
 	};
 
 	focus = (id: string): void => {
-		this.setState(previousState => {
+		this.setState((previousState) => {
 			const hasFocusableId = previousState.focusables.some(
-				focusable => focusable?.id === id,
+				(focusable) => focusable?.id === id,
 			);
 
 			if (!hasFocusableId) {
 				return previousState;
 			}
 
-			return {activeFocusId: id};
+			return { activeFocusId: id };
 		});
 	};
 
 	focusNext = (): void => {
-		this.setState(previousState => {
+		this.setState((previousState) => {
 			const firstFocusableId = previousState.focusables.find(
-				focusable => focusable.isActive,
+				(focusable) => focusable.isActive,
 			)?.id;
 			const nextFocusableId = this.findNextFocusable(previousState);
 
@@ -273,9 +275,9 @@ export default class App extends PureComponent<Props, State> {
 	};
 
 	focusPrevious = (): void => {
-		this.setState(previousState => {
+		this.setState((previousState) => {
 			const lastFocusableId = previousState.focusables.findLast(
-				focusable => focusable.isActive,
+				(focusable) => focusable.isActive,
 			)?.id;
 			const previousFocusableId = this.findPreviousFocusable(previousState);
 
@@ -285,8 +287,8 @@ export default class App extends PureComponent<Props, State> {
 		});
 	};
 
-	addFocusable = (id: string, {autoFocus}: {autoFocus: boolean}): void => {
-		this.setState(previousState => {
+	addFocusable = (id: string, { autoFocus }: { autoFocus: boolean }): void => {
+		this.setState((previousState) => {
 			let nextFocusId = previousState.activeFocusId;
 
 			if (!nextFocusId && autoFocus) {
@@ -307,20 +309,20 @@ export default class App extends PureComponent<Props, State> {
 	};
 
 	removeFocusable = (id: string): void => {
-		this.setState(previousState => ({
+		this.setState((previousState) => ({
 			activeFocusId:
 				previousState.activeFocusId === id
 					? undefined
 					: previousState.activeFocusId,
-			focusables: previousState.focusables.filter(focusable => {
+			focusables: previousState.focusables.filter((focusable) => {
 				return focusable.id !== id;
 			}),
 		}));
 	};
 
 	activateFocusable = (id: string): void => {
-		this.setState(previousState => ({
-			focusables: previousState.focusables.map(focusable => {
+		this.setState((previousState) => ({
+			focusables: previousState.focusables.map((focusable) => {
 				if (focusable.id !== id) {
 					return focusable;
 				}
@@ -334,12 +336,12 @@ export default class App extends PureComponent<Props, State> {
 	};
 
 	deactivateFocusable = (id: string): void => {
-		this.setState(previousState => ({
+		this.setState((previousState) => ({
 			activeFocusId:
 				previousState.activeFocusId === id
 					? undefined
 					: previousState.activeFocusId,
-			focusables: previousState.focusables.map(focusable => {
+			focusables: previousState.focusables.map((focusable) => {
 				if (focusable.id !== id) {
 					return focusable;
 				}
@@ -353,15 +355,11 @@ export default class App extends PureComponent<Props, State> {
 	};
 
 	findNextFocusable = (state: State): string | undefined => {
-		const activeIndex = state.focusables.findIndex(focusable => {
+		const activeIndex = state.focusables.findIndex((focusable) => {
 			return focusable.id === state.activeFocusId;
 		});
 
-		for (
-			let index = activeIndex + 1;
-			index < state.focusables.length;
-			index++
-		) {
+		for (let index = activeIndex + 1; index < state.focusables.length; index++) {
 			const focusable = state.focusables[index];
 
 			if (focusable?.isActive) {
@@ -373,7 +371,7 @@ export default class App extends PureComponent<Props, State> {
 	};
 
 	findPreviousFocusable = (state: State): string | undefined => {
-		const activeIndex = state.focusables.findIndex(focusable => {
+		const activeIndex = state.focusables.findIndex((focusable) => {
 			return focusable.id === state.activeFocusId;
 		});
 

@@ -1,7 +1,7 @@
-import {DefaultStdin} from '../stdin/Stdin.js';
-import {useListener} from '../useListener/useListener.js';
-import Keyboard, {KeyboardState} from '../stdin/Keyboard.js';
-import {SpecialKeys as Key} from '../stdin/AsciiMap.js';
+import { DefaultStdin } from "../stdin/Stdin.js";
+import { useListener } from "../useListener/useListener.js";
+import Keyboard, { KeyboardState } from "../stdin/Keyboard.js";
+import { SpecialKeys as Key } from "../stdin/AsciiMap.js";
 
 const Emitter = DefaultStdin.Keyboard.getEmitter();
 
@@ -18,17 +18,17 @@ type Opts = {
 	/*
 	 * @default 'char'
 	 * */
-	inputType?: 'char' | 'register';
+	inputType?: "char" | "register";
 };
 
-export function useInput(cb: UseInputCb, opts: Opts = {isActive: true}): void {
-	opts = {isActive: true, inputType: 'char', ...opts};
+export function useInput(cb: UseInputCb, opts: Opts = { isActive: true }): void {
+	opts = { isActive: true, inputType: "char", ...opts };
 
 	const wrapper = (char: string, state: KeyboardState) => {
 		if (!opts.isActive) return;
 
 		const input =
-			state.ctrlKeys || (opts.inputType === 'char' ? char : state.chars) || '';
+			state.ctrlKeys || (opts.inputType === "char" ? char : state.chars) || "";
 
 		cb(input, state.specialKeys);
 	};
