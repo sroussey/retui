@@ -1,8 +1,9 @@
-import EventEmitter = require("events");
+
 import { SpecialKeys, newSpecialKeyRegister } from "./AsciiMap.js";
 import { EVENT } from "./Stdin.js";
 import { ASCII } from "./AsciiMap.js";
 import { Key } from "../utility/types.js";
+import EventEmitter from "node:events";
 
 export type KeyInput = {
 	key?: Key;

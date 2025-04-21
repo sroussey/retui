@@ -1,5 +1,5 @@
-import { Node as YogaNode } from "yoga-wasm-web";
-import EventEmitter = require("events");
+import { Node as YogaNode } from "yoga-layout";
+import EventEmitter from "node:events";
 import ElementPosition, { CornerPositions } from "./ElementPosition.js";
 import { spawnSync } from "child_process";
 import { Title } from "../renderTitles/renderTitleToOutput.js";

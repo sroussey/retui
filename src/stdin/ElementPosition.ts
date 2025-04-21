@@ -1,4 +1,4 @@
-import { Node as YogaNode } from "yoga-wasm-web";
+import { Node as YogaNode } from "yoga-layout";
 import { DOMElement } from "../dom.js";
 
 /*
