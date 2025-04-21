@@ -6,7 +6,7 @@ import process from "node:process";
 import patchConsole from "patch-console";
 import React, { type ReactNode } from "react";
 import { type FiberRoot } from "react-reconciler";
-import signalExit from "signal-exit";
+import { onExit } from "signal-exit";
 import Yoga from "yoga-layout";
 import App from "./components/App.js";
 import * as dom from "./dom.js";
@@ -95,7 +95,7 @@ export default class Ink {
 		);
 
 		// Unmount when process exits
-		this.unsubscribeExit = signalExit(this.unmount, { alwaysLast: false });
+		this.unsubscribeExit = onExit(this.unmount, { alwaysLast: false });
 
 		if (process.env["DEV"] === "true") {
 			reconciler.injectIntoDevTools({
